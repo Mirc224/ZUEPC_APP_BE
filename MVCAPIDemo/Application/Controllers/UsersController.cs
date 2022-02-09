@@ -1,8 +1,11 @@
 using DataAccess.Data;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using MVCAPIDemo.Application.Commands.Users;
 using MVCAPIDemo.Application.Queries.Users;
+using MVCAPIDemo.Localization;
 
 namespace MVCAPIDemo.Application.Controllers
 {
@@ -19,11 +22,13 @@ namespace MVCAPIDemo.Application.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         public async Task<IActionResult> GetUsers()
         {
-            var query = new GetAllUsersQuery();
-            var result = await _mediator.Send(query);
-            return Ok(result);
+            var response = await _mediator.Send(new GetAllUsersQuery());
+			if (!response.Success)
+				return StatusCode(500);
+            return Ok(response.Users);
         }
 
         [HttpGet("{id}")]
@@ -34,11 +39,32 @@ namespace MVCAPIDemo.Application.Controllers
             return result != null ? Ok(result) : NotFound();
         }
 
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand request)
         {
-            await _mediator.Send(request);
-            return Ok();
+            var response = await _mediator.Send(request);
+
+            return response.Success ? 
+                StatusCode(201) : 
+                BadRequest(new { error = response.ErrorMessage });
         }
-    }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserCommand request)
+        {
+            var response = await _mediator.Send(request);
+            if (!response.Success)
+                return Unauthorized(response.ErrorMessage);
+            return Ok(new { response.Token });
+        }
+
+		[HttpPost("roles")]
+		public async Task<IActionResult> GetRoles()
+		{
+			var response = await _mediator.Send(new GetAllRolesQuery());
+			if (!response.Success)
+				return StatusCode(500);
+			return Ok(response.Roles);
+		}
+	}
 }

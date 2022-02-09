@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>UserDB</Name>
+    <Name>APIDemoDb</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{d5a64b51-2dd4-4f8d-9228-8dc692eddc5d}</ProjectGuid>
@@ -67,14 +67,16 @@
     <Build Include="dbo\StoredProcedures\spUser_Delete.sql" />
     <Build Include="dbo\StoredProcedures\spUser_Insert.sql" />
     <Build Include="dbo\StoredProcedures\spUser_Update.sql" />
+    <Build Include="dbo\Tables\Roles.sql" />
+    <Build Include="dbo\Tables\UserRoles.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="UserDB.publish.xml" />
+    <RefactorLog Include="UserDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="UserDB.refactorlog" />
+    <None Include="APIDemoDb.publish.xml" />
   </ItemGroup>
 </Project>

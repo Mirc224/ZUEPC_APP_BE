@@ -1,28 +1,8 @@
-using DataAccess.Data;
-using DataAccess.DbAccess;
-using FluentValidation.AspNetCore;
-using MediatR;
-using MVCAPIDemo.Application.Filters;
+using MVCAPIDemo.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-builder.Services.AddSingleton<IUserData, UserData>();
-builder.Services.AddMediatR(typeof(Program));
-builder.Services.AddAutoMapper(typeof(Program));
-builder.Services
-    .AddMvc(options =>
-    {
-        options.Filters.Add<ValidationFilter>();
-    })
-    .AddFluentValidation(
-    fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.ConfigureServices();
 
 var app = builder.Build();
 
@@ -34,6 +14,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRequestLocalization(ApiLocalizationSettings.GetLocalizationOptions(builder));
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -11,5 +11,6 @@ public class DomainToResponseProfile: Profile
     {
         CreateMap<UserModel, User>();
         CreateMap<RegisterUserCommand, UserModel>();
-    }
+		CreateMap<RoleModel, Role>();
+	}
 }

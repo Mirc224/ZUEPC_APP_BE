@@ -83,4 +83,10 @@ public class SqlDataAccess : ISqlDataAccess
         await connection.ExecuteAsync(storedProcedure, parameters,
             commandType: CommandType.StoredProcedure);
     }
+
+	public async Task<T> ExecuteScalarAsync<T, U>(string sql, U parameters, string connectionId = "Default")
+	{
+		using IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionId));
+		return await connection.ExecuteScalarAsync<T>(sql, parameters, commandType: CommandType.Text);
+	}
 }

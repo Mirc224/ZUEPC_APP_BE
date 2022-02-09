@@ -1,28 +1,32 @@
 ﻿using AutoMapper;
 using DataAccess.Data;
+using DataAccess.Enums;
 using DataAccess.Models;
 using MediatR;
+using Microsoft.Extensions.Localization;
 using MVCAPIDemo.Application.Domain;
+using MVCAPIDemo.Localization;
 using System.Security.Cryptography;
 
 namespace MVCAPIDemo.Application.Commands.Users;
 
-public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, User>
+public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisterUserCommandResponse>
 {
     private readonly IUserData _repository;
     private readonly IMapper _mapper;
+    private readonly IStringLocalizer<DataAnnotations> _localizer;
 
-    public RegisterUserCommandHandler(IMapper mapper, IUserData repository)
+    public RegisterUserCommandHandler(IMapper mapper, IUserData repository, IStringLocalizer<DataAnnotations> localizer)
     {
         _repository = repository;
         _mapper = mapper;
+        _localizer = localizer;
     }
 
-    public async Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    public async Task<RegisterUserCommandResponse> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-
-        byte[] passwordHash = null;
-        byte[] passwordSalt = null;
+        byte[]? passwordHash = null;
+        byte[]? passwordSalt = null;
 
         using (var hmac = new HMACSHA512())
         {
@@ -34,8 +38,13 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
 
-        int res = await _repository.InsertUser(user);
+        int newUserId = await _repository.InsertUser(user);
+        if (newUserId == 0)
+        {
+            return new RegisterUserCommandResponse() { ErrorMessage = _localizer["UnknownError"], Success = false };
+        }
+		_repository.InsertUserRole(newUserId, RolesType.USER);
 
-        return null;
+        return new RegisterUserCommandResponse() { Success = true};
     }
 }

@@ -5,7 +5,7 @@ using MVCAPIDemo.Application.Domain;
 
 namespace MVCAPIDemo.Application.Queries.Users;
 
-public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<User>>
+public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, GetAllUsersQueryResponse>
 {
     private readonly IUserData _repository;
     private readonly IMapper _mapper;
@@ -15,10 +15,16 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumer
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<GetAllUsersQueryResponse> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _repository.GetUsers();
-        var usersResponses = _mapper.Map<List<User>>(users);
-        return usersResponses;
+        var usersModels = await _repository.GetUsers();
+		var users = _mapper.Map<List<User>>(usersModels);
+		foreach(var user in users)
+		{
+			var roles = await _repository.GetUserRoles(user.Id);
+			user.Roles = _mapper.Map<List<Role>>(roles);
+		}
+		var response = new GetAllUsersQueryResponse() { Success = true, Users = users};
+        return response;
     }
 }

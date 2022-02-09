@@ -7,4 +7,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="PasswordHash" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c1be1eeb-ab1b-450f-b6a4-677f2ca6516c" ChangeDateTime="02/09/2022 15:28:52">
+    <Property Name="ElementName" Value="[dbo].[UserRoles].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserRoles]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="63088bec-ee85-4e4c-a942-f62144c6a7a8" ChangeDateTime="02/09/2022 15:52:45">
+    <Property Name="ElementName" Value="[dbo].[Roles].[Description]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Roles]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Name" />
+  </Operation>
 </Operations>
