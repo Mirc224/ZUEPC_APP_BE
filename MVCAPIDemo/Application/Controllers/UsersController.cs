@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using MVCAPIDemo.Application.Commands.Users;
 using MVCAPIDemo.Application.Domain;
 using MVCAPIDemo.Application.Queries.Users;
+using MVCAPIDemo.Application.Validators.Users;
 using MVCAPIDemo.Localization;
 
 namespace MVCAPIDemo.Application.Controllers
@@ -94,6 +95,19 @@ namespace MVCAPIDemo.Application.Controllers
 		[HttpPatch("{id}")]
 		public async Task<IActionResult> UpdateUserPatch([FromBody] JsonPatchDocument<User> patchEntity, int id)
 		{
+			var user = new User();
+			patchEntity.ApplyTo(user);
+
+			var validationResult = new UserValidator().Validate(user);
+			if (!validationResult.IsValid)
+			{
+				foreach (var error in validationResult.Errors)
+				{
+					ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+				}
+				return UnprocessableEntity(ModelState);
+			}
+
 			var request = new UpdateUserCommand
 			{
 				AppliedPatch = patchEntity,
