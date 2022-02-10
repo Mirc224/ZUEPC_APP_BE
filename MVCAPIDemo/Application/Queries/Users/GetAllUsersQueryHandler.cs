@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataAccess.Data;
+using DataAccess.Data.User;
 using MediatR;
 using MVCAPIDemo.Application.Domain;
 
@@ -22,7 +22,7 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, GetAllU
 		foreach(var user in users)
 		{
 			var roles = await _repository.GetUserRoles(user.Id);
-			user.Roles = _mapper.Map<List<Role>>(roles);
+			user.Roles = roles.Select(x => x.Id).ToList();
 		}
 		var response = new GetAllUsersQueryResponse() { Success = true, Users = users};
         return response;

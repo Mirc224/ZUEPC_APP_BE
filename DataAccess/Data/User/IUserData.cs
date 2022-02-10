@@ -1,12 +1,12 @@
 ﻿using DataAccess.Enums;
 using DataAccess.Models;
 
-namespace DataAccess.Data;
+namespace DataAccess.Data.User;
 
 public interface IUserData
 {
     Task DeleteUser(int id);
-    Task<UserModel?> GetUser(int id);
+    Task<UserModel?> GetUserById(int id);
     Task<UserModel?> GetUserByEmail(string email);
     Task<IEnumerable<UserModel>> GetUsers();
     Task<int> InsertUser(UserModel user);

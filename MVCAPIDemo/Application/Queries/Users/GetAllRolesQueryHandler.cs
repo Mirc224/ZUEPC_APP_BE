@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataAccess.Data;
+using DataAccess.Data.User;
 using MediatR;
 using MVCAPIDemo.Application.Domain;
 

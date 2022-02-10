@@ -1,11 +1,8 @@
-﻿using MediatR;
-using MVCAPIDemo.Application.Domain;
+﻿using MVCAPIDemo.Application.Responses;
 
 namespace MVCAPIDemo.Application.Commands.Users;
 
-public class LoginUserCommandResponse
+public class LoginUserCommandResponse : CQRSBaseResponse
 {
-    public bool Success { get; set; }
     public string? Token { get; set; }
-    public string? ErrorMessage { get; set; }
 }

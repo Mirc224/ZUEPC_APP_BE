@@ -1,7 +1,9 @@
-﻿namespace MVCAPIDemo.Application.Domain;
+﻿using DataAccess.Enums;
+
+namespace MVCAPIDemo.Application.Domain;
 
 public class Role
 {
-    public int Id { get; set; }
+    public RolesType Id { get; set; }
     public string Name { get; set; }
 }

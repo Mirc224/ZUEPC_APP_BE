@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using DataAccess.Data;
+using DataAccess.Data.User;
 using DataAccess.Enums;
 using DataAccess.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using MVCAPIDemo.Application.Domain;
 using MVCAPIDemo.Localization;
 using System.Security.Cryptography;
 
@@ -39,11 +38,16 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         user.PasswordSalt = passwordSalt;
 
         int newUserId = await _repository.InsertUser(user);
-        if (newUserId == 0)
+        
+		if (newUserId == 0)
         {
-            return new RegisterUserCommandResponse() { ErrorMessage = _localizer["UnknownError"], Success = false };
+            return new() 
+			{ 
+				ErrorMessages = new string[] { _localizer["UnknownError"] },
+				Success = false 
+			};
         }
-		_repository.InsertUserRole(newUserId, RolesType.USER);
+		await _repository.InsertUserRole(newUserId, RolesType.USER);
 
         return new RegisterUserCommandResponse() { Success = true};
     }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataAccess.Data;
+using DataAccess.Data.User;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using MVCAPIDemo.Application.Services;
@@ -35,11 +35,15 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
         if (userModel is null ||
             !VerifyPasswordHash(request.Password, userModel.PasswordHash, userModel.PasswordSalt))
         {
-            return new() { ErrorMessage = _localizer["InvalidEmailOrPassword"].Value, Success = false};
+            return new() 
+			{ 
+				ErrorMessages = new string[] { _localizer["InvalidEmailOrPassword"].Value },
+				Success = false
+			};
         };
 
         string token = _jwtAuthenticationService.CreateToken(userModel);
-        return new LoginUserCommandResponse() { Token = token, Success = true };
+        return new() { Token = token, Success = true };
     }
 
     private byte[] GetHash(string password, byte[] salt)

@@ -2,6 +2,6 @@
 
 namespace MVCAPIDemo.Application.Commands.Users;
 
-public class RegisterUserCommandResponse : CQRSBaseResponse
+public class UpdateUserRolesCommandResponse: CQRSBaseResponse
 {
 }

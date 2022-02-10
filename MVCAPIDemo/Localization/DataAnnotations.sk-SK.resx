@@ -126,4 +126,7 @@
   <data name="UnknownError" xml:space="preserve">
     <value>Nastala neznáma chyba.</value>
   </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Používateľ sa nenašiel.</value>
+  </data>
 </root>

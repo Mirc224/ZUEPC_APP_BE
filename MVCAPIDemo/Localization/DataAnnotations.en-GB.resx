@@ -126,4 +126,7 @@
   <data name="UnknownError" xml:space="preserve">
     <value>An unknown error occurred.</value>
   </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User not found.</value>
+  </data>
 </root>

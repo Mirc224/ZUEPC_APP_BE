@@ -1,10 +1,9 @@
 ﻿using MVCAPIDemo.Application.Domain;
+using MVCAPIDemo.Application.Responses;
 
 namespace MVCAPIDemo.Application.Queries.Users;
 
-public class GetAllRolesQueryResponse
+public class GetAllRolesQueryResponse: CQRSBaseResponse
 {
 	public IEnumerable<Role> Roles { get; set; }
-	public bool Success { get; set; }
-
 }

@@ -1,4 +1,4 @@
-﻿using DataAccess.Data;
+﻿using DataAccess.Data.User;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using MVCAPIDemo.Application.Commands.Users;

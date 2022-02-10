@@ -3,7 +3,7 @@ using MVCAPIDemo.Application.Responses;
 
 namespace MVCAPIDemo.Application.Queries.Users;
 
-public class GetAllUsersQueryResponse : CQRSBaseResponse
+public class GetUserQueryResponse : CQRSBaseResponse
 {
-	public IEnumerable<User> Users { get; set; }
+	public User User { get; set; }
 }
