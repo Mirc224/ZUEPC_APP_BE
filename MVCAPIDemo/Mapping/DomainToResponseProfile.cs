@@ -9,7 +9,8 @@ public class DomainToResponseProfile: Profile
 {
     public DomainToResponseProfile()
     {
-        CreateMap<UserModel, User>();
+        CreateMap<UserModel, User>()
+			.ReverseMap();
         CreateMap<RegisterUserCommand, UserModel>();
 		CreateMap<RoleModel, Role>();
 	}

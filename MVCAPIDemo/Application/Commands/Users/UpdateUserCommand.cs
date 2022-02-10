@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace MVCAPIDemo.Application.Commands.Users;
 
-public class UpdateUserRolesCommand : IRequest<UpdateUserRolesCommandResponse>
+public class UpdateUserCommand : IRequest<UpdateUserCommandResponse>
 {
 	public int UserId { get; set; }
 	public JsonPatchDocument<User> AppliedPatch { get; set; }

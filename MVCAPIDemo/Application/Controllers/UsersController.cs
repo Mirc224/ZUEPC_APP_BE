@@ -94,7 +94,7 @@ namespace MVCAPIDemo.Application.Controllers
 		[HttpPatch("{id}")]
 		public async Task<IActionResult> UpdateUserPatch([FromBody] JsonPatchDocument<User> patchEntity, int id)
 		{
-			var request = new UpdateUserRolesCommand
+			var request = new UpdateUserCommand
 			{
 				AppliedPatch = patchEntity,
 				UserId = id

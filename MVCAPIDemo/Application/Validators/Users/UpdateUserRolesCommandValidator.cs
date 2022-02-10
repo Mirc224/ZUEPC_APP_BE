@@ -3,7 +3,7 @@ using MVCAPIDemo.Application.Commands.Users;
 
 namespace MVCAPIDemo.Application.Validators.Users;
 
-public class UpdateUserRolesCommandValidator : AbstractValidator<UpdateUserRolesCommand>
+public class UpdateUserRolesCommandValidator : AbstractValidator<UpdateUserCommand>
 {
 	public UpdateUserRolesCommandValidator()
 	{
