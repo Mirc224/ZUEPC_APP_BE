@@ -1,6 +1,8 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCAPIDemo.Application.Commands.Auth;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MVCAPIDemo.Application.Controllers
 {
@@ -48,6 +50,30 @@ namespace MVCAPIDemo.Application.Controllers
 			return Ok(new { response.Token, response.RefreshToken });
 		}
 
+		[HttpPost("logout")]
+		[Authorize]
+		public async Task<IActionResult> LogoutUser()
+		{
+			var jwtId = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+			
+			if (jwtId is null)
+			{
+				return Unauthorized();
+			}
+
+			var request = new LogoutUserCommand() { JwtId = jwtId };
+			var response = await _mediator.Send(request);
+			if (!response.Success)
+			{
+				return Unauthorized(
+					new
+					{
+						error = response.ErrorMessages
+					});
+			}
+			return NoContent();
+		}
+
 		[HttpPost("refreshToken")]
 		public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand request)
 		{
@@ -61,6 +87,21 @@ namespace MVCAPIDemo.Application.Controllers
 					});
 			}
 			return Ok(new { response.Token, response.RefreshToken });
+		}
+
+		[HttpPost("revokeToken")]
+		public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenCommand request)
+		{
+			var response = await _mediator.Send(request);
+			if (!response.Success)
+			{
+				return BadRequest(
+					new
+					{
+						error = response.ErrorMessages
+					});
+			}
+			return Ok();
 		}
 	}
 }

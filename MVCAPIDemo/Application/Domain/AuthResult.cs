@@ -1,9 +1,9 @@
-﻿namespace MVCAPIDemo.Application.Domain;
+﻿using MVCAPIDemo.Application.Responses;
 
-public class AuthResult
+namespace MVCAPIDemo.Application.Domain;
+
+public class AuthResult: ResponseBase
 {
 	public string Token { get; set; }
-	public string RefreshToken { get; set; }
-	public bool Success { get; set; }
-	public List<string> ErrorMessages { get; set; }
+	public Guid RefreshToken { get; set; }
 }

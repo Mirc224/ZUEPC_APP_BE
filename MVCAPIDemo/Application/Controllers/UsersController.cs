@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using MVCAPIDemo.Application.Commands.Users;
@@ -21,8 +22,10 @@ namespace MVCAPIDemo.Application.Controllers
 		}
 
 		[HttpGet]
+		//[Authorize]
 		public async Task<IActionResult> GetUsers()
 		{
+			var claimsPrincipal = User;
 			var response = await _mediator.Send(new GetAllUsersQuery());
 			if (!response.Success)
 				return StatusCode(500);
@@ -70,7 +73,6 @@ namespace MVCAPIDemo.Application.Controllers
 				}
 				return UnprocessableEntity(ModelState);
 			}
-
 			var request = new UpdateUserCommand
 			{
 				AppliedPatch = patchEntity,

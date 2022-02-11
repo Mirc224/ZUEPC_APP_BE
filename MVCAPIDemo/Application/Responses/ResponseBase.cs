@@ -2,9 +2,8 @@
 
 namespace MVCAPIDemo.Application.Responses;
 
-public class CQRSBaseResponse
+public class ResponseBase
 {
-	[JsonIgnore]
 	public bool Success { get; set; }
 
 	public IEnumerable<string> ErrorMessages { get; set; }

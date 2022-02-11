@@ -1,4 +1,5 @@
 ﻿using Constants.Infrastructure;
+using Dapper;
 using DataAccess.Data.User;
 using DataAccess.Models;
 using Microsoft.Extensions.Localization;
@@ -35,7 +36,7 @@ public class JwtAuthenticationService
 		_tokenValidationParams.ValidateLifetime = false;
 	}
 
-	public async Task<AuthResult> VerifyAndGenerateToken(string token, string refreshToken)
+	public async Task<AuthResult> VerifyAndGenerateTokenAsync(string token, string refreshToken)
 	{
 		var jwtTokenHandler = new JwtSecurityTokenHandler();
 		try
@@ -43,46 +44,41 @@ public class JwtAuthenticationService
 			var tokenInVerification = jwtTokenHandler.ValidateToken(token, _tokenValidationParams, out var validatedToken);
 			if(!IsJwtSecurityToken(validatedToken))
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["NotValidToken"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["NotValidToken"] } };
 			}
-			
-			if(!IsExpired(tokenInVerification))
+
+			if (!IsExpired(tokenInVerification))
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["NotExpiredToken"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["NotExpiredToken"] } };
 			}
 
 			var storedToken = await _userRepository.GetRefreshTokenByTokenAsync(refreshToken);
 
 			if(storedToken is null)
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["TokenNotExist"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenNotExist"] } };
 			}
 
 			if(storedToken.ExpiryDate.ToUniversalTime() < DateTime.UtcNow)
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["RefreshTokenExpired"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["RefreshTokenExpired"] } };
 			}
 
 			if (storedToken.IsUsed)
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["TokenIsUsed"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenIsUsed"] } };
 			}
 
 			if (storedToken.IsRevoked)
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["TokenIsRevoked"] } };
-			}
-
-			if (storedToken.IsRevoked)
-			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["TokenIsRevoked"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenIsRevoked"] } };
 			}
 
 			var jti = tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
 			if(storedToken.JwtId != jti)
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["TokenNotMatch"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenNotMatch"] } };
 			}
 			
 			storedToken.IsUsed = true;
@@ -90,40 +86,82 @@ public class JwtAuthenticationService
 			
 			if (rowsUpadted != 1)
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["UnknownDbError"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["UnknownDbError"] } };
 			}
 
-			var dbUser = await _userRepository.GetUserByIdAsync(storedToken.UserId);
+			var builder = new SqlBuilder();
+			builder.Select("*");
+			builder.Where("Id = @Id");
+			var userModel = (await _userRepository.GetUsersAsync(new { Id = storedToken.UserId }, builder)).FirstOrDefault();
 
-			if(dbUser is null)
+			if (userModel is null)
 			{
-				return new() { Success = false, ErrorMessages = new() { _localizer["UserNotFound"] } };
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["UserNotFound"] } };
 			}
 
-			return await GenerateJwtToken(dbUser);
+			return await GenerateJwtToken(userModel);
 		}
 		catch (Exception)
 		{
-			return new() { Success = false, ErrorMessages = new() { _localizer["NotValidToken"] } };
+			return new() { Success = false, ErrorMessages = new string[] { _localizer["NotValidToken"] } };
 		}
 	}
+
+	public async Task<RevokeResult> RevokeTokenAsync(string refreshToken)
+	{
+		var storedToken = await _userRepository.GetRefreshTokenByTokenAsync(refreshToken);
+
+		if (storedToken is null)
+		{
+			return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenNotExist"] } };
+		}
+
+		if (storedToken.IsRevoked)
+		{
+			return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenIsRevoked"] } };
+		}
+
+		storedToken.IsRevoked = true;
+		int rowsUpadted = await _userRepository.UpdateRefreshTokenAsync(storedToken);
+
+		if (rowsUpadted != 1)
+		{
+			return new() { Success = false, ErrorMessages = new string[] { _localizer["UnknownDbError"] } };
+		}
+
+		return new() { Success = true};
+	}
+
+	//public async Task<bool> RevokeTokenByJwtIdAsync(string jwtId)
+	//{
+	//	var storedToken = await _userRepository.GetRefreshTokenByTokenAsync(refreshToken);
+
+	//	if (storedToken is null)
+	//	{
+	//		return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenNotExist"] } };
+	//	}
+
+	//	if (storedToken.IsRevoked)
+	//	{
+	//		return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenIsRevoked"] } };
+	//	}
+
+	//	storedToken.IsRevoked = true;
+	//	int rowsUpadted = await _userRepository.UpdateRefreshTokenAsync(storedToken);
+
+	//	if (rowsUpadted != 1)
+	//	{
+	//		return new() { Success = false, ErrorMessages = new string[] { _localizer["UnknownDbError"] } };
+	//	}
+
+	//	return new() { Success = true };
+	//}
 
 	private DateTime UnixTimeStampToDateTime(long unixTimeStamp)
 	{
 		var dateTimeVal = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 		dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp);
 		return dateTimeVal;
-	}
-
-	private bool IsExpired(long utcExpiryDate)
-	{
-		var expiryDate = UnixTimeStampToDateTime(utcExpiryDate);
-
-		if (expiryDate > DateTime.UtcNow)
-		{
-			return false;
-		}
-		return true;
 	}
 
 	private bool IsExpired(ClaimsPrincipal tokenInVerification)
@@ -163,10 +201,9 @@ public class JwtAuthenticationService
 				new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
 				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 			}),
-			Expires = DateTime.UtcNow.AddSeconds(20),
+			Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
 			SigningCredentials = new SigningCredentials(key, _usedSecuritySignatureAlgorithm)
 		};
-
 
         var token = jwtTokenHandler.CreateToken(tokenDescriptor);
 		var jwtToken = jwtTokenHandler.WriteToken(token);
@@ -179,7 +216,7 @@ public class JwtAuthenticationService
 			UserId = userModel.Id,
 			CreatedAt = DateTime.UtcNow,
 			ExpiryDate = DateTime.UtcNow.AddMonths(6),
-			Token = RandomString(35) + Guid.NewGuid()
+			Token = Guid.NewGuid()
 		};
 		
 		await _userRepository.InsertRefreshTokenAsync(refreshToken);

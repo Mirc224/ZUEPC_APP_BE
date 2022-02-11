@@ -1,4 +1,6 @@
-﻿using DataAccess.DbAccess;
+﻿using Dapper;
+using DataAccess.DbAccess;
+using DataAccess.Enums;
 using DataAccess.Models;
 
 namespace DataAccess.Data.User;
@@ -16,25 +18,10 @@ public partial class UserData : IUserData
         _db = db;
     }
 
-    public async Task<IEnumerable<UserModel>> GetUsersAsync()
+    public async Task<IEnumerable<UserModel>> GetUsersAsync(dynamic parameters, SqlBuilder builder)
     {
-        string sql = $"SELECT * FROM {_userTableName}";
-        return await _db.QueryAsync<UserModel, dynamic>(sql, new { });
-    }
-
-    public async Task<UserModel?> GetUserByIdAsync(int id)
-    {
-		string sql = $"SELECT * FROM {_userTableName} WHERE Id = @Id";
-		var results = await _db.QueryAsync<UserModel, dynamic>(sql, new { Id = id });
-        return results.FirstOrDefault();
-    }
-
-    public async Task<UserModel?> GetUserByEmailAsync(string email)
-    {
-        string sql = $"SELECT * FROM {_userTableName} WHERE Email = @Email";
-        var result = await _db.QueryAsync<UserModel, dynamic>(sql, new { Email = email});
-
-        return result.FirstOrDefault();
+		var builderTemplate = builder.AddTemplate($"SELECT /**select**/ FROM {_userTableName} /**where**/");
+		return await _db.QueryAsync<UserModel, dynamic>(builderTemplate.RawSql, parameters);
     }
 
     public Task<int> InsertUserAsync(UserModel user)
@@ -46,17 +33,17 @@ public partial class UserData : IUserData
         return _db.ExecuteScalarAsync<int, UserModel>(sql, user);
     }
 
-    public Task<int> UpdateUserAsync(UserModel user)
+    public Task<int> DeleteUserAsync(UserModel user, SqlBuilder builder)
 	{
-		string sql = $"UPDATE {_userTableName} SET FirstName = @FirstName, LastName = @LastName WHERE Id = @Id";
-
-		return _db.ExecuteAsync(sql, user);
+		var builderTemplate = builder.AddTemplate($"DELETE FROM {_userTableName} /**where**/");
+		return _db.ExecuteAsync(builderTemplate.RawSql, user);
 	}
 
-    public Task<int> DeleteUserAsync(int id)
+
+	public Task<int> UpdateUserAsync(UserModel user, SqlBuilder builder)
 	{
-		string sql = $@"DELETE FROM {_userTableName} 
-						WHERE Id = @Id";
-		return _db.ExecuteAsync(sql, new { Id = id });
+		var builderTemplate = builder.AddTemplate($"UPDATE {_userTableName} SET FirstName = @FirstName, LastName = @LastName /**where**/");
+		return _db.ExecuteAsync(builderTemplate.RawSql, user);
 	}
+
 }

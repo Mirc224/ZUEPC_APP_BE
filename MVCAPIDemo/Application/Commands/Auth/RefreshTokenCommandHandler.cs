@@ -20,7 +20,7 @@ public class RefreshTokenCommandHandler: IRequestHandler<RefreshTokenCommand, Re
 
 	public async Task<RefreshTokenCommandResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
 	{
-		var result = await _jwtAuthenticationService.VerifyAndGenerateToken(request.Token, request.RefreshToken);
+		var result = await _jwtAuthenticationService.VerifyAndGenerateTokenAsync(request.Token, request.RefreshToken);
 		var response = _mapper.Map<RefreshTokenCommandResponse>(result);
 		return response;
 	}

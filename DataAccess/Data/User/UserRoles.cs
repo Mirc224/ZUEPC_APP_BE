@@ -1,4 +1,5 @@
-﻿using DataAccess.Enums;
+﻿using Dapper;
+using DataAccess.Enums;
 using DataAccess.Models;
 
 namespace DataAccess.Data.User;
@@ -10,24 +11,23 @@ public partial class UserData : IUserData
 		return await _db.QueryAsync<RoleModel, dynamic>(sql, new { });
 	}
 
-	public async Task<IEnumerable<RoleModel>> GetUserRolesAsync(int id)
+	public async Task<IEnumerable<RoleModel>> GetUserRolesAsync(dynamic parameters, SqlBuilder builder)
 	{
-		string sql = $@"SELECT [Id], [Name] FROM {_userRolesTableName}
-						JOIN {_rolesTableName} ON (RoleId = Id)
-						WHERE UserId = @UserId";
-		return await _db.QueryAsync<RoleModel, dynamic>(sql, new { UserId = id });
+		var builderTemplate = builder.AddTemplate($@"SELECT [Id], [Name] FROM {_userRolesTableName}
+													 JOIN {_rolesTableName} ON (RoleId = Id) /**where**/");
+		return await _db.QueryAsync<RoleModel, dynamic>(builderTemplate.RawSql, parameters);
 	}
 
 	public async Task<int> InsertUserRoleAsync(int userId, RolesType roleId)
 	{
-		string sql = $"INSERT INTO {_userRolesTableName} (UserId, RoleId) " +
-			"VALUES(@UserId, @RoleId)";
+		string sql = $@"INSERT INTO {_userRolesTableName} (UserId, RoleId) 
+						VALUES(@UserId, @RoleId)";
 		return await _db.ExecuteAsync(sql, new { UserId = userId, RoleId = roleId });
 	}
 
-	public async Task<int> DeleteUserRoleAsync(int userId, RolesType roleId)
+	public async Task<int> DeleteUserRoleAsync(dynamic parameters, SqlBuilder builder)
 	{
-		string sql = $"DELETE FROM {_userRolesTableName} WHERE UserId = @UserId AND RoleId = @RoleId";
-		return await _db.ExecuteAsync(sql, new { UserId = userId, RoleId = roleId});
+		var builderTemplate = builder.AddTemplate($@"DELETE FROM { _userRolesTableName} /**where**/");
+		return await _db.ExecuteAsync(builderTemplate.RawSql, parameters);
 	}
 }

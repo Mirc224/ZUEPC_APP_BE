@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dapper;
 using DataAccess.Data.User;
 using MediatR;
 using Microsoft.Extensions.Localization;
@@ -30,7 +31,10 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
 
     public async Task<LoginUserCommandResponse> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        var userModel = await _repository.GetUserByEmailAsync(request.Email);
+		var builder = new SqlBuilder();
+		builder.Select("*");
+		builder.Where("Email = @Email");
+        var userModel = (await _repository.GetUsersAsync(new { request.Email }, builder)).FirstOrDefault();
 
         if (userModel is null ||
             !VerifyPasswordHash(request.Password, userModel.PasswordHash, userModel.PasswordSalt))

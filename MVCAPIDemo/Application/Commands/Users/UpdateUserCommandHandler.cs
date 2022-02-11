@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Dapper;
 using DataAccess.Data.User;
 using DataAccess.Enums;
 using DataAccess.Models;
@@ -28,7 +29,10 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 
 	public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
 	{
-		var userModel = await _repository.GetUserByIdAsync(request.UserId);
+		var builder = new SqlBuilder();
+		builder.Select("*");
+		builder.Where("Id = @Id");
+		var userModel = (await _repository.GetUsersAsync(new { Id = request.UserId}, builder)).FirstOrDefault();
 		if (userModel is null)
 		{
 			return new()
@@ -40,8 +44,10 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 		
 		User user = _mapper.Map<User>(userModel);
 		var origUserJSON = JObject.FromObject(user);
-
-		user.Roles = (await _repository.GetUserRolesAsync(userModel.Id)).Select(x => x.Id).ToList();
+		builder = new SqlBuilder();
+		builder.Where("UserId = @UserId");
+		user.Roles = (await _repository.GetUserRolesAsync(new { UserId = userModel.Id }, builder)).Select(x => x.Id).ToList();
+		
 		var actualRoles = user.Roles.ToHashSet();
 		request.AppliedPatch.ApplyTo(user);
 
@@ -55,7 +61,6 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 				changedProperties.Add(x.Key);
 			}
 		}
-
 
 
 		if(changedProperties.Contains("Roles"))
@@ -74,14 +79,17 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 
 			foreach (var role in removedRoles)
 			{
-				await _repository.DeleteUserRoleAsync(user.Id, role);
+				builder = new SqlBuilder();
+				builder.Where("UserId = @UserId");
+				builder.Where("RoleId = @RoleId");
+				await _repository.DeleteUserRoleAsync(new { UserId = user.Id, RoleId = role }, builder);
 			}
 		}
 
 		if(changedProperties.Count > 0)
 		{
 			var moddifiedUserModel = _mapper.Map<UserModel>(user);
-			await _repository.UpdateUserAsync(moddifiedUserModel);
+			await _repository.UpdateUserAsync(moddifiedUserModel, new());
 		}
 
 		return new UpdateUserCommandResponse() { Success = true };

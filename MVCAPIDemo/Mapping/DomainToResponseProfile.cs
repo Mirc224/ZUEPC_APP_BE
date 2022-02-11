@@ -15,5 +15,7 @@ public class DomainToResponseProfile: Profile
 		CreateMap<RoleModel, Role>();
 		CreateMap<AuthResult, LoginUserCommandResponse>();
 		CreateMap<AuthResult, RefreshTokenCommandResponse>();
+		CreateMap<RevokeResult, RevokeTokenCommandResponse>();
+		CreateMap<RevokeResult, LogoutUserCommandResponse>();
 	}
 }

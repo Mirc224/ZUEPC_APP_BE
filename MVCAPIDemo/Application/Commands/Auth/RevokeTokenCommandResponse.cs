@@ -2,6 +2,6 @@
 
 namespace MVCAPIDemo.Application.Commands.Auth;
 
-public class RegisterUserCommandResponse : ResponseBase
+public class RevokeTokenCommandResponse : ResponseBase
 {
 }
