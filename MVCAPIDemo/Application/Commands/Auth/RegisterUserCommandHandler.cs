@@ -7,7 +7,7 @@ using Microsoft.Extensions.Localization;
 using MVCAPIDemo.Localization;
 using System.Security.Cryptography;
 
-namespace MVCAPIDemo.Application.Commands.Users;
+namespace MVCAPIDemo.Application.Commands.Auth;
 
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisterUserCommandResponse>
 {
@@ -37,7 +37,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         user.PasswordHash = passwordHash;
         user.PasswordSalt = passwordSalt;
 
-        int newUserId = await _repository.InsertUser(user);
+        int newUserId = await _repository.InsertUserAsync(user);
         
 		if (newUserId == 0)
         {
@@ -47,7 +47,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
 				Success = false 
 			};
         }
-		await _repository.InsertUserRole(newUserId, RolesType.USER);
+		await _repository.InsertUserRoleAsync(newUserId, RolesType.USER);
 
         return new RegisterUserCommandResponse() { Success = true};
     }

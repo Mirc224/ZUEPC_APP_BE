@@ -17,7 +17,7 @@ public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, GetAllR
 
 	public async Task<GetAllRolesQueryResponse> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
 	{
-		var roles = await _repository.GetRoles();
+		var roles = await _repository.GetRolesAsync();
 		var response = new GetAllRolesQueryResponse() { Success = true, Roles = _mapper.Map<List<Role>>(roles) };
         return response;
     }

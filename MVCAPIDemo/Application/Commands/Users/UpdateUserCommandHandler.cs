@@ -28,7 +28,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 
 	public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
 	{
-		var userModel = await _repository.GetUserById(request.UserId);
+		var userModel = await _repository.GetUserByIdAsync(request.UserId);
 		if (userModel is null)
 		{
 			return new()
@@ -41,7 +41,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 		User user = _mapper.Map<User>(userModel);
 		var origUserJSON = JObject.FromObject(user);
 
-		user.Roles = (await _repository.GetUserRoles(userModel.Id)).Select(x => x.Id).ToList();
+		user.Roles = (await _repository.GetUserRolesAsync(userModel.Id)).Select(x => x.Id).ToList();
 		var actualRoles = user.Roles.ToHashSet();
 		request.AppliedPatch.ApplyTo(user);
 
@@ -69,19 +69,19 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 
 			foreach (var role in addedRoles)
 			{
-				await _repository.InsertUserRole(user.Id, role);
+				await _repository.InsertUserRoleAsync(user.Id, role);
 			}
 
 			foreach (var role in removedRoles)
 			{
-				await _repository.DeleteUserRole(user.Id, role);
+				await _repository.DeleteUserRoleAsync(user.Id, role);
 			}
 		}
 
 		if(changedProperties.Count > 0)
 		{
 			var moddifiedUserModel = _mapper.Map<UserModel>(user);
-			await _repository.UpdateUser(moddifiedUserModel);
+			await _repository.UpdateUserAsync(moddifiedUserModel);
 		}
 
 		return new UpdateUserCommandResponse() { Success = true };

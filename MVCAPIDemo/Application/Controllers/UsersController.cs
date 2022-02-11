@@ -1,19 +1,15 @@
-using DataAccess.Data;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using MVCAPIDemo.Application.Commands.Users;
 using MVCAPIDemo.Application.Domain;
 using MVCAPIDemo.Application.Queries.Users;
 using MVCAPIDemo.Application.Validators.Users;
-using MVCAPIDemo.Localization;
 
 namespace MVCAPIDemo.Application.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class UsersController : ControllerBase
 	{
 
@@ -37,50 +33,17 @@ namespace MVCAPIDemo.Application.Controllers
 		public async Task<IActionResult> GetUser(int id)
 		{
 			var query = new GetUserQuery() { Id = id };
-			var result = await _mediator.Send(query);
-			if (!result.Success)
+			var response = await _mediator.Send(query);
+			if (!response.Success)
 			{
 				return NotFound(
 					new
 					{
-						errors = result.ErrorMessages
+						errors = response.ErrorMessages
 					});
 			}
 
-			return Ok(result.User);
-		}
-
-		[HttpPost("register")]
-		public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand request)
-		{
-			var response = await _mediator.Send(request);
-
-			if (!response.Success)
-			{
-				return BadRequest(
-					new
-					{
-						error = response.ErrorMessages
-					});
-			}
-
-			return NoContent();
-		}
-
-		[HttpPost("login")]
-		public async Task<IActionResult> LoginUser([FromBody] LoginUserCommand request)
-		{
-			var response = await _mediator.Send(request);
-			if (!response.Success)
-			{
-				return Unauthorized(
-					new
-					{
-						error = response.ErrorMessages
-					});
-			}
-
-			return Ok(new { response.Token });
+			return Ok(response.User);
 		}
 
 		[HttpPost("roles")]

@@ -123,6 +123,30 @@
   <data name="InvalidEmailOrPassword" xml:space="preserve">
     <value>The email or password is incorrect.</value>
   </data>
+  <data name="NotExpiredToken" xml:space="preserve">
+    <value>Token has not expired yet.</value>
+  </data>
+  <data name="NotValidToken" xml:space="preserve">
+    <value>Token is not valid.</value>
+  </data>
+  <data name="RefreshTokenExpired" xml:space="preserve">
+    <value>Refresh token has benn expired.</value>
+  </data>
+  <data name="TokenIsRevoked" xml:space="preserve">
+    <value>Token has been revoked.</value>
+  </data>
+  <data name="TokenIsUsed" xml:space="preserve">
+    <value>Token has been used.</value>
+  </data>
+  <data name="TokenNotExist" xml:space="preserve">
+    <value>Token does not exist.</value>
+  </data>
+  <data name="TokenNotMatch" xml:space="preserve">
+    <value>Token does not match.</value>
+  </data>
+  <data name="UnknownDbError" xml:space="preserve">
+    <value>Unknown database error.</value>
+  </data>
   <data name="UnknownError" xml:space="preserve">
     <value>An unknown error occurred.</value>
   </data>

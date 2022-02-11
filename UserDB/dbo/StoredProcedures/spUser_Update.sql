@@ -4,7 +4,7 @@
 	@LastName nvarchar(50)
 AS
 begin
-	update dbo.[User]
+	update dbo.[Users]
 	set FirstName = @FirstName, LastName = @LastName
 	where Id = @Id;
 end

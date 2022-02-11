@@ -21,8 +21,6 @@ public static class ApiServices
         // Add services to the container.
         builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
         builder.Services.AddSingleton<IUserData, UserData>();
-
-        builder.Services.AddSingleton<JwtAuthenticationService>();
         builder.Services.AddMediatR(typeof(Program));
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddTransient<DataAnnotations>();
@@ -61,10 +59,24 @@ public static class ApiServices
 
     public static void ConfigureAuthentication(WebApplicationBuilder builder)
     {
-        var jwtSettings = new JwtSettings();
+		builder.Services.AddSingleton<JwtAuthenticationService>();
+		var jwtSettings = new JwtSettings();
+
         builder.Configuration.Bind(nameof(jwtSettings), jwtSettings);
-        builder.Services.AddSingleton(jwtSettings);
-        builder.Services
+		builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(jwtSettings)));
+		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret));
+		var tokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuerSigningKey = true,
+			IssuerSigningKey = key,
+			ValidateIssuer = false,
+			ValidateAudience = false,
+			RequireExpirationTime = false,
+			ValidateLifetime = true
+		};
+
+		builder.Services.AddSingleton(tokenValidationParameters);
+		builder.Services
             .AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -74,15 +86,7 @@ public static class ApiServices
             .AddJwtBearer(x =>
            {
                x.SaveToken = true;
-               x.TokenValidationParameters = new TokenValidationParameters
-               {
-                   ValidateIssuerSigningKey = true,
-                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
-                   ValidateIssuer = false,
-                   ValidateAudience = false,
-                   RequireExpirationTime = false,
-                   ValidateLifetime = true
-               };
+               x.TokenValidationParameters = tokenValidationParameters;
            });
 
     }

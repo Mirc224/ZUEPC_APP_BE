@@ -123,6 +123,30 @@
   <data name="InvalidEmailOrPassword" xml:space="preserve">
     <value>E-mail alebo heslo je nesprávne.</value>
   </data>
+  <data name="NotExpiredToken" xml:space="preserve">
+    <value>Platnosť tokenu ešte nevypršala.</value>
+  </data>
+  <data name="NotValidToken" xml:space="preserve">
+    <value>Token nie je validny.</value>
+  </data>
+  <data name="RefreshTokenExpired" xml:space="preserve">
+    <value>Platnosť obnovovacieho tokenu vypršala.</value>
+  </data>
+  <data name="TokenIsRevoked" xml:space="preserve">
+    <value>Token bol zrušený.</value>
+  </data>
+  <data name="TokenIsUsed" xml:space="preserve">
+    <value>Token už bol použitý.</value>
+  </data>
+  <data name="TokenNotExist" xml:space="preserve">
+    <value>Token neexistuje.</value>
+  </data>
+  <data name="TokenNotMatch" xml:space="preserve">
+    <value>Token sa nezhoduje.</value>
+  </data>
+  <data name="UnknownDbError" xml:space="preserve">
+    <value>Neznáma chyba databázy.</value>
+  </data>
   <data name="UnknownError" xml:space="preserve">
     <value>Nastala neznáma chyba.</value>
   </data>

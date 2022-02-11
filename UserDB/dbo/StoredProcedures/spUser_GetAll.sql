@@ -2,5 +2,5 @@
 AS
 begin
 	select Id, FirstName, LastName
-	from dbo.[User];
+	from dbo.[Users];
 end

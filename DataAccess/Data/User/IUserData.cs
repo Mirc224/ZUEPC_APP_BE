@@ -5,14 +5,17 @@ namespace DataAccess.Data.User;
 
 public interface IUserData
 {
-    Task DeleteUser(int id);
-    Task<UserModel?> GetUserById(int id);
-    Task<UserModel?> GetUserByEmail(string email);
-    Task<IEnumerable<UserModel>> GetUsers();
-    Task<int> InsertUser(UserModel user);
-    Task UpdateUser(UserModel user);
-	Task<IEnumerable<RoleModel>> GetRoles();
-	Task<IEnumerable<RoleModel>> GetUserRoles(int id);
-	Task<int> InsertUserRole(int userId, RolesType roleId);
-	Task<int> DeleteUserRole(int userId, RolesType roleId);
+    Task<int> DeleteUserAsync(int id);
+    Task<UserModel?> GetUserByIdAsync(int id);
+    Task<UserModel?> GetUserByEmailAsync(string email);
+    Task<IEnumerable<UserModel>> GetUsersAsync();
+    Task<int> InsertUserAsync(UserModel user);
+    Task<int> UpdateUserAsync(UserModel user);
+	Task<IEnumerable<RoleModel>> GetRolesAsync();
+	Task<IEnumerable<RoleModel>> GetUserRolesAsync(int id);
+	Task<int> InsertUserRoleAsync(int userId, RolesType roleId);
+	Task<int> DeleteUserRoleAsync(int userId, RolesType roleId);
+	Task<int> InsertRefreshTokenAsync(RefreshTokenModel refreshToken);
+	Task<RefreshTokenModel?> GetRefreshTokenByTokenAsync(string refreshToken);
+	Task<int> UpdateRefreshTokenAsync(RefreshTokenModel refreshTokenModel);
 }

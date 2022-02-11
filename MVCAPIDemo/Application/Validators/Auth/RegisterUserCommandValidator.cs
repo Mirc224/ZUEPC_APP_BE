@@ -1,10 +1,10 @@
 ﻿using DataAccess.Data.User;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
-using MVCAPIDemo.Application.Commands.Users;
+using MVCAPIDemo.Application.Commands.Auth;
 using MVCAPIDemo.Localization;
 
-namespace MVCAPIDemo.Application.Validators.Users;
+namespace MVCAPIDemo.Application.Validators.Auth;
 
 public class RegisterUserCommandValidator: AbstractValidator<RegisterUserCommand>
 {
@@ -24,7 +24,7 @@ public class RegisterUserCommandValidator: AbstractValidator<RegisterUserCommand
 
     private bool AlreadyExists(IUserData repository, string email)
     {
-        var result = repository.GetUserByEmail(email);
+        var result = repository.GetUserByEmailAsync(email);
         result.Wait();
         return result.Result != null;
     }

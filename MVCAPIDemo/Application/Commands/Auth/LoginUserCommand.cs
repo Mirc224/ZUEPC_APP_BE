@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MVCAPIDemo.Application.Domain;
 
-namespace MVCAPIDemo.Application.Commands.Users;
+namespace MVCAPIDemo.Application.Commands.Auth;
 
 public class LoginUserCommand: IRequest<LoginUserCommandResponse>
 {

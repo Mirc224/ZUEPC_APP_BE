@@ -2,7 +2,7 @@
 using MVCAPIDemo.Application.Domain;
 using System.ComponentModel.DataAnnotations;
 
-namespace MVCAPIDemo.Application.Commands.Users;
+namespace MVCAPIDemo.Application.Commands.Auth;
 
 public class RegisterUserCommand: IRequest<RegisterUserCommandResponse>
 {

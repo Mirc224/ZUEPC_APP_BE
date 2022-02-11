@@ -22,7 +22,7 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserQueryRes
 
     public async Task<GetUserQueryResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var userModel = await _repository.GetUserById(request.Id);
+        var userModel = await _repository.GetUserByIdAsync(request.Id);
 		if (userModel is null)
 		{
 			return new()
@@ -33,7 +33,7 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserQueryRes
 		}
 		
 		var user = _mapper.Map<User>(userModel);
-		var roles = await _repository.GetUserRoles(user.Id);
+		var roles = await _repository.GetUserRolesAsync(user.Id);
 		user.Roles = roles.Select(x => x.Id).ToList();
 		
 		var response = new GetUserQueryResponse() { User = user, Success = true };
