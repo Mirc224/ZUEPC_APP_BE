@@ -11,7 +11,7 @@ public partial class UserData : IUserData
 		return await _db.QueryAsync<RoleModel, dynamic>(sql, new { });
 	}
 
-	public async Task<int> InsertUserRoleAsync(int userId, RolesType roleId)
+	public async Task<int> InsertUserRoleAsync(int userId, RoleType roleId)
 	{
 		string sql = $@"INSERT INTO {_userRolesTableName} (UserId, RoleId) 
 						VALUES(@UserId, @RoleId)";
@@ -25,7 +25,7 @@ public partial class UserData : IUserData
 		return await GetUserRolesAsync(new { UserId = id }, builder);
 	}
 
-	public async Task<int> DeleteUserRoleAsync(int userId, RolesType roleId)
+	public async Task<int> DeleteUserRoleAsync(int userId, RoleType roleId)
 	{
 		var builder = new SqlBuilder();
 		builder.Where("UserId = @UserId");

@@ -55,7 +55,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         }
 		newUserModel.Id = newUserId;
 
-		var defaultUserRoles = new List<RolesType>() { RolesType.USER };
+		var defaultUserRoles = new List<RoleType>() { RoleType.USER };
 
 		var newUser = _mapper.Map<User>(newUserModel);
 

@@ -40,7 +40,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 			};
 		}
 		
-		User user = _mapper.Map<User>(userModel);
+		var user = _mapper.Map<User>(userModel);
 		var origUserJSON = JObject.FromObject(user);
 		user.Roles = (await _repository.GetUserRolesAsync(userModel.Id)).Select(x => x.Id).ToList();
 		
@@ -49,7 +49,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 
 		var modifUserJSON = JObject.FromObject(user);
 
-		List<string> changedProperties = new List<string>();
+		var changedProperties = new List<string>();
 		foreach(var x in origUserJSON)
 		{
 			if(!JToken.DeepEquals(x.Value, modifUserJSON[x.Key]))
@@ -63,7 +63,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 		{
 			changedProperties.Remove("Roles");
 			var newUserRoles = user.Roles.ToHashSet();
-			newUserRoles.Add(RolesType.USER);
+			newUserRoles.Add(RoleType.USER);
 
 			var addedRoles = newUserRoles.Except(actualRoles);
 			var removedRoles = actualRoles.Except(newUserRoles);

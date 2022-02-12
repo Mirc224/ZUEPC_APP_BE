@@ -15,8 +15,8 @@ namespace MVCAPIDemo.Auth.Services;
 
 public class AuthenticationService
 {
-    private readonly JwtSettings _jwtSettings;
-    private readonly TokenValidationParameters _tokenValidationParams;
+	private readonly JwtSettings _jwtSettings;
+	private readonly TokenValidationParameters _tokenValidationParams;
 	private readonly IUserData _userRepository;
 	private readonly IStringLocalizer<DataAnnotations> _localizer;
 	private readonly string _usedSecuritySignatureAlgorithm = SecurityAlgorithms.HmacSha512Signature;
@@ -27,8 +27,8 @@ public class AuthenticationService
 		TokenValidationParameters tokenValidationParams,
 		IUserData userRepository,
 		IStringLocalizer<DataAnnotations> localizer)
-    {
-        _jwtSettings = jwtSettings.Value;
+	{
+		_jwtSettings = jwtSettings.Value;
 		_userRepository = userRepository;
 		_localizer = localizer;
 		_tokenValidationParams = tokenValidationParams.Clone();
@@ -41,7 +41,7 @@ public class AuthenticationService
 		try
 		{
 			var tokenInVerification = jwtTokenHandler.ValidateToken(token, _tokenValidationParams, out var validatedToken);
-			if(!IsJwtSecurityToken(validatedToken))
+			if (!IsJwtSecurityToken(validatedToken))
 			{
 				return new() { Success = false, ErrorMessages = new string[] { _localizer["NotValidToken"] } };
 			}
@@ -58,12 +58,12 @@ public class AuthenticationService
 
 			var storedToken = await _userRepository.GetRefreshTokenByTokenAsync(refreshToken);
 
-			if(storedToken is null)
+			if (storedToken is null)
 			{
 				return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenNotExist"] } };
 			}
 
-			if(storedToken.ExpiryDate.ToUniversalTime() < DateTime.UtcNow)
+			if (storedToken.ExpiryDate.ToUniversalTime() < DateTime.UtcNow)
 			{
 				return new() { Success = false, ErrorMessages = new string[] { _localizer["RefreshTokenExpired"] } };
 			}
@@ -80,14 +80,14 @@ public class AuthenticationService
 
 			var jti = tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-			if(storedToken.JwtId != jti)
+			if (storedToken.JwtId != jti)
 			{
 				return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenNotMatch"] } };
 			}
-			
+
 			storedToken.IsUsed = true;
 			int rowsUpadted = await _userRepository.UpdateRefreshTokenAsync(storedToken);
-			
+
 			if (rowsUpadted != 1)
 			{
 				return new() { Success = false, ErrorMessages = new string[] { _localizer["UnknownDbError"] } };
@@ -110,7 +110,7 @@ public class AuthenticationService
 
 	public async Task<RevokeResult> RevokeTokenAsync(string? refreshToken)
 	{
-		if(refreshToken is null)
+		if (refreshToken is null)
 		{
 			return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenNotExist"] } };
 		}
@@ -135,7 +135,7 @@ public class AuthenticationService
 			return new() { Success = false, ErrorMessages = new string[] { _localizer["UnknownDbError"] } };
 		}
 
-		return new() { Success = true};
+		return new() { Success = true };
 	}
 
 	public async Task<RevokeResult> RevokeUserTokenAsync(int userId, string jwtId)
@@ -180,7 +180,7 @@ public class AuthenticationService
 		var utcExpiryDate = long.Parse(tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
 		var expiryDate = UnixTimeStampToDateTime(utcExpiryDate);
 
-		if(expiryDate > DateTime.UtcNow)
+		if (expiryDate > DateTime.UtcNow)
 		{
 			return false;
 		}
@@ -194,29 +194,24 @@ public class AuthenticationService
 			var result = jwtSecurityToken.Header.Alg.Equals(_usedSecurityAlgorithm, StringComparison.InvariantCultureIgnoreCase);
 			return result;
 		}
-		
+
 		return false;
 	}
 
-    public async Task<AuthResult> GenerateJwtToken(UserModel userModel)
-    {
+	public async Task<AuthResult> GenerateJwtToken(UserModel userModel)
+	{
 		var jwtTokenHandler = new JwtSecurityTokenHandler();
 
 		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
 
 		var tokenDescriptor = new SecurityTokenDescriptor
 		{
-			Subject = new ClaimsIdentity(new[]
-			{
-				new Claim(CustomClaims.UserId, userModel.Id.ToString()),
-				new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
-				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-			}),
+			Subject = new ClaimsIdentity(await GetUserClaims(userModel)),
 			Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
 			SigningCredentials = new SigningCredentials(key, _usedSecuritySignatureAlgorithm)
 		};
 
-        var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+		var token = jwtTokenHandler.CreateToken(tokenDescriptor);
 		var jwtToken = jwtTokenHandler.WriteToken(token);
 
 		var refreshToken = new RefreshTokenModel()
@@ -229,16 +224,30 @@ public class AuthenticationService
 			ExpiryDate = DateTime.UtcNow.AddMonths(6),
 			Token = Guid.NewGuid()
 		};
-		
+
 		await _userRepository.InsertRefreshTokenAsync(refreshToken);
 
-		return new() { Token = jwtToken, Success = true, RefreshToken = refreshToken.Token};
-    }
+		return new() { Token = jwtToken, Success = true, RefreshToken = refreshToken.Token };
+	}
+
+	private async Task<List<Claim>> GetUserClaims(UserModel userModel)
+	{
+		var claims = new List<Claim>()
+		{
+				new Claim(CustomClaims.UserId, userModel.Id.ToString()),
+				new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
+				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+		};
+
+		var userRoles = await _userRepository.GetUserRolesAsync(userModel.Id);
+		claims.AddRange(userRoles.Select(x=> new Claim(ClaimTypes.Role, x.Id.ToString())).ToList());
+		return claims;
+	}
 
 	private string RandomString(int length)
 	{
 		var random = new Random();
-		 string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		return new string(Enumerable.Repeat(chars, length)
 			.Select(s => s[random.Next(s.Length)]).ToArray());
 	}

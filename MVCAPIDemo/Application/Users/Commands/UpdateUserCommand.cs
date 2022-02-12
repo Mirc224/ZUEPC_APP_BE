@@ -9,5 +9,5 @@ public class UpdateUserCommand : IRequest<UpdateUserCommandResponse>
 {
 	public int UserId { get; set; }
 	public JsonPatchDocument<User>? AppliedPatch { get; set; }
-	public HashSet<RolesType>? UserRoles { get; set; }
+	public HashSet<RoleType>? UserRoles { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿namespace DataAccess.Enums;
 
-public enum RolesType
+
+public enum RoleType
 {
 	ADMIN = 1,
 	EDITOR = 2,

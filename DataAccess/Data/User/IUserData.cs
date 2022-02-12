@@ -14,8 +14,8 @@ public interface IUserData
     Task<int> UpdateUserAsync(UserModel user);
 	Task<IEnumerable<RoleModel>> GetRolesAsync();
 	Task<IEnumerable<RoleModel>> GetUserRolesAsync(int id);
-	Task<int> InsertUserRoleAsync(int userId, RolesType roleId);
-	Task<int> DeleteUserRoleAsync(int userId, RolesType roleId);
+	Task<int> InsertUserRoleAsync(int userId, RoleType roleId);
+	Task<int> DeleteUserRoleAsync(int userId, RoleType roleId);
 	Task<int> DeleteAllUserRolesAsync(int userId);
 	Task<Guid> InsertRefreshTokenAsync(RefreshTokenModel refreshToken);
 	Task<RefreshTokenModel?> GetRefreshTokenByTokenAsync(string refreshToken);

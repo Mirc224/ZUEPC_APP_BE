@@ -3,6 +3,7 @@ using DataAccess.DbAccess;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MVCAPIDemo.Application.Filters;
@@ -73,7 +74,6 @@ public static class ApiServices
 			RequireExpirationTime = false,
 			ValidateLifetime = true
 		};
-
 		builder.Services.AddSingleton(tokenValidationParameters);
 		builder.Services
             .AddAuthentication(x =>
