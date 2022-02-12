@@ -5,9 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using MVCAPIDemo.Application.Filters;
-using MVCAPIDemo.Application.Services;
+using MVCAPIDemo.Auth.Services;
 using MVCAPIDemo.Localization;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
@@ -59,7 +58,7 @@ public static class ApiServices
 
     public static void ConfigureAuthentication(WebApplicationBuilder builder)
     {
-		builder.Services.AddSingleton<JwtAuthenticationService>();
+		builder.Services.AddSingleton<AuthenticationService>();
 		var jwtSettings = new JwtSettings();
 
         builder.Configuration.Bind(nameof(jwtSettings), jwtSettings);

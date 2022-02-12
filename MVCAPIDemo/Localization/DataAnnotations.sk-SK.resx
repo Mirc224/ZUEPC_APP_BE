@@ -144,6 +144,9 @@
   <data name="TokenNotMatch" xml:space="preserve">
     <value>Token sa nezhoduje.</value>
   </data>
+  <data name="TokenNotOwnedByUser" xml:space="preserve">
+    <value>Token nepatrí používateľovi.</value>
+  </data>
   <data name="UnknownDbError" xml:space="preserve">
     <value>Neznáma chyba databázy.</value>
   </data>

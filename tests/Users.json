@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "6d29fbae-6a7c-47c3-9f87-9d15b4c7f39f",
+		"name": "Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"item": [
+				{
+					"name": "RegisterNewUser",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function makeEmail(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"pm.environment.set(\"Temp.NewUser.Email\", makeEmail(10) + \"@gmail.com\")\r",
+									"pm.environment.set(\"Temp.NewUser.Password\", \"pass\")\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Registrating new user should return status 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"\r",
+									"    var response = pm.response.json()\r",
+									"    pm.environment.set(\"Temp.NewUser.Id\", response.id)\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Mirko\",\r\n  \"lastName\": \"Potočár\",\r\n  \"email\": \"{{Temp.NewUser.Email}}\",\r\n  \"password\": \"{{Temp.NewUser.Password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/auth/register?culture=sk-SK",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							],
+							"query": [
+								{
+									"key": "culture",
+									"value": "sk-SK"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RegisterNewUserWithUsedEmail",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Registrating new user should return status 400.\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Mirko\",\r\n  \"lastName\": \"Potočár\",\r\n  \"email\": \"{{Temp.NewUser.Email}}\",\r\n  \"password\": \"{{Temp.NewUser.Password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/auth/register?culture=sk-SK",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							],
+							"query": [
+								{
+									"key": "culture",
+									"value": "sk-SK"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get user by id should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var response = pm.response.json();\r",
+									"    \r",
+									"    pm.test(\"Returned user should have correct Id.\", function() \r",
+									"    {\r",
+									"        pm.expect(response.id).to.be.eql(pm.environment.get(\"Temp.NewUser.Id\"))\r",
+									"    })\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/users/{{Temp.NewUser.Id}}?culture=en-GB",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{Temp.NewUser.Id}}"
+							],
+							"query": [
+								{
+									"key": "culture",
+									"value": "en-GB"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authenticate",
+			"item": [
+				{
+					"name": "LoginUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login user with correct email and password should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Authenticate.AccessToken\", response.token);\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{Temp.NewUser.Email}}\",\r\n  \"password\": \"{{Temp.NewUser.Password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7032/api/auth/login?culture=en-GB",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7032",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "culture",
+									"value": "en-GB"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogoutUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Temp.Authenticate.AccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7032/api/auth/logout?culture=sk-SK",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7032",
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							],
+							"query": [
+								{
+									"key": "culture",
+									"value": "sk-SK"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GetUsers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7032/api/users",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PatchUser",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/roles/\",\r\n        \"value\": [1]\r\n    },\r\n    {\r\n        \"op\": \"replace\",\r\n        \"path\": \"/firstName/\",\r\n        \"value\": \"Mirec\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7032/api/users/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"api",
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RefreshToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTAwMiIsImVtYWlsIjoienpXNW1vNHRqVkBnbWFpbC5jb20iLCJqdGkiOiIzMzU2NjE3ZC0zMTU2LTRkYzgtOTMwZC01N2E5MzYwMmJlNTYiLCJuYmYiOjE2NDQ2NjYxOTUsImV4cCI6MTY0NDY2NjIxMCwiaWF0IjoxNjQ0NjY2MTk1fQ.ouHH-0rQtX_2cvrKOtBEyQkyZGeElLNXGGkQuuRXSeBX_ZZEc9R6wz0qrofS4JBIR9lxfNTPwASbSRvuzVl2hA\",\r\n    \"refreshToken\": \"fe872b4c-d695-4725-a733-c60ccb475c4f\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7032/api/auth/refreshtoken?culture=en-GB",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"api",
+						"auth",
+						"refreshtoken"
+					],
+					"query": [
+						{
+							"key": "culture",
+							"value": "en-GB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RevokeToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTAwMiIsImVtYWlsIjoienpXNW1vNHRqVkBnbWFpbC5jb20iLCJqdGkiOiIzMzU2NjE3ZC0zMTU2LTRkYzgtOTMwZC01N2E5MzYwMmJlNTYiLCJuYmYiOjE2NDQ2NjYxOTUsImV4cCI6MTY0NDY2NjIxMCwiaWF0IjoxNjQ0NjY2MTk1fQ.ouHH-0rQtX_2cvrKOtBEyQkyZGeElLNXGGkQuuRXSeBX_ZZEc9R6wz0qrofS4JBIR9lxfNTPwASbSRvuzVl2hA\",\r\n    \"refreshToken\": \"fe872b4c-d695-4725-a733-c60ccb475c4f\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7032/api/auth/revoketoken?culture=en-GB",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7032",
+					"path": [
+						"api",
+						"auth",
+						"revoketoken"
+					],
+					"query": [
+						{
+							"key": "culture",
+							"value": "en-GB"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

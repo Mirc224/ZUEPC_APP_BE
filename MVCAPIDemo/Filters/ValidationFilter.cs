@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using MVCAPIDemo.Application.Responses;
+using MVCAPIDemo.Common.Responses;
 
 namespace MVCAPIDemo.Application.Filters;
 

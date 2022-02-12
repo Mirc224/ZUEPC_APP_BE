@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using DataAccess.Models;
-using MVCAPIDemo.Application.Commands.Auth;
-using MVCAPIDemo.Application.Domain;
+using MVCAPIDemo.Auth.Commands;
+using MVCAPIDemo.Auth.Domain;
+using Users.Base.Application.Domain;
+using Users.Base.Domain;
 
 namespace MVCAPIDemo.Application.Mapping;
 

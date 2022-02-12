@@ -1,4 +1,4 @@
-﻿using DataAccess.DbAccess;
+﻿using Dapper;
 using DataAccess.Models;
 
 namespace DataAccess.Data.User;
@@ -16,33 +16,53 @@ public partial class UserData : IUserData
 
 	public async Task<RefreshTokenModel?> GetRefreshTokenByTokenAsync(string refreshToken)
 	{
-		string sql = $@"SELECT * FROM {_refreshTokensTableName} 
-						WHERE Token = @Token";
-		return (await _db.QueryAsync<RefreshTokenModel, dynamic>(sql, new { Token = refreshToken })).FirstOrDefault();
+		var builder = new SqlBuilder();
+		builder.Where("Token = @Token");
+		return (await GetRefreshTokensAsync(new { Token = refreshToken }, builder)).FirstOrDefault();
 	}
 
-	public async Task<RefreshTokenModel?> GetRefreshTokenByJwtIdAsync(string jwtId)
+	public async Task<int> UpdateRefreshTokenAsync(RefreshTokenModel refreshToken)
 	{
-		string sql = $@"SELECT * FROM {_refreshTokensTableName} 
-						WHERE JwtId = @JwtId";
-		return (await _db.QueryAsync<RefreshTokenModel, dynamic>(sql, new { JwtId = jwtId })).FirstOrDefault();
+		var builder = new SqlBuilder();
+		builder.Where("Token = @Token");
+		return await UpdateRefreshTokenAsync(refreshToken, builder);
 	}
 
-	public async Task<int> UpdateRefreshTokenAsync(RefreshTokenModel refreshTokenModel)
+	public async Task<int> UpdateRefreshTokenByJwtIdAsync(RefreshTokenModel refreshToken)
 	{
-		string sql = $@"UPDATE {_refreshTokensTableName} 
+		var builder = new SqlBuilder();
+		builder.Where("JwtId = @JwtId");
+		return await UpdateRefreshTokenAsync(refreshToken, builder);
+	}
+
+	public async Task<RefreshTokenModel?> GetUserRefreshTokenAsync(int userId, string jwtId)
+	{
+		var builder = new SqlBuilder();
+		builder.Where("JwtId = @JwtId");
+		builder.Where("UserId = @UserId");
+		return (await GetRefreshTokensAsync(new { JwtId = jwtId, UserId = userId }, builder)).FirstOrDefault();
+	}
+
+	public async Task<RefreshTokenModel?> GetUserRefreshByJwtIdAsync(string jwtId)
+	{
+		var builder = new SqlBuilder();
+		builder.Where("JwtId = @JwtId");
+		return (await GetRefreshTokensAsync(new { JwtId = jwtId}, builder)).FirstOrDefault();
+	}
+
+	protected async Task<int> UpdateRefreshTokenAsync(RefreshTokenModel refreshToken, SqlBuilder builder)
+	{
+		var builderTemplate = builder.AddTemplate($@"UPDATE {_refreshTokensTableName} 
 						SET UserId = @UserId, JwtId = @JwtId, IsUsed = @IsUsed, 
 						IsRevoked = @IsRevoked, CreatedAt = @CreatedAt, ExpiryDate = @ExpiryDate
-						WHERE Token = @Token";	
-		return await _db.ExecuteAsync(sql, refreshTokenModel);
+						/**where**/");
+		return await _db.ExecuteAsync(builderTemplate.RawSql, refreshToken);
 	}
 
-	public async Task<int> UpdateRefreshTokenByJwtIdAsync(RefreshTokenModel refreshTokenModel)
+	protected async Task<IEnumerable<RefreshTokenModel>> GetRefreshTokensAsync(dynamic parameters, SqlBuilder builder)
 	{
-		string sql = $@"UPDATE {_refreshTokensTableName} 
-						SET UserId = @UserId, JwtId = @JwtId, IsUsed = @IsUsed, 
-						IsRevoked = @IsRevoked, CreatedAt = @CreatedAt, ExpiryDate = @ExpiryDate
-						WHERE JwtId = @JwtId";
-		return await _db.ExecuteAsync(sql, refreshTokenModel);
+		var builderTemplate = builder.AddTemplate(
+			$@"SELECT * FROM {_refreshTokensTableName} /**where**/");
+		return await _db.QueryAsync<RefreshTokenModel, dynamic>(builderTemplate.RawSql, parameters);
 	}
 }

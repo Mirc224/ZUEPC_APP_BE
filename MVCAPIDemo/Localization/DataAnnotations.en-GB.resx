@@ -144,6 +144,9 @@
   <data name="TokenNotMatch" xml:space="preserve">
     <value>Token does not match.</value>
   </data>
+  <data name="TokenNotOwnedByUser" xml:space="preserve">
+    <value>Token is not owned by user.</value>
+  </data>
   <data name="UnknownDbError" xml:space="preserve">
     <value>Unknown database error.</value>
   </data>
