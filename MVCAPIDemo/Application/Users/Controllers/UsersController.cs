@@ -1,4 +1,6 @@
+using DataAccess.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +24,7 @@ namespace MVCAPIDemo.Application.Controllers
 		}
 
 		[HttpGet]
-		//[Authorize]
+		[Authorize(Roles = "ADMIN")]
 		public async Task<IActionResult> GetUsers()
 		{
 			var claimsPrincipal = User;

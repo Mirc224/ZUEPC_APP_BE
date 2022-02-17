@@ -19,9 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Constants\Constants.csproj" />
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\Users.Base\Users.Base.csproj" />
+    <ProjectReference Include="..\Constants\ZUEPC.Constants.csproj" />
+    <ProjectReference Include="..\DataAccess\ZUEPC.DataAccess.csproj" />
+    <ProjectReference Include="..\Users.Base\ZUEPC.Users.Base.csproj" />
   </ItemGroup>
 
   <ItemGroup>
