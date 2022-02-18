@@ -13,6 +13,8 @@ public class CREPCInstitution
 	[XmlArray(ElementName = "institution_identifier")]
 	[XmlArrayItem(ElementName = "local_numbers")]
 	public CREPCInstitutionIdInOtherDatabase[]? InstitutionIdInOtherDatabases { get; set; }
+	[XmlElement(ElementName = "institution_tag")]
+	public string? InstitutionTag { get; set; }
 	[XmlElement(ElementName = "institution_name")]
 	public CREPCInstitutionName[]? InstitutionNames { get; set; }
 

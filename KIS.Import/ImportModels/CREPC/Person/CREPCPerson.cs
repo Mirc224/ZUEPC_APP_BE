@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+using ZUEPC.Import.ImportModels.CREPC.Common;
 
 namespace ZUEPC.Import.ImportModels.CREPC.Person;
 
@@ -17,4 +18,8 @@ public class CREPCPerson
 	public CREPCPersonIdInOtherDatabase[]? PersonsIdInOtherDatabases { get; set; }
 	[XmlElement(ElementName = "cross_person_institution")]
 	public CREPCPersonInstitution[]? PersonsInstitution { get; set; }
+	//[XmlElement(ElementName = "periods")]
+	[XmlArray(ElementName = "periods")]
+	[XmlArrayItem(ElementName = "period")]
+	public CREPCDatePeriodInterval[]? PesronsBirthAndDeathDates { get; set; }
 }
