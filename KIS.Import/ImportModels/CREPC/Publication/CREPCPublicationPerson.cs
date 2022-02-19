@@ -9,17 +9,17 @@ public class CREPCPublicationPerson
 {
 	public PersonToPublicationRoleType PersonRole { get; set; }
 	[XmlAttribute(AttributeName = "ratio")]
-	public string? ShareString
+	public string? ContributionRatioString
 	{
-		get => Share?.ToString();
+		get => ContributionRatio?.ToString();
 		set
 		{
-			Share = default;
+			ContributionRatio = default;
 			string currentDecimalSeparator = Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 			var convertedVal = value?.Replace(",", currentDecimalSeparator).Replace(".", currentDecimalSeparator);
 			if (double.TryParse(convertedVal, out var tmpNumber))
 			{
-				Share = tmpNumber;
+				ContributionRatio = tmpNumber;
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class CREPCPublicationPerson
 	[XmlElement(ElementName = "affiliation")]
 	public CREPCReportingInstitution[]? ReportingInstitutions { get; set; }
 
-	public double? Share;
+	public double? ContributionRatio;
 
 	public string? _personRoleString;
 }
