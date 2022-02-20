@@ -4,6 +4,8 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using ZUEPC.Import.Enums.Person;
 using ZUEPC.Import.Enums.Publication;
+using ZUEPC.Import.Import.Service;
+using ZUEPC.Import.ImportModels.CREPC.Common;
 
 public class Program
 {
@@ -11,7 +13,10 @@ public class Program
 	{
 		//XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\AFC hromadné 13x.xml");
 		//XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\moj_testovaci.xml");
-
+		//ImportCREPC();
+		string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\AFC hromadné 13x.xml");
+		ImportService.ManualImportCREPC(docString);
+		//ImportDaWinci();
 		//XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
 		//XNamespace opensearch = "http://biblib.net/opensearch/";
 		//XNamespace xmlns = "http://www.crepc.sk/schema/xml-crepc2/";
@@ -28,31 +33,73 @@ public class Program
 
 
 		//XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\AFC_hromadne_13x.ISO");
-		XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_s_ohlasmi.ISO");
-		doc = ConvertUNIMARCToReadableForm(doc);
-		Console.WriteLine(doc.ToString());
+		//XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_s_ohlasmi.ISO");
+		//doc = ConvertUNIMARCToReadableForm(doc);
+		////Console.WriteLine(doc.ToString());
 
-		XNamespace marc = "http://www.loc.gov/MARC21/slim";
-		var searchedName = "record";
+		////XNamespace marc = "http://www.loc.gov/marc21/slim";
+		////var searchedName = "record";
 
-		var nodes = from descendant in doc.Descendants()
-					where descendant.Name == searchedName &&
-					!(from ancestor in descendant.Ancestors()
-					  where ancestor.Name == searchedName
-					  select ancestor).Any()
-					select descendant;
+		//XNamespace marc = "http://www.loc.gov/marc21/slim";
+		//var searchedName = marc + "collection";
 
+		////XNamespace marc = "http://www.loc.gov/MARC21/slim";
+		////var searchedName = biblibsearch + "records";
+
+		//var nodes = from descendant in doc.Descendants()
+		//			where descendant.Name == searchedName &&
+		//			!(from ancestor in descendant.Ancestors()
+		//			  where ancestor.Name == searchedName
+		//			  select ancestor).Any()
+		//			select descendant;
+
+		//StringReader reader = new StringReader(doc.ToString());
+		//XmlSerializer xmlSerializer = new XmlSerializer(typeof(DaWinciImport));
+		//var result = xmlSerializer.Deserialize(reader) as DaWinciImport;
 		//Console.WriteLine(nodes.Count());
-		foreach (var child in nodes)
-		{
-			StringReader reader = new StringReader(child.ToString());
-			XmlSerializer xmlSerializer = new XmlSerializer(typeof(DaWinciPublication));
-			var result = xmlSerializer.Deserialize(reader) as DaWinciPublication;
-			Console.WriteLine();
-		}
+		//foreach (var child in nodes)
+		//{
+		//	StringReader reader = new StringReader(child.ToString());
+		//	XmlSerializer xmlSerializer = new XmlSerializer(typeof(DaWinciImport));
+		//	var result = xmlSerializer.Deserialize(reader) as DaWinciImport;
+		//	Console.WriteLine();
+		//}
 
 		//XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_s_ohlasmi.ISO");
-		Console.WriteLine(doc.ToString());
+		//Console.WriteLine(doc.ToString());
+	}
+
+	public static void ImportCREPC()
+	{
+		XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\ADC_10x.xml");
+		XNamespace biblibsearch = "http://biblib.net/search/";
+
+		var searchedName = biblibsearch + "records";
+
+		var recordsElement = doc.Descendants(searchedName).FirstOrDefault();
+		StringReader reader = new StringReader(recordsElement?.ToString());
+		XmlSerializer xmlSerializer = new XmlSerializer(typeof(CREPCImport));
+		var result = xmlSerializer.Deserialize(reader) as CREPCImport;
+		Console.WriteLine();
+	}
+
+	public static void ImportDaWinci()
+	{
+		XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_s_ohlasmi.ISO");
+		doc = ConvertUNIMARCToReadableForm(doc);
+		StringReader reader = new StringReader(doc.ToString());
+		XmlSerializer xmlSerializer = new XmlSerializer(typeof(DaWinciImport));
+		var result = xmlSerializer.Deserialize(reader) as DaWinciImport;
+		Console.WriteLine();
+	}
+
+
+	[XmlRoot(ElementName = "collection", Namespace = "http://www.loc.gov/MARC21/slim")]
+	public class DaWinciImport
+	{
+		[XmlElement(ElementName = "record", Namespace = "")]
+		public DaWinciPublication[]? Publications { get; set; }
+
 	}
 
 	[XmlRoot(ElementName = "record")]
@@ -88,6 +135,9 @@ public class Program
 
 		[XmlElement(ElementName = "extern_db_identifier")]
 		public DaWinciPublicationInExternDb[]? PublicationExternDbIdentifiers { get; set; }
+
+		[XmlElement(ElementName = "general_processing_data")]
+		public DaWinciPublicationGeneralData? PublicationGeneralData { get; set; }
 	}
 
 	public class DaWinciRelatedPublication
@@ -107,21 +157,20 @@ public class Program
 
 	public class DaWinciPublicationInExternDb
 	{
-
 		public string? ExternDbPublicationId { get; set; }
 
 		[XmlElement(ElementName = "publication_externdb_id")]
-		public string? ExternDbPublicationIdString 
+		public string? ExternDbPublicationIdString
 		{
 			get => ExternDbPublicationId;
 			set
 			{
 				ExternDbPublicationId = value;
-				if(value is null)
+				if (value is null)
 				{
 					return;
 				}
-				if(!value.StartsWith("CCC") && !value.StartsWith("WOS"))
+				if (!value.StartsWith("CCC") && !value.StartsWith("WOS"))
 				{
 					return;
 				}
@@ -131,6 +180,36 @@ public class Program
 
 		[XmlElement(ElementName = "db_name")]
 		public string? ExternDbName { get; set; }
+	}
+
+	public class DaWinciPublicationGeneralData
+	{
+		public DateTime? RecordVersionDate { get; set; }
+
+		[XmlElement(ElementName = "general_data")]
+		public string? RecordVersionDateString
+		{
+			get => _recordVersionDateString;
+			set
+			{
+				_recordVersionDateString = value;
+				if (value is null || !int.TryParse(value.AsSpan(0, 4), out var year))
+				{
+					return;
+				}
+				if (!int.TryParse(value.AsSpan(4, 2), out var month))
+				{
+					return;
+				}
+				if (!int.TryParse(value.AsSpan(6, 2), out var day))
+				{
+					return;
+				}
+				RecordVersionDate = new DateTime(year, month, day);
+			}
+		}
+
+		public string? _recordVersionDateString;
 	}
 
 	public class DaWinciPubliactionPerson
@@ -227,7 +306,7 @@ public class Program
 
 		[XmlElement(ElementName = "faculty_short")]
 		public string? FacultyCode { get; set; }
-		
+
 		[XmlElement(ElementName = "reviewed")]
 		public string? Reviewed { get; set; }
 
@@ -243,7 +322,7 @@ public class Program
 		[XmlElement(ElementName = "digi_identifier")]
 		public DaWinciPublicationDigitalIdentifier? DigitalIdentifier { get; set; }
 	}
-	
+
 
 	public class DaWinciDocumentType
 	{
@@ -293,18 +372,18 @@ public class Program
 			set
 			{
 				_identifierValueString = value;
-				if(value is null)
+				if (value is null)
 				{
 					return;
 				}
-				if(!value.StartsWith("DOI"))
+				if (!value.StartsWith("DOI"))
 				{
 					IdentifierValue = value;
 					return;
 				}
 				var splitIdentifier = value.Split(' ');
 				IdentifierTypeString = splitIdentifier[0];
-				if(splitIdentifier.Length > 1)
+				if (splitIdentifier.Length > 1)
 				{
 					IdentifierValue = splitIdentifier[1];
 				}
@@ -446,6 +525,8 @@ public class Program
 		FindElementAndRename(doc, marcCollection, datafieldName, "tag", "985", "publishing_activity");
 		FindElementAndRename(doc, marcCollection, datafieldName, "tag", "992", "document_type");
 		FindElementAndRename(doc, marcCollection, datafieldName, "tag", "RID", "extern_db_identifier");
+
+		FindElementAndRename(doc, "general_processing_data", subfieldName, "code", "a", "general_data");
 
 		FindElementAndRename(doc, "publication_language", subfieldName, "code", "a", "language_code");
 		FindElementAndRename(doc, "publication_country", subfieldName, "code", "a", "country_code");
