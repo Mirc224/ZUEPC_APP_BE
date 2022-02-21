@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Import.Import.Service;
 
-public partial class ImportService
+public partial class ImportParser
 {
 	public static void ManualImportCREPC(string stringDoc)
 	{
@@ -34,20 +34,6 @@ public partial class ImportService
 		importedRecord.Publication = ParseCREPCPublication(publicationElement, xmlns);
 
 		return importedRecord;
-	}
-
-	public static ImportPublication ParseCREPCPublication(XElement publicationElement, string xmlns)
-	{
-		var importedPublication = new ImportPublication();
-		importedPublication.PublicationTypeAsString = publicationElement.Attribute("form_type")?.Value;
-
-		importedPublication.PublicationExternDbIds = ParseCREPCPublicationExternDbIdentifiers(publicationElement, xmlns);
-		importedPublication.PublicationIds = ParseCREPCPublicationIdentifiers(publicationElement, xmlns);
-		importedPublication.PublicationNames = ParseCREPCPublicationNames(publicationElement, xmlns);
-		importedPublication.PublicationAuthors = ParseCREPCPublicationAuthors(publicationElement, xmlns);
-		importedPublication.RelatedPublications = ParseCREPCRelatedPublications(publicationElement, xmlns);
-
-		return importedPublication;
 	}
 
 	public static int? ParseInt(string? value)

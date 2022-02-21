@@ -3,7 +3,7 @@ using ZUEPC.Import.Import.Models;
 
 namespace ZUEPC.Import.Import.Service;
 
-partial class ImportService
+partial class ImportParser
 {
 	public static List<ImportRelatedPublication> ParseCREPCRelatedPublications(XElement publicationElement, string xmlns)
 	{
@@ -22,6 +22,8 @@ partial class ImportService
 
 			var nestedPublicationElement = relatedPublicationElement.Element(XName.Get("rec_biblio", xmlns));
 			relatedPublication.RelatedPublication = ParseCREPCPublication(nestedPublicationElement, xmlns);
+			relatedPublication.CitationCategory = relatedPublicationElement
+												  .Element(XName.Get("citation_category", xmlns))?.Value;
 			result.Add(relatedPublication);
 		}
 		return result;

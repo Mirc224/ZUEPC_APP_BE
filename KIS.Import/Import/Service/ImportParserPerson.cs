@@ -4,7 +4,7 @@ using static ZUEPC.Import.Import.Models.ImportPerson;
 
 namespace ZUEPC.Import.Import.Service;
 
-partial class ImportService
+partial class ImportParser
 {
 	public static ImportPerson ParseCREPCPerson(XElement personElement, string xmlns)
 	{

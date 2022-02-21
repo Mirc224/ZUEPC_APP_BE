@@ -5,8 +5,23 @@ using static ZUEPC.Import.Import.Service.ImportPublication;
 
 namespace ZUEPC.Import.Import.Service;
 
-partial class ImportService
+partial class ImportParser
 {
+	public static ImportPublication ParseCREPCPublication(XElement publicationElement, string xmlns)
+	{
+		var importedPublication = new ImportPublication();
+		importedPublication.PublicationTypeAsString = publicationElement.Attribute("form_type")?.Value;
+
+		importedPublication.PublicationExternDbIds = ParseCREPCPublicationExternDbIdentifiers(publicationElement, xmlns);
+		importedPublication.PublicationIds = ParseCREPCPublicationIdentifiers(publicationElement, xmlns);
+		importedPublication.PublicationNames = ParseCREPCPublicationNames(publicationElement, xmlns);
+		importedPublication.PublicationAuthors = ParseCREPCPublicationAuthors(publicationElement, xmlns);
+		importedPublication.RelatedPublications = ParseCREPCRelatedPublications(publicationElement, xmlns);
+		importedPublication.PublishingActivities = ParseCREPCPublishingActivityDetails(publicationElement, xmlns);
+
+		return importedPublication;
+	}
+
 	public static List<ImportPublicationIdentifier> ParseCREPCPublicationIdentifiers(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationIdentifier> result = new();

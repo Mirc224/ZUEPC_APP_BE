@@ -7,6 +7,7 @@ public class ImportInstitution
 	public List<ImportInstitutionExternDbId> InstitutionExternDbIds { get; set; } = new();
 
 	public string? InstititutionType { get; set; }
+	public string? InstititutionTag { get; set; }
 
 	public class ImportInstitutionName
 	{

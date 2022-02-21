@@ -11,6 +11,7 @@ public class ImportPublication
 	public List<ImportPublicationNameDetails> PublicationNames { get; set; } = new();
 	public List<ImportPublicationAuthor> PublicationAuthors { get; set; } = new();
 	public List<ImportRelatedPublication> RelatedPublications { get; set; } = new();
+	public List<ImportPublishingActivityDetails> PublishingActivities { get; set; } = new();
 
 	public string? PublicationTypeAsString
 	{

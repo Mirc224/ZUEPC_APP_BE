@@ -4,7 +4,7 @@ using static ZUEPC.Import.Import.Models.ImportInstitution;
 
 namespace ZUEPC.Import.Import.Service;
 
-partial class ImportService
+partial class ImportParser
 {
 	public static ImportInstitution ParseCREPCInstitution(XElement institutionElement, string xmlns)
 	{
@@ -22,7 +22,7 @@ partial class ImportService
 
 		var nameElements = institutionElement.Elements(XName.Get("institution_name", xmlns));
 
-		foreach(var nameElement in nameElements)
+		foreach (var nameElement in nameElements)
 		{
 			ImportInstitutionName institutionName = new()
 			{
@@ -43,10 +43,25 @@ partial class ImportService
 		{
 			InstitutionExternDbId = $"CREPC:{input}"
 		};
+
+		result.Add(externDbId);
+
+		var insitutionTagElement = institutionElement.Element(XName.Get("institution_identifier", xmlns))?
+								   .Element(XName.Get("institution_tag", xmlns));
+		if(insitutionTagElement != null)
+		{
+			input = insitutionTagElement.Value;
+			externDbId = new ImportInstitutionExternDbId()
+			{
+				InstitutionExternDbId = $"ins_tag:{input}"
+			};
+		}
+
 		var identifierElements = institutionElement.Element(XName.Get("institution_identifier", xmlns))?
 			.Elements(XName.Get("local_numbers", xmlns));
 		result.Add(externDbId);
-		if(identifierElements is null)
+
+		if (identifierElements is null)
 		{
 			return result;
 		}

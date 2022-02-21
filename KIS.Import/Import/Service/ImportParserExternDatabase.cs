@@ -4,7 +4,7 @@ using static ZUEPC.Import.Import.Models.ImportExternDatabase;
 
 namespace ZUEPC.Import.Import.Service;
 
-partial class ImportService
+partial class ImportParser
 {
 	public static ImportExternDatabase? CREPCExternDbCreator(XElement extDbElement, string xmlns)
 	{

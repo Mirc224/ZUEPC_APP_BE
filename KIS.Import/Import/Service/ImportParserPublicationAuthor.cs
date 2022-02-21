@@ -3,7 +3,7 @@ using ZUEPC.Import.Import.Models;
 
 namespace ZUEPC.Import.Import.Service;
 
-partial class ImportService
+partial class ImportParser
 {
 	public static List<ImportPublicationAuthor> ParseCREPCPublicationAuthors(XElement publicationElement, string xmlns)
 	{
