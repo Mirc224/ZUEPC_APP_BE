@@ -1,12 +1,21 @@
 ﻿using System.Xml.Linq;
+using ZUEPC.Import.Import.Models;
 
 namespace ZUEPC.Import.Import.Service;
 
 public partial class ImportParser
 {
-	public static void ManualImportCREPC(string stringDoc)
+	private const string DAWINCI_CONTROLFIELD = "controlfield";
+	private const string DAWINCI_DATAFIELD = "datafield";
+	private const string DAWINCI_SUBFIELD = "subfield";
+	private const string DAWINCI_CODE = "code";
+	private const string DAWINCI_TAG = "tag";
+	private const string ZU_PERSONID_PREFIX = "ŽU Žilina";
+	private const string ZU_PUBLICATIONID_PREFIX = "kis";
+
+	private const string CREPC_IDENTIFIER_PREFIX = "crepc2";
+	public static void ManualParseCREPC(string stringDoc)
 	{
-		//XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\ADC_s_ohlasmi_my.xml");
 		XDocument doc = XDocument.Parse(stringDoc);
 		string biblibsearch = "http://biblib.net/search/";
 		string xmlns = "http://www.crepc.sk/schema/xml-crepc2/";
@@ -22,6 +31,7 @@ public partial class ImportParser
 		Console.WriteLine();
 	}
 
+
 	public static ImportRecord? ParseCREPCImportRecord(XElement record, string biblibsearch, string xmlns)
 	{
 		var importedRecord = new ImportRecord();
@@ -35,6 +45,7 @@ public partial class ImportParser
 
 		return importedRecord;
 	}
+
 
 	public static int? ParseInt(string? value)
 	{
@@ -61,27 +72,46 @@ public partial class ImportParser
 		}
 		return new DateTime(year, month, day);
 	}
-}
 
-public class ImportRecord
-{
-	public DateTime RecordVersionDate { get; set; }
-	public ImportPublication? Publication { get; set; }
-
-
-	public string? RecordVersionDateString
+	public static void ManualParseDaWinci(string stringDoc)
 	{
-		set
+		XDocument doc = XDocument.Parse(stringDoc);
+		string marcns = "http://www.loc.gov/MARC21/slim";
+
+		List<ImportRecord> result = new();
+
+		var allRecords = doc.Descendants(XName.Get("record", marcns));
+
+		foreach (XElement node in allRecords)
 		{
-			if (value is null)
+			var parsedRecord = ParseDaWinciImportRecord(node, marcns);
+			if (parsedRecord != null)
 			{
-				return;
+				result.Add(parsedRecord);
 			}
-			if (!DateTime.TryParse(value, out var resultDate))
-			{
-				return;
-			}
-			RecordVersionDate = resultDate;
 		}
+
+		Console.WriteLine();
+	}
+
+	public static ImportRecord? ParseDaWinciImportRecord(XElement record, string marcns)
+	{
+		var importedRecord = new ImportRecord();
+		var versionIdentifierElement = (from element in record.Elements()
+								 where element.Attribute(DAWINCI_TAG)?.Value == "005"
+								 select element).FirstOrDefault();
+		if (versionIdentifierElement != null)
+		{
+			string version = versionIdentifierElement.Value;
+			int year = int.Parse(version.AsSpan(0, 4));
+			int month = int.Parse(version.AsSpan(4, 2));
+			int day = int.Parse(version.AsSpan(6, 2));
+			importedRecord.RecordVersionDate = new DateTime(year, month, day);
+		}
+
+		importedRecord.Publication = ParseDaWinciPublication(record, marcns);
+
+		return importedRecord;
 	}
 }
+

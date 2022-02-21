@@ -12,6 +12,7 @@ public class ImportPublication
 	public List<ImportPublicationAuthor> PublicationAuthors { get; set; } = new();
 	public List<ImportRelatedPublication> RelatedPublications { get; set; } = new();
 	public List<ImportPublishingActivityDetails> PublishingActivities { get; set; } = new();
+	public string? DocumentType { get; set; }
 
 	public string? PublicationTypeAsString
 	{
@@ -55,6 +56,6 @@ public class ImportPublication
 	public class ImportPublicationExternDbId
 	{
 		public string? PublicationId { get; set; }
-		public ImportExternDatabase? ExternDatabase { get; set; }
+		//public ImportExternDatabase? ExternDatabase { get; set; }
 	}
 }

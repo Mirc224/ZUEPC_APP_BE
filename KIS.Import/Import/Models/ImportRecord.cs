@@ -1,0 +1,26 @@
+﻿using ZUEPC.Import.Import.Service;
+
+namespace ZUEPC.Import.Import.Models;
+
+public class ImportRecord
+{
+	public DateTime RecordVersionDate { get; set; }
+	public ImportPublication? Publication { get; set; }
+
+
+	public string? RecordVersionDateString
+	{
+		set
+		{
+			if (value is null)
+			{
+				return;
+			}
+			if (!DateTime.TryParse(value, out var resultDate))
+			{
+				return;
+			}
+			RecordVersionDate = resultDate;
+		}
+	}
+}

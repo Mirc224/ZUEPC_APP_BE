@@ -15,8 +15,13 @@ public class Program
 		//XDocument doc = XDocument.Load(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\moj_testovaci.xml");
 		//ImportCREPC();
 		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\AFC hromadné 13x.xml");
-		string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\ADC_s_ohlasmi_my.xml");
-		ImportParser.ManualImportCREPC(docString);
+		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\ADC_s_ohlasmi_my.xml");
+		//ImportParser.ManualParseCREPC(docString);
+
+		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_s_ohlasmi.ISO");
+		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_samostatne.ISO");
+		string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_hromadne_10x.ISO");
+		ImportParser.ManualParseDaWinci(docString);
 		//ImportDaWinci();
 		//XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
 		//XNamespace opensearch = "http://biblib.net/opensearch/";

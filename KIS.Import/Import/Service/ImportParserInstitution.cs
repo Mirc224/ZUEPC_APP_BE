@@ -55,11 +55,11 @@ partial class ImportParser
 			{
 				InstitutionExternDbId = $"ins_tag:{input}"
 			};
+			result.Add(externDbId);
 		}
 
 		var identifierElements = institutionElement.Element(XName.Get("institution_identifier", xmlns))?
 			.Elements(XName.Get("local_numbers", xmlns));
-		result.Add(externDbId);
 
 		if (identifierElements is null)
 		{
@@ -75,6 +75,40 @@ partial class ImportParser
 			};
 			result.Add(externDbId);
 		}
+		return result;
+	}
+
+	public static ImportInstitution ParseDaWinciInstitution(XElement institutionElement, string xmlns)
+	{
+		ImportInstitution importInstitution = new();
+		importInstitution.InstitutionNames = ParseDaWinciInstitutionNames(institutionElement, xmlns);
+		importInstitution.InstitutionExternDbIds = ParseDaWinciInstitutionExternDbId(institutionElement, xmlns);
+		importInstitution.InstititutionType = institutionElement.Element(XName.Get("institution_type", xmlns))?.Value;
+		return importInstitution;
+	}
+
+	public static List<ImportInstitutionName> ParseDaWinciInstitutionNames(XElement institutionElement, string xmlns)
+	{
+		return new();
+	}
+
+	public static List<ImportInstitutionExternDbId> ParseDaWinciInstitutionExternDbId(XElement publicationElement, string xmlns)
+	{
+		List<ImportInstitutionExternDbId> result = new();
+		var insitutionTagElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+									where element.Attribute(DAWINCI_CODE)?.Value == "p"
+									select element).FirstOrDefault();
+
+		if (insitutionTagElement != null)
+		{
+			string input = insitutionTagElement.Value;
+			var externDbId = new ImportInstitutionExternDbId()
+			{
+				InstitutionExternDbId = $"ins_tag:{input}"
+			};
+			result.Add(externDbId);
+		}
+
 		return result;
 	}
 }
