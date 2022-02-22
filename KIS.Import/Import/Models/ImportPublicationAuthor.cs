@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.Import.Import.Models;
+﻿namespace ZUEPC.Import.Models;
 
 public class ImportPublicationAuthor
 {

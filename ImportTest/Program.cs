@@ -4,8 +4,8 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using ZUEPC.Import.Enums.Person;
 using ZUEPC.Import.Enums.Publication;
-using ZUEPC.Import.Import.Service;
 using ZUEPC.Import.ImportModels.CREPC.Common;
+using ZUEPC.Import.Parser;
 
 public class Program
 {
@@ -16,6 +16,7 @@ public class Program
 		//ImportCREPC();
 		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\AFC hromadné 13x.xml");
 		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\ADC_s_ohlasmi_my.xml");
+		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z CREPČ2\Testovacie\ADC_samostatne.xml");
 		//ImportParser.ManualParseCREPC(docString);
 
 		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_s_ohlasmi.ISO");

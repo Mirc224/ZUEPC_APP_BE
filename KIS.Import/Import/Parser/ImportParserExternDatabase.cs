@@ -1,8 +1,8 @@
 ﻿using System.Xml.Linq;
-using ZUEPC.Import.Import.Models;
-using static ZUEPC.Import.Import.Models.ImportExternDatabase;
+using ZUEPC.Import.Models;
+using static ZUEPC.Import.Models.ImportExternDatabase;
 
-namespace ZUEPC.Import.Import.Service;
+namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {

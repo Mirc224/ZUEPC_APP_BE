@@ -1,23 +1,24 @@
 ﻿using System.Xml.Linq;
-using ZUEPC.Import.Import.Models;
-using static ZUEPC.Import.Import.Models.ImportExternDatabase;
-using static ZUEPC.Import.Import.Service.ImportPublication;
+using ZUEPC.Import.Models;
+using static ZUEPC.Import.Models.ImportPublication;
 
-namespace ZUEPC.Import.Import.Service;
+namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
 	public static ImportPublication ParseCREPCPublication(XElement publicationElement, string xmlns)
 	{
-		var importedPublication = new ImportPublication();
-		importedPublication.PublicationTypeAsString = publicationElement.Attribute("form_type")?.Value;
-
-		importedPublication.PublicationExternDbIds = ParseCREPCPublicationExternDbIdentifiers(publicationElement, xmlns);
-		importedPublication.PublicationIds = ParseCREPCPublicationIdentifiers(publicationElement, xmlns);
-		importedPublication.PublicationNames = ParseCREPCPublicationNames(publicationElement, xmlns);
-		importedPublication.PublicationAuthors = ParseCREPCPublicationAuthors(publicationElement, xmlns);
-		importedPublication.RelatedPublications = ParseCREPCRelatedPublications(publicationElement, xmlns);
-		importedPublication.PublishingActivities = ParseCREPCPublishingActivityDetails(publicationElement, xmlns);
+		var importedPublication = new ImportPublication
+		{
+			PublicationTypeAsString = publicationElement.Attribute("form_type")?.Value,
+			PublicationExternDbIds = ParseCREPCPublicationExternDbIdentifiers(publicationElement, xmlns),
+			PublicationIds = ParseCREPCPublicationIdentifiers(publicationElement, xmlns),
+			PublicationNames = ParseCREPCPublicationNames(publicationElement, xmlns),
+			PublicationAuthors = ParseCREPCPublicationAuthors(publicationElement, xmlns),
+			RelatedPublications = ParseCREPCRelatedPublications(publicationElement, xmlns),
+			PublishingActivities = ParseCREPCPublishingActivityDetails(publicationElement, xmlns),
+			PublishYear = ParseCREPCPublicationPubishYear(publicationElement, xmlns)
+		};
 
 		var documentTypeElement = publicationElement.Element(XName.Get("document_type", xmlns));
 		if (documentTypeElement != null)
@@ -25,7 +26,75 @@ partial class ImportParser
 			importedPublication.DocumentType = documentTypeElement.Value;
 		}
 
+		
+
 		return importedPublication;
+	}
+
+	public static int? ParseCREPCPublicationPubishYear(XElement publicationElement, string xmlns)
+	{
+		int? publishYear = null;
+		var biblioYearElement = (from element in publicationElement.Elements(XName.Get("biblio_year", xmlns))
+								 where element.Attribute("type")?.Value == "published"
+								 select (from dateElement in element.Elements(XName.Get("date", xmlns))
+										 select (from yearElement in dateElement.Elements(XName.Get("year", xmlns))
+												 where yearElement.Attribute("period_type")?.Value == "from"
+												 select dateElement).FirstOrDefault()
+										 ).FirstOrDefault()
+								 ).FirstOrDefault();
+		if (biblioYearElement != null)
+		{
+			publishYear = ParseInt(biblioYearElement.Value);
+			return publishYear;
+		}
+
+		var crossSourceElement = (from crossPublEle in publicationElement.Elements(XName.Get("cross_biblio_biblio", xmlns))
+								  where crossPublEle.Attribute("source")?.Value == "source"
+								  select crossPublEle).FirstOrDefault();
+
+		if (crossSourceElement is null)
+		{
+			return publishYear;
+		}
+
+		var sourcePublElement = (from publElement in crossSourceElement.Elements(XName.Get("rec_biblio", xmlns))
+								 select publElement).FirstOrDefault();
+
+		if (sourcePublElement is null)
+		{
+			return publishYear;
+		}
+
+		biblioYearElement = (from element in sourcePublElement.Elements(XName.Get("biblio_year", xmlns))
+							 where element.Attribute("type")?.Value == "published"
+							 select (from dateElement in element.Elements(XName.Get("date", xmlns))
+									 select (from yearElement in dateElement.Elements(XName.Get("year", xmlns))
+											 where yearElement.Attribute("period_type")?.Value == "from"
+											 select dateElement
+											).FirstOrDefault()
+									).FirstOrDefault()
+							).FirstOrDefault();
+
+
+		if (biblioYearElement != null)
+		{
+			publishYear = ParseInt(biblioYearElement.Value);
+			return publishYear;
+		}
+
+		biblioYearElement = (from issueElement in crossSourceElement.Elements(XName.Get("rec_issue", xmlns))
+							 select (from dateElement in issueElement.Elements(XName.Get("date", xmlns))
+									 select dateElement.Element(XName.Get("year", xmlns))).FirstOrDefault()
+							 ).FirstOrDefault();
+
+		if (biblioYearElement != null)
+		{
+			publishYear = ParseInt(biblioYearElement.Value);
+			return publishYear;
+		}
+
+
+		return publishYear;
 	}
 
 	public static List<ImportPublicationIdentifier> ParseCREPCPublicationIdentifiers(XElement publicationElement, string xmlns)
@@ -128,16 +197,19 @@ partial class ImportParser
 
 	public static ImportPublication ParseDaWinciPublication(XElement publicationElement, string xmlns)
 	{
-		var importedPublication = new ImportPublication();
-		importedPublication.PublicationTypeAsString = publicationElement.Attribute("form_type")?.Value;
+		var importedPublication = new ImportPublication
+		{
+			PublicationTypeAsString = publicationElement.Attribute("form_type")?.Value,
 
-		importedPublication.PublicationExternDbIds = ParseDaWinciPublicationExternDbIdentifiers(publicationElement, xmlns);
+			PublicationExternDbIds = ParseDaWinciPublicationExternDbIdentifiers(publicationElement, xmlns),
 
-		importedPublication.PublicationIds = ParseDaWinciPublicationIdentifiers(publicationElement, xmlns);
-		importedPublication.PublicationNames = ParseDaWinciPublicationNames(publicationElement, xmlns);
-		importedPublication.PublicationAuthors = ParseDaWinciPublicationAuthors(publicationElement, xmlns);
-		importedPublication.RelatedPublications = ParseDaWinciRelatedPublications(publicationElement, xmlns);
-		importedPublication.PublishingActivities = ParseDaWinciPublishingActivityDetails(publicationElement, xmlns);
+			PublicationIds = ParseDaWinciPublicationIdentifiers(publicationElement, xmlns),
+			PublicationNames = ParseDaWinciPublicationNames(publicationElement, xmlns),
+			PublicationAuthors = ParseDaWinciPublicationAuthors(publicationElement, xmlns),
+			RelatedPublications = ParseDaWinciRelatedPublications(publicationElement, xmlns),
+			PublishingActivities = ParseDaWinciPublishingActivityDetails(publicationElement, xmlns),
+			PublishYear = ParseDaWinciPublicationPubishYear(publicationElement, xmlns)
+	};
 
 		var documentTypeElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
 								   where element.Attribute(DAWINCI_TAG)?.Value == "992"
@@ -151,6 +223,24 @@ partial class ImportParser
 		}
 
 		return importedPublication;
+	}
+
+	public static int? ParseDaWinciPublicationPubishYear(XElement publicationElement, string xmlns)
+	{
+		int? publishYear = null;
+
+		var publishYearElement = (from publishingDetailsElement in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
+								  where publishingDetailsElement.Attribute(DAWINCI_TAG)?.Value == "210"
+								  select (from subfieldElement in publishingDetailsElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+										  where subfieldElement.Attribute(DAWINCI_CODE)?.Value == "d"
+										  select subfieldElement).FirstOrDefault()
+										  ).FirstOrDefault();
+		if(publishYearElement != null)
+		{
+			publishYear = ParseInt(publishYearElement.Value);
+		}
+
+		return publishYear;
 	}
 
 	public static List<ImportPublicationExternDbId> ParseDaWinciPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
@@ -280,8 +370,8 @@ partial class ImportParser
 		List<ImportPublicationNameDetails> result = new();
 
 		var publicationDetailsElements = from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
-										where element.Attribute(DAWINCI_TAG)?.Value == "200"
-										select element;
+										 where element.Attribute(DAWINCI_TAG)?.Value == "200"
+										 select element;
 
 		var publicationNames = ParseDaWinciPublicationNamesFromElements(publicationDetailsElements, xmlns);
 		result.AddRange(publicationNames);
@@ -304,9 +394,9 @@ partial class ImportParser
 	{
 		List<ImportPublicationNameDetails> result = new();
 
-		var publicationDetailsElements =   from element in sourcePublicationElement.Descendants(XName.Get(DAWINCI_DATAFIELD, xmlns))
-										   where element.Attribute(DAWINCI_TAG)?.Value == "200"
-										   select element;
+		var publicationDetailsElements = from element in sourcePublicationElement.Descendants(XName.Get(DAWINCI_DATAFIELD, xmlns))
+										 where element.Attribute(DAWINCI_TAG)?.Value == "200"
+										 select element;
 
 		var publicationNames = ParseDaWinciPublicationNamesFromElements(publicationDetailsElements, xmlns);
 		result.AddRange(publicationNames);
@@ -321,7 +411,7 @@ partial class ImportParser
 								  element.Attribute(DAWINCI_TAG)?.Value == "011" ||
 								  element.Attribute(DAWINCI_TAG)?.Value == "013" ||
 								  element.Attribute(DAWINCI_TAG)?.Value == "015" ||
-								  element.Attribute(DAWINCI_TAG)?.Value == "016" 
+								  element.Attribute(DAWINCI_TAG)?.Value == "016"
 								  select element);
 
 		var standardIdentifiers = ParseDaWinciPublicationStandardIdentifiers(identifierElements, xmlns);
@@ -364,7 +454,7 @@ partial class ImportParser
 	{
 		List<ImportPublicationNameDetails> result = new();
 
-		if(!publicationDetailsElement.Any())
+		if (!publicationDetailsElement.Any())
 		{
 			return result;
 		}
@@ -390,7 +480,7 @@ partial class ImportParser
 	}
 
 	public static List<ImportPublicationIdentifier> ParseDaWinciPublicationStandardIdentifiers(
-		IEnumerable<XElement> records, 
+		IEnumerable<XElement> records,
 		string xmlns)
 	{
 		List<ImportPublicationIdentifier> result = new();
@@ -415,7 +505,7 @@ partial class ImportParser
 				var idValue = recordElement.Value.Trim();
 
 				var inputArr = idValue.Split(' ');
-				string isForm = null;
+				string? isForm = null;
 				if (inputArr.Length > 1)
 				{
 					idValue = inputArr[0];

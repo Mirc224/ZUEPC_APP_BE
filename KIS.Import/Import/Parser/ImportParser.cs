@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
-using ZUEPC.Import.Import.Models;
+using ZUEPC.Import.Models;
 
-namespace ZUEPC.Import.Import.Service;
+namespace ZUEPC.Import.Parser;
 
 public partial class ImportParser
 {
@@ -23,12 +23,16 @@ public partial class ImportParser
 		List<ImportRecord> result = new();
 		var allRecords = doc.Descendants(XName.Get("record", biblibsearch));
 
-		foreach (XElement node in allRecords)
+		foreach (var node in allRecords)
 		{
-			result.Add(ParseCREPCImportRecord(node, biblibsearch, xmlns));
+			var parsedRecord = ParseCREPCImportRecord(node, biblibsearch, xmlns);
+			if (parsedRecord is null)
+			{
+				continue;
+			}
+			result.Add(parsedRecord);
 		}
 
-		Console.WriteLine();
 	}
 
 
@@ -90,8 +94,6 @@ public partial class ImportParser
 				result.Add(parsedRecord);
 			}
 		}
-
-		Console.WriteLine();
 	}
 
 	public static ImportRecord? ParseDaWinciImportRecord(XElement record, string marcns)

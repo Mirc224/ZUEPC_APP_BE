@@ -1,7 +1,6 @@
 ﻿using ZUEPC.Import.Enums.Publication;
-using ZUEPC.Import.Import.Models;
 
-namespace ZUEPC.Import.Import.Service;
+namespace ZUEPC.Import.Models;
 
 public class ImportPublication
 {
@@ -13,6 +12,7 @@ public class ImportPublication
 	public List<ImportRelatedPublication> RelatedPublications { get; set; } = new();
 	public List<ImportPublishingActivityDetails> PublishingActivities { get; set; } = new();
 	public string? DocumentType { get; set; }
+	public int? PublishYear { get; set; }
 
 	public string? PublicationTypeAsString
 	{

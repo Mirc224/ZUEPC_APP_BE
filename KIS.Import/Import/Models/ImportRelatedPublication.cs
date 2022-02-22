@@ -1,6 +1,4 @@
-﻿using ZUEPC.Import.Import.Service;
-
-namespace ZUEPC.Import.Import.Models;
+﻿namespace ZUEPC.Import.Models;
 
 public class ImportRelatedPublication
 {

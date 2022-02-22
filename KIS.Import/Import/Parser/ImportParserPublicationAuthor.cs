@@ -1,7 +1,7 @@
 ﻿using System.Xml.Linq;
-using ZUEPC.Import.Import.Models;
+using ZUEPC.Import.Models;
 
-namespace ZUEPC.Import.Import.Service;
+namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
