@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace MVCAPIDemo.Users.Queries;
+namespace ZUEPC.Application.Users.Queries;
 
 public class GetUserQuery: IRequest<GetUserQueryResponse>
 {

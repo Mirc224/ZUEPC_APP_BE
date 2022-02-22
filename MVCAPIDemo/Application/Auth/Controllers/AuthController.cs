@@ -2,10 +2,10 @@ using Constants.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MVCAPIDemo.Auth.Commands;
+using ZUEPC.Application.Auth.Commands;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace MVCAPIDemo.Application.Controllers
+namespace ZUEPC.Application.Auth.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
@@ -55,13 +55,17 @@ namespace MVCAPIDemo.Application.Controllers
 		[Authorize]
 		public async Task<IActionResult> LogoutUser()
 		{
-			var jwtId = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-			var userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserId).Value);
-			
+			var jwtId = User?.Claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
 			if (jwtId is null)
 			{
 				return Unauthorized();
 			}
+			var userIdClaim = User?.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserId);
+			if (userIdClaim is null)
+			{
+				return Unauthorized();
+			}
+			var userId = int.Parse(userIdClaim.Value);
 
 			var request = new LogoutUserCommand() { JwtId = jwtId, UserId = userId};
 			var response = await _mediator.Send(request);

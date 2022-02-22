@@ -1,4 +1,4 @@
-﻿namespace MVCAPIDemo.Localization;
+﻿namespace ZUEPC.Localization;
 
 public class DataAnnotations
 {

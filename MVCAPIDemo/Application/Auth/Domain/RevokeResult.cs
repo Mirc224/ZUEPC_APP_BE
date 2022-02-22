@@ -1,6 +1,6 @@
-﻿using MVCAPIDemo.Common.Responses;
+﻿using ZUEPC.Common.Responses;
 
-namespace MVCAPIDemo.Auth.Domain;
+namespace ZUEPC.Auth.Domain;
 
 public class RevokeResult : ResponseBase
 {

@@ -6,7 +6,7 @@ namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
-	public static List<ImportRelatedPublication> ParseCREPCRelatedPublications(XElement publicationElement, string xmlns)
+	private static List<ImportRelatedPublication> ParseCREPCRelatedPublications(XElement publicationElement, string xmlns)
 	{
 		List<ImportRelatedPublication> result = new();
 
@@ -34,7 +34,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportRelatedPublication> ParseDaWinciRelatedPublications(XElement publicationElement, string xmlns)
+	private static List<ImportRelatedPublication> ParseDaWinciRelatedPublications(XElement publicationElement, string xmlns)
 	{
 		List<ImportRelatedPublication> result = new();
 
@@ -83,7 +83,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static ImportPublication? ParseDaWinciReferencePublication(XElement referencedPublication, string xmlns)
+	private static ImportPublication? ParseDaWinciReferencePublication(XElement referencedPublication, string xmlns)
 	{
 
 		string? publicationDetailsString = (from element in referencedPublication.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
@@ -124,7 +124,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static ImportPublicationIdentifier? ParseDaWinciSearchForIdentifiersInPublicationDetailsString(string publicationDetailsString, string wantedIdentifier)
+	private static ImportPublicationIdentifier? ParseDaWinciSearchForIdentifiersInPublicationDetailsString(string publicationDetailsString, string wantedIdentifier)
 	{
 		int startIndexOfIdentifier = publicationDetailsString.LastIndexOf(wantedIdentifier, StringComparison.OrdinalIgnoreCase);
 		if (startIndexOfIdentifier == -1)

@@ -1,8 +1,8 @@
-﻿namespace MVCAPIDemo.Options;
+﻿namespace ZUEPC.Options;
 
 public class JwtSettings
 {
-    public string Secret { get; set; }
+    public string? Secret { get; set; }
     public TimeSpan TokenLifetime { get; set; }
 
 }

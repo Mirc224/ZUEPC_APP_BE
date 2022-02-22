@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.Import.Enums.Publication;
+﻿namespace ZUEPC.Base.Enums.Publication;
 
 public enum PublicationReferenceType
 {

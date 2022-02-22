@@ -6,7 +6,7 @@ namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
-	public static ImportExternDatabase? CREPCExternDbCreator(XElement extDbElement, string xmlns)
+	private static ImportExternDatabase? CREPCExternDbCreator(XElement extDbElement, string xmlns)
 	{
 		ImportExternDatabase externDatabase = new();
 		externDatabase.CREPCId = extDbElement.Attribute("id")?.Value;

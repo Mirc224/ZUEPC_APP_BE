@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.Import.Enums.Person;
+﻿namespace ZUEPC.Base.Enums.Person;
 
 public enum PersonToPublicationRoleType
 {

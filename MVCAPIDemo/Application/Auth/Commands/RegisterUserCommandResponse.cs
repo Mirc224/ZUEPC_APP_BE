@@ -1,7 +1,7 @@
-﻿using MVCAPIDemo.Common.Responses;
+﻿using ZUEPC.Common.Responses;
 using Users.Base.Domain;
 
-namespace MVCAPIDemo.Auth.Commands;
+namespace ZUEPC.Application.Auth.Commands;
 
 public class RegisterUserCommandResponse : ResponseBase
 {

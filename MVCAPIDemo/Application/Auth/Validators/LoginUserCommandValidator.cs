@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
-using MVCAPIDemo.Auth.Commands;
-using MVCAPIDemo.Localization;
+using ZUEPC.Application.Auth.Commands;
+using ZUEPC.Localization;
 
-namespace MVCAPIDemo.Auth.Validators;
+namespace ZUEPC.Application.Auth.Validators;
 
 public class LoginUserCommandValidator: AbstractValidator<LoginUserCommand>
 {

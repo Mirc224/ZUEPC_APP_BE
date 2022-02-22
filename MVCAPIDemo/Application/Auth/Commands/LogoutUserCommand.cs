@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace MVCAPIDemo.Auth.Commands;
+namespace ZUEPC.Application.Auth.Commands;
 
 public class LogoutUserCommand: IRequest<LogoutUserCommandResponse>
 {

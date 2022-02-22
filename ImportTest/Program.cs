@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System.Xml.Linq;
 using ZUEPC.Import.Parser;
 
 public class Program
@@ -16,6 +17,8 @@ public class Program
 		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_s_ohlasmi.ISO");
 		//string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_samostatne.ISO");
 		string docString = File.ReadAllText(@"D:\Skola\Inzinier\Diplomova_praca\Material_k_systemu\Informačný systém Publikačná činnosť UNIZA\Exporty XML\z DaWinci\Testovacie\ADC_hromadne_10x.ISO");
-		ImportParser.ManualParseDaWinci(docString);
+		var doc = XDocument.Parse(docString);
+		var result = ImportParser.ManualParseDaWinci(doc);
+		Console.WriteLine();
 	}
 }

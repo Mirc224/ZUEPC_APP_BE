@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using MVCAPIDemo.Auth.Services;
+using ZUEPC.Auth.Services;
 
-namespace MVCAPIDemo.Auth.Commands;
+namespace ZUEPC.Application.Auth.Commands;
 public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand, RevokeTokenCommandResponse>
 {
 	private readonly IMapper _mapper;

@@ -1,4 +1,4 @@
-﻿using ZUEPC.Import.Enums.Publication;
+﻿using ZUEPC.Base.Enums.Publication;
 
 namespace ZUEPC.Import.Models;
 

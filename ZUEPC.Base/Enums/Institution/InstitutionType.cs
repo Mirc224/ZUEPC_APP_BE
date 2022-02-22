@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.Import.Enums.Institution;
+﻿namespace ZUEPC.Base.Enums.Institution;
 
 public enum InstitutionType
 {

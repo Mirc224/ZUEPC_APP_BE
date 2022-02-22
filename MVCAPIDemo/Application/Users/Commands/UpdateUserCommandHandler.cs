@@ -5,11 +5,11 @@ using DataAccess.Enums;
 using DataAccess.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using MVCAPIDemo.Localization;
+using ZUEPC.Localization;
 using Newtonsoft.Json.Linq;
 using Users.Base.Domain;
 
-namespace MVCAPIDemo.Users.Commands;
+namespace ZUEPC.Application.Users.Commands;
 
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UpdateUserCommandResponse>
 {

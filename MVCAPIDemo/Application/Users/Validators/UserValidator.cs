@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Users.Base.Domain;
 
-namespace MVCAPIDemo.Users.Validators;
+namespace ZUEPC.Application.Users.Validators;
 
 public class UserValidator : AbstractValidator<User>
 {

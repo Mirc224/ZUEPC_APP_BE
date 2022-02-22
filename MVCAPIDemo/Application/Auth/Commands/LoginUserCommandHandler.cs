@@ -3,11 +3,11 @@ using Dapper;
 using DataAccess.Data.User;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using MVCAPIDemo.Auth.Services;
-using MVCAPIDemo.Localization;
+using ZUEPC.Auth.Services;
+using ZUEPC.Localization;
 using System.Security.Cryptography;
 
-namespace MVCAPIDemo.Auth.Commands;
+namespace ZUEPC.Application.Auth.Commands;
 
 public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUserCommandResponse>
 {

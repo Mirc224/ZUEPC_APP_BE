@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
-using MVCAPIDemo.Auth.Services;
+using ZUEPC.Auth.Services;
 using System.Security.Cryptography;
 
-namespace MVCAPIDemo.Auth.Commands;
+namespace ZUEPC.Application.Auth.Commands;
 
 public class LogoutUserCommandHandler : IRequestHandler<LogoutUserCommand, LogoutUserCommandResponse>
 {

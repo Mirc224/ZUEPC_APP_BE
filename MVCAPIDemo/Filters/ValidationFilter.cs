@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using MVCAPIDemo.Common.Responses;
+using ZUEPC.Common.Responses;
 
-namespace MVCAPIDemo.Application.Filters;
+namespace ZUEPC.Application.Filters;
 
 public class ValidationFilter : IAsyncActionFilter
 {

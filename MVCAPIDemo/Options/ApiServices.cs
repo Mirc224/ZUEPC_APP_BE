@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MVCAPIDemo.Application.Filters;
-using MVCAPIDemo.Auth.Services;
-using MVCAPIDemo.Localization;
+using ZUEPC.Application.Filters;
+using ZUEPC.Auth.Services;
+using ZUEPC.Localization;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using ZUEPC.Application.Import.Services;
 
-namespace MVCAPIDemo.Options;
+namespace ZUEPC.Options;
 
 public static class ApiServices
 {
@@ -32,12 +33,13 @@ public static class ApiServices
                 options.Filters.Add<ValidationFilter>();
             })
             .AddFluentValidation(
-            fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
+            fv => fv.RegisterValidatorsFromAssemblyContaining<Program>())
+			.AddNewtonsoftJson(); ;
 
-        builder.Services.AddLocalization(); ;
-        builder.Services
-			.AddControllers()
-			.AddNewtonsoftJson();
+
+		builder.Services.AddLocalization();
+		builder.Services
+			.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(x =>
@@ -60,6 +62,7 @@ public static class ApiServices
     public static void ConfigureAuthentication(WebApplicationBuilder builder)
     {
 		builder.Services.AddSingleton<AuthenticationService>();
+		builder.Services.AddSingleton<ImportService>();
 		var jwtSettings = new JwtSettings();
 
         builder.Configuration.Bind(nameof(jwtSettings), jwtSettings);

@@ -6,7 +6,7 @@ namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
-	public static ImportInstitution ParseCREPCInstitution(XElement institutionElement, string xmlns)
+	private static ImportInstitution ParseCREPCInstitution(XElement institutionElement, string xmlns)
 	{
 		ImportInstitution importInstitution = new();
 		importInstitution.Level = ParseInt(institutionElement.Attribute("level")?.Value);
@@ -16,7 +16,7 @@ partial class ImportParser
 		return importInstitution;
 	}
 
-	public static List<ImportInstitutionName> ParseCREPCInstitutionNames(XElement institutionElement, string xmlns)
+	private static List<ImportInstitutionName> ParseCREPCInstitutionNames(XElement institutionElement, string xmlns)
 	{
 		List<ImportInstitutionName> result = new();
 
@@ -34,7 +34,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportInstitutionExternDbId> ParseCREPCInstitutionExternDbId(XElement institutionElement, string xmlns)
+	private static List<ImportInstitutionExternDbId> ParseCREPCInstitutionExternDbId(XElement institutionElement, string xmlns)
 	{
 		List<ImportInstitutionExternDbId> result = new();
 
@@ -78,7 +78,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static ImportInstitution ParseDaWinciInstitution(XElement institutionElement, string xmlns)
+	private static ImportInstitution ParseDaWinciInstitution(XElement institutionElement, string xmlns)
 	{
 		ImportInstitution importInstitution = new();
 		importInstitution.InstitutionNames = ParseDaWinciInstitutionNames(institutionElement, xmlns);
@@ -87,12 +87,12 @@ partial class ImportParser
 		return importInstitution;
 	}
 
-	public static List<ImportInstitutionName> ParseDaWinciInstitutionNames(XElement institutionElement, string xmlns)
+	private static List<ImportInstitutionName> ParseDaWinciInstitutionNames(XElement institutionElement, string xmlns)
 	{
 		return new();
 	}
 
-	public static List<ImportInstitutionExternDbId> ParseDaWinciInstitutionExternDbId(XElement publicationElement, string xmlns)
+	private static List<ImportInstitutionExternDbId> ParseDaWinciInstitutionExternDbId(XElement publicationElement, string xmlns)
 	{
 		List<ImportInstitutionExternDbId> result = new();
 		var insitutionTagElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))

@@ -156,4 +156,7 @@
   <data name="UserNotFound" xml:space="preserve">
     <value>User not found.</value>
   </data>
+  <data name="XMLDocumentNotValid" xml:space="preserve">
+    <value>XML document is not valid.</value>
+  </data>
 </root>

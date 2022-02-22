@@ -1,7 +1,7 @@
-﻿using MVCAPIDemo.Common.Responses;
+﻿using ZUEPC.Common.Responses;
 using Users.Base.Domain;
 
-namespace MVCAPIDemo.Users.Queries;
+namespace ZUEPC.Application.Users.Queries;
 
 public class GetUserQueryResponse : ResponseBase
 {

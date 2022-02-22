@@ -1,15 +1,13 @@
-using DataAccess.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using MVCAPIDemo.Users.Commands;
-using MVCAPIDemo.Users.Queries;
-using MVCAPIDemo.Users.Validators;
+using ZUEPC.Application.Users.Commands;
+using ZUEPC.Application.Users.Queries;
+using ZUEPC.Application.Users.Validators;
 using Users.Base.Domain;
 
-namespace MVCAPIDemo.Application.Controllers
+namespace ZUEPC.Application.Users.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]

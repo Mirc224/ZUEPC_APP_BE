@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Users.Base.Domain;
 
-namespace MVCAPIDemo.Users.Commands;
+namespace ZUEPC.Application.Users.Commands;
 
 public class UpdateUserCommand : IRequest<UpdateUserCommandResponse>
 {

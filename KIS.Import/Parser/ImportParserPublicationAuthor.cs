@@ -5,7 +5,7 @@ namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
-	public static List<ImportPublicationAuthor> ParseCREPCPublicationAuthors(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationAuthor> ParseCREPCPublicationAuthors(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationAuthor> result = new();
 
@@ -43,7 +43,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationAuthor> ParseDaWinciPublicationAuthors(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationAuthor> ParseDaWinciPublicationAuthors(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationAuthor> result = new();
 

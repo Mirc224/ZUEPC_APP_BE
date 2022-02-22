@@ -4,11 +4,11 @@ using DataAccess.Enums;
 using DataAccess.Models;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using MVCAPIDemo.Localization;
+using ZUEPC.Localization;
 using System.Security.Cryptography;
 using Users.Base.Domain;
 
-namespace MVCAPIDemo.Auth.Commands;
+namespace ZUEPC.Application.Auth.Commands;
 
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisterUserCommandResponse>
 {

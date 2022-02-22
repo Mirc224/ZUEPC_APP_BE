@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using MVCAPIDemo.Auth.Services;
+using ZUEPC.Auth.Services;
 
-namespace MVCAPIDemo.Auth.Commands;
+namespace ZUEPC.Application.Auth.Commands;
 
 public class RefreshTokenCommandHandler: IRequestHandler<RefreshTokenCommand, RefreshTokenCommandResponse>
 {

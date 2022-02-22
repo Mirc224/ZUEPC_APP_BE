@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Localization;
 
-namespace MVCAPIDemo.Options;
+namespace ZUEPC.Options;
 
 public static class ApiLocalizationSettings
 {

@@ -3,7 +3,7 @@ using DataAccess.Data.User;
 using MediatR;
 using Users.Base.Application.Domain;
 
-namespace MVCAPIDemo.Users.Queries;
+namespace ZUEPC.Application.Users.Queries;
 
 public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, GetAllRolesQueryResponse>
 {

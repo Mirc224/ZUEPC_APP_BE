@@ -1,6 +1,6 @@
-﻿using MVCAPIDemo.Common.Responses;
+﻿using ZUEPC.Common.Responses;
 
-namespace MVCAPIDemo.Auth.Commands;
+namespace ZUEPC.Application.Auth.Commands;
 
 public class LogoutUserCommandResponse : ResponseBase
 {

@@ -1,4 +1,4 @@
-﻿namespace MVCAPIDemo.Common.Responses;
+﻿namespace ZUEPC.Common.Responses;
 
 public class ErrorResponse
 {

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using DataAccess.Models;
-using MVCAPIDemo.Auth.Commands;
-using MVCAPIDemo.Auth.Domain;
 using Users.Base.Application.Domain;
 using Users.Base.Domain;
+using ZUEPC.Application.Auth.Commands;
+using ZUEPC.Auth.Domain;
 
-namespace MVCAPIDemo.Application.Mapping;
+namespace ZUEPC.Application.Mapping;
 
 public class DomainToResponseProfile: Profile
 {

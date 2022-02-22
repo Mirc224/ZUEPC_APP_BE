@@ -14,9 +14,9 @@ public partial class ImportParser
 	private const string ZU_PUBLICATIONID_PREFIX = "kis";
 
 	private const string CREPC_IDENTIFIER_PREFIX = "crepc2";
-	public static void ManualParseCREPC(string stringDoc)
+	
+	public static IEnumerable<ImportRecord> ParseCREPC(XDocument doc)
 	{
-		XDocument doc = XDocument.Parse(stringDoc);
 		string biblibsearch = "http://biblib.net/search/";
 		string xmlns = "http://www.crepc.sk/schema/xml-crepc2/";
 
@@ -32,11 +32,11 @@ public partial class ImportParser
 			}
 			result.Add(parsedRecord);
 		}
-
+		return result;
 	}
 
 
-	public static ImportRecord? ParseCREPCImportRecord(XElement record, string biblibsearch, string xmlns)
+	private static ImportRecord? ParseCREPCImportRecord(XElement record, string biblibsearch, string xmlns)
 	{
 		var importedRecord = new ImportRecord();
 		importedRecord.RecordVersionDateString = record.Descendants(XName.Get("updated", biblibsearch)).FirstOrDefault()?.Value;
@@ -51,7 +51,7 @@ public partial class ImportParser
 	}
 
 
-	public static int? ParseInt(string? value)
+	private static int? ParseInt(string? value)
 	{
 		if (int.TryParse(value, out var result))
 		{
@@ -60,7 +60,7 @@ public partial class ImportParser
 		return null;
 	}
 
-	public static DateTime? ParseCREPCDate(XElement dateElement, string xmlns)
+	private static DateTime? ParseCREPCDate(XElement dateElement, string xmlns)
 	{
 		if (!int.TryParse(dateElement.Element(XName.Get("year", xmlns))?.Value, out int year))
 		{
@@ -77,9 +77,9 @@ public partial class ImportParser
 		return new DateTime(year, month, day);
 	}
 
-	public static void ManualParseDaWinci(string stringDoc)
+	public static IEnumerable<ImportRecord> ParseDaWinci(XDocument doc)
 	{
-		XDocument doc = XDocument.Parse(stringDoc);
+		//XDocument doc = XDocument.Parse(stringDoc);
 		string marcns = "http://www.loc.gov/MARC21/slim";
 
 		List<ImportRecord> result = new();
@@ -94,9 +94,10 @@ public partial class ImportParser
 				result.Add(parsedRecord);
 			}
 		}
+		return result;
 	}
 
-	public static ImportRecord? ParseDaWinciImportRecord(XElement record, string marcns)
+	private static ImportRecord? ParseDaWinciImportRecord(XElement record, string marcns)
 	{
 		var importedRecord = new ImportRecord();
 		var versionIdentifierElement = (from element in record.Elements()

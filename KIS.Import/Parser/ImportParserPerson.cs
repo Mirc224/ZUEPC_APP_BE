@@ -6,7 +6,7 @@ namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
-	public static ImportPerson ParseCREPCPerson(XElement personElement, string xmlns)
+	private static ImportPerson ParseCREPCPerson(XElement personElement, string xmlns)
 	{
 		ImportPerson person = new();
 		person.PersonNames = ParseCREPCPersonNames(personElement, xmlns);
@@ -37,7 +37,7 @@ partial class ImportParser
 		return person;
 	}
 
-	public static List<ImportPersonExternDbId> ParseCREPCPersonExternDbIds(XElement personElement, string xmlns)
+	private static List<ImportPersonExternDbId> ParseCREPCPersonExternDbIds(XElement personElement, string xmlns)
 	{
 		List<ImportPersonExternDbId> result = new();
 
@@ -62,7 +62,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPersonName> ParseCREPCPersonNames(XElement personElement, string xmlns)
+	private static List<ImportPersonName> ParseCREPCPersonNames(XElement personElement, string xmlns)
 	{
 		List<ImportPersonName> result = new();
 
@@ -77,7 +77,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static ImportPerson ParseDaWinciPerson(XElement personElement, string xmlns)
+	private static ImportPerson ParseDaWinciPerson(XElement personElement, string xmlns)
 	{
 		ImportPerson person = new();
 		person.PersonNames = ParseDaWinciPersonNames(personElement, xmlns);
@@ -105,7 +105,7 @@ partial class ImportParser
 		return person;
 	}
 
-	public static List<ImportPersonName> ParseDaWinciPersonNames(XElement personElement, string xmlns)
+	private static List<ImportPersonName> ParseDaWinciPersonNames(XElement personElement, string xmlns)
 	{
 		List<ImportPersonName> result = new();
 		string? nameType = "real_name";
@@ -139,7 +139,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPersonExternDbId> ParseDaWinciPersonExternDbIds(XElement personElement, string xmlns)
+	private static List<ImportPersonExternDbId> ParseDaWinciPersonExternDbIds(XElement personElement, string xmlns)
 	{
 		List<ImportPersonExternDbId> result = new();
 

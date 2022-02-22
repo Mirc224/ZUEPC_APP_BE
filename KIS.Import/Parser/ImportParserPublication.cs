@@ -6,7 +6,7 @@ namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
-	public static ImportPublication ParseCREPCPublication(XElement publicationElement, string xmlns)
+	private static ImportPublication ParseCREPCPublication(XElement publicationElement, string xmlns)
 	{
 		var importedPublication = new ImportPublication
 		{
@@ -31,7 +31,7 @@ partial class ImportParser
 		return importedPublication;
 	}
 
-	public static int? ParseCREPCPublicationPubishYear(XElement publicationElement, string xmlns)
+	private static int? ParseCREPCPublicationPubishYear(XElement publicationElement, string xmlns)
 	{
 		int? publishYear = null;
 		var biblioYearElement = (from element in publicationElement.Elements(XName.Get("biblio_year", xmlns))
@@ -97,7 +97,7 @@ partial class ImportParser
 		return publishYear;
 	}
 
-	public static List<ImportPublicationIdentifier> ParseCREPCPublicationIdentifiers(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationIdentifier> ParseCREPCPublicationIdentifiers(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationIdentifier> result = new();
 
@@ -133,7 +133,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationExternDbId> ParseCREPCPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationExternDbId> ParseCREPCPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationExternDbId> result = new();
 		string? input = publicationElement.Attribute("id")?.Value;
@@ -161,7 +161,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationNameDetails> ParseCREPCPublicationNames(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationNameDetails> ParseCREPCPublicationNames(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationNameDetails> result = new();
 
@@ -181,7 +181,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static ImportPublicationIdentifier? PublicationIdCreator(string? identifierName, string? idValue, string? is_form = null)
+	private static ImportPublicationIdentifier? PublicationIdCreator(string? identifierName, string? idValue, string? is_form = null)
 	{
 		if (idValue is null || identifierName is null)
 		{
@@ -195,7 +195,7 @@ partial class ImportParser
 		};
 	}
 
-	public static ImportPublication ParseDaWinciPublication(XElement publicationElement, string xmlns)
+	private static ImportPublication ParseDaWinciPublication(XElement publicationElement, string xmlns)
 	{
 		var importedPublication = new ImportPublication
 		{
@@ -225,7 +225,7 @@ partial class ImportParser
 		return importedPublication;
 	}
 
-	public static int? ParseDaWinciPublicationPubishYear(XElement publicationElement, string xmlns)
+	private static int? ParseDaWinciPublicationPubishYear(XElement publicationElement, string xmlns)
 	{
 		int? publishYear = null;
 
@@ -243,7 +243,7 @@ partial class ImportParser
 		return publishYear;
 	}
 
-	public static List<ImportPublicationExternDbId> ParseDaWinciPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationExternDbId> ParseDaWinciPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationExternDbId> result = new();
 		string? input = (from element in publicationElement.Elements(XName.Get(DAWINCI_CONTROLFIELD, xmlns))
@@ -310,7 +310,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationIdentifier> ParseDaWinciPublicationIdentifiers(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationIdentifier> ParseDaWinciPublicationIdentifiers(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationIdentifier> result = new();
 
@@ -365,7 +365,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationNameDetails> ParseDaWinciPublicationNames(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationNameDetails> ParseDaWinciPublicationNames(XElement publicationElement, string xmlns)
 	{
 		List<ImportPublicationNameDetails> result = new();
 
@@ -379,7 +379,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static ImportPublication ParseDaWinciSourcePublication(XElement sourcePublicationElement, string xmlns)
+	private static ImportPublication ParseDaWinciSourcePublication(XElement sourcePublicationElement, string xmlns)
 	{
 		ImportPublication result = new();
 
@@ -390,7 +390,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationNameDetails> ParseDaWinciSourcePublicationNames(XElement sourcePublicationElement, string xmlns)
+	private static List<ImportPublicationNameDetails> ParseDaWinciSourcePublicationNames(XElement sourcePublicationElement, string xmlns)
 	{
 		List<ImportPublicationNameDetails> result = new();
 
@@ -403,7 +403,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationIdentifier> ParseDaWinciSourcePublicationIdentifiers(XElement sourcePublicationElement, string xmlns)
+	private static List<ImportPublicationIdentifier> ParseDaWinciSourcePublicationIdentifiers(XElement sourcePublicationElement, string xmlns)
 	{
 		List<ImportPublicationIdentifier> result = new();
 		var identifierElements = (from element in sourcePublicationElement.Descendants(XName.Get(DAWINCI_DATAFIELD, xmlns))
@@ -420,7 +420,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationExternDbId> ParseDaWinciSourcePublicationExternDbIds(XElement sourcePublicationElement, string xmlns)
+	private static List<ImportPublicationExternDbId> ParseDaWinciSourcePublicationExternDbIds(XElement sourcePublicationElement, string xmlns)
 	{
 		List<ImportPublicationExternDbId> result = new();
 
@@ -448,7 +448,7 @@ partial class ImportParser
 	}
 
 
-	public static List<ImportPublicationNameDetails> ParseDaWinciPublicationNamesFromElements(
+	private static List<ImportPublicationNameDetails> ParseDaWinciPublicationNamesFromElements(
 		IEnumerable<XElement> publicationDetailsElement,
 		string xmlns)
 	{
@@ -479,7 +479,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublicationIdentifier> ParseDaWinciPublicationStandardIdentifiers(
+	private static List<ImportPublicationIdentifier> ParseDaWinciPublicationStandardIdentifiers(
 		IEnumerable<XElement> records,
 		string xmlns)
 	{

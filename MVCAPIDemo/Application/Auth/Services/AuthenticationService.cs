@@ -4,14 +4,14 @@ using DataAccess.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MVCAPIDemo.Auth.Domain;
-using MVCAPIDemo.Localization;
-using MVCAPIDemo.Options;
+using ZUEPC.Auth.Domain;
+using ZUEPC.Localization;
+using ZUEPC.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace MVCAPIDemo.Auth.Services;
+namespace ZUEPC.Auth.Services;
 
 public class AuthenticationService
 {
@@ -78,7 +78,14 @@ public class AuthenticationService
 				return new() { Success = false, ErrorMessages = new string[] { _localizer["TokenIsRevoked"] } };
 			}
 
-			var jti = tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+			var jtiClaim = tokenInVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti);
+
+			if (jtiClaim is null)
+			{
+				return new() { Success = false, ErrorMessages = new string[] { _localizer["NotValidToken"] } };
+			}
+
+			var jti = jtiClaim.Value;
 
 			if (storedToken.JwtId != jti)
 			{

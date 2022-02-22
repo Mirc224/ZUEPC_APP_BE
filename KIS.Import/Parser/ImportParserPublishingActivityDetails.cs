@@ -5,7 +5,7 @@ namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
-	public static List<ImportPublishingActivityDetails> ParseCREPCPublishingActivityDetails(
+	private static List<ImportPublishingActivityDetails> ParseCREPCPublishingActivityDetails(
 		XElement publicationElement, 
 		string xmlns)
 	{
@@ -35,7 +35,7 @@ partial class ImportParser
 		return result;
 	}
 
-	public static List<ImportPublishingActivityDetails> ParseDaWinciPublishingActivityDetails(
+	private static List<ImportPublishingActivityDetails> ParseDaWinciPublishingActivityDetails(
 		XElement publicationElement,
 		string xmlns)
 	{

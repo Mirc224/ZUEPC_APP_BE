@@ -3,10 +3,10 @@ using Dapper;
 using DataAccess.Data.User;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using MVCAPIDemo.Localization;
+using ZUEPC.Localization;
 using Users.Base.Domain;
 
-namespace MVCAPIDemo.Users.Queries;
+namespace ZUEPC.Application.Users.Queries;
 
 public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserQueryResponse>
 {

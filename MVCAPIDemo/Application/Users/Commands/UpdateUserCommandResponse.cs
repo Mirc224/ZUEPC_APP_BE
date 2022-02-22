@@ -1,6 +1,6 @@
-﻿using MVCAPIDemo.Common.Responses;
+﻿using ZUEPC.Common.Responses;
 
-namespace MVCAPIDemo.Users.Commands;
+namespace ZUEPC.Application.Users.Commands;
 
 public class UpdateUserCommandResponse: ResponseBase
 {
