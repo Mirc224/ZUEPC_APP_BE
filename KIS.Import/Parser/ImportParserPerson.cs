@@ -41,7 +41,7 @@ partial class ImportParser
 	{
 		List<ImportPersonExternDbId> result = new();
 
-		string? input = personElement.Attribute("id")?.Value;
+		string? input = personElement.Attribute("id")?.Value.Trim();
 		var externDbId = new ImportPersonExternDbId()
 		{
 			PersonExternDbId = $"{CREPC_IDENTIFIER_PREFIX}:{input}",
@@ -54,8 +54,8 @@ partial class ImportParser
 		foreach (var recordElement in records)
 		{
 			ImportPersonExternDbId personExterDbId = new();
-			string? idLabel = recordElement.Attribute("id_title")?.Value;
-			string? idValue = recordElement.Attribute("id_value")?.Value;
+			string? idLabel = recordElement.Attribute("id_title")?.Value.Trim();
+			string? idValue = recordElement.Attribute("id_value")?.Value.Trim();
 			personExterDbId.PersonExternDbId = $"{idLabel}:{idValue}";
 			result.Add(personExterDbId);
 		}
@@ -68,9 +68,9 @@ partial class ImportParser
 
 		ImportPersonName personName = new()
 		{
-			NameType = personElement.Attribute("relationship")?.Value,
-			FirstName = personElement.Element(XName.Get("firstname", xmlns))?.Value,
-			LastName = personElement.Element(XName.Get("lastname", xmlns))?.Value
+			NameType = personElement.Attribute("relationship")?.Value.Trim(),
+			FirstName = personElement.Element(XName.Get("firstname", xmlns))?.Value.Trim(),
+			LastName = personElement.Element(XName.Get("lastname", xmlns))?.Value.Trim()
 		};
 
 		result.Add(personName);
@@ -117,7 +117,7 @@ partial class ImportParser
 						  select element).FirstOrDefault();
 		if(nameElement != null)
 		{
-			firstName = nameElement.Value;
+			firstName = nameElement.Value.Trim();
 		}
 
 		nameElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
@@ -125,7 +125,7 @@ partial class ImportParser
 						   select element).FirstOrDefault();
 		if (nameElement != null)
 		{
-			lastName = nameElement.Value;
+			lastName = nameElement.Value.Trim();
 		}
 
 		ImportPersonName personName = new()
@@ -150,7 +150,7 @@ partial class ImportParser
 		{
 			ImportPersonExternDbId externDbId = new()
 			{
-				PersonExternDbId = $"{ZU_PERSONID_PREFIX}:{personIdElement?.Value}"
+				PersonExternDbId = $"{ZU_PERSONID_PREFIX}:{personIdElement?.Value.Trim()}"
 			};
 			result.Add(externDbId);
 		}

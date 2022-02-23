@@ -21,8 +21,8 @@ partial class ImportParser
 			}
 			var authorPerson = ParseCREPCPerson(authorElement, xmlns);
 			var publicationAuthor = new ImportPublicationAuthor() { Person = authorPerson };
-			publicationAuthor.ContributionRatioString = author.Attribute("ratio")?.Value;
-			publicationAuthor.Role = author.Attribute("role")?.Value;
+			publicationAuthor.ContributionRatioString = author.Attribute("ratio")?.Value.Trim();
+			publicationAuthor.Role = author.Attribute("role")?.Value.Trim();
 
 			var reportingRelationElement = author.Element(XName.Get("affiliation", xmlns));
 			if(reportingRelationElement is null)

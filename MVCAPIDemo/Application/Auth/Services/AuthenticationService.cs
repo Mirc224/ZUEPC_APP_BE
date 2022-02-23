@@ -1,15 +1,15 @@
 ﻿using Constants.Infrastructure;
 using DataAccess.Data.User;
-using DataAccess.Models;
+using DataAccess.Models.User;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ZUEPC.Auth.Domain;
-using ZUEPC.Localization;
-using ZUEPC.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ZUEPC.Auth.Domain;
+using ZUEPC.Localization;
+using ZUEPC.Options;
 
 namespace ZUEPC.Auth.Services;
 

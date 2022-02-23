@@ -3,11 +3,9 @@
 public class ImportInstitution
 {
 	public int? Level { get; set; }
+	public string? InstititutionType { get; set; }
 	public List<ImportInstitutionName> InstitutionNames { get; set; } = new();
 	public List<ImportInstitutionExternDbId> InstitutionExternDbIds { get; set; } = new();
-
-	public string? InstititutionType { get; set; }
-	public string? InstititutionTag { get; set; }
 
 	public class ImportInstitutionName
 	{

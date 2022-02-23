@@ -11,7 +11,7 @@ public partial class ImportParser
 	private const string DAWINCI_CODE = "code";
 	private const string DAWINCI_TAG = "tag";
 	private const string ZU_PERSONID_PREFIX = "ŽU Žilina";
-	private const string ZU_PUBLICATIONID_PREFIX = "kis";
+	private const string ZU_PUBLICATIONID_PREFIX = "ŽU.Žilina.";
 
 	private const string CREPC_IDENTIFIER_PREFIX = "crepc2";
 	

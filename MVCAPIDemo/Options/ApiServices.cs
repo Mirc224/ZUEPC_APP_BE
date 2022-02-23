@@ -12,6 +12,7 @@ using ZUEPC.Localization;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using ZUEPC.Application.Import.Services;
+using ZUEPC.DataAccess.Data.Publication;
 
 namespace ZUEPC.Options;
 
@@ -22,6 +23,8 @@ public static class ApiServices
         // Add services to the container.
         builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
         builder.Services.AddSingleton<IUserData, UserData>();
+        builder.Services.AddSingleton<IPublicationData, PublicationInMemoryData>();
+        builder.Services.AddSingleton<IPublicationNameData, PublicationNameInMemoryData>();
         builder.Services.AddMediatR(typeof(Program));
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddTransient<DataAnnotations>();

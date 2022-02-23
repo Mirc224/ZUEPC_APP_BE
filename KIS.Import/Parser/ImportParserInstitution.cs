@@ -12,7 +12,7 @@ partial class ImportParser
 		importInstitution.Level = ParseInt(institutionElement.Attribute("level")?.Value);
 		importInstitution.InstitutionNames = ParseCREPCInstitutionNames(institutionElement, xmlns);
 		importInstitution.InstitutionExternDbIds = ParseCREPCInstitutionExternDbId(institutionElement, xmlns);
-		importInstitution.InstititutionType = institutionElement.Element(XName.Get("institution_type", xmlns))?.Value;
+		importInstitution.InstititutionType = institutionElement.Element(XName.Get("institution_type", xmlns))?.Value.Trim();
 		return importInstitution;
 	}
 
@@ -26,8 +26,8 @@ partial class ImportParser
 		{
 			ImportInstitutionName institutionName = new()
 			{
-				Name = nameElement.Value,
-				NameType = nameElement.Attribute("inst_type")?.Value
+				Name = nameElement.Value.Trim(),
+				NameType = nameElement.Attribute("inst_type")?.Value.Trim()
 			};
 			result.Add(institutionName);
 		}
@@ -38,7 +38,7 @@ partial class ImportParser
 	{
 		List<ImportInstitutionExternDbId> result = new();
 
-		string? input = institutionElement.Attribute("id")?.Value;
+		string? input = institutionElement.Attribute("id")?.Value.Trim();
 		var externDbId = new ImportInstitutionExternDbId()
 		{
 			InstitutionExternDbId = $"CREPC:{input}"
@@ -67,8 +67,8 @@ partial class ImportParser
 		}
 		foreach (var identifierElement in identifierElements)
 		{
-			string? dbName = identifierElement.Element(XName.Get("num_title", xmlns))?.Value;
-			string? idValue = identifierElement.Element(XName.Get("number", xmlns))?.Value;
+			string? dbName = identifierElement.Element(XName.Get("num_title", xmlns))?.Value.Trim();
+			string? idValue = identifierElement.Element(XName.Get("number", xmlns))?.Value.Trim();
 			externDbId = new()
 			{
 				InstitutionExternDbId = $"{dbName}:{idValue}"
@@ -83,7 +83,7 @@ partial class ImportParser
 		ImportInstitution importInstitution = new();
 		importInstitution.InstitutionNames = ParseDaWinciInstitutionNames(institutionElement, xmlns);
 		importInstitution.InstitutionExternDbIds = ParseDaWinciInstitutionExternDbId(institutionElement, xmlns);
-		importInstitution.InstititutionType = institutionElement.Element(XName.Get("institution_type", xmlns))?.Value;
+		importInstitution.InstititutionType = institutionElement.Element(XName.Get("institution_type", xmlns))?.Value.Trim();
 		return importInstitution;
 	}
 
@@ -101,7 +101,7 @@ partial class ImportParser
 
 		if (insitutionTagElement != null)
 		{
-			string input = insitutionTagElement.Value;
+			string input = insitutionTagElement.Value.Trim();
 			var externDbId = new ImportInstitutionExternDbId()
 			{
 				InstitutionExternDbId = $"ins_tag:{input}"

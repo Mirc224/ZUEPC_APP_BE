@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
-using DataAccess.Models;
+using DataAccess.Models.User;
 
 namespace DataAccess.Data.User;
 

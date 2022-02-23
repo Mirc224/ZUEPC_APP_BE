@@ -10,7 +10,7 @@ public class ImportPublication
 	public List<ImportPublicationNameDetails> PublicationNames { get; set; } = new();
 	public List<ImportPublicationAuthor> PublicationAuthors { get; set; } = new();
 	public List<ImportRelatedPublication> RelatedPublications { get; set; } = new();
-	public List<ImportPublishingActivityDetails> PublishingActivities { get; set; } = new();
+	public List<ImportPublicationActivityDetails> PublishingActivities { get; set; } = new();
 	public string? DocumentType { get; set; }
 	public int? PublishYear { get; set; }
 
@@ -48,7 +48,7 @@ public class ImportPublication
 
 	public class ImportPublicationIdentifier
 	{
-		public string? PublicationId { get; set; }
+		public string? PublicationIdentifierValue { get; set; }
 		public string? IdentifierName { get; set; }
 		public string? ISForm { get; set; }
 	}

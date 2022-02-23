@@ -17,8 +17,8 @@ partial class ImportParser
 		{
 			ImportRelatedPublication relatedPublication = new()
 			{
-				RelationType = relatedPublicationElement.Attribute("source")?.Value ??
-				relatedPublicationElement.Attribute("bond_type")?.Value
+				RelationType = relatedPublicationElement.Attribute("source")?.Value.Trim() ??
+				relatedPublicationElement.Attribute("bond_type")?.Value.Trim()
 			};
 
 			var nestedPublicationElement = relatedPublicationElement.Element(XName.Get("rec_biblio", xmlns));
@@ -28,7 +28,7 @@ partial class ImportParser
 			}
 
 			relatedPublication.RelatedPublication = ParseCREPCPublication(nestedPublicationElement, xmlns);
-			relatedPublication.CitationCategory = relatedPublicationElement.Element(XName.Get("citation_category", xmlns))?.Value;
+			relatedPublication.CitationCategory = relatedPublicationElement.Element(XName.Get("citation_category", xmlns))?.Value.Trim();
 			result.Add(relatedPublication);
 		}
 		return result;
@@ -67,7 +67,7 @@ partial class ImportParser
 										   select element).FirstOrDefault();
 			if (citationCategoryElement != null)
 			{
-				citationCategory = citationCategoryElement.Value;
+				citationCategory = citationCategoryElement.Value.Trim();
 			}
 
 			ImportRelatedPublication relatedPublication = new()

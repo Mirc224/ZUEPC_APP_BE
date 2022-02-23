@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
-using Dapper;
 using DataAccess.Data.User;
 using DataAccess.Enums;
-using DataAccess.Models;
+using DataAccess.Models.User;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using ZUEPC.Localization;
 using Newtonsoft.Json.Linq;
 using Users.Base.Domain;
+using ZUEPC.Localization;
 
 namespace ZUEPC.Application.Users.Commands;
 

@@ -21,7 +21,7 @@ public class LogoutUserCommandHandler : IRequestHandler<LogoutUserCommand, Logou
 
     public async Task<LogoutUserCommandResponse> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
     {
-        var authResult = await _jwtAuthenticationService.RevokeUserTokenAsync(request.UserId, request.JwtId);
+        var authResult = await _jwtAuthenticationService.RevokeUserTokenAsync(request.UserId, request?.JwtId);
 		var response = _mapper.Map<LogoutUserCommandResponse>(authResult);
         return response;
     }

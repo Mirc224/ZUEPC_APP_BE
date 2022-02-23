@@ -16,7 +16,7 @@ partial class ImportParser
 		{
 			var dbName = new ImportExternDatabaseName();
 			dbName.Name = dbNameElement.Value;
-			dbName.NameType = dbNameElement.Attribute("name_type")?.Value;
+			dbName.NameType = dbNameElement.Attribute("name_type")?.Value.Trim();
 			externDatabase.DatabaseNames.Add(dbName);
 		}
 		return externDatabase;

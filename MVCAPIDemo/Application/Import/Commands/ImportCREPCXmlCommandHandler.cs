@@ -13,7 +13,7 @@ public class ImportCREPCXmlCommandHandler : IRequestHandler<ImportCREPCXmlComman
 	}
 	public async Task<ImportCREPCXmlCommandResponse> Handle(ImportCREPCXmlCommand request, CancellationToken cancellationToken)
 	{
-		_importService.Import
+		_importService.ImportFromCREPCXML(request);
 		return new() { Success = true };
 	}
 }

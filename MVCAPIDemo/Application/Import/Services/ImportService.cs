@@ -22,7 +22,7 @@ public class ImportService
 		}
 	}
 
-	public void ImportFromCREPCXML(ImportDaWinciXmlCommand command)
+	public void ImportFromDaWinciXML(ImportDaWinciXmlCommand command)
 	{
 		var result = ParseImportXMLCommand(command);
 		if (result is null || result.Any())
