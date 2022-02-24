@@ -23,10 +23,13 @@
     <ProjectReference Include="..\DataAccess\ZUEPC.DataAccess.csproj" />
     <ProjectReference Include="..\KIS.Import\ZUEPC.Import.csproj" />
     <ProjectReference Include="..\Users.Base\ZUEPC.Users.Base.csproj" />
+    <ProjectReference Include="..\ZUEPC.EvidencePublication.Base\ZUEPC.EvidencePublication.Base.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Application\Auth\Queries\" />
+    <Folder Include="Application\Publications\Controllers\" />
+    <Folder Include="Application\Publications\Commands\" />
   </ItemGroup>
 
 </Project>

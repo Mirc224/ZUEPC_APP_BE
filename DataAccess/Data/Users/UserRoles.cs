@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using DataAccess.Enums;
-using DataAccess.Models.User;
+using ZUEPC.DataAccess.Models.Users;
 
 namespace DataAccess.Data.User;
 public partial class UserData : IUserData

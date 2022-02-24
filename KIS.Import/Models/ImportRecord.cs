@@ -2,8 +2,9 @@
 
 public class ImportRecord
 {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	public DateTime RecordVersionDate { get; set; }
-	public ImportPublication? Publication { get; set; }
+	public ImportPublication Publication { get; set; }
 
 
 	public string? RecordVersionDateString
@@ -21,4 +22,5 @@ public class ImportRecord
 			RecordVersionDate = resultDate;
 		}
 	}
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 }

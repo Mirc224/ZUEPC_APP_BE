@@ -120,7 +120,7 @@ partial class ImportParser
 				publicationIdentifiers.Add(identifier);
 			}
 		}
-		result.PublicationIds = publicationIdentifiers;
+		result.PublicationIdentifiers = publicationIdentifiers;
 		return result;
 	}
 

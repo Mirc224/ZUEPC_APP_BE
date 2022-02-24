@@ -1,6 +1,6 @@
 ﻿using Constants.Infrastructure;
 using DataAccess.Data.User;
-using DataAccess.Models.User;
+using ZUEPC.DataAccess.Models.Users;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

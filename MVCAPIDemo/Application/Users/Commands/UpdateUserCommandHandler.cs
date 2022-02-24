@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DataAccess.Data.User;
 using DataAccess.Enums;
-using DataAccess.Models.User;
+using ZUEPC.DataAccess.Models.Users;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json.Linq;

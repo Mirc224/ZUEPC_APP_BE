@@ -3,16 +3,19 @@ using DataAccess.DbAccess;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ZUEPC.Application.Filters;
-using ZUEPC.Auth.Services;
-using ZUEPC.Localization;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using ZUEPC.Application.Filters;
 using ZUEPC.Application.Import.Services;
-using ZUEPC.DataAccess.Data.Publication;
+using ZUEPC.Auth.Services;
+using ZUEPC.DataAccess.Data.Institutions;
+using ZUEPC.DataAccess.Data.Publications;
+using ZUEPC.DataAccess.Data.PublicationActivities;
+using ZUEPC.DataAccess.Data.PublicationAuthors;
+using ZUEPC.DataAccess.Data.RelatedPublications;
+using ZUEPC.Localization;
 
 namespace ZUEPC.Options;
 
@@ -21,11 +24,30 @@ public static class ApiServices
     public static void ConfigureServices(this WebApplicationBuilder builder)
     {
         // Add services to the container.
+		// User
         builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
         builder.Services.AddSingleton<IUserData, UserData>();
+		// Publication
         builder.Services.AddSingleton<IPublicationData, PublicationInMemoryData>();
         builder.Services.AddSingleton<IPublicationNameData, PublicationNameInMemoryData>();
-        builder.Services.AddMediatR(typeof(Program));
+        builder.Services.AddSingleton<IPublicationExternDatabaseIdData, PublicationExternDatabaseIdInMemoryData>();
+        builder.Services.AddSingleton<IPublicationIdentifierData, PublicationIdentifierInMemoryData>();
+		// Person
+        builder.Services.AddSingleton<IPersonData, PersonInMemoryData>();
+        builder.Services.AddSingleton<IPersonNameData, PersonNameInMemoryData>();
+        builder.Services.AddSingleton<IPersonExternDatabaseIdData, PersonExternDatabaseIdInMemoryData>();
+		// Institution
+		builder.Services.AddSingleton<IInstitutionData, InstitutionInMemoryData>();
+		builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, InstitutionExternDatabaseIdInMemoryData>();
+		builder.Services.AddSingleton<IInstitutionNameData, InstitutionNameInMemoryData>();
+		// Publication activity
+		builder.Services.AddSingleton<IPublicationActivityData, PublicationActivityInMemoryData>();
+		// Publication author
+		builder.Services.AddSingleton<IPublicationAuthorData, PublicationAuthorInMemoryData>();
+		// Related publication
+		builder.Services.AddSingleton<IRelatedPublicationData, RelatedPublicationInMemoryData>();
+
+		builder.Services.AddMediatR(typeof(Program));
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.AddTransient<DataAnnotations>();
 		ConfigureAuthentication(builder);

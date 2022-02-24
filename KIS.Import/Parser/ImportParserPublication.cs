@@ -12,7 +12,7 @@ partial class ImportParser
 		{
 			PublicationTypeAsString = publicationElement.Attribute("form_type")?.Value,
 			PublicationExternDbIds = ParseCREPCPublicationExternDbIdentifiers(publicationElement, xmlns),
-			PublicationIds = ParseCREPCPublicationIdentifiers(publicationElement, xmlns),
+			PublicationIdentifiers = ParseCREPCPublicationIdentifiers(publicationElement, xmlns),
 			PublicationNames = ParseCREPCPublicationNames(publicationElement, xmlns),
 			PublicationAuthors = ParseCREPCPublicationAuthors(publicationElement, xmlns),
 			RelatedPublications = ParseCREPCRelatedPublications(publicationElement, xmlns),
@@ -142,7 +142,7 @@ partial class ImportParser
 		string? input = publicationElement.Attribute("id")?.Value.Trim();
 		var externDbId = new ImportPublicationExternDbId()
 		{
-			PublicationId = $"{CREPC_IDENTIFIER_PREFIX}:{input}",
+			PublicationExternIdValue = $"{CREPC_IDENTIFIER_PREFIX}:{input}",
 		};
 
 		result.Add(externDbId);
@@ -157,7 +157,7 @@ partial class ImportParser
 		foreach (var recordElement in records)
 		{
 			ImportPublicationExternDbId publicationExterDbId = new();
-			publicationExterDbId.PublicationId = recordElement.Element(XName.Get("database_id", xmlns))?.Value.Trim();
+			publicationExterDbId.PublicationExternIdValue = recordElement.Element(XName.Get("database_id", xmlns))?.Value.Trim();
 			result.Add(publicationExterDbId);
 		}
 
@@ -206,7 +206,7 @@ partial class ImportParser
 
 			PublicationExternDbIds = ParseDaWinciPublicationExternDbIdentifiers(publicationElement, xmlns),
 
-			PublicationIds = ParseDaWinciPublicationIdentifiers(publicationElement, xmlns),
+			PublicationIdentifiers = ParseDaWinciPublicationIdentifiers(publicationElement, xmlns),
 			PublicationNames = ParseDaWinciPublicationNames(publicationElement, xmlns),
 			PublicationAuthors = ParseDaWinciPublicationAuthors(publicationElement, xmlns),
 			RelatedPublications = ParseDaWinciRelatedPublications(publicationElement, xmlns),
@@ -264,7 +264,7 @@ partial class ImportParser
 		{
 			var externDbId = new ImportPublicationExternDbId()
 			{
-				PublicationId = $"{systemName}{input}",
+				PublicationExternIdValue = $"{systemName}{input}",
 			};
 			result.Add(externDbId);
 		}
@@ -287,7 +287,7 @@ partial class ImportParser
 				}
 
 				ImportPublicationExternDbId publicationExterDbId = new();
-				publicationExterDbId.PublicationId = idSubfieldElement?.Value;
+				publicationExterDbId.PublicationExternIdValue = idSubfieldElement?.Value;
 				result.Add(publicationExterDbId);
 			}
 		}
@@ -316,7 +316,7 @@ partial class ImportParser
 				{
 					continue;
 				}
-				publicationExterDbId.PublicationId = $"{CREPC_IDENTIFIER_PREFIX}:{input}";
+				publicationExterDbId.PublicationExternIdValue = $"{CREPC_IDENTIFIER_PREFIX}:{input}";
 				result.Add(publicationExterDbId);
 			}
 		}
@@ -397,7 +397,7 @@ partial class ImportParser
 	{
 		ImportPublication result = new();
 
-		result.PublicationIds = ParseDaWinciSourcePublicationIdentifiers(sourcePublicationElement, xmlns);
+		result.PublicationIdentifiers = ParseDaWinciSourcePublicationIdentifiers(sourcePublicationElement, xmlns);
 		result.PublicationExternDbIds = ParseDaWinciSourcePublicationExternDbIds(sourcePublicationElement, xmlns);
 		result.PublicationNames = ParseDaWinciSourcePublicationNames(sourcePublicationElement, xmlns);
 
@@ -455,7 +455,7 @@ partial class ImportParser
 		}
 		ImportPublicationExternDbId newIdentifier = new()
 		{
-			PublicationId = $"{systemName}{input}"
+			PublicationExternIdValue = $"{systemName}{input}"
 		};
 		result.Add(newIdentifier);
 		return result;
