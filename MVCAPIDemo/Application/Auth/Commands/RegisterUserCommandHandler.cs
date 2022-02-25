@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using DataAccess.Data.User;
 using DataAccess.Enums;
-using ZUEPC.DataAccess.Models.Users;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System.Security.Cryptography;
 using Users.Base.Domain;
+using ZUEPC.DataAccess.Models.Users;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Application.Auth.Commands;

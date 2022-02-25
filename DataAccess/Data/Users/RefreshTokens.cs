@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using DataAccess.Models;
 using ZUEPC.DataAccess.Models.Users;
 
 namespace DataAccess.Data.User;

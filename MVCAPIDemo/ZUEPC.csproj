@@ -29,7 +29,6 @@
   <ItemGroup>
     <Folder Include="Application\Auth\Queries\" />
     <Folder Include="Application\Publications\Controllers\" />
-    <Folder Include="Application\Publications\Commands\" />
   </ItemGroup>
 
 </Project>

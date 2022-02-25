@@ -193,7 +193,7 @@ partial class ImportParser
 		return new ImportPublicationIdentifier
 		{
 			IdentifierName = identifierName,
-			PublicationIdentifierValue = idValue,
+			IdentifierValue = idValue,
 			ISForm = is_form
 		};
 	}

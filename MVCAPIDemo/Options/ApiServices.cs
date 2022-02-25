@@ -16,6 +16,7 @@ using ZUEPC.DataAccess.Data.PublicationActivities;
 using ZUEPC.DataAccess.Data.PublicationAuthors;
 using ZUEPC.DataAccess.Data.RelatedPublications;
 using ZUEPC.Localization;
+using ZUEPC.DataAccess.Data.Persons;
 
 namespace ZUEPC.Options;
 

@@ -2,6 +2,8 @@
 using Users.Base.Application.Domain;
 using Users.Base.Domain;
 using ZUEPC.Application.Auth.Commands;
+using ZUEPC.Application.Publications.Commands.PublicationIdentifiers;
+using ZUEPC.Application.Publications.Commands.Publications;
 using ZUEPC.Auth.Domain;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.DataAccess.Models.Institution;
@@ -11,6 +13,7 @@ using ZUEPC.DataAccess.Models.PublicationActivity;
 using ZUEPC.DataAccess.Models.PublicationAuthor;
 using ZUEPC.DataAccess.Models.RelatedPublication;
 using ZUEPC.DataAccess.Models.Users;
+using ZUEPC.EvidencePublication.Base.Commands;
 using ZUEPC.EvidencePublication.Base.Domain.Common;
 using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
@@ -92,8 +95,39 @@ public class DomainToResponseProfile: Profile
 			.IncludeBase<EPCBaseModel, EPCBase>()
 			.ReverseMap();
 
-		CreateMap<PublicationNameModel, PublicationName>();
-		CreateMap<InstitutionModel, Institution>();
 
+		// ImportPublication
+		CreateMap<ImportPublication, CreatePublicationCommand>();
+
+		// Base command to model mapping
+		CreateMap<EPCCreateBaseCommand, EPCBaseModel>();
+		CreateMap<EPCUpdateBaseCommand, EPCBaseModel>();
+		
+		// Base doamin to command mapping
+		CreateMap<EPCBase, EPCUpdateBaseCommand>();
+
+		CreateMap<CreatePublicationCommand, PublicationModel>()
+			.IncludeBase<EPCCreateBaseCommand, EPCBaseModel>();
+		
+		CreateMap<UpdatePublicationCommand, PublicationModel>()
+			.IncludeBase<EPCUpdateBaseCommand, EPCBaseModel>();
+
+		CreateMap<ImportPublication, UpdatePublicationCommand>();
+
+		CreateMap<Publication, UpdatePublicationCommand>()
+			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
+
+		// Create publication identifier
+		CreateMap<ImportPublicationIdentifier, CreatePublicationIdentifierCommand>();
+		CreateMap<CreatePublicationIdentifierCommand, PublicationIdentifierModel>();
+
+		// Update publication identifier
+		CreateMap<PublicationIdentifier, UpdatePublicationIdentifierCommand>()
+			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
+
+		CreateMap<UpdatePublicationIdentifierCommand, PublicationIdentifierModel>()
+			.IncludeBase<EPCUpdateBaseCommand, EPCBaseModel>();
+
+		CreateMap<ImportPublicationIdentifier, UpdatePublicationIdentifierCommand>();
 	}
 }

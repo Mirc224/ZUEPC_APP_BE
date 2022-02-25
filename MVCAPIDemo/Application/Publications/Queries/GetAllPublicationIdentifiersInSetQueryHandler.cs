@@ -1,15 +1,19 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using ZUEPC.DataAccess.Data.Publications;
+using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries;
 
 public class GetAllPublicationIdentifiersInSetQueryHandler : IRequestHandler<GetAllPublicationIdentifiersInSetQuery, GetAllPublicationIdentifiersInSetQueryResponse>
 {
 	private readonly IPublicationIdentifierData _repository;
+	private readonly IMapper _mapper;
 
-	public GetAllPublicationIdentifiersInSetQueryHandler(IPublicationIdentifierData repository)
+	public GetAllPublicationIdentifiersInSetQueryHandler(IMapper mapper, IPublicationIdentifierData repository)
 	{
 		_repository = repository;
+		_mapper = mapper;
 	}
 	public async Task<GetAllPublicationIdentifiersInSetQueryResponse> Handle(GetAllPublicationIdentifiersInSetQuery request, CancellationToken cancellationToken)
 	{
@@ -20,10 +24,11 @@ public class GetAllPublicationIdentifiersInSetQueryHandler : IRequestHandler<Get
 			return new() { Success = false };
 		}
 
+		var mappedResult = _mapper.Map<List<PublicationIdentifier>>(identifiers);
 		var result = new GetAllPublicationIdentifiersInSetQueryResponse()
 		{
 			Success = true,
-			Identifiers = identifiers
+			Identifiers = mappedResult
 		};
 		return result;
 	}

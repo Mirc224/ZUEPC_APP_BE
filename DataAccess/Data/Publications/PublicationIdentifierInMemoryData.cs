@@ -19,12 +19,12 @@ public class PublicationIdentifierInMemoryData : InMemoryBaseRepository<Publicat
 
 	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByIdentifierValueAsync(string identifierValue)
 	{
-		return _repository.Where(x => x.PublicationIdentifierValue == identifierValue);
+		return _repository.Where(x => x.IdentifierValue == identifierValue);
 	}
 
 	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
-		return _repository.Where(x => identifierValues.Contains(x.PublicationIdentifierValue));
+		return _repository.Where(x => identifierValues.Contains(x.IdentifierValue));
 	}
 
 	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByPublicationIdAsync(long publicationId)
