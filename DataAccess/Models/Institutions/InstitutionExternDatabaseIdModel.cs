@@ -2,8 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.Institution;
 
-public class InstitutionExternDatabaseIdModel : EPCBaseModel
+public class InstitutionExternDatabaseIdModel : EPCExternDatabaseIdBaseModel
 {
 	public long InstitutionId { get; set; }
-	public string ExternDbId { get; set; }
 }

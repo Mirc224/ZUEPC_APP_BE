@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using System.Collections.Generic;
+using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
+using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
@@ -26,6 +27,6 @@ public class GetAllPublicationExternDbIdsInSetQueryHandler : IRequestHandler<Get
 		}
 
 		var mapedResult = _mapper.Map<List<PublicationExternDatabaseId>>(externIds);
-		return new GetAllPublicationExternDbIdsInSetQueryResponse() { Success = true, ExternDbIdentifiers = mapedResult };
+		return new GetAllPublicationExternDbIdsInSetQueryResponse() { Success = true, ExternDatabaseIds = mapedResult };
 	}
 }

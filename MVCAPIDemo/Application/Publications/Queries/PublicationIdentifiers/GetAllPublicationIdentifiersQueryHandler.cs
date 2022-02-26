@@ -3,7 +3,7 @@ using MediatR;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
-namespace ZUEPC.Application.Publications.Queries;
+namespace ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 
 public class GetAllPublicationIdentifiersQueryHandler : IRequestHandler<GetAllPublicationIdentifiersQuery, GetAllPublicationIdentifiersQueryResponse>
 {

@@ -1,11 +1,13 @@
-﻿namespace ZUEPC.Import.Models;
+﻿using ZUEPC.Import.Models.Commond;
+
+namespace ZUEPC.Import.Models;
 
 public class ImportInstitution
 {
 	public int? Level { get; set; }
 	public string? InstititutionType { get; set; }
 	public List<ImportInstitutionName> InstitutionNames { get; set; } = new();
-	public List<ImportInstitutionExternDbId> InstitutionExternDbIds { get; set; } = new();
+	public List<ImportInstitutionExternDatabaseId> InstitutionExternDbIds { get; set; } = new();
 
 	public class ImportInstitutionName
 	{
@@ -13,8 +15,7 @@ public class ImportInstitution
 		public string? Name { get; set; }
 	}
 
-	public class ImportInstitutionExternDbId
+	public class ImportInstitutionExternDatabaseId : EPCImportExternDatabaseIdBase
 	{
-		public string? InstitutionExternDbId { get; set; }
 	}
 }

@@ -93,7 +93,7 @@ partial class ImportParser
 		{
 			return default;
 		}
-		var publicationNames = new List<ImportPublicationNameDetails>() { new() { NameType = "title_proper", Name = publicationDetailsString } };
+		var publicationNames = new List<ImportPublicationName>() { new() { NameType = "title_proper", Name = publicationDetailsString } };
 		ImportPublication result = new()
 		{
 			PublicationNames = publicationNames

@@ -17,6 +17,11 @@ public class PersonExternDatabaseIdInMemoryData : InMemoryBaseRepository<PersonE
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
+	public async Task<IEnumerable<PersonExternDatabaseIdModel>> GetAllPersonExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
+	{
+		return _repository.Where(x => identifierValues.Contains(x.ExternIdentifierValue));
+	}
+
 	public async Task<PersonExternDatabaseIdModel?> GetPersonExternDatabaseIdByIdAsync(long id)
 	{
 		return _repository.FirstOrDefault(x => x.Id == id);
@@ -24,7 +29,7 @@ public class PersonExternDatabaseIdInMemoryData : InMemoryBaseRepository<PersonE
 
 	public async Task<IEnumerable<PersonExternDatabaseIdModel>> GetPersonExternDatabaseIdsByExternDbIdAsync(string externDbId)
 	{
-		return _repository.Where(x => x.PersonExternDatabaseId == externDbId).ToList();
+		return _repository.Where(x => x.ExternIdentifierValue == externDbId).ToList();
 	}
 
 	public async Task<IEnumerable<PersonExternDatabaseIdModel>> GetPersonExternDatabaseIdsByPersonIdAsync(long personId)

@@ -2,10 +2,11 @@
 
 public class ImportPublicationAuthor
 {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	public double? ContributionRatio { get; set; }
 	public string? Role { get; set; }
-	public ImportPerson? Person { get; set; }
-	public ImportInstitution? ReportingInstitution { get; set; }
+	public ImportPerson Person { get; set; }
+	public ImportInstitution ReportingInstitution { get; set; }
 
 	public string? ContributionRatioString
 	{
@@ -20,4 +21,5 @@ public class ImportPublicationAuthor
 			}
 		}
 	}
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 }

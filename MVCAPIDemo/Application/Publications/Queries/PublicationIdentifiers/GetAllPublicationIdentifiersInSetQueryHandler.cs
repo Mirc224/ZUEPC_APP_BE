@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
-namespace ZUEPC.Application.Publications.Queries;
+namespace ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 
 public class GetAllPublicationIdentifiersInSetQueryHandler : IRequestHandler<GetAllPublicationIdentifiersInSetQuery, GetAllPublicationIdentifiersInSetQueryResponse>
 {

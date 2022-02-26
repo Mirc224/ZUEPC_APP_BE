@@ -24,7 +24,7 @@ public class InstitutionExternDatabaseIdInMemoryData : InMemoryBaseRepository<In
 
 	public async Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByExternIdAsync(string externDbId)
 	{
-		return _repository.Where(x => x.InstitutionExternDbId == externDbId).ToList();
+		return _repository.Where(x => x.ExternIdentifierValue == externDbId).ToList();
 	}
 
 	public async Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId)

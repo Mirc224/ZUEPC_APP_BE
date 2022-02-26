@@ -2,8 +2,6 @@
 
 namespace ZUEPC.EvidencePublication.Base.Domain.Persons;
 
-public class PersonExternDatabaseId : EPCBase
+public class PersonExternDatabaseId : EPCExternDatabaseIdBase
 {
-	public long PersonId { get; set; }
-	public string ExternDatabaseId { get; set; }
 }

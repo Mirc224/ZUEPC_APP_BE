@@ -10,7 +10,7 @@ partial class ImportParser
 	{
 		ImportPerson person = new();
 		person.PersonNames = ParseCREPCPersonNames(personElement, xmlns);
-		person.PersonExternDbIds = ParseCREPCPersonExternDbIds(personElement, xmlns);
+		person.PersonExternDatabaseIds = ParseCREPCPersonExternDbIds(personElement, xmlns);
 
 		var birthElement = (from element in personElement.Elements(XName.Get("periods", xmlns))
 							where element.Attribute("birth_death")?.Value == "yes"
@@ -37,14 +37,14 @@ partial class ImportParser
 		return person;
 	}
 
-	private static List<ImportPersonExternDbId> ParseCREPCPersonExternDbIds(XElement personElement, string xmlns)
+	private static List<ImportPersonExternDatabaseId> ParseCREPCPersonExternDbIds(XElement personElement, string xmlns)
 	{
-		List<ImportPersonExternDbId> result = new();
+		List<ImportPersonExternDatabaseId> result = new();
 
 		string? input = personElement.Attribute("id")?.Value.Trim();
-		var externDbId = new ImportPersonExternDbId()
+		var externDbId = new ImportPersonExternDatabaseId()
 		{
-			PersonExternDbId = $"{CREPC_IDENTIFIER_PREFIX}:{input}",
+			ExternIdentifierValue = $"{CREPC_IDENTIFIER_PREFIX}:{input}",
 		};
 
 		result.Add(externDbId);
@@ -53,10 +53,10 @@ partial class ImportParser
 
 		foreach (var recordElement in records)
 		{
-			ImportPersonExternDbId personExterDbId = new();
+			ImportPersonExternDatabaseId personExterDbId = new();
 			string? idLabel = recordElement.Attribute("id_title")?.Value.Trim();
 			string? idValue = recordElement.Attribute("id_value")?.Value.Trim();
-			personExterDbId.PersonExternDbId = $"{idLabel}:{idValue}";
+			personExterDbId.ExternIdentifierValue = $"{idLabel}:{idValue}";
 			result.Add(personExterDbId);
 		}
 		return result;
@@ -81,7 +81,7 @@ partial class ImportParser
 	{
 		ImportPerson person = new();
 		person.PersonNames = ParseDaWinciPersonNames(personElement, xmlns);
-		person.PersonExternDbIds = ParseDaWinciPersonExternDbIds(personElement, xmlns);
+		person.PersonExternDatabaseIds = ParseDaWinciPersonExternDbIds(personElement, xmlns);
 
 		var birthDeathElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
 								 where element.Attribute(DAWINCI_CODE)?.Value == "f"
@@ -139,18 +139,18 @@ partial class ImportParser
 		return result;
 	}
 
-	private static List<ImportPersonExternDbId> ParseDaWinciPersonExternDbIds(XElement personElement, string xmlns)
+	private static List<ImportPersonExternDatabaseId> ParseDaWinciPersonExternDbIds(XElement personElement, string xmlns)
 	{
-		List<ImportPersonExternDbId> result = new();
+		List<ImportPersonExternDatabaseId> result = new();
 
 		var personIdElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
 							   where element.Attribute(DAWINCI_CODE)?.Value == "3"
 							   select element).FirstOrDefault();
 		if (personIdElement != null)
 		{
-			ImportPersonExternDbId externDbId = new()
+			ImportPersonExternDatabaseId externDbId = new()
 			{
-				PersonExternDbId = $"{ZU_PERSONID_PREFIX}:{personIdElement?.Value.Trim()}"
+				ExternIdentifierValue = $"{ZU_PERSONID_PREFIX}:{personIdElement?.Value.Trim()}"
 			};
 			result.Add(externDbId);
 		}

@@ -136,13 +136,13 @@ partial class ImportParser
 		return result;
 	}
 
-	private static List<ImportPublicationExternDbId> ParseCREPCPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationExternDatabaseId> ParseCREPCPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
 	{
-		List<ImportPublicationExternDbId> result = new();
+		List<ImportPublicationExternDatabaseId> result = new();
 		string? input = publicationElement.Attribute("id")?.Value.Trim();
-		var externDbId = new ImportPublicationExternDbId()
+		var externDbId = new ImportPublicationExternDatabaseId()
 		{
-			PublicationExternIdValue = $"{CREPC_IDENTIFIER_PREFIX}:{input}",
+			ExternIdentifierValue = $"{CREPC_IDENTIFIER_PREFIX}:{input}",
 		};
 
 		result.Add(externDbId);
@@ -156,24 +156,24 @@ partial class ImportParser
 
 		foreach (var recordElement in records)
 		{
-			ImportPublicationExternDbId publicationExterDbId = new();
-			publicationExterDbId.PublicationExternIdValue = recordElement.Element(XName.Get("database_id", xmlns))?.Value.Trim();
+			ImportPublicationExternDatabaseId publicationExterDbId = new();
+			publicationExterDbId.ExternIdentifierValue = recordElement.Element(XName.Get("database_id", xmlns))?.Value.Trim();
 			result.Add(publicationExterDbId);
 		}
 
 		return result;
 	}
 
-	private static List<ImportPublicationNameDetails> ParseCREPCPublicationNames(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationName> ParseCREPCPublicationNames(XElement publicationElement, string xmlns)
 	{
-		List<ImportPublicationNameDetails> result = new();
+		List<ImportPublicationName> result = new();
 
 		var publicationNames = publicationElement.Elements(XName.Get("title", xmlns));
 		foreach (var recordElement in publicationNames)
 		{
 			var name = recordElement.Value;
 			var nameType = recordElement.Attribute("title_type")?.Value.Trim();
-			var publicationNameDetails = new ImportPublicationNameDetails
+			var publicationNameDetails = new ImportPublicationName
 			{
 				Name = name,
 				NameType = nameType
@@ -246,9 +246,9 @@ partial class ImportParser
 		return publishYear;
 	}
 
-	private static List<ImportPublicationExternDbId> ParseDaWinciPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationExternDatabaseId> ParseDaWinciPublicationExternDbIdentifiers(XElement publicationElement, string xmlns)
 	{
-		List<ImportPublicationExternDbId> result = new();
+		List<ImportPublicationExternDatabaseId> result = new();
 		string? input = (from element in publicationElement.Elements(XName.Get(DAWINCI_CONTROLFIELD, xmlns))
 						 where element.Attribute(DAWINCI_TAG)?.Value == "001"
 						 select element?.Value).FirstOrDefault();
@@ -262,9 +262,9 @@ partial class ImportParser
 
 		if(input != null)
 		{
-			var externDbId = new ImportPublicationExternDbId()
+			var externDbId = new ImportPublicationExternDatabaseId()
 			{
-				PublicationExternIdValue = $"{systemName}{input}",
+				ExternIdentifierValue = $"{systemName}{input}",
 			};
 			result.Add(externDbId);
 		}
@@ -286,8 +286,8 @@ partial class ImportParser
 					continue;
 				}
 
-				ImportPublicationExternDbId publicationExterDbId = new();
-				publicationExterDbId.PublicationExternIdValue = idSubfieldElement?.Value;
+				ImportPublicationExternDatabaseId publicationExterDbId = new();
+				publicationExterDbId.ExternIdentifierValue = idSubfieldElement?.Value;
 				result.Add(publicationExterDbId);
 			}
 		}
@@ -309,14 +309,14 @@ partial class ImportParser
 					continue;
 				}
 
-				ImportPublicationExternDbId publicationExterDbId = new();
+				ImportPublicationExternDatabaseId publicationExterDbId = new();
 				input = idSubfieldElement?.Value;
 
 				if (input is null)
 				{
 					continue;
 				}
-				publicationExterDbId.PublicationExternIdValue = $"{CREPC_IDENTIFIER_PREFIX}:{input}";
+				publicationExterDbId.ExternIdentifierValue = $"{CREPC_IDENTIFIER_PREFIX}:{input}";
 				result.Add(publicationExterDbId);
 			}
 		}
@@ -379,9 +379,9 @@ partial class ImportParser
 		return result;
 	}
 
-	private static List<ImportPublicationNameDetails> ParseDaWinciPublicationNames(XElement publicationElement, string xmlns)
+	private static List<ImportPublicationName> ParseDaWinciPublicationNames(XElement publicationElement, string xmlns)
 	{
-		List<ImportPublicationNameDetails> result = new();
+		List<ImportPublicationName> result = new();
 
 		var publicationDetailsElements = from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
 										 where element.Attribute(DAWINCI_TAG)?.Value == "200"
@@ -404,9 +404,9 @@ partial class ImportParser
 		return result;
 	}
 
-	private static List<ImportPublicationNameDetails> ParseDaWinciSourcePublicationNames(XElement sourcePublicationElement, string xmlns)
+	private static List<ImportPublicationName> ParseDaWinciSourcePublicationNames(XElement sourcePublicationElement, string xmlns)
 	{
-		List<ImportPublicationNameDetails> result = new();
+		List<ImportPublicationName> result = new();
 
 		var publicationDetailsElements = from element in sourcePublicationElement.Descendants(XName.Get(DAWINCI_DATAFIELD, xmlns))
 										 where element.Attribute(DAWINCI_TAG)?.Value == "200"
@@ -434,9 +434,9 @@ partial class ImportParser
 		return result;
 	}
 
-	private static List<ImportPublicationExternDbId> ParseDaWinciSourcePublicationExternDbIds(XElement sourcePublicationElement, string xmlns)
+	private static List<ImportPublicationExternDatabaseId> ParseDaWinciSourcePublicationExternDbIds(XElement sourcePublicationElement, string xmlns)
 	{
-		List<ImportPublicationExternDbId> result = new();
+		List<ImportPublicationExternDatabaseId> result = new();
 
 		var identifierElement = (from element in sourcePublicationElement.Descendants(XName.Get(DAWINCI_CONTROLFIELD, xmlns))
 								 where element.Attribute(DAWINCI_TAG)?.Value == "001"
@@ -453,20 +453,20 @@ partial class ImportParser
 			systemName = CREPC_IDENTIFIER_PREFIX + ":";
 			input = input.Substring(5);
 		}
-		ImportPublicationExternDbId newIdentifier = new()
+		ImportPublicationExternDatabaseId newIdentifier = new()
 		{
-			PublicationExternIdValue = $"{systemName}{input}"
+			ExternIdentifierValue = $"{systemName}{input}"
 		};
 		result.Add(newIdentifier);
 		return result;
 	}
 
 
-	private static List<ImportPublicationNameDetails> ParseDaWinciPublicationNamesFromElements(
+	private static List<ImportPublicationName> ParseDaWinciPublicationNamesFromElements(
 		IEnumerable<XElement> publicationDetailsElement,
 		string xmlns)
 	{
-		List<ImportPublicationNameDetails> result = new();
+		List<ImportPublicationName> result = new();
 
 		if (!publicationDetailsElement.Any())
 		{
@@ -483,7 +483,7 @@ partial class ImportParser
 			}
 
 			var name = nameElement.Value.Trim();
-			var publicationNameDetails = new ImportPublicationNameDetails
+			var publicationNameDetails = new ImportPublicationName
 			{
 				Name = name,
 				NameType = "title_proper"

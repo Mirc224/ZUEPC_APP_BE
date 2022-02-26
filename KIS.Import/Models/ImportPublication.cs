@@ -1,14 +1,15 @@
 ﻿using ZUEPC.Base.Enums.Publication;
+using ZUEPC.Import.Models.Commond;
 
 namespace ZUEPC.Import.Models;
 
 public class ImportPublication
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-	public List<ImportPublicationExternDbId> PublicationExternDbIds { get; set; } = new();
+	public List<ImportPublicationExternDatabaseId> PublicationExternDbIds { get; set; } = new();
 	public List<ImportPublicationIdentifier> PublicationIdentifiers { get; set; } = new();
 	public PublicationType PublicationType { get; set; }
-	public List<ImportPublicationNameDetails> PublicationNames { get; set; } = new();
+	public List<ImportPublicationName> PublicationNames { get; set; } = new();
 	public List<ImportPublicationAuthor> PublicationAuthors { get; set; } = new();
 	public List<ImportRelatedPublication> RelatedPublications { get; set; } = new();
 	public List<ImportPublicationActivityDetails> PublishingActivities { get; set; } = new();
@@ -40,7 +41,7 @@ public class ImportPublication
 		}
 	}
 
-	public class ImportPublicationNameDetails
+	public class ImportPublicationName
 	{
 		public string Name { get; set; }
 		public string? NameType { get; set; }
@@ -54,9 +55,8 @@ public class ImportPublication
 		public string? ISForm { get; set; }
 	}
 
-	public class ImportPublicationExternDbId
+	public class ImportPublicationExternDatabaseId : EPCImportExternDatabaseIdBase
 	{
-		public string? PublicationExternIdValue { get; set; }
 		//public ImportExternDatabase? ExternDatabase { get; set; }
 	}
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

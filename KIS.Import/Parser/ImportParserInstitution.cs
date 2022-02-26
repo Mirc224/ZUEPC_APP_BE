@@ -34,14 +34,14 @@ partial class ImportParser
 		return result;
 	}
 
-	private static List<ImportInstitutionExternDbId> ParseCREPCInstitutionExternDbId(XElement institutionElement, string xmlns)
+	private static List<ImportInstitutionExternDatabaseId> ParseCREPCInstitutionExternDbId(XElement institutionElement, string xmlns)
 	{
-		List<ImportInstitutionExternDbId> result = new();
+		List<ImportInstitutionExternDatabaseId> result = new();
 
 		string? input = institutionElement.Attribute("id")?.Value.Trim();
-		var externDbId = new ImportInstitutionExternDbId()
+		var externDbId = new ImportInstitutionExternDatabaseId()
 		{
-			InstitutionExternDbId = $"CREPC:{input}"
+			ExternIdentifierValue = $"CREPC:{input}"
 		};
 
 		result.Add(externDbId);
@@ -51,9 +51,9 @@ partial class ImportParser
 		if(insitutionTagElement != null)
 		{
 			input = insitutionTagElement.Value;
-			externDbId = new ImportInstitutionExternDbId()
+			externDbId = new ImportInstitutionExternDatabaseId()
 			{
-				InstitutionExternDbId = $"ins_tag:{input}"
+				ExternIdentifierValue = $"ins_tag:{input}"
 			};
 			result.Add(externDbId);
 		}
@@ -71,7 +71,7 @@ partial class ImportParser
 			string? idValue = identifierElement.Element(XName.Get("number", xmlns))?.Value.Trim();
 			externDbId = new()
 			{
-				InstitutionExternDbId = $"{dbName}:{idValue}"
+				ExternIdentifierValue = $"{dbName}:{idValue}"
 			};
 			result.Add(externDbId);
 		}
@@ -92,9 +92,9 @@ partial class ImportParser
 		return new();
 	}
 
-	private static List<ImportInstitutionExternDbId> ParseDaWinciInstitutionExternDbId(XElement publicationElement, string xmlns)
+	private static List<ImportInstitutionExternDatabaseId> ParseDaWinciInstitutionExternDbId(XElement publicationElement, string xmlns)
 	{
-		List<ImportInstitutionExternDbId> result = new();
+		List<ImportInstitutionExternDatabaseId> result = new();
 		var insitutionTagElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
 									where element.Attribute(DAWINCI_CODE)?.Value == "p"
 									select element).FirstOrDefault();
@@ -102,9 +102,9 @@ partial class ImportParser
 		if (insitutionTagElement != null)
 		{
 			string input = insitutionTagElement.Value.Trim();
-			var externDbId = new ImportInstitutionExternDbId()
+			var externDbId = new ImportInstitutionExternDatabaseId()
 			{
-				InstitutionExternDbId = $"ins_tag:{input}"
+				ExternIdentifierValue = $"ins_tag:{input}"
 			};
 			result.Add(externDbId);
 		}

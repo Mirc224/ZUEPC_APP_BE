@@ -2,8 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.Publication;
 
-public class PublicationExternDatabaseIdModel : EPCBaseModel
+public class PublicationExternDatabaseIdModel : EPCExternDatabaseIdBaseModel
 {
 	public long PublicationId { get; set; }
-	public string? ExternDatabaseId { get; set; }
 }

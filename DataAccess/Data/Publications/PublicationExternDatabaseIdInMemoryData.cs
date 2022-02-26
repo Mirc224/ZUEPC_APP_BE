@@ -20,12 +20,12 @@ public class PublicationExternDatabaseIdInMemoryData : InMemoryBaseRepository<Pu
 
 	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
-		return _repository.Where(x => identifierValues.Contains(x.PublicationExternDatabaseId));
+		return _repository.Where(x => identifierValues.Contains(x.ExternIdentifierValue));
 	}
 
 	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByPublicationExternDbIdAsync(string externDbId)
 	{
-		return _repository.Where(x => x.PublicationExternDatabaseId == externDbId);
+		return _repository.Where(x => x.ExternIdentifierValue == externDbId);
 	}
 
 	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByPublicationIdAsync(long publicationId)

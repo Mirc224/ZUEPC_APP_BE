@@ -2,8 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.Person;
 
-public class PersonExternDatabaseIdModel : EPCBaseModel
+public class PersonExternDatabaseIdModel : EPCExternDatabaseIdBaseModel
 {
 	public long PersonId { get; set; }
-	public string ExternDatabaseId { get; set; }
 }

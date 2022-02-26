@@ -1,9 +1,11 @@
-﻿namespace ZUEPC.Import.Models;
+﻿using ZUEPC.Import.Models.Commond;
+
+namespace ZUEPC.Import.Models;
 
 public class ImportPerson
 {
 	public List<ImportPersonName> PersonNames { get; set; } = new();
-	public List<ImportPersonExternDbId> PersonExternDbIds { get; set; } = new();
+	public List<ImportPersonExternDatabaseId> PersonExternDatabaseIds { get; set; } = new();
 	public int? BirthYear { get; set; }
 	public int? DeathYear { get; set; }
 
@@ -14,8 +16,7 @@ public class ImportPerson
 		public string? LastName { get; set; }
 	}
 
-	public class ImportPersonExternDbId
+	public class ImportPersonExternDatabaseId: EPCImportExternDatabaseIdBase
 	{
-		public string? PersonExternDbId { get; set; }
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ZUEPC.Application.Publications.Queries;
+namespace ZUEPC.Application.Publications.Queries.Publictions;
 
 public class GetPublicationQuery : IRequest<GetPublicationQueryResponse>
 {
