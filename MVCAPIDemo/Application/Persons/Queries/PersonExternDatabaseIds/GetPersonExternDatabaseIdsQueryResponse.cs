@@ -1,11 +1,11 @@
 ﻿using ZUEPC.Common.Responses;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
-namespace ZUEPC.Application.Publications.Queries.PublicationNames;
+namespace ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 
-public class GetAllPublicationNamesQueryResponse : ResponseBase
+public class GetPersonExternDatabaseIdsQueryResponse : ResponseBase
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-	public IEnumerable<PublicationName> PublicationNames { get; set; }
+	public IEnumerable<PersonExternDatabaseId> PersonExternDatabaseIds { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 }

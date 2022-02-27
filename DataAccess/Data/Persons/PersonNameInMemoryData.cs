@@ -18,17 +18,17 @@ public class PersonNameInMemoryData : InMemoryBaseRepository<PersonNameModel>, I
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
-	public async Task<IEnumerable<PersonNameModel>> GetAllPersonNamesByFirstNameAsync(string firstName)
+	public async Task<IEnumerable<PersonNameModel>> GetPersonNamesByFirstNameAsync(string firstName)
 	{
 		return _repository.Where(x => x.FirstName == firstName);
 	}
 
-	public async Task<IEnumerable<PersonNameModel>> GetAllPersonNamesByLastNameAsync(string lastName)
+	public async Task<IEnumerable<PersonNameModel>> GetPersonNamesByLastNameAsync(string lastName)
 	{
 		return _repository.Where(x => x.LastName == lastName);
 	}
 
-	public async Task<IEnumerable<PersonNameModel>> GetAllPersonNamesByPersonIdAsync(long personId)
+	public async Task<IEnumerable<PersonNameModel>> GetPersonNamesByPersonIdAsync(long personId)
 	{
 		return _repository.Where(x => x.PersonId == personId);
 	}

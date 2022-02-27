@@ -17,7 +17,7 @@ public class PublicationIdentifierInMemoryData : InMemoryBaseRepository<Publicat
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
-	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByIdentifierValueAsync(string identifierValue)
+	public async Task<IEnumerable<PublicationIdentifierModel>> GetPublicationIdentifiersByIdentifierValueAsync(string identifierValue)
 	{
 		return _repository.Where(x => x.IdentifierValue == identifierValue);
 	}
@@ -27,7 +27,7 @@ public class PublicationIdentifierInMemoryData : InMemoryBaseRepository<Publicat
 		return _repository.Where(x => identifierValues.Contains(x.IdentifierValue));
 	}
 
-	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByPublicationIdAsync(long publicationId)
+	public async Task<IEnumerable<PublicationIdentifierModel>> GetPublicationIdentifiersByPublicationIdAsync(long publicationId)
 	{
 		return _repository.Where(x => x.PublicationId == publicationId);
 	}

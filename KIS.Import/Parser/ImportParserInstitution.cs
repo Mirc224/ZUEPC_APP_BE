@@ -11,7 +11,7 @@ partial class ImportParser
 		ImportInstitution importInstitution = new();
 		importInstitution.Level = ParseInt(institutionElement.Attribute("level")?.Value);
 		importInstitution.InstitutionNames = ParseCREPCInstitutionNames(institutionElement, xmlns);
-		importInstitution.InstitutionExternDbIds = ParseCREPCInstitutionExternDbId(institutionElement, xmlns);
+		importInstitution.InstitutionExternDatabaseIds = ParseCREPCInstitutionExternDbId(institutionElement, xmlns);
 		importInstitution.InstititutionType = institutionElement.Element(XName.Get("institution_type", xmlns))?.Value.Trim();
 		return importInstitution;
 	}
@@ -82,7 +82,7 @@ partial class ImportParser
 	{
 		ImportInstitution importInstitution = new();
 		importInstitution.InstitutionNames = ParseDaWinciInstitutionNames(institutionElement, xmlns);
-		importInstitution.InstitutionExternDbIds = ParseDaWinciInstitutionExternDbId(institutionElement, xmlns);
+		importInstitution.InstitutionExternDatabaseIds = ParseDaWinciInstitutionExternDbId(institutionElement, xmlns);
 		importInstitution.InstititutionType = institutionElement.Element(XName.Get("institution_type", xmlns))?.Value.Trim();
 		return importInstitution;
 	}

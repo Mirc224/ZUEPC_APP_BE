@@ -2,6 +2,9 @@
 using Users.Base.Application.Domain;
 using Users.Base.Domain;
 using ZUEPC.Application.Auth.Commands;
+using ZUEPC.Application.Institutions.Commands.Institutions;
+using ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
+using ZUEPC.Application.Persons.Commands.PersonNames;
 using ZUEPC.Application.Persons.Commands.Persons;
 using ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Commands.PublicationIdentifiers;
@@ -25,14 +28,17 @@ using ZUEPC.EvidencePublication.Base.Domain.Publications;
 using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 using ZUEPC.EvidencePublication.Base.PublicationAuthors;
 using ZUEPC.Import.Models;
+using ZUEPC.Import.Models.Commond;
+using static ZUEPC.Import.Models.ImportInstitution;
+using static ZUEPC.Import.Models.ImportPerson;
 using static ZUEPC.Import.Models.ImportPublication;
 
 namespace ZUEPC.Application.Mapping;
 
-public class DomainToResponseProfile: Profile
+public class DomainToResponseProfile : Profile
 {
-    public DomainToResponseProfile()
-    {
+	public DomainToResponseProfile()
+	{
 		CreateBaseClassesMapping();
 		CreateUserMapping();
 		CreateImportToDomainMapping();
@@ -58,9 +64,24 @@ public class DomainToResponseProfile: Profile
 
 	private void CreateImportToDomainMapping()
 	{
+		// Publication
+		CreateMap<ImportPublication, Publication>();
 		CreateMap<ImportPublicationIdentifier, PublicationIdentifier>();
-		CreateMap<ImportPublicationExternDatabaseId, PublicationExternDatabaseId>();
-		CreateMap<ImportPublicationName, PublicationName>();
+		CreateMap<ImportPublicationExternDatabaseId, PublicationExternDatabaseId>()
+			.IncludeBase<EPCImportExternDatabaseIdBase, EPCExternDatabaseIdBase>();
+		  CreateMap<ImportPublicationName, PublicationName>();
+
+		// Person
+		CreateMap<ImportPerson, Person>();
+		CreateMap<ImportPersonExternDatabaseId, PersonExternDatabaseId>()
+			.IncludeBase<EPCImportExternDatabaseIdBase, EPCExternDatabaseIdBase>();
+		CreateMap<ImportPersonName, PersonName>();
+
+		// Institution
+		CreateMap<ImportInstitution, Institution>();
+		CreateMap<ImportInstitutionExternDatabaseId, InstitutionExternDatabaseId>()
+			.IncludeBase<EPCImportExternDatabaseIdBase, EPCExternDatabaseIdBase>();
+		CreateMap<ImportInstitutionName, InstitutionName>();
 	}
 
 	private void CreateBaseClassesMapping()
@@ -71,9 +92,14 @@ public class DomainToResponseProfile: Profile
 		CreateMap<EPCExternDatabaseIdBaseModel, EPCExternDatabaseIdBase>()
 			.ReverseMap();
 
+		CreateMap<EPCImportExternDatabaseIdBase, EPCExternDatabaseIdBase>()
+			.ReverseMap();
+
 		// Base command to model mapping
-		CreateMap<EPCCreateBaseCommand, EPCBaseModel>();
-		CreateMap<EPCUpdateBaseCommand, EPCBaseModel>();
+		CreateMap<EPCCreateBaseCommand, EPCBaseModel>()
+			.ReverseMap();
+		CreateMap<EPCUpdateBaseCommand, EPCBaseModel>()
+			.ReverseMap();
 	}
 
 	private void CreateModelToDomainMapping()
@@ -140,35 +166,87 @@ public class DomainToResponseProfile: Profile
 	private void CreateImportToCommandMapping()
 	{
 		// Base doamin to command mapping
-		CreateMap<EPCBase, EPCUpdateBaseCommand>();
+		CreateMap<EPCBase, EPCCreateBaseCommand>();
 		// Base doamin to command mapping
 		CreateMap<EPCBase, EPCUpdateBaseCommand>();
 
 
 		// ImportPublication
 		CreateMap<ImportPublication, CreatePublicationCommand>();
-		CreateMap<ImportPublication, UpdatePublicationCommand>();
+		//CreateMap<ImportPublication, UpdatePublicationCommand>();
 
-		// ImportPublicationIdentifier
-		CreateMap<ImportPublicationIdentifier, CreatePublicationIdentifierCommand>();
-		CreateMap<ImportPublicationIdentifier, UpdatePublicationIdentifierCommand>();
+		//// ImportPublicationIdentifier
+		//CreateMap<ImportPublicationIdentifier, CreatePublicationIdentifierCommand>();
+		//CreateMap<ImportPublicationIdentifier, UpdatePublicationIdentifierCommand>();
 
-		// ImportPublicationExternDatabaseId
-		CreateMap<ImportPublicationExternDatabaseId, CreatePublicationExternDatabaseIdCommand>();
-		CreateMap<ImportPublicationExternDatabaseId, UpdatePublicationExternDatabaseIdCommand>();
+		//// ImportPublicationExternDatabaseId
+		//CreateMap<ImportPublicationExternDatabaseId, CreatePublicationExternDatabaseIdCommand>();
+		//CreateMap<ImportPublicationExternDatabaseId, UpdatePublicationExternDatabaseIdCommand>();
 
 		// ImportPerson
 		CreateMap<ImportPerson, CreatePersonCommand>();
+		//CreateMap<ImportPerson, UpdatePersonCommand>();
 
+		//// ImportPersonExternDatabaseId
+		//CreateMap<ImportPersonExternDatabaseId, CreatePersonExternDatabaseIdCommand>();
+		//CreateMap<ImportPersonExternDatabaseId, UpdatePersonExternDatabaseIdCommand>();
+
+		//// ImportPersonName
+		//CreateMap<ImportPersonName, CreatePersonNameCommand>();
+		//CreateMap<ImportPersonName, UpdatePersonNameCommand>();
+		// ImportInstitution
+		CreateMap<ImportInstitution, CreateInstitutionCommand>();
 	}
 
 	private void CreateDomainToCommandMapping()
 	{
 		// Publication
+		//CreateMap<Publication, CreatePublicationCommand>()
+		//	.IncludeBase<EPCBase, EPCCreateBaseCommand>();
 		CreateMap<Publication, UpdatePublicationCommand>()
 			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
-		// ImportPublicationIdentifier
+
+		// PublicationIdentifier
+		CreateMap<PublicationIdentifier, CreatePublicationIdentifierCommand>()
+			.IncludeBase<EPCBase, EPCCreateBaseCommand>();
 		CreateMap<PublicationIdentifier, UpdatePublicationIdentifierCommand>()
+			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
+
+		// PublicationExternDatabaseId
+		CreateMap<PublicationExternDatabaseId, CreatePublicationExternDatabaseIdCommand>()
+			.IncludeBase<EPCBase, EPCCreateBaseCommand>();
+		CreateMap<PublicationExternDatabaseId, UpdatePublicationExternDatabaseIdCommand>()
+			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
+
+		// PublicationName
+		CreateMap<PublicationName, CreatePublicationNameCommand>()
+			.IncludeBase<EPCBase, EPCCreateBaseCommand>();
+		CreateMap<PublicationName, UpdatePublicationNameCommand>()
+			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
+
+
+		// Person
+		//CreateMap<Person, CreatePersonCommand>()
+		//	.IncludeBase<EPCBase, EPCCreateBaseCommand>();
+		CreateMap<Person, UpdatePersonCommand>()
+			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
+
+		// PersonExternDatabaseId
+		CreateMap<PersonExternDatabaseId, CreatePersonExternDatabaseIdCommand>()
+			.IncludeBase<EPCBase, EPCCreateBaseCommand>();
+		CreateMap<PersonExternDatabaseId, UpdatePersonExternDatabaseIdCommand>()
+			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
+
+		// PersonName
+		CreateMap<PersonName, CreatePersonNameCommand>()
+			.IncludeBase<EPCBase, EPCCreateBaseCommand>();
+		CreateMap<PersonName, UpdatePersonNameCommand>()
+			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
+
+		// Institution
+		//CreateMap<Institution, CreateInstitutionCommand>()
+		//	.IncludeBase<EPCBase, EPCCreateBaseCommand>();
+		CreateMap<Institution, UpdateInstitutionCommand>()
 			.IncludeBase<EPCBase, EPCUpdateBaseCommand>();
 	}
 
@@ -201,6 +279,26 @@ public class DomainToResponseProfile: Profile
 		// Person
 		CreateMap<CreatePersonCommand, PersonModel>()
 			.IncludeBase<EPCCreateBaseCommand, EPCBaseModel>();
+		CreateMap<UpdatePersonCommand, PersonModel>()
+			.IncludeBase<EPCUpdateBaseCommand, EPCBaseModel>();
+
+		// PersonExternDatabaseId
+		CreateMap<CreatePersonExternDatabaseIdCommand, PersonExternDatabaseIdModel>()
+			.IncludeBase<EPCCreateBaseCommand, EPCBaseModel>();
+		CreateMap<UpdatePersonExternDatabaseIdCommand, PersonExternDatabaseIdModel>()
+			.IncludeBase<EPCUpdateBaseCommand, EPCBaseModel>();
+
+		// PersonName
+		CreateMap<CreatePersonNameCommand, PersonNameModel>()
+			.IncludeBase<EPCCreateBaseCommand, EPCBaseModel>();
+		CreateMap<UpdatePersonNameCommand, PersonNameModel>()
+			.IncludeBase<EPCUpdateBaseCommand, EPCBaseModel>();
+
+		// Institution
+		CreateMap<CreateInstitutionCommand, InstitutionModel>()
+			.IncludeBase<EPCCreateBaseCommand, EPCBaseModel>();
+		CreateMap<UpdateInstitutionCommand, InstitutionModel>()
+			.IncludeBase<EPCUpdateBaseCommand, EPCBaseModel>();
 	}
 }
 

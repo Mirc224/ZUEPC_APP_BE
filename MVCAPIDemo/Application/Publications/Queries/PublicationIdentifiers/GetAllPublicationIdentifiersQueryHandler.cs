@@ -17,7 +17,7 @@ public class GetAllPublicationIdentifiersQueryHandler : IRequestHandler<GetAllPu
 	}
 	public async Task<GetAllPublicationIdentifiersQueryResponse> Handle(GetAllPublicationIdentifiersQuery request, CancellationToken cancellationToken)
 	{
-		var publicationIdentifierModels = _repository.GetAllPublicationIdentifiersByPublicationIdAsync(request.PublicationId);
+		var publicationIdentifierModels = _repository.GetPublicationIdentifiersByPublicationIdAsync(request.PublicationId);
 		var mappedResult = _mapper.Map<List<PublicationIdentifier>>(publicationIdentifierModels);
 
 		return new() { Success = true, PublicationIdentifiers = mappedResult};

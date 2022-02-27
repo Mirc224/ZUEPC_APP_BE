@@ -7,7 +7,7 @@ public class ImportInstitution
 	public int? Level { get; set; }
 	public string? InstititutionType { get; set; }
 	public List<ImportInstitutionName> InstitutionNames { get; set; } = new();
-	public List<ImportInstitutionExternDatabaseId> InstitutionExternDbIds { get; set; } = new();
+	public List<ImportInstitutionExternDatabaseId> InstitutionExternDatabaseIds { get; set; } = new();
 
 	public class ImportInstitutionName
 	{

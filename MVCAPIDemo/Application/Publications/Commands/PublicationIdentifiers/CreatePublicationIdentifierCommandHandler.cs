@@ -2,6 +2,7 @@
 using MediatR;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Models.Publication;
+using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Commands.PublicationIdentifiers;
 
@@ -17,9 +18,12 @@ public class CreatePublicationIdentifierCommandHandler : IRequestHandler<CreateP
 	}
 	public async Task<CreatePublicationIdentifierCommandResponse> Handle(CreatePublicationIdentifierCommand request, CancellationToken cancellationToken)
 	{
-		var publicationIdentifierModel = _mapper.Map<PublicationIdentifierModel>(request);
+		PublicationIdentifierModel publicationIdentifierModel = _mapper.Map<PublicationIdentifierModel>(request);
 
 		long newId = await _repository.InsertPublicationIdentifierAsync(publicationIdentifierModel);
-		return new() { Success = newId > 0 };
+		publicationIdentifierModel.Id = newId;
+		PublicationIdentifier domain = _mapper.Map<PublicationIdentifier>(publicationIdentifierModel);
+
+		return new() { Success = newId > 0, CreatedPublicationIdentifier = domain };
 	}
 }

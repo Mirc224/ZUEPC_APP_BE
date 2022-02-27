@@ -4,8 +4,8 @@ namespace ZUEPC.DataAccess.Data.Publications;
 
 public interface IPublicationExternDatabaseIdData
 {
-	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByPublicationExternDbIdAsync(string externDbId);
-	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByPublicationIdAsync(long publicationId);
+	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetPublicationExternDbIdsByPublicationExternDbIdAsync(string externDbId);
+	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetPublicationExternDbIdsByPublicationIdAsync(long publicationId);
 	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues);
 	Task<PublicationExternDatabaseIdModel?> GetPublicationExternDbIdByIdAsync(long id);
 	Task<long> InsertPublicationExternDbIdAsync(PublicationExternDatabaseIdModel model);

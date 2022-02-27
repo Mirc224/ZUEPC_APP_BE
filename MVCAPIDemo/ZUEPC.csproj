@@ -28,8 +28,8 @@
 
   <ItemGroup>
     <Folder Include="Application\Auth\Queries\" />
+    <Folder Include="Application\Institutions\Controllers\" />
     <Folder Include="Application\Persons\Controllers\" />
-    <Folder Include="Application\Persons\Queries\PersonNames\" />
     <Folder Include="Application\Publications\Controllers\" />
   </ItemGroup>
 

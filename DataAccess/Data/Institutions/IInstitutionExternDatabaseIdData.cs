@@ -7,6 +7,7 @@ public interface IInstitutionExternDatabaseIdData
 	Task<InstitutionExternDatabaseIdModel?> GetInstitutionExternDatabaseIdByIdAsync(long id);
 	Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId);
 	Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByExternIdAsync(string externDbId);
+	Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetAllInstitutionExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues);
 	Task<long> InsertInstitutionExternDatabaseIdAsync(InstitutionExternDatabaseIdModel model);
 	Task<int> UpdateInstitutionExternDatabaseIdAsync(InstitutionExternDatabaseIdModel model);
 	Task<int> DeleteInstitutionExternDatabaseIdByIdAsync(long id);

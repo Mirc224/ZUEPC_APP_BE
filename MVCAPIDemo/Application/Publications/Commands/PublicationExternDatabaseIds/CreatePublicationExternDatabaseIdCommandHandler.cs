@@ -2,10 +2,11 @@
 using MediatR;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Models.Publication;
+using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 
-public class CreatePublicationExternDatabaseIdCommandHandler : IRequestHandler<CreatePublicationExternDatabaseIdCommand, CreatePublicationExternDatabaseIdCommandResult>
+public class CreatePublicationExternDatabaseIdCommandHandler : IRequestHandler<CreatePublicationExternDatabaseIdCommand, CreatePublicationExternDatabaseIdCommandResponse>
 {
 	private readonly IMapper _mapper;
 	private readonly IPublicationExternDatabaseIdData _repository;
@@ -16,10 +17,12 @@ public class CreatePublicationExternDatabaseIdCommandHandler : IRequestHandler<C
 		_repository = repository;
 	}
 
-	public async Task<CreatePublicationExternDatabaseIdCommandResult> Handle(CreatePublicationExternDatabaseIdCommand request, CancellationToken cancellationToken)
+	public async Task<CreatePublicationExternDatabaseIdCommandResponse> Handle(CreatePublicationExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		var insertModel = _mapper.Map<PublicationExternDatabaseIdModel>(request);
+		PublicationExternDatabaseIdModel insertModel = _mapper.Map<PublicationExternDatabaseIdModel>(request);
 		long insertedId = await _repository.InsertPublicationExternDbIdAsync(insertModel);
-		return new CreatePublicationExternDatabaseIdCommandResult() { Success = true };
+		insertModel.Id = insertedId;
+		PublicationExternDatabaseId domain = _mapper.Map<PublicationExternDatabaseId>(insertModel);
+		return new CreatePublicationExternDatabaseIdCommandResponse() { Success = true, CreatedPublicationExternDatabaseId = domain };
 	}
 }
