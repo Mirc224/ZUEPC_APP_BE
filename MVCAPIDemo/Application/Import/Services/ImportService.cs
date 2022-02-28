@@ -2,8 +2,11 @@
 using MediatR;
 using System.Xml.Linq;
 using ZUEPC.Application.Import.Commands;
+using ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
+using ZUEPC.Application.Institutions.Commands.InstitutionNames;
 using ZUEPC.Application.Institutions.Commands.Institutions;
 using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
+using ZUEPC.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Application.Institutions.Queries.Institutions;
 using ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Commands.PersonNames;
@@ -11,6 +14,8 @@ using ZUEPC.Application.Persons.Commands.Persons;
 using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Queries.PersonNames;
 using ZUEPC.Application.Persons.Queries.Persons;
+using ZUEPC.Application.PublicationAuthors.Commands;
+using ZUEPC.Application.PublicationAuthors.Queries;
 using ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Commands.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Commands.PublicationNames;
@@ -19,15 +24,19 @@ using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.Publications.Queries.Publictions;
+using ZUEPC.Application.RelatedPublications.Queries;
 using ZUEPC.Base.Enums.Common;
 using ZUEPC.EvidencePublication.Base.Commands;
 using ZUEPC.EvidencePublication.Base.Domain.Common;
 using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
+using ZUEPC.EvidencePublication.Base.PublicationAuthors;
 using ZUEPC.Import.Models;
 using ZUEPC.Import.Models.Commond;
 using ZUEPC.Import.Parser;
+using static ZUEPC.Import.Models.ImportInstitution;
 using static ZUEPC.Import.Models.ImportPerson;
 using static ZUEPC.Import.Models.ImportPublication;
 
@@ -98,34 +107,293 @@ public class ImportService
 		ImportPublication importedPublication = record.Publication;
 		DateTime versionDate = record.RecordVersionDate;
 
-		Publication publication = await FindOrCreatePublication(importedPublication, versionDate, source);
-		await UpdateCurrentPublicationDetailsAsync(publication, importedPublication, versionDate, source);
-		List<ImportPerson> relatedPersons = importedPublication.PublicationAuthors.Select(x => x.Person).ToList();
-		IEnumerable<Tuple<ImportPerson, Person>> publicationPersonsTuples = await GetOrCreatePublicationPersonImportDomainTuplesAsync(
-																				  relatedPersons,
-																				  versionDate,
-																				  source);
-		await UpdateCurrentPersonsDetailsAsync(publicationPersonsTuples, versionDate, source);
+		await ProcessImportedPublication(importedPublication, versionDate, source);
+	}
 
-		List<ImportInstitution> relatedInstitutions = importedPublication.PublicationAuthors.Select(x => x.ReportingInstitution).ToList();
-		IEnumerable<Tuple<ImportInstitution, Institution>> publicationInstitutionTuples = await GetOrCreatePublicationInstitutionImportDomainTuplesAsync(
+	private async Task<Publication> ProcessImportedPublication(
+		ImportPublication importedPublication, 
+		DateTime versionDate, 
+		OriginSourceType source)
+	{
+		Publication publication = await FindOrCreatePublication(importedPublication, versionDate, source);
+		Publication updatedPublication = await UpdateCurrentPublicationDetailsAsync(publication,
+																					importedPublication,
+																					versionDate,
+																					source);
+		await ProcessImportPublicationAuthorsAsync(updatedPublication, importedPublication.PublicationAuthors, versionDate, source);
+
+
+		await ProcessRelatedPublicationsAsync(updatedPublication, importedPublication.RelatedPublications, versionDate, source);
+
+		return updatedPublication;
+	}
+
+	private async Task ProcessRelatedPublicationsAsync(
+		Publication updatedPublication, 
+		IEnumerable<ImportRelatedPublication> relatedPublications, 
+		DateTime versionDate, 
+		OriginSourceType source)
+	{
+		GetPublicationRelatedPublicationsCommandResponse response = await _mediator.Send(
+			new GetPublicationRelatedPublicationsCommand()
+			{
+				SourcePublicationId = updatedPublication.Id
+			});
+		foreach(ImportRelatedPublication relatedPublication in relatedPublications)
+		{
+			await ProcessRelatedPublicationAsync(updatedPublication, relatedPublication, versionDate, source);
+		}
+	}
+
+	private async Task ProcessRelatedPublicationAsync(Publication sourcePublication, ImportRelatedPublication importRelatedPublication, DateTime versionDate, OriginSourceType source)
+	{
+		if(importRelatedPublication.RelatedPublication is null)
+		{
+			return;
+		}
+		ImportPublication importPublication = importRelatedPublication.RelatedPublication;
+		Publication destPublication = await ProcessImportedPublication(importPublication, versionDate, source);
+
+
+
+		RelatedPublication relatedPublication = _mapper.Map<RelatedPublication>(importRelatedPublication);
+		relatedPublication.PublicationId = sourcePublication.Id;
+		relatedPublication.RelatedPublicationId = destPublication.Id;
+
+	}
+
+	private async Task ProcessImportPublicationAuthorsAsync(
+		Publication updatedPublication,
+		IEnumerable<ImportPublicationAuthor> importPublicationAuthors, 
+		DateTime versionDate, 
+		OriginSourceType source)
+	{
+		IEnumerable<ImportPerson> relatedPersons = importPublicationAuthors.Select(x => x.Person).ToList();
+		
+
+		IEnumerable<Tuple<ImportPerson, Person>> updatedCurrentPersonsTuple = await ProcessImportPersonsAsync(
+			relatedPersons,
+			versionDate,
+			source);
+
+		IEnumerable<ImportInstitution> relatedInstitutions = importPublicationAuthors
+														.Select(x => x.ReportingInstitution)
+														.ToList();
+
+
+		IEnumerable<Tuple<ImportInstitution, Institution>> updatedCurrentInstitutions = await ProcessImportedInstitutions(
 																								relatedInstitutions,
 																								versionDate,
 																								source);
-		await UpdateCurrentInstitutionsDetailsAsync(publicationInstitutionTuples, versionDate, source);
+
+		IEnumerable<PublicationAuthor> foundPublicationAuthors = (await _mediator.Send(new GetAllPublicationAuthorsQuery()
+		{
+			PublicationId = updatedPublication.Id
+		})).PublicationAuthors;
+
+		IEnumerable<Tuple<ImportPublicationAuthor, Publication, Person, Institution>> authorsTuples = GetPublicationAuthorTuples(
+																												updatedPublication,
+																												importPublicationAuthors,
+																												updatedCurrentPersonsTuple,
+																												updatedCurrentInstitutions);
+
+		IEnumerable<Tuple<ImportPublicationAuthor, PublicationAuthor>> publicationAuthorTuples =
+			await GetCreatedOrUpdatedPublicationAuthorImportDomainTuplesAsync(authorsTuples,
+																		  foundPublicationAuthors,
+																		  versionDate,
+																		  source);
 	}
 
-	private async Task UpdateCurrentInstitutionsDetailsAsync(
+	private async Task<IEnumerable<Tuple<ImportInstitution, Institution>>> ProcessImportedInstitutions(IEnumerable<ImportInstitution> relatedInstitutions, DateTime versionDate, OriginSourceType source)
+	{
+		IEnumerable<Tuple<ImportInstitution, Institution>> publicationInstitutionTuples =
+			await GetOrCreatePublicationInstitutionImportDomainTuplesAsync(
+																		   relatedInstitutions,
+																		   versionDate,
+																		   source);
+
+		IEnumerable<Tuple<ImportInstitution, Institution>> updatedCurrentInstitutions = await UpdateCurrentInstitutionsDetailsAsync(
+																								publicationInstitutionTuples,
+																								versionDate,
+																								source);
+		return updatedCurrentInstitutions;
+	}
+
+	private async Task<IEnumerable<Tuple<ImportPerson, Person>>> ProcessImportPersonsAsync(
+		IEnumerable<ImportPerson> relatedPersons, 
+		DateTime versionDate, 
+		OriginSourceType source)
+	{
+		IEnumerable<Tuple<ImportPerson, Person>> publicationPersonsTuples = await GetOrCreatePublicationPersonImportDomainTuplesAsync(
+																					relatedPersons,
+																					versionDate,
+																					source);
+
+		IEnumerable<Tuple<ImportPerson, Person>> updatedCurrentPersonsTuples = await UpdateCurrentPersonsDetailsAsync(
+																						publicationPersonsTuples,
+																						versionDate,
+																						source);
+
+		return updatedCurrentPersonsTuples;
+	}
+
+	private IEnumerable<Tuple<ImportPublicationAuthor, Publication, Person, Institution>> GetPublicationAuthorTuples(
+		Publication updatedPublication,
+		IEnumerable<ImportPublicationAuthor> importPublicationAuthors,
+		IEnumerable<Tuple<ImportPerson, Person>> updatedCurrentPersonsTuple,
+		IEnumerable<Tuple<ImportInstitution, Institution>> updatedCurrentInstitutions)
+	{
+		IEnumerable<Tuple<ImportPublicationAuthor, Publication, Person, Institution>> authorsTuples =
+							from publicationAuthor in importPublicationAuthors
+							join currPersonTuple in updatedCurrentPersonsTuple
+							on publicationAuthor.Person equals currPersonTuple.Item1
+							select new
+							{
+								Author = currPersonTuple.Item2,
+								Institution = publicationAuthor.ReportingInstitution,
+								ImportAuthor = publicationAuthor
+							} into intermediate
+							join publicationInstitutionTuple in updatedCurrentInstitutions
+							on intermediate.Institution equals publicationInstitutionTuple.Item1
+							select new Tuple<ImportPublicationAuthor, Publication, Person, Institution>(
+																			   intermediate.ImportAuthor,
+																			   updatedPublication,
+																			   intermediate.Author,
+																			   publicationInstitutionTuple.Item2);
+		return authorsTuples;
+	}
+
+	private async Task<IEnumerable<Tuple<ImportPublicationAuthor, PublicationAuthor>>> GetCreatedOrUpdatedPublicationAuthorImportDomainTuplesAsync(
+		IEnumerable<Tuple<ImportPublicationAuthor, Publication, Person, Institution>> authorsTuples,
+		IEnumerable<PublicationAuthor> foundPublicationAuthors,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		if (!authorsTuples.Any())
+		{
+			return new List<Tuple<ImportPublicationAuthor, PublicationAuthor>>();
+		}
+
+		IEnumerable<Tuple<ImportPublicationAuthor, Publication, Person, Institution>>
+			authorsToInsert = from authorTuple in authorsTuples
+							  where !(from foundAuthor in foundPublicationAuthors
+									  where
+									  foundAuthor.PublicationId == authorTuple.Item2.Id &&
+									  foundAuthor.PersonId == authorTuple.Item3.Id &&
+									  foundAuthor.InstitutionId == authorTuple.Item4.Id
+									  select 1).Any()
+							  select authorTuple;
+
+		List<Tuple<ImportPublicationAuthor, PublicationAuthor>> publicationAuthorImportDomainTuples = new();
+		foreach (Tuple<ImportPublicationAuthor, Publication, Person, Institution> tupleToInsert in authorsToInsert)
+		{
+			PublicationAuthor newPublicationAuthor = await CreatePublicationAuthorAsync(tupleToInsert, versionDate, source);
+			publicationAuthorImportDomainTuples.Add(
+				new Tuple<ImportPublicationAuthor, PublicationAuthor>(tupleToInsert.Item1, newPublicationAuthor));
+		}
+
+		IEnumerable<Tuple<ImportPublicationAuthor, PublicationAuthor, Publication, Person, Institution>>
+			authorsToUpdate = from authorTuple in authorsTuples
+							  join foundPublicationAuthor in foundPublicationAuthors on
+							  new
+							  {
+								  PublicationId = authorTuple.Item2.Id,
+								  PersonId = authorTuple.Item3.Id,
+								  InstitutionId = authorTuple.Item4.Id
+							  }
+							  equals
+							  new
+							  {
+								  PublicationId = foundPublicationAuthor.PublicationId,
+								  PersonId = foundPublicationAuthor.PersonId,
+								  InstitutionId = foundPublicationAuthor.InstitutionId
+							  }
+							  where foundPublicationAuthor.VersionDate < versionDate
+							  select new Tuple<ImportPublicationAuthor, PublicationAuthor, Publication, Person, Institution>(
+								  authorTuple.Item1,
+								  foundPublicationAuthor,
+								  authorTuple.Item2,
+								  authorTuple.Item3,
+								  authorTuple.Item4);
+
+		foreach (var tupleToUpdate in authorsToUpdate)
+		{
+			PublicationAuthor newPublicationAuthor = await UpdatePublicationAuthorAsync(tupleToUpdate, versionDate, source);
+			publicationAuthorImportDomainTuples.Add(
+				new Tuple<ImportPublicationAuthor, PublicationAuthor>(tupleToUpdate.Item1, newPublicationAuthor));
+		}
+
+		return publicationAuthorImportDomainTuples;
+	}
+
+	private async Task<PublicationAuthor> UpdatePublicationAuthorAsync(
+		Tuple<ImportPublicationAuthor, PublicationAuthor, Publication, Person, Institution> tupleToUpdate, 
+		DateTime versionDate, 
+		OriginSourceType source)
+	{
+
+		ImportPublicationAuthor importAuthor = tupleToUpdate.Item1;
+		PublicationAuthor publicationAuthor = tupleToUpdate.Item2;
+		Publication publication = tupleToUpdate.Item3;
+		Person authorPerson = tupleToUpdate.Item4;
+		Institution reportingInstitution = tupleToUpdate.Item5;
+
+		PublicationAuthor updatedAuthor = _mapper.Map<PublicationAuthor>(importAuthor);
+		updatedAuthor.VersionDate = versionDate;
+		updatedAuthor.OriginSourceType = source;
+		updatedAuthor.PublicationId = publication.Id;
+		updatedAuthor.PersonId = authorPerson.Id;
+		updatedAuthor.InstitutionId = reportingInstitution.Id;
+		updatedAuthor.Id = publicationAuthor.Id;
+
+		if(publicationAuthor.VersionDate < versionDate)
+			await UpdateRecordAsync<PublicationAuthor, UpdatePublicationAuthorCommand>(updatedAuthor, versionDate, source);
+
+		return updatedAuthor;
+	}
+
+	private async Task<PublicationAuthor> CreatePublicationAuthorAsync(
+		Tuple<ImportPublicationAuthor, Publication, Person, Institution> tupleToInsert,
+		DateTime versionDate,
+		OriginSourceType source
+		)
+	{
+		Publication publication = tupleToInsert.Item2;
+		ImportPublicationAuthor importAuthor = tupleToInsert.Item1;
+		Person authorPerson = tupleToInsert.Item3;
+		Institution reportingInstitution = tupleToInsert.Item4;
+		
+		PublicationAuthor publicationAuthor = _mapper.Map<PublicationAuthor>(importAuthor);
+		publicationAuthor.VersionDate = versionDate;
+		publicationAuthor.OriginSourceType = source;
+		publicationAuthor.PublicationId = publication.Id;
+		publicationAuthor.PersonId = authorPerson.Id;
+		publicationAuthor.InstitutionId = reportingInstitution.Id;
+
+		CreatePublicationAuthorCommand request = _mapper.Map<CreatePublicationAuthorCommand>(publicationAuthor);
+		return (await _mediator.Send(request)).CreatedPublicationAuthor;
+	}
+
+	private async Task<IEnumerable<Tuple<ImportInstitution, Institution>>> UpdateCurrentInstitutionsDetailsAsync(
 		IEnumerable<Tuple<ImportInstitution, Institution>> publicationInstitutionTuples,
 		DateTime versionDate,
 		OriginSourceType source)
 	{
+		List<Tuple<ImportInstitution, Institution>> updatedInstitutions = new();
 		foreach (Tuple<ImportInstitution, Institution> institutionTuple in publicationInstitutionTuples)
 		{
 			ImportInstitution importInstitution = institutionTuple.Item1;
 			Institution currentInstitution = institutionTuple.Item2;
+			Institution updatedInstitution = _mapper.Map<Institution>(importInstitution);
+			updatedInstitution.Id = currentInstitution.Id;
+			updatedInstitutions.Add(new Tuple<ImportInstitution, Institution>(importInstitution, updatedInstitution));
+			if(versionDate == currentInstitution.VersionDate)
+			{
+				continue;
+			}
 			await UpdateCurrentInstitutionDetailsAsync(currentInstitution, importInstitution, versionDate, source);
 		}
+		return updatedInstitutions;
 	}
 
 	private async Task UpdateCurrentInstitutionDetailsAsync(
@@ -149,6 +417,109 @@ public class ImportService
 			importInstitution.InstitutionNames,
 			versionDate,
 			source);
+	}
+
+	private async Task UpdateInstitutionNamesAsync(
+		Institution currentInstitution, 
+		IEnumerable<ImportInstitutionName> importInstitutionNames, 
+		DateTime versionDate, 
+		OriginSourceType source)
+	{
+		GetInstitutionNamesQuery request = new() { InstitutionId = currentInstitution.Id };
+		IEnumerable<InstitutionName> institutionCurrentNames = (await _mediator.Send(request)).InstitutionNames;
+
+		List<string> allImportedNamesString = importInstitutionNames.Select(identifier => identifier.Name).ToList();
+		List<string> allCurrentNamesString = institutionCurrentNames.Select(identifier => identifier.Name).ToList();
+
+		IEnumerable<ImportInstitutionName> namesToInsert = from institutionImpName in importInstitutionNames
+														   where !(from institutionCurrName in institutionCurrentNames
+																   where institutionCurrName.Name == institutionImpName.Name &&
+																		 institutionCurrName.NameType == institutionImpName.NameType
+																   select 1).Any()
+														   select institutionImpName;
+
+		List<InstitutionName> mappedNamesToInsert = _mapper.Map<List<InstitutionName>>(namesToInsert);
+
+		await InsertRecordsAsync<InstitutionName, CreateInstitutionNameCommand>(mappedNamesToInsert, versionDate, source);
+
+		IEnumerable<Tuple<ImportInstitutionName, InstitutionName>> nameTuplesToUpdate = from institutionCurrName in institutionCurrentNames
+																						join institutionImpName in importInstitutionNames on
+																						new { Name = institutionCurrName.Name, NameType = institutionCurrName.NameType }
+																						equals
+																						new { Name = institutionImpName.Name, NameType = institutionImpName.NameType }
+																						where institutionCurrName.VersionDate < versionDate
+																						select new Tuple<ImportInstitutionName, InstitutionName>(
+																							institutionImpName, 
+																							institutionCurrName);
+		List<InstitutionName> recordsForUpdate = new();
+		foreach (Tuple<ImportInstitutionName, InstitutionName> nameTuple in nameTuplesToUpdate)
+		{
+			ImportInstitutionName import = nameTuple.Item1;
+			InstitutionName current = nameTuple.Item2;
+			InstitutionName recordForUpdate = _mapper.Map<InstitutionName>(import);
+			recordForUpdate.InstitutionId = current.Id;
+			recordsForUpdate.Add(recordForUpdate);
+		}
+
+		if (recordsForUpdate.Any())
+		{
+			await UpdateRecordsAsync<InstitutionName, UpdateInstitutionNameCommand>(
+			  recordsForUpdate,
+			  versionDate,
+			  source);
+		}
+	}
+
+	private async Task UpdateInstitutionExternDatabaseIdsAsync(
+		Institution currentInstitution, 
+		IEnumerable<ImportInstitutionExternDatabaseId> importExternDatabaseIds, 
+		DateTime versionDate, 
+		OriginSourceType source)
+	{
+		GetInstitutionExternDatabaseIdsQuery request = new() { InstitutionId = currentInstitution.Id };
+		IEnumerable<InstitutionExternDatabaseId> institutionCurrentExternIds = (await _mediator.Send(request))
+			.InstitutionExternDatabaseIds;
+
+		IEnumerable<ImportInstitutionExternDatabaseId> importExternIdToInsert = GetEPCObjectExternDatabaseIdsForInsertAsync(
+																					importExternDatabaseIds,
+																					institutionCurrentExternIds);
+
+		List<InstitutionExternDatabaseId> identifiersToInsert = 
+			_mapper.Map<List<InstitutionExternDatabaseId>>(importExternIdToInsert);
+
+		foreach (InstitutionExternDatabaseId externIdentifier in identifiersToInsert)
+		{
+			externIdentifier.InstitutionId = currentInstitution.Id;
+		}
+
+		await InsertRecordsAsync<InstitutionExternDatabaseId, CreateInstitutionExternDatabaseIdCommand>(
+			identifiersToInsert,
+			versionDate,
+			source);
+
+		IEnumerable<Tuple<ImportInstitutionExternDatabaseId, InstitutionExternDatabaseId>> recordTuplesForUpdate = 
+			GetEPCObjectExternDatabaseIdsForUpdateAsync(
+				importExternDatabaseIds, 
+				institutionCurrentExternIds, 
+				versionDate);
+
+		List<InstitutionExternDatabaseId> recordsForUpdate = new();
+		foreach (Tuple<ImportInstitutionExternDatabaseId, InstitutionExternDatabaseId> tuple in recordTuplesForUpdate)
+		{
+			ImportInstitutionExternDatabaseId import = tuple.Item1;
+			InstitutionExternDatabaseId current = tuple.Item2;
+			InstitutionExternDatabaseId recordForUpdate = _mapper.Map<InstitutionExternDatabaseId>(import);
+			recordForUpdate.InstitutionId = current.Id;
+			recordsForUpdate.Add(recordForUpdate);
+		}
+
+		if (recordsForUpdate.Any())
+		{
+			await UpdateRecordsAsync<InstitutionExternDatabaseId, UpdateInstitutionExternDatabaseIdCommand>(
+			  recordsForUpdate,
+			  versionDate,
+			  source);
+		}
 	}
 
 	private async Task UpdateInstitutionBaseRecordAsync(
@@ -230,17 +601,27 @@ public class ImportService
 		return response.Institution;
 	}
 
-	private async Task UpdateCurrentPersonsDetailsAsync(
+	private async Task<IEnumerable<Tuple<ImportPerson,Person>>> UpdateCurrentPersonsDetailsAsync(
 		IEnumerable<Tuple<ImportPerson, Person>> publicationPersonsTuples,
 		DateTime versionDate,
 		OriginSourceType source)
 	{
+		List<Tuple<ImportPerson,Person>> updatedPersons = new();
 		foreach (Tuple<ImportPerson, Person> personTuple in publicationPersonsTuples)
 		{
 			ImportPerson importPerson = personTuple.Item1;
 			Person currentPerson = personTuple.Item2;
+			Person updatedPerson = _mapper.Map<Person>(importPerson);
+			updatedPerson.Id = currentPerson.Id;
+
+			updatedPersons.Add(new Tuple<ImportPerson, Person>(importPerson, updatedPerson));
+			if(currentPerson.VersionDate == versionDate)
+			{
+				continue;
+			}
 			await UpdateCurrentPersonDetailsAsync(currentPerson, importPerson, versionDate, source);
 		}
+		return updatedPersons;
 	}
 
 	private async Task UpdateCurrentPersonDetailsAsync(Person currentPerson, ImportPerson importPerson, DateTime versionDate, OriginSourceType source)
@@ -287,6 +668,11 @@ public class ImportService
 		{
 			externIdentifier.PersonId = currentPerson.Id;
 		}
+
+		await InsertRecordsAsync<PersonExternDatabaseId, CreatePersonExternDatabaseIdCommand>(
+			identifiersToInsert, 
+			versionDate, 
+			source);
 
 		IEnumerable<Tuple<ImportPersonExternDatabaseId, PersonExternDatabaseId>> recordTuplesForUpdate = GetEPCObjectExternDatabaseIdsForUpdateAsync(
 			importExternIdentifiers,
@@ -382,14 +768,14 @@ public class ImportService
 		List<Tuple<ImportPerson, Person>> publicationPersonImportDomainTuples = new();
 		foreach (ImportPerson importPerson in relatedPersons)
 		{
-			Person? domainPerson = await FindOrCreatePerson(importPerson, recordVersion, source);
+			Person? domainPerson = await FindOrCreatePersonAsync(importPerson, recordVersion, source);
 			publicationPersonImportDomainTuples.Add(new Tuple<ImportPerson, Person>(importPerson, domainPerson));
 		}
 
 		return publicationPersonImportDomainTuples;
 	}
 
-	private async Task<Person> FindOrCreatePerson(ImportPerson importPerson, DateTime recordVersion, OriginSourceType source)
+	private async Task<Person> FindOrCreatePersonAsync(ImportPerson importPerson, DateTime recordVersion, OriginSourceType source)
 	{
 		Person? resultModel = null;
 		long personId = -1;
@@ -429,16 +815,19 @@ public class ImportService
 		return (await _mediator.Send(createCommand)).Person;
 	}
 
-	private async Task UpdateCurrentPublicationDetailsAsync(
+	private async Task<Publication> UpdateCurrentPublicationDetailsAsync(
 		Publication currentPublication,
 		ImportPublication importPublication,
 		DateTime versionDate,
 		OriginSourceType source)
 	{
+		Publication updatedPublication = _mapper.Map<Publication>(importPublication);
+		updatedPublication.Id = currentPublication.Id;
 		await UpdatePublicationBaseRecordAsync(currentPublication, importPublication, versionDate, source);
 		await UpdatePublicationIdentifiersAsync(currentPublication, importPublication.PublicationIdentifiers, versionDate, source);
 		await UpdatePublicationExternDatabaseIdsAsync(currentPublication, importPublication.PublicationExternDbIds, versionDate, source);
 		await UpdatePublicationNamesAsync(currentPublication, importPublication.PublicationNames, versionDate, source);
+		return updatedPublication;
 	}
 
 
@@ -454,15 +843,6 @@ public class ImportService
 		List<string> allImportedNamesString = importPublicationNames.Select(identifier => identifier.Name).ToList();
 		List<string> allCurrentNamesString = publicationCurrentNames.Select(identifier => identifier.Name).ToList();
 
-		//IEnumerable<PublicationName> namesToDelete = from publicationCurrName in publicationCurrentNames
-		//											  where publicationCurrName.VersionDate < versionDate &&
-		//											  !(from publicationImpName in importPublicationNames
-		//												where publicationImpName.Name == publicationCurrName.Name &&
-		//													  publicationImpName.NameType == publicationCurrName.NameType
-		//												select 1).Any()
-		//											  select publicationCurrName;
-		//await DeleteRecordsAsync<PublicationName, DeletePublicationNameCommand>(namesToDelete);
-
 		IEnumerable<ImportPublicationName> namesToInsert = from publicationImpName in importPublicationNames
 															where !(from publicationCurrName in publicationCurrentNames
 																	where publicationCurrName.Name == publicationImpName.Name &&
@@ -476,9 +856,15 @@ public class ImportService
 
 		IEnumerable<Tuple<ImportPublicationName, PublicationName>> nameTuplesToUpdate = from publicationCurrName in publicationCurrentNames
 																						 join publicationImpName in importPublicationNames on
-																						 new { Name = publicationCurrName.Name, NameType = publicationCurrName.NameType }
+																						 new { 
+																							 Name = publicationCurrName.Name, 
+																							 NameType = publicationCurrName.NameType 
+																							 }
 																						 equals
-																						 new { Name = publicationImpName.Name, NameType = publicationImpName.NameType }
+																						 new { 
+																							 Name = publicationImpName.Name, 
+																							 NameType = publicationImpName.NameType 
+																							 }
 																						 where publicationCurrName.VersionDate < versionDate
 																						 select new Tuple<ImportPublicationName, PublicationName>(publicationImpName, publicationCurrName);
 		List<PublicationName> recordsForUpdate = new();
@@ -764,40 +1150,4 @@ public class ImportService
 		
 		return importExternIdToInsert;
 	}
-
-	//private async Task UpdateAndDeleteEPCObjectExternDatabaseIdsAsync<
-	//	TImport,
-	//	TDomain,
-	//	TDeleteCommand,
-	//	TUpdateCommand>(
-	//	IEnumerable<TDomain> objectCurrentExternIds,
-	//	IEnumerable<TImport> importExternIdentifiers,
-	//	DateTime versionDate,
-	//	OriginSourceType source)
-	//	where TImport : EPCImportExternDatabaseIdBase
-	//	where TDomain : EPCExternDatabaseIdBase
-	//	where TDeleteCommand : EPCDeleteBaseCommand, new()
-	//	where TUpdateCommand : EPCUpdateBaseCommand, new()
-	//{
-	//	List<string> allImportedExternIdsString = importExternIdentifiers.Select(identifier => identifier.ExternIdentifierValue).ToList();
-	//	List<string> allCurrentExternIdsString = objectCurrentExternIds.Select(identifier => identifier.ExternIdentifierValue).ToList();
-
-	//	//if (source != OriginSourceType.DAWINCI)
-	//	//{
-	//	//	IEnumerable<TDomain> identifiersToDelete = objectCurrentExternIds.Where(x => x.VersionDate < versionDate &&
-	//	//															!allImportedExternIdsString.Contains(x.ExternIdentifierValue));
-	//	//	await DeleteRecordsAsync<TDomain, TDeleteCommand>(identifiersToDelete);
-	//	//}
-
-	//	IEnumerable<Tuple<TImport, TDomain>> identifiersTupleToUpdate =
-	//		from current in objectCurrentExternIds
-	//		join import in importExternIdentifiers on current.ExternIdentifierValue equals import.ExternIdentifierValue
-	//		where current.VersionDate < versionDate
-	//		select new Tuple<TImport, TDomain>(import, current);
-
-	//	await UpdateRecordsAsync<TImport, TDomain, TUpdateCommand>(
-	//		  identifiersTupleToUpdate,
-	//		  versionDate,
-	//		  source);
-	//}
 }

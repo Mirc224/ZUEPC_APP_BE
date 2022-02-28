@@ -1,8 +1,8 @@
 ﻿using MediatR;
+using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Persons.Commands.PersonNames;
 
-public class DeletePersonNameCommand : IRequest<DeletePersonNameCommandResponse>
+public class DeletePersonNameCommand : EPCDeleteBaseCommand, IRequest<DeletePersonNameCommandResponse>
 {
-	public long PersonNameId { get; set; }
 }

@@ -30,7 +30,10 @@
     <Folder Include="Application\Auth\Queries\" />
     <Folder Include="Application\Institutions\Controllers\" />
     <Folder Include="Application\Persons\Controllers\" />
+    <Folder Include="Application\PublicationAuthors\Controllers\" />
     <Folder Include="Application\Publications\Controllers\" />
+    <Folder Include="Application\RelatedPublications\Commands\" />
+    <Folder Include="Application\RelatedPublications\Controllers\" />
   </ItemGroup>
 
 </Project>

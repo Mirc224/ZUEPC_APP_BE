@@ -12,7 +12,7 @@ public class ImportInstitution
 	public class ImportInstitutionName
 	{
 		public string? NameType { get; set; }
-		public string? Name { get; set; }
+		public string Name { get; set; } = "";
 	}
 
 	public class ImportInstitutionExternDatabaseId : EPCImportExternDatabaseIdBase
