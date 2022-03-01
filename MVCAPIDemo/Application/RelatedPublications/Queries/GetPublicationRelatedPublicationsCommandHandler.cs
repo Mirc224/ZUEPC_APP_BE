@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
+using AutoMapper;
 using ZUEPC.DataAccess.Data.RelatedPublications;
 using ZUEPC.DataAccess.Models.RelatedPublication;
 using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;

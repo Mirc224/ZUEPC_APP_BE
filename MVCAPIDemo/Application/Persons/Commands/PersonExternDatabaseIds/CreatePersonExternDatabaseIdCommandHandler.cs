@@ -22,6 +22,6 @@ public class CreatePersonExternDatabaseIdCommandHandler : IRequestHandler<Create
 		long newId = await _repository.InsertPersonExternDatabaseIdAsync(insertModel);
 		insertModel.Id = newId;
 		PersonExternDatabaseId domain = _mapper.Map<PersonExternDatabaseId>(insertModel);
-		return new() { Success = true, CreatedPersonExternDatabaseId = domain };
+		return new() { Success = true, PersonExternDatabaseId = domain };
 	}
 }

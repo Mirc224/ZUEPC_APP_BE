@@ -26,6 +26,6 @@ public class CreateInstitutionExternDatabaseIdCommandHandler :
 		long insertedId = await _repository.InsertInstitutionExternDatabaseIdAsync(insertModel);
 		InstitutionExternDatabaseId domain = _mapper.Map<InstitutionExternDatabaseId>(insertModel);
 		domain.Id = insertedId;
-		return new() { Success = true, CreatedInstitutionExternDatabaseId = domain };
+		return new() { Success = true, InstitutionExternDatabaseId = domain };
 	}
 }

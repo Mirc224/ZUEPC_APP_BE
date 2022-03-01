@@ -16,11 +16,11 @@ partial class ImportParser
 			PublicationNames = ParseCREPCPublicationNames(publicationElement, xmlns),
 			PublicationAuthors = ParseCREPCPublicationAuthors(publicationElement, xmlns),
 			RelatedPublications = ParseCREPCRelatedPublications(publicationElement, xmlns),
-			PublishingActivities = ParseCREPCPublishingActivityDetails(publicationElement, xmlns),
+			PublicationActivities = ParseCREPCPublishingActivityDetails(publicationElement, xmlns),
 			PublishYear = ParseCREPCPublicationPubishYear(publicationElement, xmlns)
 		};
 
-		foreach(var publishActivity in importedPublication.PublishingActivities)
+		foreach(var publishActivity in importedPublication.PublicationActivities)
 		{
 			publishActivity.ActivityYear = importedPublication.PublishYear;
 		}
@@ -210,7 +210,7 @@ partial class ImportParser
 			PublicationNames = ParseDaWinciPublicationNames(publicationElement, xmlns),
 			PublicationAuthors = ParseDaWinciPublicationAuthors(publicationElement, xmlns),
 			RelatedPublications = ParseDaWinciRelatedPublications(publicationElement, xmlns),
-			PublishingActivities = ParseDaWinciPublishingActivityDetails(publicationElement, xmlns),
+			PublicationActivities = ParseDaWinciPublishingActivityDetails(publicationElement, xmlns),
 			PublishYear = ParseDaWinciPublicationPubishYear(publicationElement, xmlns)
 	};
 

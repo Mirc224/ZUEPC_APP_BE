@@ -5,11 +5,11 @@ namespace ZUEPC.Import.Parser;
 
 partial class ImportParser
 {
-	private static List<ImportPublicationActivityDetails> ParseCREPCPublishingActivityDetails(
+	private static List<ImportPublicationActivity> ParseCREPCPublishingActivityDetails(
 		XElement publicationElement, 
 		string xmlns)
 	{
-		List<ImportPublicationActivityDetails> result = new();
+		List<ImportPublicationActivity> result = new();
 		var biblioActivityElements = publicationElement.Elements(XName.Get("cross_biblio_activity", xmlns));
 		if(!biblioActivityElements.Any())
 		{
@@ -24,7 +24,7 @@ partial class ImportParser
 				continue;
 			}
 
-			ImportPublicationActivityDetails activityDetails = new()
+			ImportPublicationActivity activityDetails = new()
 			{
 				Category = recActivityElement.Element(XName.Get("category", xmlns))?.Value.Trim(),
 				GovernmentGrant = recActivityElement.Element(XName.Get("government_grant", xmlns))?.Value.Trim()
@@ -35,11 +35,11 @@ partial class ImportParser
 		return result;
 	}
 
-	private static List<ImportPublicationActivityDetails> ParseDaWinciPublishingActivityDetails(
+	private static List<ImportPublicationActivity> ParseDaWinciPublishingActivityDetails(
 		XElement publicationElement,
 		string xmlns)
 	{
-		List<ImportPublicationActivityDetails> result = new();
+		List<ImportPublicationActivity> result = new();
 
 		var publishingActivityElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
 										 where element.Attribute(DAWINCI_TAG)?.Value == "985"
@@ -62,7 +62,7 @@ partial class ImportParser
 									   where element.Attribute(DAWINCI_CODE)?.Value == "r"
 									   select element).FirstOrDefault();
 
-			ImportPublicationActivityDetails activityDetails = new()
+			ImportPublicationActivity activityDetails = new()
 			{
 				Category = categoryElement?.Value.Trim(),
 				GovernmentGrant = governmentGrantElement?.Value.Trim(),

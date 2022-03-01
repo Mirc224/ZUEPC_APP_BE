@@ -1,6 +1,6 @@
 ﻿namespace ZUEPC.Import.Models;
 
-public class ImportPublicationActivityDetails
+public class ImportPublicationActivity
 {
 	public string? Category { get; set; }
 	public string? GovernmentGrant { get; set; }

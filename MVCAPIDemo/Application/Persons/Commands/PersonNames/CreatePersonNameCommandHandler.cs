@@ -22,6 +22,6 @@ public class CreatePersonNameCommandHandler : IRequestHandler<CreatePersonNameCo
 		long createdRecordId = await _repository.InsertPersonNameAsync(insertModel);
 		insertModel.Id = createdRecordId;
 		PersonName domain = _mapper.Map<PersonName>(insertModel);
-		return new() { Success = true, CreatedPersonName = domain };
+		return new() { Success = true, PersonName = domain };
 	}
 }

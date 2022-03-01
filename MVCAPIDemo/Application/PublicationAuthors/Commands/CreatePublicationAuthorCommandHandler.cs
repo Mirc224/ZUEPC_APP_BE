@@ -22,6 +22,6 @@ public class CreatePublicationAuthorCommandHandler : IRequestHandler<CreatePubli
 		long insertedId = await _repository.InsertPublicationAuthorAsync(insertModel);
 		PublicationAuthor domain = _mapper.Map<PublicationAuthor>(insertModel);
 		insertModel.Id = insertedId;
-		return new() { Success = true, CreatedPublicationAuthor = domain };
+		return new() { Success = true, PublicationAuthor = domain };
 	}
 }

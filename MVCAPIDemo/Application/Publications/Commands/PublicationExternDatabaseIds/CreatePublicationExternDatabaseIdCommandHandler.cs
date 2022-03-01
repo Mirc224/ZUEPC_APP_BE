@@ -23,6 +23,6 @@ public class CreatePublicationExternDatabaseIdCommandHandler : IRequestHandler<C
 		long insertedId = await _repository.InsertPublicationExternDbIdAsync(insertModel);
 		insertModel.Id = insertedId;
 		PublicationExternDatabaseId domain = _mapper.Map<PublicationExternDatabaseId>(insertModel);
-		return new CreatePublicationExternDatabaseIdCommandResponse() { Success = true, CreatedPublicationExternDatabaseId = domain };
+		return new CreatePublicationExternDatabaseIdCommandResponse() { Success = true, PublicationExternDatabaseId = domain };
 	}
 }

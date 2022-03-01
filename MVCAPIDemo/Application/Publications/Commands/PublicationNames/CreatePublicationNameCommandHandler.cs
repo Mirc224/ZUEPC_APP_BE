@@ -23,6 +23,6 @@ public class CreatePublicationNameCommandHandler : IRequestHandler<CreatePublica
 		insertModel.Id = insertedItemId;
 		
 		PublicationName domain = _mapper.Map<PublicationName>(insertModel);
-		return new CreatePublicationNameCommandResponse() { Success = true, CreatedPublicationName = domain};
+		return new CreatePublicationNameCommandResponse() { Success = true, PublicationName = domain};
 	}
 }

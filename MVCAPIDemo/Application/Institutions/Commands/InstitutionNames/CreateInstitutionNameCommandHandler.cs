@@ -26,6 +26,6 @@ public class CreateInstitutionNameCommandHandler :
 		InstitutionName domain = _mapper.Map<InstitutionName>(insertModel);
 		domain.InstitutionId = insertedId;
 
-		return new() { Success = true, CreatedInstitutionName = domain };
+		return new() { Success = true, InstitutionName = domain };
 	}
 }

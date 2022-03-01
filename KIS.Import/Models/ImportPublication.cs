@@ -12,7 +12,7 @@ public class ImportPublication
 	public List<ImportPublicationName> PublicationNames { get; set; } = new();
 	public List<ImportPublicationAuthor> PublicationAuthors { get; set; } = new();
 	public List<ImportRelatedPublication> RelatedPublications { get; set; } = new();
-	public List<ImportPublicationActivityDetails> PublishingActivities { get; set; } = new();
+	public List<ImportPublicationActivity> PublicationActivities { get; set; } = new();
 	public string? DocumentType { get; set; }
 	public int? PublishYear { get; set; }
 

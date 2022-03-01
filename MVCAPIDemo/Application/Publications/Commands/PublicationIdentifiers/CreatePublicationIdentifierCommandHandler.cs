@@ -24,6 +24,6 @@ public class CreatePublicationIdentifierCommandHandler : IRequestHandler<CreateP
 		publicationIdentifierModel.Id = newId;
 		PublicationIdentifier domain = _mapper.Map<PublicationIdentifier>(publicationIdentifierModel);
 
-		return new() { Success = newId > 0, CreatedPublicationIdentifier = domain };
+		return new() { Success = newId > 0, PublicationIdentifier = domain };
 	}
 }

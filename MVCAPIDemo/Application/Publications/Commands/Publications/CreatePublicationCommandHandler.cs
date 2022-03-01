@@ -29,6 +29,6 @@ public class CreatePublicationCommandHandler : IRequestHandler<CreatePublication
 		var createdPublication = _mapper.Map<Publication>(model);
 		createdPublication.Id = newPublicationId;
 
-		return new CreatePublicationCommandResponse() { Success = true, CreatedPublication = createdPublication};
+		return new CreatePublicationCommandResponse() { Success = true, Publication = createdPublication};
 	}
 }

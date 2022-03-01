@@ -5,5 +5,5 @@ namespace ZUEPC.Application.PublicationAuthors.Commands;
 
 public class CreatePublicationAuthorCommandResponse : ResponseBase
 {
-	public PublicationAuthor CreatedPublicationAuthor { get; set; }
+	public PublicationAuthor PublicationAuthor { get; set; }
 }

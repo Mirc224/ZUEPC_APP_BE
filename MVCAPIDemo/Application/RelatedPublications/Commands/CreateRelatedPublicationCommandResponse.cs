@@ -1,11 +1,11 @@
 ﻿using ZUEPC.Common.Responses;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 
-namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
+namespace ZUEPC.Application.RelatedPublications.Commands;
 
-public class CreatePublicationExternDatabaseIdCommandResponse : ResponseBase
+public class CreateRelatedPublicationCommandResponse : ResponseBase
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-	public PublicationExternDatabaseId PublicationExternDatabaseId { get; set; }
+	public RelatedPublication RelatedPublication { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 }
