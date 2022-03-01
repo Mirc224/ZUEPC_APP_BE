@@ -19,6 +19,11 @@ public class CreatePublicationActivityCommandHandler : IRequestHandler<CreatePub
 	public async Task<CreatePublicationActivityCommandResponse> Handle(CreatePublicationActivityCommand request, CancellationToken cancellationToken)
 	{
 		PublicationActivityModel insertModel = _mapper.Map<PublicationActivityModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
+		if (request.VersionDate is null)
+		{
+			insertModel.CreatedAt = DateTime.UtcNow;
+		}
 		long newId = await _repository.InsertPublicationActivityAsync(insertModel);
 		insertModel.Id = newId;
 		PublicationActivity domain = _mapper.Map<PublicationActivity>(insertModel);

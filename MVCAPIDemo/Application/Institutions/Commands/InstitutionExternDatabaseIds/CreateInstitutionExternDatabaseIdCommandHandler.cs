@@ -23,6 +23,11 @@ public class CreateInstitutionExternDatabaseIdCommandHandler :
 	public async Task<CreateInstitutionExternDatabaseIdCommandResponse> Handle(CreateInstitutionExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
 		InstitutionExternDatabaseIdModel insertModel = _mapper.Map<InstitutionExternDatabaseIdModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
+		if (request.VersionDate is null)
+		{
+			insertModel.CreatedAt = DateTime.UtcNow;
+		}
 		long insertedId = await _repository.InsertInstitutionExternDatabaseIdAsync(insertModel);
 		InstitutionExternDatabaseId domain = _mapper.Map<InstitutionExternDatabaseId>(insertModel);
 		domain.Id = insertedId;

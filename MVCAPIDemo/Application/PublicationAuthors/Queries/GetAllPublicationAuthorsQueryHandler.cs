@@ -19,7 +19,7 @@ public class GetAllPublicationAuthorsQueryHandler : IRequestHandler<GetAllPublic
 	public async Task<GetAllPublicationAuthorsQueryResponse> Handle(GetAllPublicationAuthorsQuery request, CancellationToken cancellationToken)
 	{
 		IEnumerable<PublicationAuthorModel> queryResult = await _repository.GetPublicationAuthorByPublicationIdAsync(request.PublicationId);
-		List<PublicationAuthor>? mappedResult = _mapper.Map<List<PublicationAuthor>>(queryResult);
+		List<PublicationAuthor> mappedResult = _mapper.Map<List<PublicationAuthor>>(queryResult);
 		return new() { Success = true, PublicationAuthors = mappedResult };
 	}
 }

@@ -19,7 +19,7 @@ public class GetInstitutionExternDatabaseIdsQueryHandler : IRequestHandler<GetIn
 
 	public async Task<GetInstitutionExternDatabaseIdsQueryResponse> Handle(GetInstitutionExternDatabaseIdsQuery request, CancellationToken cancellationToken)
 	{
-		Task<IEnumerable<InstitutionExternDatabaseIdModel>> queryResult = _repository
+		IEnumerable<InstitutionExternDatabaseIdModel> queryResult = await _repository
 			.GetInstitutionExternDatabaseIdsByInstitutionIdAsync(request.InstitutionId);
 
 		List<InstitutionExternDatabaseId> mappedResult = _mapper.Map<List<InstitutionExternDatabaseId>>(queryResult);

@@ -19,6 +19,11 @@ public class CreatePersonNameCommandHandler : IRequestHandler<CreatePersonNameCo
 	public async Task<CreatePersonNameCommandResponse> Handle(CreatePersonNameCommand request, CancellationToken cancellationToken)
 	{
 		PersonNameModel insertModel = _mapper.Map<PersonNameModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
+		if (request.VersionDate is null)
+		{
+			insertModel.CreatedAt = DateTime.UtcNow;
+		}
 		long createdRecordId = await _repository.InsertPersonNameAsync(insertModel);
 		insertModel.Id = createdRecordId;
 		PersonName domain = _mapper.Map<PersonName>(insertModel);

@@ -24,18 +24,18 @@ namespace ZUEPC.Application.Import.Controllers
 		[HttpPost("crepc")]
 		public async Task<IActionResult> ImportCREPC()
 		{
-			var request = new ImportCREPCXmlCommand();
-			using(var reader = new StreamReader(Request.Body, Encoding.UTF8))
+			ImportCREPCXmlCommand request = new ImportCREPCXmlCommand();
+			using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
 			{
 				request.XMLBody = await reader.ReadToEndAsync();
 			}
-			var validationResult = ValidateImportXmlCommand(request);
+			IActionResult? validationResult = ValidateImportXmlCommand(request);
 			if (validationResult != null)
 			{
 				return validationResult;
 			}
 
-			var response = await _mediator.Send(request);
+			ImportCREPCXmlCommandResponse? response = await _mediator.Send(request);
 			if (!response.Success)
 				return StatusCode(500);
 			return Ok();
@@ -44,18 +44,18 @@ namespace ZUEPC.Application.Import.Controllers
 		[HttpPost("dawinci")]
 		public async Task<IActionResult> ImportDaWinci()
 		{
-			var request = new ImportDaWinciXmlCommand();
-			using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
+			ImportDaWinciXmlCommand request = new ImportDaWinciXmlCommand();
+			using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
 			{
 				request.XMLBody = await reader.ReadToEndAsync();
 			}
-			var validationResult = ValidateImportXmlCommand(request);
+			IActionResult validationResult = ValidateImportXmlCommand(request);
 			if (validationResult != null)
 			{
 				return validationResult;
 			}
 
-			var response = await _mediator.Send(request);
+			ImportDaWinciXmlCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 				return StatusCode(500);
 			return Ok();
@@ -63,10 +63,10 @@ namespace ZUEPC.Application.Import.Controllers
 
 		private IActionResult? ValidateImportXmlCommand(ImportXmlBaseCommand command)
 		{
-			var validationResult = new ImportXmlBaseCommandValidator(_localizer).Validate(command);
+			FluentValidation.Results.ValidationResult validationResult = new ImportXmlBaseCommandValidator(_localizer).Validate(command);
 			if (!validationResult.IsValid)
 			{
-				foreach (var error in validationResult.Errors)
+				foreach (FluentValidation.Results.ValidationFailure error in validationResult.Errors)
 				{
 					ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
 				}

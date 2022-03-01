@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.DataAccess.Data.Publications;
+using ZUEPC.DataAccess.Models.Publication;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
@@ -18,9 +19,9 @@ public class GetPublicationExternDatabaseIdsQueryHandler : IRequestHandler<GetPu
 
 	public async Task<GetPublicationExternDatabaseIdsQueryResponse> Handle(GetPublicationExternDatabaseIdsQuery request, CancellationToken cancellationToken)
 	{
-		var queryResult = await _repository.GetPublicationExternDbIdsByPublicationIdAsync(request.PublicationId);
-		var externDbIds = _mapper.Map<List<PublicationExternDatabaseId>>(queryResult);
+		IEnumerable<PublicationExternDatabaseIdModel> queryResult = await _repository.GetPublicationExternDbIdsByPublicationIdAsync(request.PublicationId);
+		List<PublicationExternDatabaseId> externDbIds = _mapper.Map<List<PublicationExternDatabaseId>>(queryResult);
 
-		return new() { Success = true, PublicationExternDatabaseIds = externDbIds};
+		return new() { Success = true, PublicationExternDatabaseIds = externDbIds };
 	}
 }

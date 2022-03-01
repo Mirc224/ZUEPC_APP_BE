@@ -13,7 +13,7 @@ public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, D
 	}
 	public async Task<DeletePersonCommandResponse> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeletePersonByIdAsync(request.PersonId);
+		int rowsDeleted = await _repository.DeletePersonByIdAsync(request.Id);
 
 		return new() { Success = rowsDeleted == 1 };
 	}

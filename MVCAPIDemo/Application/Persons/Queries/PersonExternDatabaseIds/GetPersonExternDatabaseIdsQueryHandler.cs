@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.DataAccess.Data.Persons;
+using ZUEPC.DataAccess.Models.Person;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
@@ -17,12 +18,12 @@ public class GetPersonExternDatabaseIdsQueryHandler : IRequestHandler<GetPersonE
 	}
 	public async Task<GetPersonExternDatabaseIdsQueryResponse> Handle(GetPersonExternDatabaseIdsQuery request, CancellationToken cancellationToken)
 	{
-		var queryResult = await _repository.GetPersonExternDatabaseIdsByPersonIdAsync(request.PersonId);
+		IEnumerable<PersonExternDatabaseIdModel> queryResult = await _repository.GetPersonExternDatabaseIdsByPersonIdAsync(request.PersonId);
 		if (queryResult is null)
 		{
 			return new() { Success = false };
 		}
-		var mappedResult = _mapper.Map<List<PersonExternDatabaseId>>(queryResult);
+		List<PersonExternDatabaseId> mappedResult = _mapper.Map<List<PersonExternDatabaseId>>(queryResult);
 
 		return new() { PersonExternDatabaseIds = mappedResult };
 	}

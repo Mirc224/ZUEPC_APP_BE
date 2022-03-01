@@ -19,6 +19,11 @@ public class CreatePublicationNameCommandHandler : IRequestHandler<CreatePublica
 	public async Task<CreatePublicationNameCommandResponse> Handle(CreatePublicationNameCommand request, CancellationToken cancellationToken)
 	{
 		PublicationNameModel insertModel = _mapper.Map<PublicationNameModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
+		if (request.VersionDate is null)
+		{
+			insertModel.CreatedAt = DateTime.UtcNow;
+		}
 		long insertedItemId = await _repository.InsertPublicationNameAsync(insertModel);
 		insertModel.Id = insertedItemId;
 		

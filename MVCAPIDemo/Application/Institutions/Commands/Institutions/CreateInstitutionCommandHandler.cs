@@ -18,14 +18,14 @@ public class CreateInstitutionCommandHandler : IRequestHandler<CreateInstitution
 	}
 	public async Task<CreateInstitutionCommandResponse> Handle(CreateInstitutionCommand request, CancellationToken cancellationToken)
 	{
-		InstitutionModel institutionModel = _mapper.Map<InstitutionModel>(request);
-		institutionModel.CreatedAt = DateTime.UtcNow;
+		InstitutionModel insertModel = _mapper.Map<InstitutionModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
 		if (request.VersionDate is null)
 		{
-			institutionModel.CreatedAt = DateTime.UtcNow;
+			insertModel.CreatedAt = DateTime.UtcNow;
 		}
-		long institutionId = await _repository.InsertInstitutionAsync(institutionModel);
-		Institution domain = _mapper.Map<Institution>(institutionModel);
+		long institutionId = await _repository.InsertInstitutionAsync(insertModel);
+		Institution domain = _mapper.Map<Institution>(insertModel);
 		domain.Id = institutionId;
 		return new() { Success = true, Institution = domain };
 	}

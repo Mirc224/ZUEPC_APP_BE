@@ -4,6 +4,6 @@ namespace ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 public class Institution : EPCBase
 {
-		public int? Level { get; set; }
+	public int? Level { get; set; }
 	public string? InstitutionType { get; set; }
 }

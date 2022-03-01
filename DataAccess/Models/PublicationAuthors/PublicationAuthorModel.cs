@@ -8,5 +8,5 @@ public class PublicationAuthorModel : EPCBaseModel
 	public long PersonId { get; set; }
 	public long InstitutionId {get; set; }
 	public double? ContributionRatio { get; set; }
-	public string? PersonRole { get; set; }
+	public string? Role { get; set; }
 }

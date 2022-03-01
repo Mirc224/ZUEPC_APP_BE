@@ -5,5 +5,5 @@ namespace ZUEPC.Application.Persons.Queries.PersonNames;
 
 public class GetPersonNamesQueryResponse: ResponseBase
 {
-	public IEnumerable<PersonName> PersonNames { get; set; }
+	public ICollection<PersonName> PersonNames { get; set; }
 }

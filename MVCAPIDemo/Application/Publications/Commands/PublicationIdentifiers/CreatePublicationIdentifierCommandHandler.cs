@@ -18,11 +18,15 @@ public class CreatePublicationIdentifierCommandHandler : IRequestHandler<CreateP
 	}
 	public async Task<CreatePublicationIdentifierCommandResponse> Handle(CreatePublicationIdentifierCommand request, CancellationToken cancellationToken)
 	{
-		PublicationIdentifierModel publicationIdentifierModel = _mapper.Map<PublicationIdentifierModel>(request);
-
-		long newId = await _repository.InsertPublicationIdentifierAsync(publicationIdentifierModel);
-		publicationIdentifierModel.Id = newId;
-		PublicationIdentifier domain = _mapper.Map<PublicationIdentifier>(publicationIdentifierModel);
+		PublicationIdentifierModel insertModel = _mapper.Map<PublicationIdentifierModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
+		if (request.VersionDate is null)
+		{
+			insertModel.CreatedAt = DateTime.UtcNow;
+		}
+		long newId = await _repository.InsertPublicationIdentifierAsync(insertModel);
+		insertModel.Id = newId;
+		PublicationIdentifier domain = _mapper.Map<PublicationIdentifier>(insertModel);
 
 		return new() { Success = newId > 0, PublicationIdentifier = domain };
 	}

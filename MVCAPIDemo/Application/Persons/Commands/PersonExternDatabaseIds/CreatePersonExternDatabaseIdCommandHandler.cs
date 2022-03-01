@@ -19,6 +19,11 @@ public class CreatePersonExternDatabaseIdCommandHandler : IRequestHandler<Create
 	public async Task<CreatePersonExternDatabaseIdCommandResponse> Handle(CreatePersonExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
 		PersonExternDatabaseIdModel insertModel = _mapper.Map<PersonExternDatabaseIdModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
+		if (request.VersionDate is null)
+		{
+			insertModel.CreatedAt = DateTime.UtcNow;
+		}
 		long newId = await _repository.InsertPersonExternDatabaseIdAsync(insertModel);
 		insertModel.Id = newId;
 		PersonExternDatabaseId domain = _mapper.Map<PersonExternDatabaseId>(insertModel);

@@ -22,6 +22,11 @@ public class CreateInstitutionNameCommandHandler :
 	public async Task<CreateInstitutionNameCommandResponse> Handle(CreateInstitutionNameCommand request, CancellationToken cancellationToken)
 	{
 		InstitutionNameModel insertModel = _mapper.Map<InstitutionNameModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
+		if (request.VersionDate is null)
+		{
+			insertModel.CreatedAt = DateTime.UtcNow;
+		}
 		long insertedId = await _repository.InsertInstitutionNameAsync(insertModel);
 		InstitutionName domain = _mapper.Map<InstitutionName>(insertModel);
 		domain.InstitutionId = insertedId;

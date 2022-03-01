@@ -19,7 +19,7 @@ public class GetInstitutionNamesQueryHandler : IRequestHandler<GetInstitutionNam
 
 	public async Task<GetInstitutionNamesQueryResponse> Handle(GetInstitutionNamesQuery request, CancellationToken cancellationToken)
 	{
-		Task<IEnumerable<InstitutionNameModel>> queryResult = _repository.GetInstitutionNamesByInstitutionIdAsync(request.InstitutionId);
+		IEnumerable<InstitutionNameModel> queryResult = await _repository.GetInstitutionNamesByInstitutionIdAsync(request.InstitutionId);
 		List<InstitutionName> mappedResult = _mapper.Map<List<InstitutionName>>(queryResult);
 		return new() { Success = true, InstitutionNames = mappedResult };
 	}

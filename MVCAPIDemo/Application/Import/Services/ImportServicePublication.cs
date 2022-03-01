@@ -127,7 +127,7 @@ public partial class ImportService
 		{
 			identifier.PublicationId = currentPublication.Id;
 		}
-		await InsertRecordsAsync<PublicationIdentifier, CreatePublicationCommand>(identifiersToInsert, versionDate, source);
+		await InsertRecordsAsync<PublicationIdentifier, CreatePublicationIdentifierCommand>(identifiersToInsert, versionDate, source);
 
 		IEnumerable<Tuple<ImportPublicationIdentifier, PublicationIdentifier>> identifiersTupleToUpdate =
 			from current in publicationCurrentIdentifiers

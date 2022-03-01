@@ -32,7 +32,6 @@
     <Folder Include="Application\Persons\Controllers\" />
     <Folder Include="Application\PublicationActivities\Controllers\" />
     <Folder Include="Application\PublicationAuthors\Controllers\" />
-    <Folder Include="Application\Publications\Controllers\" />
     <Folder Include="Application\RelatedPublications\Controllers\" />
   </ItemGroup>
 

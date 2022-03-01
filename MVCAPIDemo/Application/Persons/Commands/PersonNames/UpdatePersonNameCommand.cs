@@ -5,6 +5,7 @@ namespace ZUEPC.Application.Persons.Commands.PersonNames;
 
 public class UpdatePersonNameCommand : EPCUpdateBaseCommand, IRequest<UpdatePersonNameCommandResponse>
 {
+	public long PersonId { get; set; }
 	public string? NameType { get; set; }
 	public string? FirstName { get; set; }
 	public string? LastName { get; set; }

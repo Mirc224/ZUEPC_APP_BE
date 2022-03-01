@@ -20,6 +20,7 @@ public class CreatePublicationExternDatabaseIdCommandHandler : IRequestHandler<C
 	public async Task<CreatePublicationExternDatabaseIdCommandResponse> Handle(CreatePublicationExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
 		PublicationExternDatabaseIdModel insertModel = _mapper.Map<PublicationExternDatabaseIdModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
 		long insertedId = await _repository.InsertPublicationExternDbIdAsync(insertModel);
 		insertModel.Id = insertedId;
 		PublicationExternDatabaseId domain = _mapper.Map<PublicationExternDatabaseId>(insertModel);

@@ -18,14 +18,14 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, C
 	}
 	public async Task<CreatePersonCommandResponse> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
 	{
-		PersonModel personModel = _mapper.Map<PersonModel>(request);
-		personModel.CreatedAt = DateTime.UtcNow;
+		PersonModel insertModel = _mapper.Map<PersonModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
 		if (request.VersionDate is null)
 		{
-			personModel.CreatedAt = DateTime.UtcNow;
+			insertModel.CreatedAt = DateTime.UtcNow;
 		}
-		long personId = await _repository.InsertPersonAsync(personModel);
-		Person mappedModel = _mapper.Map<Person>(personModel);
+		long personId = await _repository.InsertPersonAsync(insertModel);
+		Person mappedModel = _mapper.Map<Person>(insertModel);
 		mappedModel.Id = personId;
 		return new() { Success = true, Person = mappedModel };
 	}

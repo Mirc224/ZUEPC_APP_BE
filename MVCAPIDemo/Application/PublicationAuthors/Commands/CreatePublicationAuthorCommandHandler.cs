@@ -19,6 +19,11 @@ public class CreatePublicationAuthorCommandHandler : IRequestHandler<CreatePubli
 	public async Task<CreatePublicationAuthorCommandResponse> Handle(CreatePublicationAuthorCommand request, CancellationToken cancellationToken)
 	{
 		PublicationAuthorModel insertModel = _mapper.Map<PublicationAuthorModel>(request);
+		insertModel.CreatedAt = DateTime.UtcNow;
+		if (request.VersionDate is null)
+		{
+			insertModel.CreatedAt = DateTime.UtcNow;
+		}
 		long insertedId = await _repository.InsertPublicationAuthorAsync(insertModel);
 		PublicationAuthor domain = _mapper.Map<PublicationAuthor>(insertModel);
 		insertModel.Id = insertedId;

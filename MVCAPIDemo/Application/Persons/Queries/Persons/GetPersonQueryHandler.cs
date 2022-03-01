@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.DataAccess.Data.Persons;
+using ZUEPC.DataAccess.Models.Person;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.Persons;
@@ -15,15 +16,15 @@ public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, GetPersonQu
 		_mapper = mapper;
 		_repository = repository;
 	}
-	
+
 	public async Task<GetPersonQueryResponse> Handle(GetPersonQuery request, CancellationToken cancellationToken)
 	{
-		var personModel = await _repository.GetPersonByIdAsync(request.PersonId);
+		PersonModel? personModel = await _repository.GetPersonByIdAsync(request.PersonId);
 		if (personModel is null)
 		{
 			return new() { Success = false };
 		}
-		var mappedPerson = _mapper.Map<Person>(request);
+		Person mappedPerson = _mapper.Map<Person>(request);
 		return new() { Success = true, Person = mappedPerson };
 	}
 }
