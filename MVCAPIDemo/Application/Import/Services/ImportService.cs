@@ -2,16 +2,10 @@
 using MediatR;
 using System.Xml.Linq;
 using ZUEPC.Application.Import.Commands;
-using ZUEPC.Application.PublicationActivities.Commands;
-using ZUEPC.Application.PublicationActivities.Queries;
-using ZUEPC.Application.RelatedPublications.Commands;
-using ZUEPC.Application.RelatedPublications.Queries;
 using ZUEPC.Base.Enums.Common;
 using ZUEPC.EvidencePublication.Base.Commands;
 using ZUEPC.EvidencePublication.Base.Domain.Common;
-using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
-using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 using ZUEPC.Import.Models;
 using ZUEPC.Import.Models.Commond;
 using ZUEPC.Import.Parser;
@@ -30,16 +24,16 @@ public partial class ImportService
 	}
 
 
-	public async Task ImportFromCREPCXML(ImportCREPCXmlCommand command)
+	public async Task<ICollection<Publication>?> ImportFromCREPCXML(ImportCREPCXmlCommand command)
 	{
 		IEnumerable<ImportRecord>? result = ParseImportXMLCommand(command, OriginSourceType.CREPC);
-		await ProcessImportedRecords(result, OriginSourceType.CREPC);
+		return await ProcessImportedRecords(result, OriginSourceType.CREPC);
 	}
 
-	public async Task ImportFromDaWinciXML(ImportDaWinciXmlCommand command)
+	public async Task<ICollection<Publication>?> ImportFromDaWinciXML(ImportDaWinciXmlCommand command)
 	{
 		IEnumerable<ImportRecord>? result = ParseImportXMLCommand(command, OriginSourceType.DAWINCI);
-		await ProcessImportedRecords(result, OriginSourceType.DAWINCI);
+		return await ProcessImportedRecords(result, OriginSourceType.DAWINCI);
 	}
 
 	private IEnumerable<ImportRecord>? ParseImportXMLCommand(ImportXmlBaseCommand command, OriginSourceType source)
@@ -60,21 +54,23 @@ public partial class ImportService
 		return null;
 	}
 
-	private async Task ProcessImportedRecords(IEnumerable<ImportRecord>? records, OriginSourceType source)
+	private async Task<ICollection<Publication>?> ProcessImportedRecords(IEnumerable<ImportRecord>? records, OriginSourceType source)
 	{
 		if (records is null || !records.Any())
 		{
-			return;
+			return null;
 		};
-
+		List<Publication> importedList = new();
 		foreach (ImportRecord? item in records)
 		{
 			if (item is null)
 			{
 				continue;
 			}
-			await ProccesImportedRecordAsync(item, source);
+			Publication newPublication = await ProccesImportedRecordAsync(item, source);
+			importedList.Add(newPublication);
 		}
+		return importedList;
 	}
 
 	private async Task UpdateRecordsAsync<TDomain, TCommand>(
@@ -112,9 +108,6 @@ public partial class ImportService
 		where TImport : EPCImportExternDatabaseIdBase
 		where TDomain : EPCExternDatabaseIdBase
 	{
-		List<string> allImportedExternIdsString = importExternIdentifiers.Select(identifier => identifier.ExternIdentifierValue).ToList();
-		List<string> allCurrentExternIdsString = objectCurrentExternIds.Select(identifier => identifier.ExternIdentifierValue).ToList();
-
 		IEnumerable<Tuple<TImport, TDomain>> identifiersTupleToUpdate =
 			from current in objectCurrentExternIds
 			join import in importExternIdentifiers on current.ExternIdentifierValue equals import.ExternIdentifierValue

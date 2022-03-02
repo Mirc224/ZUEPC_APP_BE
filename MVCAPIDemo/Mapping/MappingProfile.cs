@@ -5,17 +5,24 @@ using ZUEPC.Application.Auth.Commands;
 using ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Commands.InstitutionNames;
 using ZUEPC.Application.Institutions.Commands.Institutions;
+using ZUEPC.Application.Institutions.Entities.Previews;
 using ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Commands.PersonNames;
 using ZUEPC.Application.Persons.Commands.Persons;
+using ZUEPC.Application.Persons.Entities.Previews;
 using ZUEPC.Application.PublicationActivities.Commands;
 using ZUEPC.Application.PublicationAuthors.Commands;
+using ZUEPC.Application.PublicationAuthors.Entities.Details;
 using ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Commands.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Commands.PublicationNames;
 using ZUEPC.Application.Publications.Commands.Publications;
+using ZUEPC.Application.Publications.Entities.Details;
+using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Commands;
+using ZUEPC.Application.RelatedPublications.Entities.Details;
 using ZUEPC.Auth.Domain;
+using ZUEPC.Common.Entities;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.DataAccess.Models.Institution;
 using ZUEPC.DataAccess.Models.Person;
@@ -53,6 +60,50 @@ public class MappingProfile : Profile
 
 		CreateDomainToCommandMapping();
 		CreateCommandToModelMapping();
+
+		CreateDomainToDetailMapping();
+		CreateDomainToPreviewMapping();
+	}
+
+	private void CreateDomainToPreviewMapping()
+	{
+		CreateMap<Person, PersonPreview>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.BirthYear, opts => opts.MapFrom(src => src.BirthYear))
+			.ForMember(dest => dest.DeathYear, opts => opts.MapFrom(src => src.DeathYear));
+
+		CreateMap<Institution, InstitutionPreview>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
+			.ForMember(dest => dest.InstitutionType, opts => opts.MapFrom(src => src.InstitutionType));
+
+		CreateMap<Publication, PublicationPreview>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id));
+	}
+
+	private void CreateDomainToDetailMapping()
+	{
+		CreateMap<EPCBase, DetailsBase>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.CreatedAt, opts => opts.MapFrom(src => src.CreatedAt))
+			.ForMember(dest => dest.OriginSourceType, opts => opts.MapFrom(src => src.OriginSourceType))
+			.ForMember(dest => dest.VersionDate, opts => opts.MapFrom(src => src.VersionDate));
+
+		CreateMap<Publication, PublicationDetails>()
+			.IncludeBase<EPCBase, DetailsBase>()
+			.ForMember(dest => dest.DocumentType, opts => opts.MapFrom(src => src.DocumentType))
+			.ForMember(dest => dest.PublishYear, opts => opts.MapFrom(src => src.PublishYear));
+
+		CreateMap<PublicationAuthor, PublicationAuthorDetails>()
+			.IncludeBase<EPCBase, DetailsBase>()
+			.ForMember(dest => dest.ContributionRatio, opts => opts.MapFrom(src => src.ContributionRatio))
+			.ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role));
+
+		CreateMap<RelatedPublication, RelatedPublicationDetails>()
+			.IncludeBase<EPCBase, DetailsBase>()
+			.ForMember(dest => dest.RelationType, opts => opts.MapFrom(src => src.RelationType))
+			.ForMember(dest => dest.CitationCategory, opts => opts.MapFrom(src => src.CitationCategory));
+
 	}
 
 	private void CreateUserMapping()

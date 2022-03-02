@@ -18,7 +18,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		IEnumerable<PublicationActivity> currPublicationActivities = (await _mediator.Send(
-				new GetPublicationActivitiesCommand()
+				new GetPublicationActivitiesQuery()
 				{
 					PublicationId = currPublication.Id
 				})).PublicationActivities;
@@ -65,18 +65,19 @@ public partial class ImportService
 
 		foreach (Tuple<ImportPublicationActivity, PublicationActivity> tuple in activityTuplesToUpdate)
 		{
-			await UpdatePublicationActivityAsync(tuple.Item1, tuple.Item2, versionDate, source);
+			await UpdatePublicationActivityAsync(tuple.Item2, tuple.Item1, versionDate, source);
 		}
 
 	}
 
 	private async Task UpdatePublicationActivityAsync(
-		ImportPublicationActivity importRecord,
 		PublicationActivity currRecord,
+		ImportPublicationActivity importRecord,
 		DateTime versionDate,
 		OriginSourceType source)
 	{
 		PublicationActivity recordForUpdate = _mapper.Map<PublicationActivity>(importRecord);
+		recordForUpdate.Id = currRecord.Id;
 		recordForUpdate.PublicationId = currRecord.PublicationId;
 		await UpdateRecordAsync<PublicationActivity, UpdatePublicationActivityCommand>(
 				recordForUpdate,
@@ -84,12 +85,12 @@ public partial class ImportService
 				source);
 	}
 
-	private async Task ProccesImportedRecordAsync(ImportRecord record, OriginSourceType source)
+	private async Task<Publication> ProccesImportedRecordAsync(ImportRecord record, OriginSourceType source)
 	{
 		ImportPublication importedPublication = record.Publication;
 		DateTime versionDate = record.RecordVersionDate;
 
-		await ProcessImportedPublication(importedPublication, versionDate, source);
+		return await ProcessImportedPublication(importedPublication, versionDate, source);
 	}
 
 	private async Task DeleteRecordsAsync<TDomain, TCommand>(IEnumerable<TDomain> recordsToDelete)

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ZUEPC.Application.Publications.Queries.Publications;
+using ZUEPC.Application.Publications.Queries.Publications.Details;
 
 namespace ZUEPC.Application.Publications.Controllers;
 
@@ -15,16 +15,15 @@ public class PublicationController : ControllerBase
 		_mediator = mediator;
 	}
 
-	[HttpGet("publication/{id}")]
-	public async Task<IActionResult> GetPublicationDetails([FromRoute] long publicationId)
+	[HttpGet("{id}")]
+	public async Task<IActionResult> GetPublicationDetails(long id)
 	{
-		GetPublicationWithDetailsQuery request = new() { PublicationId = publicationId };
-		GetPublicationWithDetailsQueryResponse response = await _mediator.Send(request);
+		GetPublicationDetailsQuery request = new() { PublicationId = id };
+		GetPublicationDetailsQueryResponse response = await _mediator.Send(request);
 		if(!response.Success)
 		{
 			return NotFound();
 		}
-
 		return Ok(response.PublicationWithDetails);
 	}
 }

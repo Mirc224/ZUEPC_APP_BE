@@ -13,69 +13,46 @@ namespace ZUEPC.Application.Import.Services;
 
 public partial class ImportService
 {
-	private async Task<IEnumerable<Tuple<ImportPerson, Person>>> ProcessImportPersonsAsync(
+	private async Task<IEnumerable<Tuple<ImportPerson, Person>>> ProcessImportPersonCollectionAsync(
 		IEnumerable<ImportPerson> relatedPersons,
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		IEnumerable<Tuple<ImportPerson, Person>> publicationPersonsTuples = await GetOrCreatePublicationPersonImportDomainTuplesAsync(
-																					relatedPersons,
-																					versionDate,
-																					source);
-
-		IEnumerable<Tuple<ImportPerson, Person>> updatedCurrentPersonsTuples = await UpdateCurrentPersonsDetailsAsync(
-																						publicationPersonsTuples,
-																						versionDate,
-																						source);
-
-		return updatedCurrentPersonsTuples;
-	}
-
-	private async Task<IEnumerable<Tuple<ImportPerson, Person>>> UpdateCurrentPersonsDetailsAsync(
-	IEnumerable<Tuple<ImportPerson, Person>> publicationPersonsTuples,
-	DateTime versionDate,
-	OriginSourceType source)
-	{
-		List<Tuple<ImportPerson, Person>> updatedPersons = new();
-		foreach (Tuple<ImportPerson, Person> personTuple in publicationPersonsTuples)
+		List<Tuple<ImportPerson, Person>> processedPersonsTuples = new();
+		foreach (ImportPerson relatedPerson in relatedPersons)
 		{
-			ImportPerson importPerson = personTuple.Item1;
-			Person currentPerson = personTuple.Item2;
-			Person updatedPerson = _mapper.Map<Person>(importPerson);
-			updatedPerson.Id = currentPerson.Id;
-
-			updatedPersons.Add(new Tuple<ImportPerson, Person>(importPerson, updatedPerson));
-			if (currentPerson.VersionDate == versionDate)
-			{
-				continue;
-			}
-			await UpdateCurrentPersonDetailsAsync(currentPerson, importPerson, versionDate, source);
+			Person updatedPerson = await ProcessImportPersonAsync(relatedPerson, versionDate, source);
+			processedPersonsTuples.Add(new Tuple<ImportPerson, Person>(relatedPerson, updatedPerson));
 		}
-		return updatedPersons;
+
+		return processedPersonsTuples;
 	}
 
-	private async Task UpdateCurrentPersonDetailsAsync(Person currentPerson, ImportPerson importPerson, DateTime versionDate, OriginSourceType source)
-	{
-		await UpdatePersonBaseRecordAsync(currentPerson, importPerson, versionDate, source);
-		await UpdatePersonExternDatabaseIdDataAsync(currentPerson, importPerson.PersonExternDatabaseIds, versionDate, source);
-		await UpdatePersonNameDataAsync(currentPerson, importPerson.PersonNames, versionDate, source);
-	}
 
-	private async Task UpdatePersonBaseRecordAsync(
-		Person currentPerson,
+	private async Task<Person> ProcessImportPersonAsync(
 		ImportPerson importPerson,
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		if (currentPerson.VersionDate < versionDate)
+		Person person = await FindOrCreatePersonAsync(importPerson, versionDate, source);
+		if (person.VersionDate < versionDate)
 		{
-			Person personForUpdate = _mapper.Map<Person>(importPerson);
-			personForUpdate.Id = currentPerson.Id;
-			await UpdateRecordAsync<Person, UpdatePersonCommand>(
-				personForUpdate,
-				versionDate,
-				source);
+			person = await UpdatePersonBaseAsync(importPerson, person, versionDate, source);
 		}
+		await UpdatePersonExternDatabaseIdDataAsync(person, importPerson.PersonExternDatabaseIds, versionDate, source);
+		await UpdatePersonNameDataAsync(person, importPerson.PersonNames, versionDate, source);
+
+		return person;
+	}
+
+	private async Task<Person> UpdatePersonBaseAsync(ImportPerson importPerson, Person person, DateTime versionDate, OriginSourceType source)
+	{
+		Person updatedPerson = _mapper.Map<Person>(importPerson);
+		updatedPerson.Id = person.Id;
+		updatedPerson.VersionDate = versionDate;
+		updatedPerson.OriginSourceType = source;
+		await UpdateRecordAsync<Person, UpdatePersonCommand>(updatedPerson, versionDate, source);
+		return updatedPerson;
 	}
 
 	private async Task UpdatePersonExternDatabaseIdDataAsync(
@@ -92,17 +69,7 @@ public partial class ImportService
 																					importExternIdentifiers,
 																					personCurrentExternIds);
 
-		List<PersonExternDatabaseId> identifiersToInsert = _mapper.Map<List<PersonExternDatabaseId>>(importExternIdToInsert);
-
-		foreach (PersonExternDatabaseId externIdentifier in identifiersToInsert)
-		{
-			externIdentifier.PersonId = currentPerson.Id;
-		}
-
-		await InsertRecordsAsync<PersonExternDatabaseId, CreatePersonExternDatabaseIdCommand>(
-			identifiersToInsert,
-			versionDate,
-			source);
+		await InsertPersonExternDatabaseIdCollectionAsync(currentPerson, importExternIdToInsert, versionDate, source);
 
 		IEnumerable<Tuple<ImportPersonExternDatabaseId, PersonExternDatabaseId>> recordTuplesForUpdate = GetEPCObjectExternDatabaseIdsForUpdateAsync(
 			importExternIdentifiers,
@@ -115,6 +82,33 @@ public partial class ImportService
 		}
 	}
 
+	private async Task InsertPersonExternDatabaseIdCollectionAsync(
+		Person currentPerson,
+		IEnumerable<ImportPersonExternDatabaseId> importPersonExternDbIds,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		foreach (ImportPersonExternDatabaseId identifier in importPersonExternDbIds)
+		{
+			if (identifier.ExternIdentifierValue is null)
+			{
+				continue;
+			}
+			await InsertPersonExternDatabaseIdAsync(currentPerson, identifier, versionDate, source);
+		}
+	}
+
+	public async Task InsertPersonExternDatabaseIdAsync(
+		Person currentPerson,
+		ImportPersonExternDatabaseId importPersonExternDbId,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		PersonExternDatabaseId identifierToInsert = _mapper.Map<PersonExternDatabaseId>(importPersonExternDbId);
+		identifierToInsert.PersonId = currentPerson.Id;
+		await InsertRecordAsync<PersonExternDatabaseId, CreatePersonExternDatabaseIdCommand>(identifierToInsert, versionDate, source);
+	}
+
 	private async Task UpdatePersonExternDatabaseIdAsync(
 		ImportPersonExternDatabaseId importRecord,
 		PersonExternDatabaseId currRecord,
@@ -122,7 +116,8 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		PersonExternDatabaseId recordForUpdate = _mapper.Map<PersonExternDatabaseId>(importRecord);
-		recordForUpdate.PersonId = currRecord.Id;
+		recordForUpdate.Id = currRecord.Id;
+		recordForUpdate.PersonId = currRecord.PersonId;
 		await UpdateRecordAsync<PersonExternDatabaseId, UpdatePersonExternDatabaseIdCommand>(
 			  recordForUpdate,
 			  versionDate,
@@ -143,16 +138,13 @@ public partial class ImportService
 															  where personCurrName.FirstName == personImpName.FirstName &&
 																	personCurrName.LastName == personImpName.LastName &&
 																	personCurrName.NameType == personImpName.NameType
-															  select 1).Any()
+															  select 1).Any() &&
+															  (personImpName.FirstName != null ||
+															   personImpName.LastName != null ||
+															   personImpName.NameType != null)
 													  select personImpName;
 
-		List<PersonName> mappedNamesToInsert = _mapper.Map<List<PersonName>>(namesToInsert);
-		foreach (PersonName personName in mappedNamesToInsert)
-		{
-			personName.PersonId = currentPerson.Id;
-		}
-
-		await InsertRecordsAsync<PersonName, CreatePersonNameCommand>(mappedNamesToInsert, versionDate, source);
+		await InsertPersonNameCollectionAsync(currentPerson, namesToInsert, versionDate, source);
 
 		IEnumerable<Tuple<ImportPersonName, PersonName>> nameTuplesToUpdate = from personCurrName in personCurrentNames
 																			  join personImpName in importPersonNames on
@@ -180,6 +172,33 @@ public partial class ImportService
 		}
 	}
 
+	private async Task InsertPersonNameCollectionAsync(
+		Person currentPerson,
+		IEnumerable<ImportPersonName> importPersonNames,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		foreach (ImportPersonName personName in importPersonNames)
+		{
+			if(personName.FirstName is null && personName.LastName is null)
+			{
+				continue;
+			}
+			await InsertPersonNameAsync(currentPerson, personName, versionDate, source);
+		}
+	}
+
+	private async Task InsertPersonNameAsync(
+		Person currentPerson,
+		ImportPersonName importPersonNames,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		PersonName nameToInsert = _mapper.Map<PersonName>(importPersonNames);
+		nameToInsert.PersonId = currentPerson.Id;
+		await InsertRecordAsync<PersonName, CreatePersonNameCommand>(nameToInsert, versionDate, source);
+	}
+
 	private async Task UpdatePersonNameAsync(
 		ImportPersonName importRecord,
 		PersonName currRecord,
@@ -187,7 +206,8 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		PersonName recordForUpdate = _mapper.Map<PersonName>(importRecord);
-		recordForUpdate.PersonId = currRecord.Id;
+		recordForUpdate.Id = currRecord.Id;
+		recordForUpdate.PersonId = currRecord.PersonId;
 		await UpdateRecordAsync<PersonName, UpdatePersonNameCommand>(
 				recordForUpdate,
 				versionDate,
@@ -223,7 +243,7 @@ public partial class ImportService
 		if (foundPersonExternIdentifiers.ExternDatabaseIds != null &&
 			foundPersonExternIdentifiers.ExternDatabaseIds.Any())
 		{
-			personId = foundPersonExternIdentifiers.ExternDatabaseIds.First().Id;
+			personId = foundPersonExternIdentifiers.ExternDatabaseIds.First().PersonId;
 			resultModel = await GetPersonByIdAsync(personId);
 			if (resultModel != null)
 			{
@@ -245,7 +265,9 @@ public partial class ImportService
 		CreatePersonCommand createCommand = _mapper.Map<CreatePersonCommand>(importPerson);
 		createCommand.VersionDate = versionDate;
 		createCommand.OriginSourceType = source;
-
-		return (await _mediator.Send(createCommand)).Person;
+		Person newPerson = (await _mediator.Send(createCommand)).Person;
+		await InsertPersonExternDatabaseIdCollectionAsync(newPerson, importPerson.PersonExternDatabaseIds, versionDate, source);
+		await InsertPersonNameCollectionAsync(newPerson, importPerson.PersonNames, versionDate, source);
+		return newPerson;
 	}
 }

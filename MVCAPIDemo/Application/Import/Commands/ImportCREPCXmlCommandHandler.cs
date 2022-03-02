@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using ZUEPC.Application.Import.Services;
+using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Import.Commands;
 
@@ -13,7 +14,14 @@ public class ImportCREPCXmlCommandHandler : IRequestHandler<ImportCREPCXmlComman
 	}
 	public async Task<ImportCREPCXmlCommandResponse> Handle(ImportCREPCXmlCommand request, CancellationToken cancellationToken)
 	{
-		_importService.ImportFromCREPCXML(request);
-		return new() { Success = true };
+		ICollection<Publication>? importedPublications = await _importService.ImportFromCREPCXML(request);
+		if(importedPublications is null)
+		{
+			return new() { Success = false };
+		}
+
+		ICollection<long> importedPublicationsIds = importedPublications.Select(x => x.Id).ToList();
+
+		return new() { Success = true, PublicationsIds = importedPublicationsIds };
 	}
 }

@@ -20,7 +20,7 @@ public partial class ImportService
 		IEnumerable<ImportPerson> relatedPersons = importPublicationAuthors.Select(x => x.Person).ToList();
 
 
-		IEnumerable<Tuple<ImportPerson, Person>> updatedCurrentPersonsTuple = await ProcessImportPersonsAsync(
+		IEnumerable<Tuple<ImportPerson, Person>> updatedCurrentPersonsTuple = await ProcessImportPersonCollectionAsync(
 			relatedPersons,
 			versionDate,
 			source);
@@ -30,12 +30,12 @@ public partial class ImportService
 																.ToList();
 
 
-		IEnumerable<Tuple<ImportInstitution, Institution>> updatedCurrentInstitutions = await ProcessImportInstitutions(
+		IEnumerable<Tuple<ImportInstitution, Institution>> updatedCurrentInstitutions = await ProcessImportInstitutionsCollectionAsync(
 																								relatedInstitutions,
 																								versionDate,
 																								source);
 
-		IEnumerable<PublicationAuthor> foundPublicationAuthors = (await _mediator.Send(new GetAllPublicationAuthorsQuery()
+		IEnumerable<PublicationAuthor> foundPublicationAuthors = (await _mediator.Send(new GetPublicationAuthorsQuery()
 		{
 			PublicationId = updatedPublication.Id
 		})).PublicationAuthors;
@@ -157,15 +157,17 @@ public partial class ImportService
 		Institution reportingInstitution = tupleToUpdate.Item5;
 
 		PublicationAuthor updatedAuthor = _mapper.Map<PublicationAuthor>(importAuthor);
-		updatedAuthor.VersionDate = versionDate;
-		updatedAuthor.OriginSourceType = source;
+		updatedAuthor.Id = publicationAuthor.Id;
 		updatedAuthor.PublicationId = publication.Id;
 		updatedAuthor.PersonId = authorPerson.Id;
 		updatedAuthor.InstitutionId = reportingInstitution.Id;
-		updatedAuthor.Id = publicationAuthor.Id;
+		updatedAuthor.VersionDate = versionDate;
+		updatedAuthor.OriginSourceType = source;
 
 		if (publicationAuthor.VersionDate < versionDate)
+		{
 			await UpdateRecordAsync<PublicationAuthor, UpdatePublicationAuthorCommand>(updatedAuthor, versionDate, source);
+		}
 
 		return updatedAuthor;
 	}

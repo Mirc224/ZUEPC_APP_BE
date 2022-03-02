@@ -16,7 +16,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		IEnumerable<RelatedPublication> currRelatedPublications = (await _mediator.Send(
-				new GetPublicationRelatedPublicationsCommand()
+				new GetPublicationRelatedPublicationsQuery()
 				{
 					SourcePublicationId = updatedPublication.Id
 				})).RelatedPublications;
@@ -64,9 +64,9 @@ public partial class ImportService
 													   currRelatedPub.CitationCategory == filledRelatedPublicationTuple.Item2.CitationCategory &&
 													   currRelatedPub.VersionDate < versionDate
 												 select 1).Any()
-										  select new Tuple<ImportRelatedPublication, RelatedPublication>(filledRelatedPublicationTuple.Item1,
-																										 filledRelatedPublicationTuple.Item2);
-
+										  select (filledRelatedPublicationTuple, ) ;
+		// new Tuple<ImportRelatedPublication, RelatedPublication>(filledRelatedPublicationTuple.Item1,
+		//filledRelatedPublicationTuple.Item2)
 		foreach (Tuple<ImportRelatedPublication, RelatedPublication> recordToUpdate in relatedPublicationsToUpdate)
 		{
 			await UpdateRelatedPublicationAsync(recordToUpdate.Item1, recordToUpdate.Item2, versionDate, source);
@@ -80,6 +80,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		RelatedPublication recordForUpdate = _mapper.Map<RelatedPublication>(importRelatedPublication);
+		recordForUpdate.Id = currRelatedPublication.Id;
 		recordForUpdate.PublicationId = currRelatedPublication.PublicationId;
 		recordForUpdate.RelatedPublicationId = currRelatedPublication.RelatedPublicationId;
 		await UpdateRecordAsync<RelatedPublication, UpdateRelatedPublicationCommand>(recordForUpdate, versionDate, source);

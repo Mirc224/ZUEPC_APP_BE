@@ -13,19 +13,53 @@ namespace ZUEPC.Application.Import.Services;
 
 public partial class ImportService
 {
-	private async Task<IEnumerable<Tuple<ImportInstitution, Institution>>> ProcessImportInstitutions(IEnumerable<ImportInstitution> relatedInstitutions, DateTime versionDate, OriginSourceType source)
+	private async Task<IEnumerable<Tuple<ImportInstitution, Institution>>> ProcessImportInstitutionsCollectionAsync(
+		IEnumerable<ImportInstitution> relatedInstitutions,
+		DateTime versionDate,
+		OriginSourceType source)
 	{
-		IEnumerable<Tuple<ImportInstitution, Institution>> publicationInstitutionTuples =
-			await GetOrCreatePublicationInstitutionImportDomainTuplesAsync(
-																		   relatedInstitutions,
-																		   versionDate,
-																		   source);
 
-		IEnumerable<Tuple<ImportInstitution, Institution>> updatedCurrentInstitutions = await UpdateCurrentInstitutionsDetailsAsync(
-																								publicationInstitutionTuples,
-																								versionDate,
-																								source);
-		return updatedCurrentInstitutions;
+		List<Tuple<ImportInstitution, Institution>> processedInstitutionsTuples = new();
+		foreach (ImportInstitution institution in relatedInstitutions)
+		{
+			Institution updatedInstitution = await ProcessImportInstitutionAsync(institution, versionDate, source);
+			processedInstitutionsTuples.Add(new Tuple<ImportInstitution, Institution>(institution, updatedInstitution));
+		}
+		return processedInstitutionsTuples;
+	}
+
+	private async Task<Institution> ProcessImportInstitutionAsync(
+		ImportInstitution importInstitution,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		Institution instituton = await FindOrCreateInstitutionAsync(importInstitution, versionDate, source);
+		if (instituton.VersionDate < versionDate)
+		{
+			instituton = await UpdateInstitutionBaseAsync(importInstitution, instituton, versionDate, source);
+		}
+		await UpdateInstitutionExternDatabaseIdDataAsync(
+				instituton,
+				importInstitution.InstitutionExternDatabaseIds,
+				versionDate,
+				source);
+		await UpdateInstitutionNameDataAsync(instituton, importInstitution.InstitutionNames, versionDate, source);
+
+		return instituton;
+	}
+
+	private async Task<Institution> UpdateInstitutionBaseAsync(
+		ImportInstitution importInstitution,
+		Institution instituton,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		Institution updatedInstitution = _mapper.Map<Institution>(importInstitution);
+		updatedInstitution.Id = instituton.Id;
+		updatedInstitution.VersionDate = versionDate;
+		updatedInstitution.OriginSourceType = source;
+		await UpdateRecordAsync<Institution, UpdateInstitutionCommand>(updatedInstitution, versionDate, source);
+		return updatedInstitution;
 	}
 
 	private async Task<IEnumerable<Tuple<ImportInstitution, Institution>>> GetOrCreatePublicationInstitutionImportDomainTuplesAsync(
@@ -36,14 +70,19 @@ public partial class ImportService
 		List<Tuple<ImportInstitution, Institution>> publicationInstitutionImportDomainTuples = new();
 		foreach (ImportInstitution importInstitution in relatedInstitutions)
 		{
-			Institution domainInstitution = await FindOrCreateInstitution(importInstitution, versionDate, source);
-			publicationInstitutionImportDomainTuples.Add(new Tuple<ImportInstitution, Institution>(importInstitution, domainInstitution));
+			Institution domainInstitution = await FindOrCreateInstitutionAsync(importInstitution, versionDate, source);
+			publicationInstitutionImportDomainTuples.Add(new Tuple<ImportInstitution, Institution>(
+				importInstitution,
+				domainInstitution));
 		}
 
 		return publicationInstitutionImportDomainTuples;
 	}
 
-	private async Task<Institution> FindOrCreateInstitution(ImportInstitution importInstitution, DateTime versionDate, OriginSourceType source)
+	private async Task<Institution> FindOrCreateInstitutionAsync(
+		ImportInstitution importInstitution,
+		DateTime versionDate,
+		OriginSourceType source)
 	{
 		Institution? resultModel = null;
 		long institutionId = -1;
@@ -61,7 +100,7 @@ public partial class ImportService
 		if (foundInstitutionExternIdentifiers.ExternDatabaseIds != null &&
 			foundInstitutionExternIdentifiers.ExternDatabaseIds.Any())
 		{
-			institutionId = foundInstitutionExternIdentifiers.ExternDatabaseIds.First().Id;
+			institutionId = foundInstitutionExternIdentifiers.ExternDatabaseIds.First().InstitutionId;
 			resultModel = await GetInstitutionByIdAsync(institutionId);
 			if (resultModel != null)
 			{
@@ -72,51 +111,6 @@ public partial class ImportService
 		return await CreateInstitutionAsync(importInstitution, versionDate, source);
 	}
 
-	private async Task<IEnumerable<Tuple<ImportInstitution, Institution>>> UpdateCurrentInstitutionsDetailsAsync(
-		IEnumerable<Tuple<ImportInstitution, Institution>> publicationInstitutionTuples,
-		DateTime versionDate,
-		OriginSourceType source)
-	{
-		List<Tuple<ImportInstitution, Institution>> updatedInstitutions = new();
-		foreach (Tuple<ImportInstitution, Institution> institutionTuple in publicationInstitutionTuples)
-		{
-			ImportInstitution importInstitution = institutionTuple.Item1;
-			Institution currentInstitution = institutionTuple.Item2;
-			Institution updatedInstitution = _mapper.Map<Institution>(importInstitution);
-			updatedInstitution.Id = currentInstitution.Id;
-			updatedInstitutions.Add(new Tuple<ImportInstitution, Institution>(importInstitution, updatedInstitution));
-			if (versionDate == currentInstitution.VersionDate)
-			{
-				continue;
-			}
-			await UpdateCurrentInstitutionDetailsAsync(currentInstitution, importInstitution, versionDate, source);
-		}
-		return updatedInstitutions;
-	}
-
-	private async Task UpdateCurrentInstitutionDetailsAsync(
-		Institution currentInstitution,
-		ImportInstitution importInstitution,
-		DateTime versionDate,
-		OriginSourceType source)
-	{
-		await UpdateInstitutionBaseRecordAsync(
-			currentInstitution,
-			importInstitution,
-			versionDate,
-			source);
-		await UpdateInstitutionExternDatabaseIdDataAsync(
-			currentInstitution,
-			importInstitution.InstitutionExternDatabaseIds,
-			versionDate,
-			source);
-		await UpdateInstitutionNameDataAsync(
-			currentInstitution,
-			importInstitution.InstitutionNames,
-			versionDate,
-			source);
-	}
-
 	private async Task UpdateInstitutionNameDataAsync(
 		Institution currentInstitution,
 		IEnumerable<ImportInstitutionName> importInstitutionNames,
@@ -125,10 +119,6 @@ public partial class ImportService
 	{
 		GetInstitutionNamesQuery request = new() { InstitutionId = currentInstitution.Id };
 		IEnumerable<InstitutionName> institutionCurrentNames = (await _mediator.Send(request)).InstitutionNames;
-
-		List<string> allImportedNamesString = importInstitutionNames.Select(identifier => identifier.Name).ToList();
-		List<string> allCurrentNamesString = institutionCurrentNames.Select(identifier => identifier.Name).ToList();
-
 		IEnumerable<ImportInstitutionName> namesToInsert = from institutionImpName in importInstitutionNames
 														   where !(from institutionCurrName in institutionCurrentNames
 																   where institutionCurrName.Name == institutionImpName.Name &&
@@ -136,9 +126,7 @@ public partial class ImportService
 																   select 1).Any()
 														   select institutionImpName;
 
-		List<InstitutionName> mappedNamesToInsert = _mapper.Map<List<InstitutionName>>(namesToInsert);
-
-		await InsertRecordsAsync<InstitutionName, CreateInstitutionNameCommand>(mappedNamesToInsert, versionDate, source);
+		await InsertInstitutionNameCollectionAsync(currentInstitution, namesToInsert, versionDate, source);
 
 		IEnumerable<Tuple<ImportInstitutionName, InstitutionName>> nameTuplesToUpdate = from institutionCurrName in institutionCurrentNames
 																						join institutionImpName in importInstitutionNames on
@@ -149,11 +137,38 @@ public partial class ImportService
 																						select new Tuple<ImportInstitutionName, InstitutionName>(
 																							institutionImpName,
 																							institutionCurrName);
-		
+
 		foreach (Tuple<ImportInstitutionName, InstitutionName> nameTuple in nameTuplesToUpdate)
 		{
 			await UpdateInstitutionNameAsync(nameTuple.Item1, nameTuple.Item2, versionDate, source);
 		}
+	}
+
+	private async Task InsertInstitutionNameCollectionAsync(
+		Institution currentInstitution,
+		IEnumerable<ImportInstitutionName> importInstitutionNames,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		foreach (ImportInstitutionName name in importInstitutionNames)
+		{
+			if (name.Name is null)
+			{
+				continue;
+			}
+			await InsertInstitutionNameAsync(currentInstitution, name, versionDate, source);
+		}
+	}
+
+	private async Task InsertInstitutionNameAsync(
+		Institution currentInstitution,
+		ImportInstitutionName importInstitutionName,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		InstitutionName nameToInsert = _mapper.Map<InstitutionName>(importInstitutionName);
+		nameToInsert.InstitutionId = currentInstitution.Id;
+		await InsertRecordAsync<InstitutionName, CreateInstitutionNameCommand>(nameToInsert, versionDate, source);
 	}
 
 	private async Task UpdateInstitutionNameAsync(
@@ -163,6 +178,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		InstitutionName recordForUpdate = _mapper.Map<InstitutionName>(importInstitutionName);
+		recordForUpdate.Id = currInstitutionName.Id;
 		recordForUpdate.InstitutionId = currInstitutionName.InstitutionId;
 		await UpdateRecordAsync<InstitutionName, UpdateInstitutionNameCommand>(
 			  recordForUpdate,
@@ -186,16 +202,9 @@ public partial class ImportService
 																					importExternDatabaseIds,
 																					institutionCurrentExternIds);
 
-		List<InstitutionExternDatabaseId> identifiersToInsert =
-			_mapper.Map<List<InstitutionExternDatabaseId>>(importExternIdToInsert);
-
-		foreach (InstitutionExternDatabaseId externIdentifier in identifiersToInsert)
-		{
-			externIdentifier.InstitutionId = currentInstitution.Id;
-		}
-
-		await InsertRecordsAsync<InstitutionExternDatabaseId, CreateInstitutionExternDatabaseIdCommand>(
-			identifiersToInsert,
+		await InsertInstitutionExternDatabaseIdCollectionAsync(
+			currentInstitution,
+			importExternIdToInsert,
 			versionDate,
 			source);
 
@@ -211,6 +220,36 @@ public partial class ImportService
 		}
 	}
 
+	private async Task InsertInstitutionExternDatabaseIdCollectionAsync(
+		Institution currentInstitution,
+		IEnumerable<ImportInstitutionExternDatabaseId> importInstitutionExternDbIds,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		foreach (ImportInstitutionExternDatabaseId identifier in importInstitutionExternDbIds)
+		{
+			if (identifier.ExternIdentifierValue is null)
+			{
+				continue;
+			}
+			await InsertInstitutionExternDatabaseIdAsync(currentInstitution, identifier, versionDate, source);
+		}
+	}
+
+	private async Task InsertInstitutionExternDatabaseIdAsync(
+		Institution currentInstitution,
+		ImportInstitutionExternDatabaseId importInstitutionExternDbId,
+		DateTime versionDate,
+		OriginSourceType source)
+	{
+		InstitutionExternDatabaseId identifierToInsert = _mapper.Map<InstitutionExternDatabaseId>(importInstitutionExternDbId);
+		identifierToInsert.InstitutionId = currentInstitution.Id;
+		await InsertRecordAsync<InstitutionExternDatabaseId, CreateInstitutionExternDatabaseIdCommand>(
+			identifierToInsert,
+			versionDate,
+			source);
+	}
+
 	private async Task UpdateInstitutionExternDatabaseIdAsync(
 		ImportInstitutionExternDatabaseId importRecord,
 		InstitutionExternDatabaseId currentRecord,
@@ -218,7 +257,8 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		InstitutionExternDatabaseId recordForUpdate = _mapper.Map<InstitutionExternDatabaseId>(importRecord);
-		recordForUpdate.InstitutionId = currentRecord.Id;
+		recordForUpdate.Id = currentRecord.Id;
+		recordForUpdate.InstitutionId = currentRecord.InstitutionId;
 		await UpdateRecordAsync<InstitutionExternDatabaseId, UpdateInstitutionExternDatabaseIdCommand>(
 				recordForUpdate,
 				versionDate,
@@ -234,6 +274,7 @@ public partial class ImportService
 		if (currentInstitution.VersionDate < versionDate)
 		{
 			Institution publicationForUpdate = _mapper.Map<Institution>(importInstitution);
+			publicationForUpdate.Id = currentInstitution.Id;
 			await UpdateRecordAsync<Institution, UpdateInstitutionCommand>(
 				publicationForUpdate,
 				versionDate,
@@ -246,7 +287,18 @@ public partial class ImportService
 		CreateInstitutionCommand createCommand = _mapper.Map<CreateInstitutionCommand>(importInstitution);
 		createCommand.VersionDate = versionDate;
 		createCommand.OriginSourceType = source;
-		return (await _mediator.Send(createCommand)).Institution;
+		Institution newInstitution = (await _mediator.Send(createCommand)).Institution;
+		await InsertInstitutionExternDatabaseIdCollectionAsync(
+			newInstitution,
+			importInstitution.InstitutionExternDatabaseIds,
+			versionDate,
+			source);
+		await InsertInstitutionNameCollectionAsync(
+			newInstitution,
+			importInstitution.InstitutionNames,
+			versionDate,
+			source);
+		return newInstitution;
 	}
 
 	private async Task<Institution?> GetInstitutionByIdAsync(long institutionId)

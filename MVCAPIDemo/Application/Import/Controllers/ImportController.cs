@@ -24,8 +24,8 @@ namespace ZUEPC.Application.Import.Controllers
 		[HttpPost("crepc")]
 		public async Task<IActionResult> ImportCREPC()
 		{
-			ImportCREPCXmlCommand request = new ImportCREPCXmlCommand();
-			using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+			ImportCREPCXmlCommand request = new();
+			using (StreamReader reader = new(Request.Body, Encoding.UTF8))
 			{
 				request.XMLBody = await reader.ReadToEndAsync();
 			}
@@ -38,18 +38,18 @@ namespace ZUEPC.Application.Import.Controllers
 			ImportCREPCXmlCommandResponse? response = await _mediator.Send(request);
 			if (!response.Success)
 				return StatusCode(500);
-			return Ok();
+			return Ok(response.PublicationsIds);
 		}
 
 		[HttpPost("dawinci")]
 		public async Task<IActionResult> ImportDaWinci()
 		{
-			ImportDaWinciXmlCommand request = new ImportDaWinciXmlCommand();
-			using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+			ImportDaWinciXmlCommand request = new();
+			using (StreamReader reader = new(Request.Body, Encoding.UTF8))
 			{
 				request.XMLBody = await reader.ReadToEndAsync();
 			}
-			IActionResult validationResult = ValidateImportXmlCommand(request);
+			IActionResult? validationResult = ValidateImportXmlCommand(request);
 			if (validationResult != null)
 			{
 				return validationResult;
@@ -58,7 +58,7 @@ namespace ZUEPC.Application.Import.Controllers
 			ImportDaWinciXmlCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 				return StatusCode(500);
-			return Ok();
+			return Ok(response.PublicationsIds);
 		}
 
 		private IActionResult? ValidateImportXmlCommand(ImportXmlBaseCommand command)

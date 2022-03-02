@@ -24,7 +24,7 @@ public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, GetPersonQu
 		{
 			return new() { Success = false };
 		}
-		Person mappedPerson = _mapper.Map<Person>(request);
+		Person mappedPerson = _mapper.Map<Person>(personModel);
 		return new() { Success = true, Person = mappedPerson };
 	}
 }
