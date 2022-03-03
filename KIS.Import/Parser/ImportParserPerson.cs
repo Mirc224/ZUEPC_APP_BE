@@ -113,7 +113,7 @@ partial class ImportParser
 		string? lastName = null;
 
 		var nameElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-						  where element.Attribute(DAWINCI_CODE)?.Value == "a"
+						  where element.Attribute(DAWINCI_CODE)?.Value == "b"
 						  select element).FirstOrDefault();
 		if(nameElement != null)
 		{
@@ -121,7 +121,7 @@ partial class ImportParser
 		}
 
 		nameElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-						   where element.Attribute(DAWINCI_CODE)?.Value == "b"
+						   where element.Attribute(DAWINCI_CODE)?.Value == "a"
 						   select element).FirstOrDefault();
 		if (nameElement != null)
 		{

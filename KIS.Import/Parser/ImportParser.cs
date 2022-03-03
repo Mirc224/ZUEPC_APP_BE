@@ -15,7 +15,7 @@ public partial class ImportParser
 
 	private const string CREPC_IDENTIFIER_PREFIX = "crepc2";
 	
-	public static IEnumerable<ImportRecord> ParseCREPC(XDocument doc)
+	public static IEnumerable<ImportRecord> ParseCREPC(XElement doc)
 	{
 		string biblibsearch = "http://biblib.net/search/";
 		string xmlns = "http://www.crepc.sk/schema/xml-crepc2/";
@@ -77,7 +77,7 @@ public partial class ImportParser
 		return new DateTime(year, month, day);
 	}
 
-	public static IEnumerable<ImportRecord> ParseDaWinci(XDocument doc)
+	public static IEnumerable<ImportRecord> ParseDaWinci(XElement doc)
 	{
 		//XDocument doc = XDocument.Parse(stringDoc);
 		string marcns = "http://www.loc.gov/MARC21/slim";

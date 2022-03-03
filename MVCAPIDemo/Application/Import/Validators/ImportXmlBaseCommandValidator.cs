@@ -10,9 +10,9 @@ public class ImportXmlBaseCommandValidator : AbstractValidator<ImportXmlBaseComm
 {
 	public ImportXmlBaseCommandValidator(IStringLocalizer<DataAnnotations> localizer)
 	{
-		RuleFor(x => x.XMLBody)
-			.Must(x => IsValidXMLDocument(x))
-			.WithMessage(localizer["XMLDocumentNotValid"]);
+		//RuleFor(x => x.XMLBody)
+		//	.Must(x => IsValidXMLDocument(x))
+		//	.WithMessage(localizer["XMLDocumentNotValid"]);
 	}
 
 	private bool IsValidXMLDocument(string? docString)

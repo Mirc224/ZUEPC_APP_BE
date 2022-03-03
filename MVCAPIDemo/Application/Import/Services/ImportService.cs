@@ -23,7 +23,6 @@ public partial class ImportService
 		_mediator = mediator;
 	}
 
-
 	public async Task<ICollection<Publication>?> ImportFromCREPCXML(ImportCREPCXmlCommand command)
 	{
 		IEnumerable<ImportRecord>? result = ParseImportXMLCommand(command, OriginSourceType.CREPC);
@@ -38,18 +37,17 @@ public partial class ImportService
 
 	private IEnumerable<ImportRecord>? ParseImportXMLCommand(ImportXmlBaseCommand command, OriginSourceType source)
 	{
-		if (command.XMLBody is null)
+		if (command.XEelementBody is null)
 		{
 			return null;
 		}
-		XDocument? doc = XDocument.Parse(command.XMLBody);
 		if (source == OriginSourceType.CREPC)
 		{
-			return ImportParser.ParseCREPC(doc);
+			return ImportParser.ParseCREPC(command.XEelementBody);
 		}
 		if (source == OriginSourceType.DAWINCI)
 		{
-			return ImportParser.ParseDaWinci(doc);
+			return ImportParser.ParseDaWinci(command.XEelementBody);
 		}
 		return null;
 	}

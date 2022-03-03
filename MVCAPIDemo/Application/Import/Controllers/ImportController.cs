@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Text;
+using System.Xml.Linq;
 using ZUEPC.Application.Import.Commands;
 using ZUEPC.Application.Import.Validators;
 using ZUEPC.Localization;
@@ -22,18 +23,10 @@ namespace ZUEPC.Application.Import.Controllers
 		}
 
 		[HttpPost("crepc")]
-		public async Task<IActionResult> ImportCREPC()
+		[Consumes("application/xml")]
+		public async Task<IActionResult> ImportCREPC([FromBody] XElement input)
 		{
-			ImportCREPCXmlCommand request = new();
-			using (StreamReader reader = new(Request.Body, Encoding.UTF8))
-			{
-				request.XMLBody = await reader.ReadToEndAsync();
-			}
-			IActionResult? validationResult = ValidateImportXmlCommand(request);
-			if (validationResult != null)
-			{
-				return validationResult;
-			}
+			ImportCREPCXmlCommand request = new() { XEelementBody = input };
 
 			ImportCREPCXmlCommandResponse? response = await _mediator.Send(request);
 			if (!response.Success)
@@ -42,18 +35,10 @@ namespace ZUEPC.Application.Import.Controllers
 		}
 
 		[HttpPost("dawinci")]
-		public async Task<IActionResult> ImportDaWinci()
+		[Consumes("application/xml")]
+		public async Task<IActionResult> ImportDaWinci([FromBody] XElement input)
 		{
-			ImportDaWinciXmlCommand request = new();
-			using (StreamReader reader = new(Request.Body, Encoding.UTF8))
-			{
-				request.XMLBody = await reader.ReadToEndAsync();
-			}
-			IActionResult? validationResult = ValidateImportXmlCommand(request);
-			if (validationResult != null)
-			{
-				return validationResult;
-			}
+			ImportDaWinciXmlCommand request = new() { XEelementBody = input};
 
 			ImportDaWinciXmlCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)

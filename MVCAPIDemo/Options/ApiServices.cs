@@ -60,7 +60,8 @@ public static class ApiServices
             })
             .AddFluentValidation(
             fv => fv.RegisterValidatorsFromAssemblyContaining<Program>())
-			.AddNewtonsoftJson(); ;
+			.AddNewtonsoftJson()
+			.AddXmlSerializerFormatters();
 
 
 		builder.Services.AddLocalization();

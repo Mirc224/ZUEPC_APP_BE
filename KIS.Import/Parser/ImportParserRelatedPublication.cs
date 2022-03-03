@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportPublication;
 
@@ -10,10 +11,10 @@ partial class ImportParser
 	{
 		List<ImportRelatedPublication> result = new();
 
-		var relatedPublicationsElements = from node in publicationElement.Elements(XName.Get("cross_biblio_biblio", xmlns))
-										  select node;
+		IEnumerable<XElement> relatedPublicationsElements = from node in publicationElement.Elements(XName.Get("cross_biblio_biblio", xmlns))
+															 select node;
 
-		foreach (var relatedPublicationElement in relatedPublicationsElements)
+		foreach (XElement relatedPublicationElement in relatedPublicationsElements)
 		{
 			ImportRelatedPublication relatedPublication = new()
 			{
@@ -21,7 +22,7 @@ partial class ImportParser
 				relatedPublicationElement.Attribute("bond_type")?.Value.Trim()
 			};
 
-			var nestedPublicationElement = relatedPublicationElement.Element(XName.Get("rec_biblio", xmlns));
+			XElement? nestedPublicationElement = relatedPublicationElement.Element(XName.Get("rec_biblio", xmlns));
 			if (nestedPublicationElement is null)
 			{
 				continue;
@@ -38,9 +39,9 @@ partial class ImportParser
 	{
 		List<ImportRelatedPublication> result = new();
 
-		var sourceElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
-							 where element.Attribute(DAWINCI_TAG)?.Value == "463"
-							 select element).FirstOrDefault();
+		XElement? sourceElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
+								   where element.Attribute(DAWINCI_TAG)?.Value == "463"
+								   select element).FirstOrDefault();
 		if (sourceElement != null)
 		{
 			ImportRelatedPublication newRelatedPublication = new();
@@ -49,22 +50,22 @@ partial class ImportParser
 			result.Add(newRelatedPublication);
 		}
 
-		var relatedPublicationsElements = from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
-										  where element.Attribute(DAWINCI_TAG)?.Value == "976"
-										  select element;
+		IEnumerable<XElement> relatedPublicationsElements = from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
+															 where element.Attribute(DAWINCI_TAG)?.Value == "976"
+															 select element;
 
-		foreach (var relatedPublicationElement in relatedPublicationsElements)
+		foreach (XElement relatedPublicationElement in relatedPublicationsElements)
 		{
-			var parsedPublication = ParseDaWinciReferencePublication(relatedPublicationElement, xmlns);
+			ImportPublication? parsedPublication = ParseDaWinciReferencePublication(relatedPublicationElement, xmlns);
 			if (parsedPublication is null)
 			{
 				continue;
 			}
 
 			string? citationCategory = null;
-			var citationCategoryElement = (from element in relatedPublicationElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-										   where element.Attribute(DAWINCI_CODE)?.Value == "4"
-										   select element).FirstOrDefault();
+			XElement? citationCategoryElement = (from element in relatedPublicationElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+												 where element.Attribute(DAWINCI_CODE)?.Value == "4"
+												 select element).FirstOrDefault();
 			if (citationCategoryElement != null)
 			{
 				citationCategory = citationCategoryElement.Value.Trim();
@@ -93,35 +94,79 @@ partial class ImportParser
 		{
 			return default;
 		}
-		var publicationNames = new List<ImportPublicationName>() { new() { NameType = "title_proper", Name = publicationDetailsString } };
+		List<ImportPublicationName> publicationNames = new() { new() { NameType = "title_proper", Name = publicationDetailsString } };
 		ImportPublication result = new()
 		{
 			PublicationNames = publicationNames
 		};
 
-		int startIndexOfPubMetaData = publicationDetailsString.LastIndexOf("In: ");
-		if (startIndexOfPubMetaData == -1)
+		string[] wantedIdentifiers = new[] { "issn", "isbn", "ismn", "isrn", "isrc" };
+		string sourceDelimeter = ". In: ";
+		int startIndexOfPubMetaData = publicationDetailsString.LastIndexOf(sourceDelimeter);
+		ImportPublication? sourcePublication = null;
+		string? sourceMetadataString = null;
+		
+		if (startIndexOfPubMetaData != -1)
 		{
-			return result;
+			sourceMetadataString = publicationDetailsString[(startIndexOfPubMetaData + sourceDelimeter.Length)..];
+			sourcePublication = ParseDaWinciReferencePublicationSource(sourceMetadataString, wantedIdentifiers);
 		}
 		string publicationDetailSubstring = publicationDetailsString[startIndexOfPubMetaData..];
 
 		string? publicationName = publicationDetailsString[..startIndexOfPubMetaData];
-		publicationNames[0].Name = publicationName;
+		publicationNames[0].Name = publicationName.Trim();
 		List<ImportPublicationIdentifier> publicationIdentifiers = new();
 
-		var wantedIdentifiers = new string[] { "issn", "isbn",  "ismn", "isrn", "isrc"};
-		
-		foreach(var wantedIdentifier in wantedIdentifiers)
+		if(sourcePublication != null && sourceMetadataString != null)
 		{
-			var identifier = ParseDaWinciSearchForIdentifiersInPublicationDetailsString(publicationDetailsString, wantedIdentifier);
-			if(identifier != null)
+			string externIdentifier = Regex.Replace(sourceMetadataString, @"\s", "");
+			ImportPublicationExternDatabaseId externId = new() { ExternIdentifierValue = externIdentifier };
+			result.PublicationExternDbIds.Add(externId);
+			return result;
+		}
+
+		foreach (string? wantedIdentifier in wantedIdentifiers)
+		{
+			ImportPublicationIdentifier? identifier = ParseDaWinciSearchForIdentifiersInPublicationDetailsString(publicationDetailsString, wantedIdentifier);
+			if (identifier != null)
 			{
 				publicationIdentifiers.Add(identifier);
 			}
 		}
 		result.PublicationIdentifiers = publicationIdentifiers;
 		return result;
+	}
+	
+	private static ImportPublication? ParseDaWinciReferencePublicationSource(string sourceMetadataString, IEnumerable<string> wantedIdentifiers)
+	{
+		int startIndexOfIdentifier = -1;
+		string? foundIdentifier = null;
+		foreach (string identifierType in wantedIdentifiers)
+		{
+			startIndexOfIdentifier = sourceMetadataString.LastIndexOf(identifierType, StringComparison.OrdinalIgnoreCase);
+			if (startIndexOfIdentifier != -1)
+			{
+				foundIdentifier = identifierType;
+				break;
+			}
+		}
+		if (foundIdentifier is null)
+		{
+			return default;
+		}
+
+		int indexOfNextComma = sourceMetadataString.IndexOf(',', startIndexOfIdentifier);
+		string? idValue = sourceMetadataString[(startIndexOfIdentifier + foundIdentifier.Length)..indexOfNextComma].Trim();
+		ImportPublication resultPublication = new();
+		ImportPublicationIdentifier? identifier = PublicationIdCreator(foundIdentifier, idValue);
+		if (identifier != null)
+		{
+			resultPublication.PublicationIdentifiers.Add(identifier);
+		}
+		string publicationNameValue = sourceMetadataString[..(startIndexOfIdentifier)].Trim();
+		ImportPublicationName publicationName = new() { NameType = "title_proper", Name = publicationNameValue };
+		resultPublication.PublicationNames.Add(publicationName);
+		return resultPublication;
 	}
 
 	private static ImportPublicationIdentifier? ParseDaWinciSearchForIdentifiersInPublicationDetailsString(string publicationDetailsString, string wantedIdentifier)
@@ -132,7 +177,7 @@ partial class ImportParser
 			return default;
 		}
 		int indexOfNextComma = publicationDetailsString.IndexOf(',', startIndexOfIdentifier);
-		var idValue = publicationDetailsString[(startIndexOfIdentifier + wantedIdentifier.Length)..indexOfNextComma].Trim();
+		string? idValue = publicationDetailsString[(startIndexOfIdentifier + wantedIdentifier.Length)..indexOfNextComma].Trim();
 		return PublicationIdCreator(wantedIdentifier, idValue);
 	}
 
