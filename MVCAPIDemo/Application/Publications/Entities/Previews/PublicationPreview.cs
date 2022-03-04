@@ -6,7 +6,7 @@ namespace ZUEPC.Application.Publications.Entities.Previews;
 public class PublicationPreview
 {
 	public long Id { get; set; }
-	public ICollection<PublicationName>? PublicationNames { get; set; }
-	public ICollection<PublicationIdentifier>? PublicationIdentifiers { get; set; }
+	public ICollection<PublicationName>? Names { get; set; }
+	public ICollection<PublicationIdentifier>? Identifiers { get; set; }
 	public ICollection<PublicationAuthorDetails>? PublicationAuthors { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.Application.Persons.Entities.Previews;
+using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Queries.PersonNames;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
@@ -25,10 +26,14 @@ public class GetPersonPreviewQueryHandler : IRequestHandler<GetPersonPreviewQuer
 			return new() { Success = false };
 		}
 		PersonPreview resultPreview = _mapper.Map<PersonPreview>(personDomain);
-		resultPreview.PersonNames = (await _mediator.Send(new GetPersonNamesQuery()
+		resultPreview.Names = (await _mediator.Send(new GetPersonNamesQuery()
 		{ 
 			PersonId = personId 
 		})).PersonNames;
+		resultPreview.ExternDatabaseIds = (await _mediator.Send(new GetPersonExternDatabaseIdsQuery()
+		{
+			PersonId = personId
+		})).PersonExternDatabaseIds;
 		return new() { Success = true, PersonPreview = resultPreview };
 	}
 }

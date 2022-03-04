@@ -3,6 +3,8 @@ using MediatR;
 using System.Xml.Linq;
 using ZUEPC.Application.Import.Commands;
 using ZUEPC.Base.Enums.Common;
+using ZUEPC.DataAccess.Data.Publications;
+using ZUEPC.DataAccess.Data.RelatedPublications;
 using ZUEPC.EvidencePublication.Base.Commands;
 using ZUEPC.EvidencePublication.Base.Domain.Common;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
@@ -16,11 +18,29 @@ public partial class ImportService
 {
 	private readonly IMapper _mapper;
 	private readonly IMediator _mediator;
+	private readonly IPublicationData publiRepo;
+	private readonly IPublicationIdentifierData publiIentifierRepo;
+	private readonly IPublicationNameData publiNameRepo;
+	private readonly IPublicationExternDatabaseIdData publiExternIdRepo;
+	private readonly IRelatedPublicationData pubRelatedRepo;
 
-	public ImportService(IMapper mapper, IMediator mediator)
+	public ImportService(
+		IMapper mapper, 
+		IMediator mediator,
+		IPublicationData publiRepo,
+		IPublicationIdentifierData publiIentifierRepo,
+		IPublicationNameData publiNameRepo,
+		IPublicationExternDatabaseIdData publiExternIdRepo,
+		IRelatedPublicationData pubRelatedRepo
+		)
 	{
 		_mapper = mapper;
 		_mediator = mediator;
+		this.publiRepo = publiRepo;
+		this.publiIentifierRepo = publiIentifierRepo;
+		this.publiNameRepo = publiNameRepo;
+		this.publiExternIdRepo = publiExternIdRepo;
+		this.pubRelatedRepo = pubRelatedRepo;
 	}
 
 	public async Task<ICollection<Publication>?> ImportFromCREPCXML(ImportCREPCXmlCommand command)

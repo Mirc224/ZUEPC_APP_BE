@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.Application.Institutions.Entities.Previews;
+using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
@@ -25,7 +26,9 @@ public class GetInstitutionPreviewQueryHandler : IRequestHandler<GetInstitutionP
 			return new() { Success = false };
 		}
 		InstitutionPreview previewResult = _mapper.Map<InstitutionPreview>(institutionDomain);
-		previewResult.InstitutionNames = (await _mediator.Send(new GetInstitutionNamesQuery() { InstitutionId = institutionId })).InstitutionNames;
+		previewResult.Names = (await _mediator.Send(new GetInstitutionNamesQuery() { InstitutionId = institutionId })).InstitutionNames;
+		previewResult.ExternDatabaseIds = (await _mediator.Send(new GetInstitutionExternDatabaseIdsQuery() 
+		{ InstitutionId = institutionId })).InstitutionExternDatabaseIds;
 		return new() { Success = true, InstitutionPreview = previewResult };
 	}
 }

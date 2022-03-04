@@ -169,8 +169,8 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		PublicationIdentifier recordForUpdate = _mapper.Map<PublicationIdentifier>(importRecord);
-		recordForUpdate.PublicationId = currRecord.Id;
 		recordForUpdate.Id = currRecord.Id;
+		recordForUpdate.PublicationId = currRecord.PublicationId;
 		await UpdateRecordAsync<PublicationIdentifier, UpdatePublicationIdentifierCommand>(
 				recordForUpdate,
 				versionDate,
@@ -331,7 +331,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		PublicationName recordForUpdate = _mapper.Map<PublicationName>(importRecord);
-		recordForUpdate.PublicationId = currRecord.Id;
+		recordForUpdate.PublicationId = currRecord.PublicationId;
 		recordForUpdate.Id = currRecord.Id;
 		await UpdateRecordAsync<PublicationName, UpdatePublicationNameCommand>(
 				recordForUpdate,

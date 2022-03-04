@@ -1,5 +1,4 @@
 ﻿using ZUEPC.Application.PublicationAuthors.Entities.Details;
-using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
 using ZUEPC.Common.Entities;
 using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;

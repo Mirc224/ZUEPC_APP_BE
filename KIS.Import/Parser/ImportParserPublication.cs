@@ -156,8 +156,16 @@ partial class ImportParser
 
 		foreach (var recordElement in records)
 		{
+			string? idValue = recordElement.Element(XName.Get("database_id", xmlns))?.Value.Trim();
+			if(idValue is null ||
+			   idValue == "wos" ||
+			   idValue == "scopus" ||
+			   idValue == "ccc")
+			{
+				continue;
+			}
 			ImportPublicationExternDatabaseId publicationExterDbId = new();
-			publicationExterDbId.ExternIdentifierValue = recordElement.Element(XName.Get("database_id", xmlns))?.Value.Trim();
+			publicationExterDbId.ExternIdentifierValue = idValue;
 			result.Add(publicationExterDbId);
 		}
 
