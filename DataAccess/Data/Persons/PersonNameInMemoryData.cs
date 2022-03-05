@@ -8,13 +8,13 @@ public class PersonNameInMemoryData : InMemoryBaseRepository<PersonNameModel>, I
 
 	public async Task<int> DeletePersonNameByIdAsync(long id)
 	{
-		var deletedObjects = _repository.Where(x => x.Id == id);
+		var deletedObjects = _repository.Where(x => x.Id == id).ToList();
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
 	public async Task<int> DeletePersonNameByPersonIdAsync(long personId)
 	{
-		var deletedObjects = _repository.Where(x => x.PersonId == personId);
+		var deletedObjects = _repository.Where(x => x.PersonId == personId).ToList();
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 

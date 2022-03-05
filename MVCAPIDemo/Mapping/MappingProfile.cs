@@ -5,10 +5,17 @@ using ZUEPC.Application.Auth.Commands;
 using ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Commands.InstitutionNames;
 using ZUEPC.Application.Institutions.Commands.Institutions;
+using ZUEPC.Application.Institutions.Entities.Details;
+using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseIds;
+using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
 using ZUEPC.Application.Institutions.Entities.Previews;
 using ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Commands.PersonNames;
 using ZUEPC.Application.Persons.Commands.Persons;
+using ZUEPC.Application.Persons.Entities.Details;
+using ZUEPC.Application.Persons.Entities.Inputs;
+using ZUEPC.Application.Persons.Entities.Inputs.PersonExternDatabaseIds;
+using ZUEPC.Application.Persons.Entities.Inputs.PersonNames;
 using ZUEPC.Application.Persons.Entities.Previews;
 using ZUEPC.Application.PublicationActivities.Commands;
 using ZUEPC.Application.PublicationAuthors.Commands;
@@ -23,6 +30,7 @@ using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
 using ZUEPC.Auth.Domain;
 using ZUEPC.Common.Entities;
+using ZUEPC.Common.Entities.Inputs;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.DataAccess.Models.Institution;
 using ZUEPC.DataAccess.Models.Person;
@@ -63,6 +71,92 @@ public class MappingProfile : Profile
 
 		CreateDomainToDetailMapping();
 		CreateDomainToPreviewMapping();
+
+		CreateCommandToCommandMapping();
+		
+		CreateInputDtoToCommandMapping();
+	}
+
+	private void CreateInputDtoToCommandMapping()
+	{
+		CreateMap<EPCBaseDto, EPCCreateBaseCommand>()
+			.ForMember(dest => dest.VersionDate, opts => opts.MapFrom(src => src.VersionDate))
+			.ForMember(dest => dest.OriginSourceType, opts => opts.MapFrom(src => src.OriginSourceType));
+
+		CreateMap<EPCBaseDto, EPCUpdateBaseCommand>()
+			.ForMember(dest => dest.VersionDate, opts => opts.MapFrom(src => src.VersionDate))
+			.ForMember(dest => dest.OriginSourceType, opts => opts.MapFrom(src => src.OriginSourceType));
+
+		CreateMap<PersonNameCreateDto, CreatePersonNameCommand>()
+			.IncludeBase<EPCBaseDto, EPCCreateBaseCommand>()
+			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
+			.ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
+			.ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
+			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType));
+
+		CreateMap<PersonNameUpdateDto, UpdatePersonNameCommand>()
+			.IncludeBase<EPCBaseDto, EPCUpdateBaseCommand>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
+			.ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
+			.ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
+			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType));
+
+		CreateMap<PersonExternDatabaseIdCreateDto, CreatePersonExternDatabaseIdCommand>()
+			.IncludeBase<EPCBaseDto, EPCCreateBaseCommand>()
+			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
+		
+		CreateMap<PersonExternDatabaseIdUpdateDto, UpdatePersonExternDatabaseIdCommand>()
+			.IncludeBase<EPCBaseDto, EPCUpdateBaseCommand>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
+
+		CreateMap<InstitutionNameCreateDto, CreateInstitutionNameCommand>()
+			.IncludeBase<EPCBaseDto, EPCCreateBaseCommand>()
+			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
+			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType))
+			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name));
+
+		CreateMap<InstitutionNameUpdateDto, UpdateInstitutionNameCommand>()
+			.IncludeBase<EPCBaseDto, EPCUpdateBaseCommand>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
+			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType))
+			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name));
+
+		CreateMap<InstitutionExternDatabaseIdCreateDto, CreateInstitutionExternDatabaseIdCommand>()
+			.IncludeBase<EPCBaseDto, EPCCreateBaseCommand>()
+			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
+
+		CreateMap<InstitutionExternDatabaseIdUpdateDto, UpdateInstitutionExternDatabaseIdCommand>()
+			.IncludeBase<EPCBaseDto, EPCUpdateBaseCommand>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
+	}
+
+	private void CreateCommandToCommandMapping()
+	{
+		CreateMap<CreatePersonWithDetailsCommand, CreatePersonCommand>()
+			.ForMember(dest => dest.BirthYear, opts => opts.MapFrom(src => src.BirthYear))
+			.ForMember(dest => dest.DeathYear, opts => opts.MapFrom(src => src.DeathYear));
+
+		CreateMap<UpdatePersonWithDetailsCommand, UpdatePersonCommand>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.BirthYear, opts => opts.MapFrom(src => src.BirthYear))
+			.ForMember(dest => dest.DeathYear, opts => opts.MapFrom(src => src.DeathYear));
+
+		CreateMap<CreateInstitutionWithDetailsCommand, CreateInstitutionCommand>()
+			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
+			.ForMember(dest => dest.InstititutionType, opts => opts.MapFrom(src => src.InstitutionType));
+
+		//CreateMap<UpdateInstitutionWithDetailsCommand, UpdateInstitutionCommand>()
+		//	.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+		//	.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
+		//	.ForMember(dest => dest.InstititutionType, opts => opts.MapFrom(src => src.InstitutionType));
 	}
 
 	private void CreateDomainToPreviewMapping()
@@ -94,6 +188,11 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.DocumentType, opts => opts.MapFrom(src => src.DocumentType))
 			.ForMember(dest => dest.PublishYear, opts => opts.MapFrom(src => src.PublishYear));
 
+		CreateMap<Institution, InstitutionDetails>()
+			.IncludeBase<EPCBase, DetailsBase>()
+			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
+			.ForMember(dest => dest.InstitutionType, opts => opts.MapFrom(src => src.InstitutionType));
+
 		CreateMap<PublicationAuthor, PublicationAuthorDetails>()
 			.IncludeBase<EPCBase, DetailsBase>()
 			.ForMember(dest => dest.ContributionRatio, opts => opts.MapFrom(src => src.ContributionRatio))
@@ -104,6 +203,10 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.RelationType, opts => opts.MapFrom(src => src.RelationType))
 			.ForMember(dest => dest.CitationCategory, opts => opts.MapFrom(src => src.CitationCategory));
 
+		CreateMap<Person, PersonDetails>()
+			.IncludeBase<EPCBase, DetailsBase>()
+			.ForMember(dest => dest.BirthYear, opts => opts.MapFrom(src => src.BirthYear))
+			.ForMember(dest => dest.DeathYear, opts => opts.MapFrom(src => src.DeathYear));
 	}
 
 	private void CreateUserMapping()

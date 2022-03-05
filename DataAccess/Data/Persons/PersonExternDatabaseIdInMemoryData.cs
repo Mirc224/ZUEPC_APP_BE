@@ -7,13 +7,13 @@ public class PersonExternDatabaseIdInMemoryData : InMemoryBaseRepository<PersonE
 {
 	public async Task<int> DeletePersonExternDatabaseIdByIdAsync(long id)
 	{
-		var deletedObjects = _repository.Where(x => x.Id == id);
+		var deletedObjects = _repository.Where(x => x.Id == id).ToList();
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
 	public async Task<int> DeletePersonExternDatabaseIdsByPersonIdAsync(long personId)
 	{
-		var deletedObjects = _repository.Where(x => x.PersonId == personId);
+		var deletedObjects = _repository.Where(x => x.PersonId == personId).ToList();
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 

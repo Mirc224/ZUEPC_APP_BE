@@ -29,7 +29,7 @@ public class CreateInstitutionNameCommandHandler :
 		}
 		long insertedId = await _repository.InsertInstitutionNameAsync(insertModel);
 		InstitutionName domain = _mapper.Map<InstitutionName>(insertModel);
-		domain.InstitutionId = insertedId;
+		domain.Id = insertedId;
 
 		return new() { Success = true, InstitutionName = domain };
 	}

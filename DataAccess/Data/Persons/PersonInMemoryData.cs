@@ -7,7 +7,7 @@ public class PersonInMemoryData : InMemoryBaseRepository<PersonModel>, IPersonDa
 {
 	public async Task<int> DeletePersonByIdAsync(long id)
 	{
-		var deletedObjects = _repository.Where(x => x.Id == id);
+		var deletedObjects = _repository.Where(x => x.Id == id).ToList();
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
