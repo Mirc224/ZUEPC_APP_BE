@@ -65,6 +65,6 @@ public class PersonController : ControllerBase
 		{
 			return BadRequest();
 		}
-		return Ok(response.CreatedPersonDetails);
+		return StatusCode(201, response.CreatedPersonDetails);
 	}
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ZUEPC.Application.Institutions.Commands.Institutions;
 using ZUEPC.Application.Institutions.Queries.Institutions.Details;
+using ZUEPC.Application.Persons.Commands.Persons;
 using ZUEPC.Base.Enums.Common;
 
 namespace ZUEPC.Application.Institutions.Controllers;
@@ -41,19 +42,19 @@ public class InstitutionController : ControllerBase
 		return NoContent();
 	}
 
-	//[HttpPut("{id}")]
-	//public async Task<IActionResult> UpdatePerson([FromBody] UpdateInstitutionWithDetailsCommand request, [FromRoute] long id)
-	//{
-	//	request.Id = id;
-	//	request.OriginSourceType = OriginSourceType.ZUEPC;
-	//	request.VersionDate = DateTime.Now;
-	//	UpdatePersonWithDetailsCommandResponse response = await _mediator.Send(request);
-	//	if (!response.Success)
-	//	{
-	//		return NotFound();
-	//	}
-	//	return Ok();
-	//}
+	[HttpPut("{id}")]
+	public async Task<IActionResult> UpdatePerson([FromBody] UpdateInstitutionWithDetailsCommand request, [FromRoute] long id)
+	{
+		request.Id = id;
+		request.OriginSourceType = OriginSourceType.ZUEPC;
+		request.VersionDate = DateTime.Now;
+		UpdateInstitutionWithDetailsCommandResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok();
+	}
 
 	[HttpPost]
 	public async Task<IActionResult> CreateInstitution(CreateInstitutionWithDetailsCommand request)
@@ -65,7 +66,7 @@ public class InstitutionController : ControllerBase
 		{
 			return BadRequest();
 		}
-		return Ok(response.CreatedInstitutionDetails);
+		return StatusCode(201, response.CreatedInstitutionDetails);
 	}
 }
 

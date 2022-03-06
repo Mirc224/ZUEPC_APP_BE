@@ -26,31 +26,46 @@ public class CreatePersonWithDetailsCommandHandler : IRequestHandler<CreatePerso
 		CreatePersonCommand createPersonCommand = _mapper.Map<CreatePersonCommand>(request);
 		Person createdPerson = (await _mediator.Send(createPersonCommand)).Person;
 		PersonDetails responseObject = _mapper.Map<PersonDetails>(createdPerson);
+		long personId = createdPerson.Id;
+		
+		responseObject.Names = await ProcessPersonNamesAsync(request, personId);
 
+		
+		responseObject.ExternDatabaseIds = await ProcessPersonExternDatabaseIdsAsync(request, personId);
+		return new() { Success = true, CreatedPersonDetails = responseObject};
+	}
+
+	private async Task<ICollection<PersonName>> ProcessPersonNamesAsync(
+		CreatePersonWithDetailsCommand request, 
+		long personId)
+	{
 		List<PersonName> personNames = new();
-		foreach(PersonNameCreateDto name in request.Names.OrEmptyIfNull())
+		foreach (PersonNameCreateDto name in request.Names.OrEmptyIfNull())
 		{
-			name.PersonId = createdPerson.Id;
+			name.PersonId = personId;
 			name.VersionDate = request.VersionDate;
 			name.OriginSourceType = request.OriginSourceType;
 			CreatePersonNameCommand createPersonNameCommand = _mapper.Map<CreatePersonNameCommand>(name);
 			PersonName createdName = (await _mediator.Send(createPersonNameCommand)).PersonName;
 			personNames.Add(createdName);
 		}
-		responseObject.Names = personNames;
+		return personNames;
+	}
 
+	private async Task<ICollection<PersonExternDatabaseId>> ProcessPersonExternDatabaseIdsAsync(
+		CreatePersonWithDetailsCommand request,
+		long personId)
+	{
 		List<PersonExternDatabaseId> personExternIds = new();
 		foreach (PersonExternDatabaseIdCreateDto externIdentifier in request.ExternDatabaseIds.OrEmptyIfNull())
 		{
-			externIdentifier.PersonId = createdPerson.Id;
+			externIdentifier.PersonId = personId;
 			externIdentifier.VersionDate = request.VersionDate;
 			externIdentifier.OriginSourceType = request.OriginSourceType;
 			CreatePersonExternDatabaseIdCommand? createPersonIdentifierCommand = _mapper.Map<CreatePersonExternDatabaseIdCommand>(externIdentifier);
 			PersonExternDatabaseId createdExternDbId = (await _mediator.Send(createPersonIdentifierCommand)).PersonExternDatabaseId;
 			personExternIds.Add(createdExternDbId);
 		}
-		responseObject.ExternDatabaseIds = personExternIds;
-		return new() { Success = true, CreatedPersonDetails = responseObject};
+		return personExternIds;
 	}
-
 }

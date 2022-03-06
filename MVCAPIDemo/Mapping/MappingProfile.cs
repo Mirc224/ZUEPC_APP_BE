@@ -153,10 +153,11 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
 			.ForMember(dest => dest.InstititutionType, opts => opts.MapFrom(src => src.InstitutionType));
 
-		//CreateMap<UpdateInstitutionWithDetailsCommand, UpdateInstitutionCommand>()
-		//	.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
-		//	.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
-		//	.ForMember(dest => dest.InstititutionType, opts => opts.MapFrom(src => src.InstitutionType));
+		CreateMap<UpdateInstitutionWithDetailsCommand, UpdateInstitutionCommand>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
+			.ForMember(dest => dest.InstititutionType, opts => opts.MapFrom(src => src.InstitutionType));
+
 	}
 
 	private void CreateDomainToPreviewMapping()

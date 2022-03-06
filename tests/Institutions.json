@@ -1,0 +1,419 @@
+{
+	"info": {
+		"_postman_id": "f1668d52-76fb-49bb-bfad-f22f14c9952e",
+		"name": "Institutions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CRUDOperations",
+			"item": [
+				{
+					"name": "CreateInstitutionWithDetails",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Level\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Institution.InstitutionType\", generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name1\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType1\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType3\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create institution should return status code 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Institution.Created.Id\", response.id);\r",
+									"\r",
+									"    pm.environment.set(\"Temp.Institution.Created.Name1.Id\", response.names[0].id);\r",
+									"\r",
+									"    pm.environment.set(\"Temp.Institution.Created.Name2.Id\", response.names[1].id);\r",
+									"    \r",
+									"    pm.environment.set(\"Temp.Institution.Created.Name3.Id\", response.names[2].id);\r",
+									"\r",
+									"    pm.environment.set(\"Temp.Institution.Created.ExternId1.Id\", response.externDatabaseIds[0].id);\r",
+									"\r",
+									"    pm.environment.set(\"Temp.Institution.Created.ExternId2.Id\", response.externDatabaseIds[1].id);\r",
+									"    \r",
+									"    pm.environment.set(\"Temp.Institution.Created.ExternId3.Id\", response.externDatabaseIds[2].id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"level\": {{Temp.Institution.Level}},\r\n    \"institutionType\": \"{{Temp.Institution.InstitutionType}}\",\r\n    \"names\": [\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType1}}\",\r\n            \"name\": \"{{Temp.Institution.Name1}}\"\r\n        },\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType2}}\",\r\n            \"name\": \"{{Temp.Institution.Name2}}\"\r\n        },\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType3}}\",\r\n            \"name\": \"{{Temp.Institution.Name3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIds\":[\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId1}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId2}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId3}}\"\r\n        }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetInstitutionById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get institution should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Institution should have correct level.\", function () {\r",
+									"        pm.expect(response.level).to.be.eql(pm.environment.get(\"Temp.Institution.Level\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Institution should have correct institution type.\", function () {\r",
+									"        pm.expect(response.institutionType).to.be.eql(pm.environment.get(\"Temp.Institution.InstitutionType\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Create institution should have correct institution names.\", function () {\r",
+									"        pm.expect(response.names.length).to.be.eql(3);\r",
+									"        pm.test(\"Institution should have correct first institution name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.Name1.Id\");\r",
+									"            var nameObject = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject.name).to.be.eql(pm.environment.get(\"Temp.Institution.Name1\"));\r",
+									"            pm.expect(nameObject.nameType).to.be.eql(pm.environment.get(\"Temp.Institution.NameType1\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Institution should have correct second institution name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.Name2.Id\");\r",
+									"            var nameObject = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject.name).to.be.eql(pm.environment.get(\"Temp.Institution.Name2\"));\r",
+									"            pm.expect(nameObject.nameType).to.be.eql(pm.environment.get(\"Temp.Institution.NameType2\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Institution should have correct third institution name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.Name3.Id\");\r",
+									"            var nameObject = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject.name).to.be.eql(pm.environment.get(\"Temp.Institution.Name3\"));\r",
+									"            pm.expect(nameObject.nameType).to.be.eql(pm.environment.get(\"Temp.Institution.NameType3\"));\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Institution should have correct extern database ids.\", function () {\r",
+									"        pm.expect(response.externDatabaseIds.length).to.be.eql(3);\r",
+									"        pm.test(\"Institution should have correct first extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.ExternId1.Id\");\r",
+									"            var externDbId = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Institution.ExternDbId1\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Institution should have correct second extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.ExternId2.Id\");\r",
+									"            var externDbId = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Institution.ExternDbId2\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Institution should have correct third extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.ExternId3.Id\");\r",
+									"            var externDbId = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Institution.ExternDbId3\"));\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution",
+								"{{Temp.Institution.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateInstitutionById",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Level\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Institution.InstitutionType\", generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType3\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Update institution should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"level\": {{Temp.Institution.Level}},\r\n    \"institutionType\": \"{{Temp.Institution.InstitutionType}}\",\r\n    \"namesToInsert\": [\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType3}}\",\r\n            \"name\": \"{{Temp.Institution.Name3}}\"\r\n        }\r\n    ],\r\n    \"namesToUpdate\": [\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType2}}\",\r\n            \"name\": \"{{Temp.Institution.Name2}}\",\r\n            \"id\" : {{Temp.Institution.Created.Name2.Id}}\r\n        }\r\n    ],\r\n    \"namesToDelete\": [ {{Temp.Institution.Created.Name3.Id}} ],\r\n    \"externDatabaseIdsToInsert\" : [\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIdsToUpdate\" : [\r\n        {\r\n            \"id\" : {{Temp.Institution.Created.ExternId2.Id}},\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId2}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIdsToDelete\" : [ {{Temp.Institution.Created.ExternId3.Id}} ] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution",
+								"{{Temp.Institution.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetInstitutionAfterUpdate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get institution should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Institution should have correct level.\", function () {\r",
+									"        pm.expect(response.level).to.be.eql(pm.environment.get(\"Temp.Institution.Level\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Person should have correct institution type.\", function () {\r",
+									"        pm.expect(response.institutionType).to.be.eql(pm.environment.get(\"Temp.Institution.InstitutionType\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Create institution should have correct institution names.\", function () {\r",
+									"        pm.expect(response.names.length).to.be.eql(3);\r",
+									"        pm.test(\"Person should have correct first institution name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.Name1.Id\");\r",
+									"            var nameObject = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject.name).to.be.eql(pm.environment.get(\"Temp.Institution.Name1\"));\r",
+									"            pm.expect(nameObject.nameType).to.be.eql(pm.environment.get(\"Temp.Institution.NameType1\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct second institution name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.Name2.Id\");\r",
+									"            var nameObject = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject.name).to.be.eql(pm.environment.get(\"Temp.Institution.Name2\"));\r",
+									"            pm.expect(nameObject.nameType).to.be.eql(pm.environment.get(\"Temp.Institution.NameType2\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct third institution name object.\", function(){\r",
+									"            var nameObject = response.names.find(x => x.name === pm.environment.get(\"Temp.Institution.Name3\"));\r",
+									"            pm.expect(nameObject.name).to.be.eql(pm.environment.get(\"Temp.Institution.Name3\"));\r",
+									"            pm.expect(nameObject.nameType).to.be.eql(pm.environment.get(\"Temp.Institution.NameType3\"));\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Institution should have correct extern database ids.\", function () {\r",
+									"        pm.expect(response.externDatabaseIds.length).to.be.eql(3);\r",
+									"        pm.test(\"Institution should have correct first extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.ExternId1.Id\");\r",
+									"            var externDbId = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Institution.ExternDbId1\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Institution should have correct second extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.ExternId2.Id\");\r",
+									"            var externDbId = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Institution.ExternDbId2\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Institution should have correct third extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Institution.Created.ExternId3.Id\");\r",
+									"            var externDbId = response.externDatabaseIds.find(x => x.externIdentifierValue === pm.environment.get(\"Temp.Institution.ExternDbId3\"));\r",
+									"            pm.expect(externDbId.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Institution.ExternDbId3\"));\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution",
+								"{{Temp.Institution.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteInstitutionById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Delete institution should return status code 204.\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution",
+								"{{Temp.Institution.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VerifyInstitutionAfterDelete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get institution after should return status code 404.\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution",
+								"{{Temp.Institution.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

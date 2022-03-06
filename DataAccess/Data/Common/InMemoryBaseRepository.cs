@@ -10,6 +10,7 @@ public abstract class InMemoryBaseRepository<T>
 
 	protected async Task<int> DeleteRecordsAsync(IEnumerable<T> deletedObjects)
 	{
+		deletedObjects = deletedObjects.ToList();
 		foreach (var deletedObject in deletedObjects)
 		{
 			_repository.Remove(deletedObject);

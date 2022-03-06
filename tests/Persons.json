@@ -1,0 +1,432 @@
+{
+	"info": {
+		"_postman_id": "6849eec1-88c5-4c53-a4d4-2426a9d50a40",
+		"name": "Person",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CRUDOperations",
+			"item": [
+				{
+					"name": "CreatePersonWithDetails",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.BirthYear\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Person.DeathYear\", 1900 + getRandomInt(70));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName1\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType1\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName3\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType3\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create person should return status code 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Person.Created.Id\", response.id);\r",
+									"\r",
+									"    pm.environment.set(\"Temp.Person.Created.PersonName1.Id\", response.names[0].id);\r",
+									"\r",
+									"    pm.environment.set(\"Temp.Person.Created.PersonName2.Id\", response.names[1].id);\r",
+									"    \r",
+									"    pm.environment.set(\"Temp.Person.Created.PersonName3.Id\", response.names[2].id);\r",
+									"\r",
+									"    pm.environment.set(\"Temp.Person.Created.PersonExternId1.Id\", response.externDatabaseIds[0].id);\r",
+									"\r",
+									"    pm.environment.set(\"Temp.Person.Created.PersonExternId2.Id\", response.externDatabaseIds[1].id);\r",
+									"    \r",
+									"    pm.environment.set(\"Temp.Person.Created.PersonExternId3.Id\", response.externDatabaseIds[2].id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthYear\" : \"{{Temp.Person.BirthYear}}\",\r\n    \"deathYear\" : \"{{Temp.Person.DeathYear}}\",\r\n    \"names\": [\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName1}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName1}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType1}}\"\r\n        },\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName2}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName2}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType2}}\"\r\n        },\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName3}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName3}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIds\":[\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId1}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId2}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId3}}\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPersonById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get person should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Person should have correct birth date.\", function () {\r",
+									"        pm.expect(response.birthYear).to.be.eql(pm.environment.get(\"Temp.Person.BirthYear\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Person should have correct death date.\", function () {\r",
+									"        pm.expect(response.deathYear).to.be.eql(pm.environment.get(\"Temp.Person.DeathYear\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Create person should have correct person names.\", function () {\r",
+									"        pm.expect(response.names.length).to.be.eql(3);\r",
+									"        pm.test(\"Person should have correct first person name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonName1.Id\");\r",
+									"            var nameObject1 = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject1.firstName).to.be.eql(pm.environment.get(\"Temp.Person.FirstName1\"));\r",
+									"            pm.expect(nameObject1.lastName).to.be.eql(pm.environment.get(\"Temp.Person.LastName1\"));\r",
+									"            pm.expect(nameObject1.nameType).to.be.eql(pm.environment.get(\"Temp.Person.NameType1\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct second person name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonName2.Id\");\r",
+									"            var nameObject2 = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject2.firstName).to.be.eql(pm.environment.get(\"Temp.Person.FirstName2\"));\r",
+									"            pm.expect(nameObject2.lastName).to.be.eql(pm.environment.get(\"Temp.Person.LastName2\"));\r",
+									"            pm.expect(nameObject2.nameType).to.be.eql(pm.environment.get(\"Temp.Person.NameType2\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct third person name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonName3.Id\");\r",
+									"            var nameObject3 = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject3.firstName).to.be.eql(pm.environment.get(\"Temp.Person.FirstName3\"));\r",
+									"            pm.expect(nameObject3.lastName).to.be.eql(pm.environment.get(\"Temp.Person.LastName3\"));\r",
+									"            pm.expect(nameObject3.nameType).to.be.eql(pm.environment.get(\"Temp.Person.NameType3\"));\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Person should have correct extern database ids.\", function () {\r",
+									"        pm.expect(response.externDatabaseIds.length).to.be.eql(3);\r",
+									"        pm.test(\"Person should have correct first person extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonExternId1.Id\");\r",
+									"            var externDbId1 = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId1.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Person.ExternDbId1\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct second person extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonExternId2.Id\");\r",
+									"            var externDbId2 = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId2.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Person.ExternDbId2\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct third person extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonExternId3.Id\");\r",
+									"            var externDbId3 = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId3.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Person.ExternDbId3\"));\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person",
+								"{{Temp.Person.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdatePersonById",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.BirthYear\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Person.DeathYear\", 1900 + getRandomInt(70));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName3\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType3\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType2\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId3\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId2\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Update person should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthYear\": {{Temp.Person.BirthYear}},\r\n    \"deathYear\": {{Temp.Person.DeathYear}},\r\n    \"namesToInsert\": [\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName3}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName3}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType3}}\"\r\n        }\r\n    ],\r\n    \"namesToUpdate\": [\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName2}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName2}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType2}}\",\r\n            \"id\": {{Temp.Person.Created.PersonName2.Id}}\r\n        }\r\n    ],\r\n    \"namesToDelete\": [ {{Temp.Person.Created.PersonName3.Id}} ],\r\n    \"externDatabaseIdsToInsert\" : [\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIdsToUpdate\" : [\r\n        {\r\n            \"id\" : {{Temp.Person.Created.PersonExternId2.Id}},\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId2}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIdsToDelete\" : [ {{Temp.Person.Created.PersonExternId3.Id}}] \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person",
+								"{{Temp.Person.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VerifyPersonAfterUpdate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify person should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var response = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Person should have correct birth date.\", function () {\r",
+									"        pm.expect(response.birthYear).to.be.eql(pm.environment.get(\"Temp.Person.BirthYear\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Person should have correct death date.\", function () {\r",
+									"        pm.expect(response.deathYear).to.be.eql(pm.environment.get(\"Temp.Person.DeathYear\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Create person should have correct person names.\", function () {\r",
+									"        pm.expect(response.names.length).to.be.eql(3);\r",
+									"        pm.test(\"Person should have correct first person name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonName1.Id\");\r",
+									"            var nameObject1 = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject1.firstName).to.be.eql(pm.environment.get(\"Temp.Person.FirstName1\"));\r",
+									"            pm.expect(nameObject1.lastName).to.be.eql(pm.environment.get(\"Temp.Person.LastName1\"));\r",
+									"            pm.expect(nameObject1.nameType).to.be.eql(pm.environment.get(\"Temp.Person.NameType1\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct second person name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonName2.Id\");\r",
+									"            var nameObject2 = response.names.find(x => x.id === id);\r",
+									"            pm.expect(nameObject2.firstName).to.be.eql(pm.environment.get(\"Temp.Person.FirstName2\"));\r",
+									"            pm.expect(nameObject2.lastName).to.be.eql(pm.environment.get(\"Temp.Person.LastName2\"));\r",
+									"            pm.expect(nameObject2.nameType).to.be.eql(pm.environment.get(\"Temp.Person.NameType2\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct third person name object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonName3.Id\");\r",
+									"            var nameObject3 = response.names.find(x => x.nameType === pm.environment.get(\"Temp.Person.NameType3\"));\r",
+									"            pm.expect(nameObject3.firstName).to.be.eql(pm.environment.get(\"Temp.Person.FirstName3\"));\r",
+									"            pm.expect(nameObject3.lastName).to.be.eql(pm.environment.get(\"Temp.Person.LastName3\"));\r",
+									"            pm.expect(nameObject3.nameType).to.be.eql(pm.environment.get(\"Temp.Person.NameType3\"));\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Person should have correct extern database ids.\", function () {\r",
+									"        pm.expect(response.externDatabaseIds.length).to.be.eql(3);\r",
+									"        pm.test(\"Person should have correct first person extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonExternId1.Id\");\r",
+									"            var externDbId1 = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId1.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Person.ExternDbId1\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct second person extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonExternId2.Id\");\r",
+									"            var externDbId2 = response.externDatabaseIds.find(x => x.id === id);\r",
+									"            pm.expect(externDbId2.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Person.ExternDbId2\"));\r",
+									"        });\r",
+									"\r",
+									"        pm.test(\"Person should have correct third person extern database id object.\", function(){\r",
+									"            var id = pm.environment.get(\"Temp.Person.Created.PersonExternId3.Id\");\r",
+									"            var externDbId3 = response.externDatabaseIds.find(x => x.externIdentifierValue === pm.environment.get(\"Temp.Person.ExternDbId3\"));\r",
+									"            pm.expect(externDbId3.externIdentifierValue).to.be.eql(pm.environment.get(\"Temp.Person.ExternDbId3\"));\r",
+									"        });\r",
+									"    });\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person",
+								"{{Temp.Person.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePersonById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Delete person should return status code 204.\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person",
+								"{{Temp.Person.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VerifyPersonAfterDelete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get person should return status code 404.\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person",
+								"{{Temp.Person.Created.Id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
