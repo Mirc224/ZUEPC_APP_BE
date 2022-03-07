@@ -22,7 +22,7 @@ public class GetPublicationAuthorsPreviewsQueryHandler : IRequestHandler<GetPubl
 	{
 		long publicationId = request.PublicationId;
 		ICollection<PublicationAuthor> pubAuthorDomain = (await _mediator.Send(new GetPublicationAuthorsQuery() 
-															{ PublicationId = publicationId })).PublicationAuthors;
+															{ PublicationId = publicationId })).Authors;
 		List<PublicationAuthorDetails> resultAuthorsList = new List<PublicationAuthorDetails>();
 		foreach(PublicationAuthor author in pubAuthorDomain)
 		{

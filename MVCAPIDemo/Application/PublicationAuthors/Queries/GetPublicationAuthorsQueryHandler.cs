@@ -20,6 +20,6 @@ public class GetPublicationAuthorsQueryHandler : IRequestHandler<GetPublicationA
 	{
 		IEnumerable<PublicationAuthorModel> queryResult = await _repository.GetPublicationAuthorByPublicationIdAsync(request.PublicationId);
 		List<PublicationAuthor> mappedResult = _mapper.Map<List<PublicationAuthor>>(queryResult);
-		return new() { Success = true, PublicationAuthors = mappedResult };
+		return new() { Success = true, Authors = mappedResult };
 	}
 }

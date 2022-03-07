@@ -2,6 +2,7 @@
 using MediatR;
 using ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Commands.InstitutionNames;
+using ZUEPC.Application.Institutions.Entities.Inputs.Common;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
 using ZUEPC.Common.Extensions;
@@ -40,27 +41,19 @@ public class UpdateInstitutionWithDetailsCommandHandler :
 		long institutionId = request.Id;
 		foreach (long idToDelete in request.ExternDatabaseIdsToDelete.OrEmptyIfNull())
 		{
-			DeleteInstitutionExternDatabaseIdsCommand deleteCommand = new() { Id = idToDelete };
+			DeleteInstitutionExternDatabaseIdCommand deleteCommand = new() { Id = idToDelete };
 			await _mediator.Send(deleteCommand);
 		}
 
-		foreach (InstitutionExternDatabaseIdUpdateDto externDbId in request.ExternDatabaseIdsToUpdate.OrEmptyIfNull())
-		{
-			externDbId.InstitutionId = institutionId;
-			externDbId.VersionDate = request.VersionDate;
-			externDbId.OriginSourceType = request.OriginSourceType;
-			UpdateInstitutionExternDatabaseIdCommand updateCommand = _mapper.Map<UpdateInstitutionExternDatabaseIdCommand>(externDbId);
-			await _mediator.Send(updateCommand);
-		}
+		await ProcessInstitutionPropertyAsync<InstitutionExternDatabaseIdUpdateDto, UpdateInstitutionExternDatabaseIdCommand>(
+			request,
+			request.ExternDatabaseIdsToUpdate,
+			institutionId);
 
-		foreach (InstitutionExternDatabaseIdCreateDto externDbId in request.ExternDatabaseIdsToInsert.OrEmptyIfNull())
-		{
-			externDbId.InstitutionId = institutionId;
-			externDbId.VersionDate = request.VersionDate;
-			externDbId.OriginSourceType = request.OriginSourceType;
-			CreateInstitutionExternDatabaseIdCommand createInstitutionIdentifierCommand = _mapper.Map<CreateInstitutionExternDatabaseIdCommand>(externDbId);
-			await _mediator.Send(createInstitutionIdentifierCommand);
-		}
+		await ProcessInstitutionPropertyAsync<InstitutionExternDatabaseIdCreateDto, CreateInstitutionExternDatabaseIdCommand>(
+			request,
+			request.ExternDatabaseIdsToInsert,
+			institutionId);
 	}
 
 	private async Task ProcessInstitutionNamesAsync(UpdateInstitutionWithDetailsCommand request)
@@ -72,22 +65,31 @@ public class UpdateInstitutionWithDetailsCommandHandler :
 			await _mediator.Send(deleteCommand);
 		}
 
-		foreach (InstitutionNameUpdateDto nameToUpdate in request.NamesToUpdate.OrEmptyIfNull())
-		{
-			nameToUpdate.InstitutionId = institutionId;
-			nameToUpdate.VersionDate = request.VersionDate;
-			nameToUpdate.OriginSourceType = request.OriginSourceType;
-			UpdateInstitutionNameCommand updateCommand = _mapper.Map<UpdateInstitutionNameCommand>(nameToUpdate);
-			await _mediator.Send(updateCommand);
-		}
 
-		foreach (InstitutionNameCreateDto name in request.NamesToInsert.OrEmptyIfNull())
+		await ProcessInstitutionPropertyAsync<InstitutionNameUpdateDto,UpdateInstitutionNameCommand>(
+			request,
+			request.NamesToUpdate, 
+			institutionId);
+
+		await ProcessInstitutionPropertyAsync<InstitutionNameCreateDto,CreateInstitutionNameCommand>(
+			request, 
+			request.NamesToInsert,
+			institutionId);
+	}
+
+	private async Task ProcessInstitutionPropertyAsync<TDto, TCommand>(
+		UpdateInstitutionWithDetailsCommand request,
+		IEnumerable<TDto>? propertyObjects,
+		long institutionId)
+		where TDto : InstitutionPropertyBaseDto
+	{
+		foreach (TDto propertyObject in propertyObjects.OrEmptyIfNull())
 		{
-			name.InstitutionId = institutionId;
-			name.VersionDate = request.VersionDate;
-			name.OriginSourceType = request.OriginSourceType;
-			CreateInstitutionNameCommand createInstitutionNameCommand = _mapper.Map<CreateInstitutionNameCommand>(name);
-			await _mediator.Send(createInstitutionNameCommand);
+			propertyObject.InstitutionId = institutionId;
+			propertyObject.OriginSourceType = request.OriginSourceType;
+			propertyObject.VersionDate = request.VersionDate;
+			TCommand actionCommand = _mapper.Map<TCommand>(propertyObject);
+			await _mediator.Send(actionCommand);
 		}
 	}
 }

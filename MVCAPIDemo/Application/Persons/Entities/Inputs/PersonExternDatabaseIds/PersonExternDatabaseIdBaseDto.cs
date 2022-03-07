@@ -1,9 +1,8 @@
-﻿using ZUEPC.Common.Entities.Inputs;
+﻿using ZUEPC.Application.Persons.Entities.Inputs.Common;
 
 namespace ZUEPC.Application.Persons.Entities.Inputs.PersonExternDatabaseIds;
 
-public class PersonExternDatabaseIdBaseDto : EPCBaseDto
+public class PersonExternDatabaseIdBaseDto : PersonPropertyBaseDto
 {
-	public long? PersonId { get; set; }
 	public string ExternIdentifierValue { get; set; }
 }

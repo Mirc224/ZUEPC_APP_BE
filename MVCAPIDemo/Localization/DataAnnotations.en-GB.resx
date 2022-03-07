@@ -120,6 +120,9 @@
   <data name="EmailAlreadyUsed" xml:space="preserve">
     <value>Email already in use.</value>
   </data>
+  <data name="InstitutionWithIdNotExist" xml:space="preserve">
+    <value>Institution with ID {0} does not exist.</value>
+  </data>
   <data name="InvalidEmailOrPassword" xml:space="preserve">
     <value>The email or password is incorrect.</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="NotValidToken" xml:space="preserve">
     <value>Token is not valid.</value>
+  </data>
+  <data name="PersonWithIdNotExist" xml:space="preserve">
+    <value>Person with ID {0} does not exist.</value>
   </data>
   <data name="RefreshTokenExpired" xml:space="preserve">
     <value>Refresh token has benn expired.</value>

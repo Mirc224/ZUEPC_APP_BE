@@ -3,6 +3,7 @@ using MediatR;
 using ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Commands.InstitutionNames;
 using ZUEPC.Application.Institutions.Entities.Details;
+using ZUEPC.Application.Institutions.Entities.Inputs.Common;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
 using ZUEPC.Common.Extensions;
@@ -39,34 +40,42 @@ public class CreateInstitutionWithDetailsCommandHandler :
 
 	private async Task<ICollection<InstitutionName>> ProcessInstitutionNamesAsync(CreateInstitutionWithDetailsCommand request, long institutionId)
 	{
-		List<InstitutionName> institutionNames = new();
-		foreach (InstitutionNameCreateDto name in request.Names.OrEmptyIfNull())
-		{
-			name.InstitutionId = institutionId;
-			CreateInstitutionNameCommand createInstitutionNameCommand = _mapper.Map<CreateInstitutionNameCommand>(name);
-			createInstitutionNameCommand.OriginSourceType = request.OriginSourceType;
-			createInstitutionNameCommand.VersionDate = request.VersionDate;
-			InstitutionName createdName = (await _mediator.Send(createInstitutionNameCommand)).InstitutionName;
-			institutionNames.Add(createdName);
-		}
-		
-		return institutionNames;
+		ICollection<CreateInstitutionNameCommandResponse> responses = await ProcessInstitutionPropertyAsync<
+			CreateInstitutionNameCommandResponse,
+			InstitutionNameCreateDto,
+			CreateInstitutionNameCommand>(request, request.Names, institutionId);
+
+		return responses.Select(x => x.InstitutionName).ToList();
 	}
 
 	private async Task<ICollection<InstitutionExternDatabaseId>> ProcessInstitutionExternDatabaseIdsAsync(
 		CreateInstitutionWithDetailsCommand request,
 		long institutionId)
 	{
-		List<InstitutionExternDatabaseId> institutionExternIds = new();
-		foreach (InstitutionExternDatabaseIdCreateDto externIdentifier in request.ExternDatabaseIds.OrEmptyIfNull())
+		ICollection<CreateInstitutionExternDatabaseIdCommandResponse> responses = await ProcessInstitutionPropertyAsync<
+			CreateInstitutionExternDatabaseIdCommandResponse,
+			InstitutionExternDatabaseIdCreateDto,
+			CreateInstitutionExternDatabaseIdCommand>(request, request.ExternDatabaseIds, institutionId);
+
+		return responses.Select(x => x.InstitutionExternDatabaseId).ToList();
+	}
+
+	private async Task<ICollection<TResponse>> ProcessInstitutionPropertyAsync<TResponse, TCreateDto, TCommand>(
+		CreateInstitutionWithDetailsCommand request,
+		IEnumerable<TCreateDto>? propertyObjects,
+		long institutionId)
+		where TCreateDto : InstitutionPropertyBaseDto
+	{
+		List<TResponse> responses = new();
+		foreach (TCreateDto propertyObject in propertyObjects.OrEmptyIfNull())
 		{
-			externIdentifier.InstitutionId = institutionId;
-			CreateInstitutionExternDatabaseIdCommand createInstitutionIdentifierCommand = _mapper.Map<CreateInstitutionExternDatabaseIdCommand>(externIdentifier);
-			createInstitutionIdentifierCommand.OriginSourceType = request.OriginSourceType;
-			createInstitutionIdentifierCommand.VersionDate = request.VersionDate;
-			InstitutionExternDatabaseId createdExternDbId = (await _mediator.Send(createInstitutionIdentifierCommand)).InstitutionExternDatabaseId;
-			institutionExternIds.Add(createdExternDbId);
+			propertyObject.InstitutionId = institutionId;
+			propertyObject.OriginSourceType = request.OriginSourceType;
+			propertyObject.VersionDate = request.VersionDate;
+			TCommand createPropertyObjectCommand = _mapper.Map<TCommand>(propertyObject);
+			TResponse createdResponse = (TResponse)(await _mediator.Send(createPropertyObjectCommand));
+			responses.Add(createdResponse);
 		}
-		return institutionExternIds;
+		return responses;
 	}
 }

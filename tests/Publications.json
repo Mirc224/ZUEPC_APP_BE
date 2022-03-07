@@ -1,0 +1,1221 @@
+{
+	"info": {
+		"_postman_id": "53984246-1115-44ad-80e6-bba8ac2e130e",
+		"name": "Publications",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Seed",
+			"item": [
+				{
+					"name": "CreatePersonWithDetails1",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.BirthYear\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Person.DeathYear\", 1900 + getRandomInt(70));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName1\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType1\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName3\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType3\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create person should return status code 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Publication.Person1.Id\", response.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthYear\" : \"{{Temp.Person.BirthYear}}\",\r\n    \"deathYear\" : \"{{Temp.Person.DeathYear}}\",\r\n    \"names\": [\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName1}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName1}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType1}}\"\r\n        },\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName2}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName2}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType2}}\"\r\n        },\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName3}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName3}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIds\":[\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId1}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId2}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId3}}\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatePersonWithDetails2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.BirthYear\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Person.DeathYear\", 1900 + getRandomInt(70));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName1\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType1\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName3\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType3\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create person should return status code 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Publication.Person2.Id\", response.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthYear\" : \"{{Temp.Person.BirthYear}}\",\r\n    \"deathYear\" : \"{{Temp.Person.DeathYear}}\",\r\n    \"names\": [\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName1}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName1}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType1}}\"\r\n        },\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName2}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName2}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType2}}\"\r\n        },\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName3}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName3}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIds\":[\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId1}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId2}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId3}}\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatePersonWithDetails3",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.BirthYear\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Person.DeathYear\", 1900 + getRandomInt(70));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName1\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType1\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.FirstName3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.LastName3\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.NameType3\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Person.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create person should return status code 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Publication.Person3.Id\", response.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthYear\" : \"{{Temp.Person.BirthYear}}\",\r\n    \"deathYear\" : \"{{Temp.Person.DeathYear}}\",\r\n    \"names\": [\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName1}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName1}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType1}}\"\r\n        },\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName2}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName2}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType2}}\"\r\n        },\r\n        {\r\n            \"firstName\": \"{{Temp.Person.FirstName3}}\",\r\n            \"lastName\": \"{{Temp.Person.LastName3}}\",\r\n            \"nameType\": \"{{Temp.Person.NameType3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIds\":[\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId1}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId2}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Person.ExternDbId3}}\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/person",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"person"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateInstitutionWithDetails1",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Level\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Institution.InstitutionType\", generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name1\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType1\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType3\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create institution should return status code 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Publication.Institution1.Id\", response.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"level\": {{Temp.Institution.Level}},\r\n    \"institutionType\": \"{{Temp.Institution.InstitutionType}}\",\r\n    \"names\": [\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType1}}\",\r\n            \"name\": \"{{Temp.Institution.Name1}}\"\r\n        },\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType2}}\",\r\n            \"name\": \"{{Temp.Institution.Name2}}\"\r\n        },\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType3}}\",\r\n            \"name\": \"{{Temp.Institution.Name3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIds\":[\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId1}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId2}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId3}}\"\r\n        }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateInstitutionWithDetails2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Level\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Institution.InstitutionType\", generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name1\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType1\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType3\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create institution should return status code 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Publication.Institution2.Id\", response.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"level\": {{Temp.Institution.Level}},\r\n    \"institutionType\": \"{{Temp.Institution.InstitutionType}}\",\r\n    \"names\": [\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType1}}\",\r\n            \"name\": \"{{Temp.Institution.Name1}}\"\r\n        },\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType2}}\",\r\n            \"name\": \"{{Temp.Institution.Name2}}\"\r\n        },\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType3}}\",\r\n            \"name\": \"{{Temp.Institution.Name3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIds\":[\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId1}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId2}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId3}}\"\r\n        }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateInstitutionWithDetails3",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function getRandomInt(max) {\r",
+									"  return Math.floor(Math.random() * max);\r",
+									"}\r",
+									"\r",
+									"function generateString(length) {\r",
+									"    var result           = '';\r",
+									"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+									"    var charactersLength = characters.length;\r",
+									"    for ( var i = 0; i < length; i++ ) {\r",
+									"      result += characters.charAt(Math.floor(Math.random() * \r",
+									" charactersLength));\r",
+									"   }\r",
+									"   return result;\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Level\", 1900 + getRandomInt(70));\r",
+									"pm.environment.set(\"Temp.Institution.InstitutionType\", generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name1\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType1\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name2\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType2\",  generateString(10));\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.Name3\", generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.NameType3\",  generateString(10));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId1\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId2\",  generateString(10));\r",
+									"pm.environment.set(\"Temp.Institution.ExternDbId3\",  generateString(10));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create institution should return status code 201.\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var response = pm.response.json();\r",
+									"    pm.environment.set(\"Temp.Publication.Institution3.Id\", response.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"level\": {{Temp.Institution.Level}},\r\n    \"institutionType\": \"{{Temp.Institution.InstitutionType}}\",\r\n    \"names\": [\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType1}}\",\r\n            \"name\": \"{{Temp.Institution.Name1}}\"\r\n        },\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType2}}\",\r\n            \"name\": \"{{Temp.Institution.Name2}}\"\r\n        },\r\n        {\r\n            \"nameType\": \"{{Temp.Institution.NameType3}}\",\r\n            \"name\": \"{{Temp.Institution.Name3}}\"\r\n        }\r\n    ],\r\n    \"externDatabaseIds\":[\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId1}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId2}}\"\r\n        },\r\n        {\r\n            \"externIdentifierValue\" : \"{{Temp.Institution.ExternDbId3}}\"\r\n        }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ApiBaseUrl}}/api/institution",
+							"host": [
+								"{{ApiBaseUrl}}"
+							],
+							"path": [
+								"api",
+								"institution"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CreatePublicationWithDetails",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getRandomInt(max) {\r",
+							"  return Math.floor(Math.random() * max);\r",
+							"}\r",
+							"\r",
+							"function generateString(length) {\r",
+							"    var result           = '';\r",
+							"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+							"    var charactersLength = characters.length;\r",
+							"    for ( var i = 0; i < length; i++ ) {\r",
+							"      result += characters.charAt(Math.floor(Math.random() * \r",
+							" charactersLength));\r",
+							"   }\r",
+							"   return result;\r",
+							"}\r",
+							"\r",
+							"var publicationNames = [];\r",
+							"for(var i = 0; i < 3; i++)\r",
+							"{\r",
+							"    publicationNames.push(\r",
+							"    {\r",
+							"        \"name\" : generateString(10),\r",
+							"        \"nameType\" : generateString(10)\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"var publicationIdentifiers = [];\r",
+							"for(var i = 0; i < 3; i++)\r",
+							"{\r",
+							"    publicationIdentifiers.push(\r",
+							"    {\r",
+							"        \"identifierValue\" : generateString(10),\r",
+							"        \"identifierName\" : generateString(10),\r",
+							"        \"isForm\" : generateString(10)\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"var publicationExternIds = [];\r",
+							"for(var i = 0; i < 3; i++)\r",
+							"{\r",
+							"    publicationExternIds.push(\r",
+							"    {\r",
+							"        \"externIdentifierValue\" : generateString(10)\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"var personId1 = pm.environment.get(\"Temp.Publication.Person1.Id\");\r",
+							"var insitutionId1 = pm.environment.get(\"Temp.Publication.Institution1.Id\");\r",
+							"\r",
+							"var personId2 = pm.environment.get(\"Temp.Publication.Person1.Id\");\r",
+							"var insitutionId2 = pm.environment.get(\"Temp.Publication.Institution1.Id\");\r",
+							"\r",
+							"var resultPublication = \r",
+							"{\r",
+							"    \"publishYear\" :  1900 + getRandomInt(70),\r",
+							"    \"documentType\": generateString(10),\r",
+							"    \"names\": publicationNames,\r",
+							"    \"identifiers\": publicationIdentifiers,\r",
+							"    \"externDatabaseIds\": publicationExternIds,\r",
+							"    \"authors\": [\r",
+							"        {\r",
+							"            \"personId\": personId1,\r",
+							"            \"institutionId\": insitutionId1,\r",
+							"            \"contributionRatio\": Math.random(),\r",
+							"            \"role\": generateString(10)\r",
+							"        },\r",
+							"        {\r",
+							"            \"personId\": personId2,\r",
+							"            \"institutionId\": insitutionId2,\r",
+							"            \"contributionRatio\": Math.random(),\r",
+							"            \"role\": generateString(10)\r",
+							"        }\r",
+							"    ]\r",
+							"};\r",
+							"\r",
+							"pm.environment.set(\"Temp.Create.Publication.Body\", JSON.stringify(resultPublication));\r",
+							"pm.environment.set(\"Temp.Create.Publication.ExpectedBody\", JSON.stringify(resultPublication));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create publication should return status code 201.\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"    var response = pm.response.json();\r",
+							"    var expectedBody = JSON.parse(pm.environment.get(\"Temp.Create.Publication.ExpectedBody\"));\r",
+							"    pm.environment.set(\"Temp.Institution.Created.Id\", response.id);\r",
+							"\r",
+							"    response.names.map(function(name) {\r",
+							"        for(var i = 0; i < expectedBody.names.length ; i++)\r",
+							"        {\r",
+							"            var expectedName = expectedBody.names[i];\r",
+							"            if (name.name == expectedName.name &&\r",
+							"                name.nameType == expectedName.nameType)\r",
+							"                {\r",
+							"                    expectedName.id = name.id;\r",
+							"                    break;\r",
+							"                };\r",
+							"        };\r",
+							"    });\r",
+							"    // var nameIds = response.names.map(function(name) {\r",
+							"    //     return name.id;\r",
+							"    // });\r",
+							"\r",
+							"    response.identifiers.map(function(identifier) {\r",
+							"        for(var i = 0; i < expectedBody.identifiers.length ; i++)\r",
+							"        {\r",
+							"            var expectedIdentifier = expectedBody.identifiers[i];\r",
+							"            if (identifier.identifierValue == expectedIdentifier.identifierValue &&\r",
+							"                identifier.identifierName == expectedIdentifier.identifierName &&\r",
+							"                identifier.isForm == expectedIdentifier.isForm )\r",
+							"                {\r",
+							"                    expectedIdentifier.id = identifier.id;\r",
+							"                    break;\r",
+							"                };\r",
+							"        };\r",
+							"    });\r",
+							"\r",
+							"    response.externDatabaseIds.map(function(externDbId) {\r",
+							"        for(var i = 0; i < expectedBody.externDatabaseIds.length ; i++)\r",
+							"        {\r",
+							"            var expectedExternDbId = expectedBody.externDatabaseIds[i];\r",
+							"            if (externDbId.externIdentifierValue == expectedExternDbId.externIdentifierValue)\r",
+							"                {\r",
+							"                    expectedExternDbId.id = externDbId.id;\r",
+							"                    break;\r",
+							"                };\r",
+							"        };\r",
+							"    });\r",
+							"\r",
+							"    response.authors.map(function(author) {\r",
+							"        for(var i = 0; i < expectedBody.authors.length ; i++)\r",
+							"        {\r",
+							"            var expectedAuthor = expectedBody.authors[i];\r",
+							"            if (author.contributionRatio == expectedAuthor.contributionRatio &&\r",
+							"                author.role == expectedAuthor.role)\r",
+							"                {\r",
+							"                    expectedAuthor.id = author.id;\r",
+							"                    break;\r",
+							"                };\r",
+							"        };\r",
+							"    });\r",
+							"    pm.environment.set(\"Temp.Institution.Created.ExpectedObject\", JSON.stringify(expectedBody));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{Temp.Create.Publication.Body}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/publication?culture=en-GB",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"publication"
+					],
+					"query": [
+						{
+							"key": "culture",
+							"value": "en-GB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPublicationById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get publication should return status code 200.\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var response = pm.response.json();\r",
+							"    var expectedObject = JSON.parse(pm.environment.get(\"Temp.Institution.Created.ExpectedObject\"));\r",
+							"    \r",
+							"    pm.test(\"Publication should have correct publish year date.\", function () {\r",
+							"        pm.expect(response.publishYear).to.be.eql(expectedObject.publishYear);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Publication should have correct document type.\", function () {\r",
+							"        pm.expect(response.documentType).to.be.eql(expectedObject.documentType);\r",
+							"    });\r",
+							"\r",
+							"   pm.test(\"Publication should have correct number of names.\", function () {\r",
+							"        pm.expect(response.names.length).to.be.eql(expectedObject.names.length);\r",
+							"\r",
+							"        expectedObject.names.forEach(function(expectedName){\r",
+							"            pm.test(\"Publication name with id \" + expectedName.id + \" should have correct values\", function(){\r",
+							"                var compared = response.names.find(x => x.id == expectedName.id);\r",
+							"                pm.expect(compared.name).to.be.eql(expectedName.name);\r",
+							"                pm.expect(compared.nameType).to.be.eql(expectedName.nameType);\r",
+							"            });\r",
+							"        });\r",
+							"   });\r",
+							"\r",
+							"   pm.test(\"Publication should have correct number of identifiers.\", function () {\r",
+							"        pm.expect(response.identifiers.length).to.be.eql(expectedObject.identifiers.length);\r",
+							"\r",
+							"        expectedObject.identifiers.forEach(function(expectedIdentifier){\r",
+							"            pm.test(\"Publication identifier with id \" + expectedIdentifier.id + \" should have correct values.\", function(){\r",
+							"                var compared = response.identifiers.find(x => x.id == expectedIdentifier.id);\r",
+							"                pm.expect(compared.isForm).to.be.eql(expectedIdentifier.isForm);\r",
+							"                pm.expect(compared.identifierValue).to.be.eql(expectedIdentifier.identifierValue);\r",
+							"                pm.expect(compared.identifierName).to.be.eql(expectedIdentifier.identifierName);\r",
+							"            });\r",
+							"        });\r",
+							"   });\r",
+							"\r",
+							"   pm.test(\"Publication should have correct number of extern database ids.\", function () {\r",
+							"        pm.expect(response.externDatabaseIds.length).to.be.eql(expectedObject.externDatabaseIds.length);\r",
+							"\r",
+							"        expectedObject.externDatabaseIds.forEach(function(externDbId){\r",
+							"            pm.test(\"Publication extern database identifier with id \" + externDbId.id + \" should have correct values.\", function(){\r",
+							"                var compared = response.externDatabaseIds.find(x => x.id == externDbId.id);\r",
+							"                pm.expect(compared.externIdentifierValue).to.be.eql(externDbId.externIdentifierValue);\r",
+							"            });\r",
+							"        });\r",
+							"   });\r",
+							"\r",
+							"   pm.test(\"Publication should have correct number of authors.\", function () {\r",
+							"        pm.expect(response.authors.length).to.be.eql(expectedObject.authors.length);\r",
+							"\r",
+							"        expectedObject.authors.forEach(function(author){\r",
+							"            pm.test(\"Publication author with id \" + author.id + \" should have correct values.\", function(){\r",
+							"                \r",
+							"                var compared = response.authors.find(x => x.id == author.id);\r",
+							"                pm.expect(compared.contributionRatio).to.be.eql(author.contributionRatio);\r",
+							"                pm.expect(compared.role).to.be.eql(author.role);\r",
+							"                pm.expect(compared.personPreview.id).to.be.eql(author.personId);\r",
+							"                pm.expect(compared.institutionPreview.id).to.be.eql(author.institutionId);\r",
+							"            });\r",
+							"        });\r",
+							"   });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Institution.Created.Id}}?culture=en-GB",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"publication",
+						"{{Temp.Institution.Created.Id}}"
+					],
+					"query": [
+						{
+							"key": "culture",
+							"value": "en-GB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdatePublicationById",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getRandomInt(max) {\r",
+							"  return Math.floor(Math.random() * max);\r",
+							"}\r",
+							"\r",
+							"function generateString(length) {\r",
+							"    var result           = '';\r",
+							"    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+							"    var charactersLength = characters.length;\r",
+							"    for ( var i = 0; i < length; i++ ) {\r",
+							"      result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+							"   }\r",
+							"   return result;\r",
+							"}\r",
+							"\r",
+							"function getItemsToDelete(processedArr, expectedItems) {\r",
+							"    var deletedIndex = Math.floor(Math.random()*processedArr.length);\r",
+							"    var itemToDelete = processedArr[deletedIndex];\r",
+							"    var itemsToDelete = [itemToDelete.id];\r",
+							"    deletedIndex = processedArr.indexOf(itemToDelete);\r",
+							"    processedArr.splice(deletedIndex, 1);\r",
+							"    updatePublication[elementName] = itemsToDelete;\r",
+							"    deletedIndex = expectedItems.indexOf(itemToDelete);\r",
+							"    expectedItems.splice(deletedIndex,1);\r",
+							"    return itemsToDelete;\r",
+							"}\r",
+							"\r",
+							"function getItemToUpdate(processedArr, propertyList){\r",
+							"    var itemToUpdate = processedArr[Math.floor(Math.random()*processedArr.length)];\r",
+							"    propertyList.forEach(function(key){\r",
+							"        itemToUpdate[key] = generateString(10);\r",
+							"    });\r",
+							"    return itemToUpdate;\r",
+							"}\r",
+							"\r",
+							"function getItemToInsert(expectedItems, propertyList){\r",
+							"    var itemsToInsert = [];\r",
+							"    for(var i = 0; i < 1; i++)\r",
+							"    {\r",
+							"        var newObject = {};\r",
+							"        propertyList.forEach(function(key) {\r",
+							"            newObject[key] = generateString(10);\r",
+							"        });\r",
+							"        expectedItems.push(newObject);\r",
+							"        itemsToInsert.push(newObject);\r",
+							"    }\r",
+							"    return itemsToInsert;\r",
+							"}\r",
+							"\r",
+							"var personId1 = pm.environment.get(\"Temp.Publication.Person1.Id\");\r",
+							"var insitutionId1 = pm.environment.get(\"Temp.Publication.Institution1.Id\");\r",
+							"\r",
+							"var personId2 = pm.environment.get(\"Temp.Publication.Person2.Id\");\r",
+							"var insitutionId2 = pm.environment.get(\"Temp.Publication.Institution2.Id\");\r",
+							"\r",
+							"var personId3 = pm.environment.get(\"Temp.Publication.Person3.Id\");\r",
+							"var insitutionId3 = pm.environment.get(\"Temp.Publication.Institution3.Id\");\r",
+							"\r",
+							"var currentObject = JSON.parse(pm.environment.get(\"Temp.Institution.Created.ExpectedObject\"));\r",
+							"var updatePublication = \r",
+							"{\r",
+							"    \"publishYear\" :  1900 + getRandomInt(70),\r",
+							"    \"documentType\": generateString(10),\r",
+							"    \"authorsToDelete\" : [1],\r",
+							"    \"authorsToInsert\" : [{\r",
+							"        \"contributionRatio\" : getRandomInt(710),\r",
+							"        \"role\" : generateString(10),\r",
+							"        \"personId\" : personId2 ,\r",
+							"        \"institutionId\" : insitutionId2,\r",
+							"    }],\r",
+							"    \"authorsToUpdate\" : [{\r",
+							"        \"id\" : 2,\r",
+							"        \"contributionRatio\" : 1000,\r",
+							"        \"role\" : \"upravene\",\r",
+							"        \"personId\" : personId3,\r",
+							"        \"institutionId\" : insitutionId3,\r",
+							"    }],\r",
+							"};\r",
+							"\r",
+							"var expectedPublication = {\r",
+							"    \"publishYear\" : updatePublication.publishYear,\r",
+							"    \"documentType\" : updatePublication.documentType,\r",
+							"    //\"names\" : expectedNames\r",
+							"//    \"identifiers\": expectedIdentifiers\r",
+							"};\r",
+							"\r",
+							"\r",
+							"\r",
+							"var processedArr = currentObject.names;\r",
+							"var expectedItems = [...processedArr];\r",
+							"\r",
+							"var elementName = \"namesToInsert\";\r",
+							"var itemsToInsert = getItemToInsert(expectedItems, [\"name\", \"nameType\"]);\r",
+							"updatePublication[elementName] = itemsToInsert;\r",
+							"\r",
+							"elementName = \"namesToDelete\";\r",
+							"var itemToDelete = getItemsToDelete(processedArr, expectedItems);\r",
+							"updatePublication[elementName] = itemToDelete;\r",
+							"\r",
+							"elementName = \"namesToUpdate\";\r",
+							"var itemToUpdate = getItemToUpdate(processedArr, [\"name\", \"nameType\"]);\r",
+							"updatePublication[elementName] = [itemToUpdate];\r",
+							"\r",
+							"expectedPublication.names = expectedItems;\r",
+							"\r",
+							"\r",
+							"processedArr = currentObject.identifiers;\r",
+							"expectedItems = [...processedArr];\r",
+							"\r",
+							"elementName = \"identifiersToInsert\";\r",
+							"itemsToInsert = getItemToInsert(expectedItems, [\"identifierValue\", \"identifierValue\", \"isForm\"]);\r",
+							"updatePublication[elementName] = itemsToInsert;\r",
+							"\r",
+							"elementName = \"identifiersToDelete\";\r",
+							"var itemToDelete = getItemsToDelete(processedArr, expectedItems);\r",
+							"updatePublication[elementName] = itemToDelete;\r",
+							"\r",
+							"elementName = \"identifiersToUpdate\";\r",
+							"var itemToUpdate = getItemToUpdate(processedArr, [\"identifierValue\", \"identifierValue\", \"isForm\"]);\r",
+							"updatePublication[elementName] = [itemToUpdate];\r",
+							"\r",
+							"expectedPublication.identifiers = expectedItems;\r",
+							"\r",
+							"\r",
+							"processedArr = currentObject.externDatabaseIds;\r",
+							"expectedItems = [...processedArr];\r",
+							"\r",
+							"elementName = \"externDatabaseIdsToInsert\";\r",
+							"itemsToInsert = getItemToInsert(expectedItems, [\"externIdentifierValue\"]);\r",
+							"updatePublication[elementName] = itemsToInsert;\r",
+							"\r",
+							"elementName = \"externDatabaseIdsToDelete\";\r",
+							"var itemToDelete = getItemsToDelete(processedArr, expectedItems);\r",
+							"updatePublication[elementName] = itemToDelete;\r",
+							"\r",
+							"elementName = \"externDatabaseIdsToUpdate\";\r",
+							"var itemToUpdate = getItemToUpdate(processedArr, [\"externIdentifierValue\"]);\r",
+							"updatePublication[elementName] = [itemToUpdate];\r",
+							"\r",
+							"expectedPublication.externDatabaseIds = expectedItems;\r",
+							"\r",
+							"// var expectedIdentifiers = [...currentObject.identifiers];\r",
+							"// var identifiersToinsert = [];\r",
+							"// for(var i = 0; i < 1; i++)\r",
+							"// {\r",
+							"//     var newIdentifier = {\r",
+							"//         \"identifierValue\" : generateString(10),\r",
+							"//         \"identifierName\" : generateString(10),\r",
+							"//         \"isForm\" : generateString(10)\r",
+							"//     };\r",
+							"//     expectedIdentifiers.push(newIdentifier);\r",
+							"//     identifiersToinsert.push(newIdentifier);\r",
+							"// }\r",
+							"\r",
+							"// deletedIndex = Math.floor(Math.random()*currentObject.identifiers.length);\r",
+							"// var itemToDelete = currentObject.identifiers[deletedIndex];\r",
+							"// var identifiersToDelete = [itemToDelete.id];\r",
+							"// expectedIdentifiers.splice(deletedIndex,1);\r",
+							"// deletedIndex = currentObject.identifiers.indexOf(itemToDelete);\r",
+							"// currentObject.identifiers.splice(deletedIndex, 1);\r",
+							"\r",
+							"// itemToUpdate = currentObject.identifiers[Math.floor(Math.random()*currentObject.identifiers.length)];\r",
+							"// itemToUpdate.identifierValue = generateString(10);\r",
+							"// itemToUpdate.identifierName = generateString(10);\r",
+							"// itemToUpdate.isForm = generateString(10);\r",
+							"// var identifiersToUpdate = [itemToUpdate];\r",
+							"\r",
+							"\r",
+							"// var expectedIdentifiers = [...currentObject.identifiers];\r",
+							"// var identifiersToinsert = [];\r",
+							"// for(var i = 0; i < 1; i++)\r",
+							"// {\r",
+							"//     var newIdentifier = {\r",
+							"//         \"identifierValue\" : generateString(10),\r",
+							"//         \"identifierName\" : generateString(10),\r",
+							"//         \"isForm\" : generateString(10)\r",
+							"//     };\r",
+							"//     expectedIdentifiers.push(newIdentifier);\r",
+							"//     identifiersToinsert.push(newIdentifier);\r",
+							"// }\r",
+							"\r",
+							"// deletedIndex = Math.floor(Math.random()*currentObject.identifiers.length);\r",
+							"// itemToDelete = currentObject.identifiers[deletedIndex];\r",
+							"// var externDbIdToDelete = [itemToDelete.id];\r",
+							"// expectedIdentifiers.splice(deletedIndex,1);\r",
+							"// deletedIndex = currentObject.identifiers.indexOf(itemToDelete);\r",
+							"// currentObject.identifiers.splice(deletedIndex, 1);\r",
+							"\r",
+							"// itemToUpdate = currentObject.identifiers[Math.floor(Math.random()*currentObject.identifiers.length)];\r",
+							"// itemToUpdate.identifierValue = generateString(10);\r",
+							"// itemToUpdate.identifierName = generateString(10);\r",
+							"// itemToUpdate.isForm = generateString(10);\r",
+							"// var identifiersToUpdate = [itemToUpdate];\r",
+							"\r",
+							"\r",
+							"\r",
+							"// // var updatePublication = \r",
+							"// // {\r",
+							"// //     \"publishYear\" :  1900 + getRandomInt(70),\r",
+							"// //     \"documentType\": generateString(10),\r",
+							"// //     \"namesToDelete\": namesToDelete,\r",
+							"// //     \"namesToInsert\": namesToinsert,\r",
+							"// //     \"namesToUpdate\": namesToUpdate,\r",
+							"// //     \"identifiersToDelete\": identifiersToDelete,\r",
+							"// //     \"identifiersToInsert\": identifiersToinsert,\r",
+							"// //     \"identifiersToUpdate\": identifiersToUpdate,\r",
+							"// // };\r",
+							"\r",
+							"// var expectedPublication = {\r",
+							"//     \"publishYear\" : updatePublication.publishYear,\r",
+							"//     \"documentType\" : updatePublication.documentType,\r",
+							"//     \"names\" : expectedNames\r",
+							"// //    \"identifiers\": expectedIdentifiers\r",
+							"// };\r",
+							"\r",
+							"console.log(updatePublication);\r",
+							"console.log(expectedPublication);\r",
+							"pm.environment.set(\"Temp.Update.Publication.Body\", JSON.stringify(updatePublication));\r",
+							"pm.environment.set(\"Temp.Update.Publication.ExpectedBody\", JSON.stringify(expectedPublication));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Update person should return status code 200.\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{{Temp.Update.Publication.Body}}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Institution.Created.Id}}?culture=en-GB",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"publication",
+						"{{Temp.Institution.Created.Id}}"
+					],
+					"query": [
+						{
+							"key": "culture",
+							"value": "en-GB"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VerifyPublicationAfterUpdate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"function isInArray(jsonArray, keynames, expectObject) {\r",
+							"    var test = false;\r",
+							"    for (var i = 0; i < jsonArray.length; i++) {\r",
+							"        var obj = jsonArray[i];\r",
+							"        test = true;\r",
+							"        for (var j = 0; j < keynames.length; j++) {\r",
+							"            var key = keynames[j];\r",
+							"            if (obj[key] != expectObject[key]) {\r",
+							"                test = false;\r",
+							"                break;\r",
+							"            }\r",
+							"        }\r",
+							"        if (test) {\r",
+							"            return true;\r",
+							"        }\r",
+							"    }\r",
+							"    return false;\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Get publication should return status code 200.\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var response = pm.response.json();\r",
+							"    var expectedObject = JSON.parse(pm.environment.get(\"Temp.Update.Publication.ExpectedBody\"));\r",
+							"\r",
+							"    pm.test(\"Publication should have correct publish year date.\", function () {\r",
+							"        pm.expect(response.publishYear).to.be.eql(expectedObject.publishYear);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Publication should have correct document type.\", function () {\r",
+							"        pm.expect(response.documentType).to.be.eql(expectedObject.documentType);\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Publication should have correct number of names.\", function () {\r",
+							"        var validatedProperties = [\"name\", \"nameType\"];\r",
+							"        var identifierTitleKey = \"name\";\r",
+							"        var currentArray = response.names;\r",
+							"        var expectedArray = expectedObject.names;\r",
+							"        pm.expect(currentArray.length).to.be.eql(expectedArray.length);\r",
+							"        var withDefinedIds = expectedArray.filter(function (item) {\r",
+							"            return typeof (item[\"id\"]) != \"undefined\";\r",
+							"        });\r",
+							"        withDefinedIds.forEach(function (item) {\r",
+							"            pm.test(\"Publication name with id \" + item.id + \" should have correct values\", function () {\r",
+							"                pm.expect(isInArray(currentArray, [\"id\", ...validatedProperties], item)).to.be.true;\r",
+							"            });\r",
+							"        });\r",
+							"\r",
+							"        var newItems = expectedArray.filter(function (item) {\r",
+							"            return typeof (item[\"id\"]) == \"undefined\";\r",
+							"        });\r",
+							"\r",
+							"        newItems.forEach(function (item) {\r",
+							"            pm.test(\"Publication name with value \" + item[identifierTitleKey] + \" should have correct values\", function () {\r",
+							"                pm.expect(isInArray(currentArray, [...validatedProperties], item)).to.be.true;\r",
+							"            });\r",
+							"        });\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Publication should have correct number of identifiers.\", function () {\r",
+							"        var validatedProperties = [\"isForm\", \"identifierValue\", \"identifierName\"];\r",
+							"        var identifierTitleKey = \"identifierValue\";\r",
+							"        var currentArray = response.identifiers;\r",
+							"        var expectedArray = expectedObject.identifiers;\r",
+							"        pm.expect(currentArray.length).to.be.eql(expectedArray.length);\r",
+							"        var withDefinedIds = expectedArray.filter(function (item) {\r",
+							"            return typeof (item[\"id\"]) != \"undefined\";\r",
+							"        });\r",
+							"        withDefinedIds.forEach(function (item) {\r",
+							"            pm.test(\"Publication identifer with id \" + item.id + \" should have correct values\", function () {\r",
+							"                pm.expect(isInArray(currentArray, [\"id\", ...validatedProperties], item)).to.be.true;\r",
+							"            });\r",
+							"        });\r",
+							"\r",
+							"        var newItems = expectedArray.filter(function (item) {\r",
+							"            return typeof (item[\"id\"]) == \"undefined\";\r",
+							"        });\r",
+							"\r",
+							"        newItems.forEach(function (item) {\r",
+							"            pm.test(\"Publication identifier with value \" + item[identifierTitleKey] + \" should have correct values\", function () {\r",
+							"                pm.expect(isInArray(currentArray, [...validatedProperties], item)).to.be.true;\r",
+							"            });\r",
+							"        });\r",
+							"    });\r",
+							"\r",
+							"    pm.test(\"Publication should have correct number of extern identifiers.\", function () {\r",
+							"        var validatedProperties = [\"externIdentifierValue\"];\r",
+							"        var identifierTitleKey = \"externIdentifierValue\";\r",
+							"        var currentArray = response.externDatabaseIds;\r",
+							"        var expectedArray = expectedObject.externDatabaseIds;\r",
+							"        pm.expect(currentArray.length).to.be.eql(expectedArray.length);\r",
+							"        var withDefinedIds = expectedArray.filter(function (item) {\r",
+							"            return typeof (item[\"id\"]) != \"undefined\";\r",
+							"        });\r",
+							"        withDefinedIds.forEach(function (item) {\r",
+							"            pm.test(\"Publication extern db identifer with id \" + item.id + \" should have correct values\", function () {\r",
+							"                pm.expect(isInArray(currentArray, [\"id\", ...validatedProperties], item)).to.be.true;\r",
+							"            });\r",
+							"        });\r",
+							"\r",
+							"        var newItems = expectedArray.filter(function (item) {\r",
+							"            return typeof (item[\"id\"]) == \"undefined\";\r",
+							"        });\r",
+							"\r",
+							"        newItems.forEach(function (item) {\r",
+							"            pm.test(\"Publication extern db identifier with value \" + item[identifierTitleKey] + \" should have correct values\", function () {\r",
+							"                pm.expect(isInArray(currentArray, [...validatedProperties], item)).to.be.true;\r",
+							"            });\r",
+							"        });\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Institution.Created.Id}}?culture=en-GB",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"publication",
+						"{{Temp.Institution.Created.Id}}"
+					],
+					"query": [
+						{
+							"key": "culture",
+							"value": "en-GB"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

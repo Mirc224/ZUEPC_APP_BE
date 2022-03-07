@@ -1,9 +1,9 @@
-﻿using ZUEPC.Common.Entities.Inputs;
+﻿using ZUEPC.Application.Institutions.Entities.Inputs.Common;
+using ZUEPC.Common.Entities.Inputs;
 
 namespace ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseIds;
 
-public class InstitutionExternDatabaseIdBaseDto : EPCBaseDto
+public class InstitutionExternDatabaseIdBaseDto : InstitutionPropertyBaseDto
 {
-	public long? InstitutionId { get; set; }
 	public string ExternIdentifierValue { get; set; }
 }

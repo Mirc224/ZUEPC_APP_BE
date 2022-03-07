@@ -2,6 +2,7 @@
 using MediatR;
 using ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Commands.PersonNames;
+using ZUEPC.Application.Persons.Entities.Inputs.Common;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonNames;
 using ZUEPC.Common.Extensions;
@@ -43,23 +44,15 @@ public class UpdatePersonWithDetailsCommandHandler : IRequestHandler<UpdatePerso
 			await _mediator.Send(deleteCommand);
 		}
 
-		foreach (PersonExternDatabaseIdUpdateDto externDbId in request.ExternDatabaseIdsToUpdate.OrEmptyIfNull())
-		{
-			externDbId.PersonId = personId;
-			externDbId.VersionDate = request.VersionDate;
-			externDbId.OriginSourceType = request.OriginSourceType;
-			UpdatePersonExternDatabaseIdCommand updateCommand = _mapper.Map<UpdatePersonExternDatabaseIdCommand>(externDbId);
-			await _mediator.Send(updateCommand);
-		}
+		await ProcessPersonPropertyAsync<PersonExternDatabaseIdUpdateDto, UpdatePersonExternDatabaseIdCommand>(
+			request,
+			request.ExternDatabaseIdsToUpdate,
+			personId);
 
-		foreach (PersonExternDatabaseIdCreateDto externDbId in request.ExternDatabaseIdsToInsert.OrEmptyIfNull())
-		{
-			externDbId.PersonId = personId;
-			externDbId.VersionDate = request.VersionDate;
-			externDbId.OriginSourceType = request.OriginSourceType;
-			CreatePersonExternDatabaseIdCommand createPersonIdentifierCommand = _mapper.Map<CreatePersonExternDatabaseIdCommand>(externDbId);
-			await _mediator.Send(createPersonIdentifierCommand);
-		}
+		await ProcessPersonPropertyAsync<PersonExternDatabaseIdCreateDto, CreatePersonExternDatabaseIdCommand>(
+			request,
+			request.ExternDatabaseIdsToInsert,
+			personId);
 	}
 
 	private async Task ProcessPersonNamesAsync(UpdatePersonWithDetailsCommand request)
@@ -71,22 +64,30 @@ public class UpdatePersonWithDetailsCommandHandler : IRequestHandler<UpdatePerso
 			await _mediator.Send(deleteCommand);
 		}
 
-		foreach (PersonNameUpdateDto nameToUpdate in request.NamesToUpdate.OrEmptyIfNull())
-		{
-			nameToUpdate.PersonId = personId;
-			nameToUpdate.VersionDate = request.VersionDate;
-			nameToUpdate.OriginSourceType = request.OriginSourceType;
-			UpdatePersonNameCommand updateCommand = _mapper.Map<UpdatePersonNameCommand>(nameToUpdate);
-			await _mediator.Send(updateCommand);
-		}
+		await ProcessPersonPropertyAsync<PersonNameUpdateDto, UpdatePersonNameCommand>(
+			request,
+			request.NamesToUpdate,
+			personId);
 
-		foreach (PersonNameCreateDto name in request.NamesToInsert.OrEmptyIfNull())
+		await ProcessPersonPropertyAsync<PersonNameCreateDto, CreatePersonNameCommand>(
+			request,
+			request.NamesToInsert,
+			personId);
+	}
+
+	private async Task ProcessPersonPropertyAsync<TDto, TCommand>(
+		UpdatePersonWithDetailsCommand request,
+		IEnumerable<TDto>? propertyObjects,
+		long personId)
+		where TDto : PersonPropertyBaseDto
+	{
+		foreach (TDto propertyObject in propertyObjects.OrEmptyIfNull())
 		{
-			name.PersonId = personId;
-			name.VersionDate = request.VersionDate;
-			name.OriginSourceType = request.OriginSourceType;
-			CreatePersonNameCommand createPersonNameCommand = _mapper.Map<CreatePersonNameCommand>(name);
-			await _mediator.Send(createPersonNameCommand);
+			propertyObject.PersonId = personId;
+			propertyObject.OriginSourceType = request.OriginSourceType;
+			propertyObject.VersionDate = request.VersionDate;
+			TCommand actionCommand = _mapper.Map<TCommand>(propertyObject);
+			await _mediator.Send(actionCommand);
 		}
 	}
 }

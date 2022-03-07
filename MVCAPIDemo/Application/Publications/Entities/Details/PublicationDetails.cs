@@ -13,7 +13,7 @@ public class PublicationDetails : DetailsBase
 	public ICollection<PublicationName>? Names { get; set; }
 	public ICollection<PublicationIdentifier>? Identifiers { get; set; }
 	public ICollection<PublicationExternDatabaseId>? ExternDatabaseIds { get; set; }
-	public ICollection<PublicationAuthorDetails>? PublicationAuthors { get; set; }
+	public ICollection<PublicationAuthorDetails>? Authors { get; set; }
 	public ICollection<RelatedPublicationDetails>? RelatedPublications { get; set; }
 	public ICollection<PublicationActivity>? PublicationActivities { get; set; }
 }

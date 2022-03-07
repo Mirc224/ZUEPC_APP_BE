@@ -120,6 +120,9 @@
   <data name="EmailAlreadyUsed" xml:space="preserve">
     <value>Email sa už používa.</value>
   </data>
+  <data name="InstitutionWithIdNotExist" xml:space="preserve">
+    <value>Inštitúcia s ID {0} neexistuje.</value>
+  </data>
   <data name="InvalidEmailOrPassword" xml:space="preserve">
     <value>E-mail alebo heslo je nesprávne.</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="NotValidToken" xml:space="preserve">
     <value>Token nie je validny.</value>
+  </data>
+  <data name="PersonWithIdNotExist" xml:space="preserve">
+    <value>Osoba s ID {0} neexistuje.</value>
   </data>
   <data name="RefreshTokenExpired" xml:space="preserve">
     <value>Platnosť obnovovacieho tokenu vypršala.</value>

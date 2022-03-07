@@ -1,10 +1,9 @@
-﻿using ZUEPC.Common.Entities.Inputs;
+﻿using ZUEPC.Application.Institutions.Entities.Inputs.Common;
 
 namespace ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
 
-public class InstitutionNameBaseDto : EPCBaseDto
+public class InstitutionNameBaseDto : InstitutionPropertyBaseDto
 {
-	public long? InstitutionId { get; set; }
 	public string? NameType { get; set; }
 	public string? Name { get; set; }
 }

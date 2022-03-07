@@ -69,5 +69,3 @@ public class InstitutionController : ControllerBase
 		return StatusCode(201, response.CreatedInstitutionDetails);
 	}
 }
-
-

@@ -50,7 +50,7 @@ public class GetPublicationDetailsQueryHandler : IRequestHandler<GetPublicationD
 			PublicationId = publicationId
 		})).PublicationExternDatabaseIds;
 
-		result.PublicationAuthors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
+		result.Authors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
 		{
 			PublicationId = publicationId
 		})).PublicationAuthorDetails;

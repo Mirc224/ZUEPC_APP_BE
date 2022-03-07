@@ -32,6 +32,9 @@
     <Folder Include="Application\PublicationActivities\Controllers\" />
     <Folder Include="Application\PublicationAuthors\Controllers\" />
     <Folder Include="Application\PublicationAuthors\Entities\Previews\" />
+    <Folder Include="Application\Publications\Entities\Inputs\PublicationActivities\" />
+    <Folder Include="Application\Publications\Entities\Inputs\RelatedPublications\" />
+    <Folder Include="Application\Publications\Entities\Inputs\PublicationAuthors\" />
     <Folder Include="Application\RelatedPublications\Controllers\" />
     <Folder Include="Application\RelatedPublications\Entities\Previews\" />
     <Folder Include="Application\RelatedPublications\Queries\Previews\" />

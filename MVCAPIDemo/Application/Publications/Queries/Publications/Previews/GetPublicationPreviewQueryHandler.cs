@@ -39,7 +39,7 @@ public class GetPublicationPreviewQueryHandler : IRequestHandler<GetPublicationP
 			PublicationId = publicationId
 		})).PublicationIdentifiers;
 
-		resultPreview.PublicationAuthors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
+		resultPreview.Authors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
 		{
 			PublicationId = publicationId
 		})).PublicationAuthorDetails;

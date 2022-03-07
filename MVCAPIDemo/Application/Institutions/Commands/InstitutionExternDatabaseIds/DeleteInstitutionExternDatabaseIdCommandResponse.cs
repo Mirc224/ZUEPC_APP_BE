@@ -2,6 +2,6 @@
 
 namespace ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 
-public class DeleteInstitutionExternDatabaseIdsCommandResponse : ResponseBase
+public class DeleteInstitutionExternDatabaseIdCommandResponse : ResponseBase
 {
 }
