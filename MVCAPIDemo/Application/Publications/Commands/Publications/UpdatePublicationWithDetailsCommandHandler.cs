@@ -2,36 +2,41 @@
 using MediatR;
 using Microsoft.Extensions.Localization;
 using ZUEPC.Application.Institutions.Entities.Previews;
-using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Application.Persons.Entities.Previews;
-using ZUEPC.Application.Persons.Queries.Persons.Previews;
 using ZUEPC.Application.PublicationAuthors.Commands;
 using ZUEPC.Application.PublicationAuthors.Entities.Inputs.PublicationAuthor;
 using ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Commands.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Commands.PublicationNames;
+using ZUEPC.Application.Publications.Commands.Publications.Common;
 using ZUEPC.Application.Publications.Entities.Inputs.Common;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationNames;
+using ZUEPC.Application.Publications.Entities.Previews;
+using ZUEPC.Application.RelatedPublications.Commands;
+using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Responses;
+using ZUEPC.Common.Services;
+using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
+using ZUEPC.EvidencePublication.Base.PublicationAuthors;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Application.Publications.Commands.Publications;
 
-public class UpdatePublicationWithDetailsCommandHandler 
-	: IRequestHandler<UpdatePublicationWithDetailsCommand, UpdatePublicationWithDetailsCommandResponse>
+public class UpdatePublicationWithDetailsCommandHandler :
+	ActionPublicationWithDetailsCommandBaseHandler,
+	IRequestHandler<UpdatePublicationWithDetailsCommand, UpdatePublicationWithDetailsCommandResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IMediator _mediator;
-	private readonly IStringLocalizer<DataAnnotations> _localizer;
-
-	public UpdatePublicationWithDetailsCommandHandler(IMapper mapper, IMediator mediator, IStringLocalizer<DataAnnotations> localizer)
+	public UpdatePublicationWithDetailsCommandHandler(
+		IMapper mapper, 
+		IMediator mediator, 
+		IStringLocalizer<DataAnnotations> localizer, 
+		PublicationItemCheckService itemCheckService)
+		:base(mapper, mediator, localizer, itemCheckService)
 	{
-		_mapper = mapper;
-		_mediator = mediator;
-		_localizer = localizer;
 	}
 
 	public async Task<UpdatePublicationWithDetailsCommandResponse> Handle(UpdatePublicationWithDetailsCommand request, CancellationToken cancellationToken)
@@ -40,8 +45,18 @@ public class UpdatePublicationWithDetailsCommandHandler
 		ICollection<Tuple<PublicationAuthorCreateDto, PersonPreview, InstitutionPreview>> authorsTuplesToInsert = 
 			await GetAuthorsTuplesOrFillWithErrors(request.AuthorsToInsert, response);
 		ICollection<Tuple<PublicationAuthorUpdateDto, PersonPreview, InstitutionPreview>> authorsTuplesToUpdate =
-			await GetAuthorsTuplesOrFillWithErrors(request.AuthorsToUpdate, response);
-		
+			await GetAuthorsTuplesWithCheckOrFillWithErrors(request, response);
+
+		ICollection<Tuple<RelatedPublicationCreateDto, PublicationPreview>> relatedPublicationsTuplesToInsert =
+			await GetRelatedPublicationsTuplesOrFillWithErrors(request.RelatedPublicationsToInsert, response);
+
+		ICollection<Tuple<RelatedPublicationUpdateDto, PublicationPreview>> relatedPublicationsTuplesToUpdate =
+			await GetRelatedPublicationsTuplesWithCheckOrFillWithErrors(request, response);
+
+		await CheckIfPublicationNamesForUpdateAreValid(request, response);
+		await CheckIfPublicationIdentifiersForUpdateAreValid(request, response);
+		await CheckIfPublicationExternDatabaseIdsForUpdateAreValid(request, response);
+
 		if (!response.Success)
 		{
 			return response;
@@ -61,7 +76,160 @@ public class UpdatePublicationWithDetailsCommandHandler
 
 		await ProcessPublicationAuthorsAsync(authorsTuplesToInsert, authorsTuplesToUpdate, request);
 		
+		await ProcessRelatedPublicationAsync(relatedPublicationsTuplesToInsert, relatedPublicationsTuplesToUpdate, request);
+		
 		return new() { Success = true };
+	}
+
+	private async Task CheckIfPublicationIdentifiersForUpdateAreValid(
+		UpdatePublicationWithDetailsCommand request, 
+		UpdatePublicationWithDetailsCommandResponse response)
+	{
+		long publicationId = request.Id;
+		foreach (PublicationIdentifierUpdateDto updateCommand in request.IdentifiersToUpdate.OrEmptyIfNull())
+		{
+			long publicationIdentifierId = updateCommand.Id;
+			PublicationIdentifier? publicationIdentifier =
+				await _itemCheckService.CheckAndGetIfPublicationIdentifierExistsAndRelatedToPublicationAsync(
+					publicationIdentifierId,
+					publicationId,
+					response);
+
+			if (publicationIdentifier is null)
+			{
+				response.Success = false;
+			}
+		}
+	}
+
+	private async Task CheckIfPublicationNamesForUpdateAreValid(
+		UpdatePublicationWithDetailsCommand request, 
+		UpdatePublicationWithDetailsCommandResponse response)
+	{
+		long publicationId = request.Id;
+		foreach (PublicationNameUpdateDto updateCommand in request.NamesToUpdate.OrEmptyIfNull())
+		{
+			long publicationNameId = updateCommand.Id;
+			PublicationName? publicationName =
+				await _itemCheckService.CheckAndGetIfPublicationNameExistsAndRelatedToPublicationAsync(
+					publicationNameId,
+					publicationId,
+					response);
+
+			if (publicationName is null)
+			{
+				response.Success = false;
+			}
+		}
+	}
+
+	private async Task CheckIfPublicationExternDatabaseIdsForUpdateAreValid(
+		UpdatePublicationWithDetailsCommand request, 
+		UpdatePublicationWithDetailsCommandResponse response)
+	{
+		long publicationId = request.Id;
+		foreach (PublicationExternDatabaseIdUpdateDto updateCommand in request.ExternDatabaseIdsToUpdate.OrEmptyIfNull())
+		{
+			long publicationExternDbIdRecordId = updateCommand.Id;
+			PublicationExternDatabaseId? externIdentifier =
+				await _itemCheckService.CheckAndGetIfPublicationExternDatabaseIdExistsAndRelatedToPublicationAsync(
+					publicationExternDbIdRecordId,
+					publicationId,
+					response);
+
+			if (externIdentifier is null)
+			{
+				response.Success = false;
+			}
+		}
+	}
+
+	private async Task<ICollection<Tuple<PublicationAuthorUpdateDto, PersonPreview, InstitutionPreview>>> GetAuthorsTuplesWithCheckOrFillWithErrors(
+		UpdatePublicationWithDetailsCommand request, 
+		UpdatePublicationWithDetailsCommandResponse response)
+	{
+		await CheckIfUpdatedAuthorIsRelatedWithPublicationAsync(request.AuthorsToUpdate, request.Id, response);
+		ICollection<Tuple<PublicationAuthorUpdateDto, PersonPreview, InstitutionPreview>> authorsTuplesToUpdate =
+			await GetAuthorsTuplesOrFillWithErrors(request.AuthorsToUpdate, response);
+		
+		return authorsTuplesToUpdate;
+	}
+
+	private async Task CheckIfUpdatedAuthorIsRelatedWithPublicationAsync(
+		IEnumerable<PublicationAuthorUpdateDto>? authorsToUpdate, 
+		long publicationId, 
+		UpdatePublicationWithDetailsCommandResponse response)
+	{
+		foreach (PublicationAuthorUpdateDto updateCommand in authorsToUpdate.OrEmptyIfNull())
+		{
+			long recordId = updateCommand.Id;
+			PublicationAuthor? author =
+				await _itemCheckService.CheckAndGetIfPublicationAuthorExistsAndRelatedToPublicationAsync(
+					recordId, 
+					publicationId, 
+					response);
+			if(author is null)
+			{
+				response.Success = false;
+			}
+		}
+	}
+
+	private async Task<ICollection<Tuple<RelatedPublicationUpdateDto, PublicationPreview>>> GetRelatedPublicationsTuplesWithCheckOrFillWithErrors(
+		UpdatePublicationWithDetailsCommand request, 
+		UpdatePublicationWithDetailsCommandResponse response)
+	{
+		await CheckIfUpdatedRelatedPublicationIsRelatedWithPublicationAsync(request.RelatedPublicationsToUpdate, request.Id, response);
+		ICollection<Tuple<RelatedPublicationUpdateDto, PublicationPreview>> relatedPublicationsTuplesToUpdate =
+			await GetRelatedPublicationsTuplesOrFillWithErrors(request.RelatedPublicationsToUpdate, response);
+
+		return relatedPublicationsTuplesToUpdate;
+	}
+
+	private async Task CheckIfUpdatedRelatedPublicationIsRelatedWithPublicationAsync(
+		IEnumerable<RelatedPublicationUpdateDto>? updateCommands,
+		long publicationId,
+		ResponseBase response)
+	{
+
+		foreach (RelatedPublicationUpdateDto updateCommand in updateCommands.OrEmptyIfNull())
+		{
+			long relatedPublicationRecordId = updateCommand.Id;
+			RelatedPublication? relatedPublication =
+				await _itemCheckService.CheckAndGetIfRelatedPublicationExistsAndRelatedToPublicationAsync(
+					relatedPublicationRecordId, 
+					publicationId, 
+					response);
+
+			if(relatedPublication is null)
+			{
+				response.Success = false;
+			}
+		}
+	}
+
+	private async Task ProcessRelatedPublicationAsync(
+		ICollection<Tuple<RelatedPublicationCreateDto, PublicationPreview>> relatedPublicationsTuplesToInsert, 
+		ICollection<Tuple<RelatedPublicationUpdateDto, PublicationPreview>> relatedPublicationsTuplesToUpdate, 
+		UpdatePublicationWithDetailsCommand request)
+	{
+		long publicationId = request.Id;
+
+		foreach (long idToDelete in request.RelatedPublicationsToDelete.OrEmptyIfNull())
+		{
+			DeleteRelatedPublicationCommand deleteCommand = new() { Id = idToDelete };
+			await _mediator.Send(deleteCommand);
+		}
+
+		await ProcessPublicationPropertyAsync<RelatedPublicationUpdateDto, UpdateRelatedPublicationCommand>(
+			request,
+			relatedPublicationsTuplesToUpdate.Select(x => x.Item1),
+			publicationId);
+
+		await ProcessPublicationPropertyAsync<RelatedPublicationCreateDto, CreateRelatedPublicationCommand>(
+			request,
+			relatedPublicationsTuplesToInsert.Select(x => x.Item1),
+			publicationId);
 	}
 
 	private async Task ProcessPublicationAuthorsAsync(
@@ -87,52 +255,6 @@ public class UpdatePublicationWithDetailsCommandHandler
 			authorsTuplesToInsert.Select(x => x.Item1),
 			publicationId);
 
-	}
-
-	private async Task<ICollection<Tuple<TActionDto, PersonPreview, InstitutionPreview>>> GetAuthorsTuplesOrFillWithErrors<TActionDto>(
-		IEnumerable<TActionDto>? authors,
-		ResponseBase response)
-		where TActionDto : PublicationAuthorBaseDto
-	{
-		long personId = -1;
-		long institutionId = -1;
-		PersonPreview? personPreview = null;
-		InstitutionPreview? institutionPreview = null;
-		List<Tuple<TActionDto, PersonPreview, InstitutionPreview>> result = new();
-		List<string> errorMessages = new();
-
-		foreach (TActionDto authorDto in authors.OrEmptyIfNull())
-		{
-			personId = authorDto.PersonId;
-
-			GetPersonPreviewQueryResponse personDetailsResponse = await _mediator.Send(new GetPersonPreviewQuery() { PersonId = personId });
-			personPreview = personDetailsResponse.PersonPreview;
-			if (!personDetailsResponse.Success)
-			{
-				response.Success = false;
-				string errorMessage = string.Format(_localizer["PersonWithIdNotExist"].Value, personId);
-				errorMessages.Add(errorMessage);
-			}
-
-			institutionId = authorDto.InstitutionId;
-			GetInstitutionPreviewQueryResponse institutionDetailsResponse = await _mediator.Send(new GetInstitutionPreviewQuery() { InstitutionId = institutionId });
-			institutionPreview = institutionDetailsResponse.InstitutionPreview;
-			if (!institutionDetailsResponse.Success)
-			{
-				response.Success = false;
-				string errorMessage = string.Format(_localizer["InstitutionWithIdNotExist"].Value, institutionId);
-				errorMessages.Add(errorMessage);
-			}
-			result.Add(new Tuple<TActionDto, PersonPreview, InstitutionPreview>(authorDto, personPreview, institutionPreview));
-		}
-		if (errorMessages.Any())
-		{
-			response.ErrorMessages = response.ErrorMessages is null ? new List<string>() : response.ErrorMessages;
-			List<string> responseMessages = response.ErrorMessages.ToList();
-			responseMessages.AddRange(errorMessages);
-			response.ErrorMessages = responseMessages;
-		}
-		return result;
 	}
 
 	private async Task ProcessPublicationExternDatabaseIdsAsync(UpdatePublicationWithDetailsCommand request)
@@ -163,7 +285,6 @@ public class UpdatePublicationWithDetailsCommandHandler
 			DeletePublicationNameCommand deleteCommand = new() { Id = nameIdToDelete };
 			await _mediator.Send(deleteCommand);
 		}
-
 
 		await ProcessPublicationPropertyAsync<PublicationNameUpdateDto, UpdatePublicationNameCommand>(
 			request,

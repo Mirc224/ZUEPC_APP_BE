@@ -21,7 +21,7 @@ public class GetPublicationAuthorsPreviewsQueryHandler : IRequestHandler<GetPubl
 	public async Task<GetPublicationAuthorsPreviewsQueryResponse> Handle(GetPublicationAuthorsPreviewsQuery request, CancellationToken cancellationToken)
 	{
 		long publicationId = request.PublicationId;
-		ICollection<PublicationAuthor> pubAuthorDomain = (await _mediator.Send(new GetPublicationAuthorsQuery() 
+		ICollection<PublicationAuthor> pubAuthorDomain = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery() 
 															{ PublicationId = publicationId })).Authors;
 		List<PublicationAuthorDetails> resultAuthorsList = new List<PublicationAuthorDetails>();
 		foreach(PublicationAuthor author in pubAuthorDomain)

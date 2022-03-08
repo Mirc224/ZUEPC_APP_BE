@@ -29,12 +29,12 @@ public class GetPublicationPreviewQueryHandler : IRequestHandler<GetPublicationP
 			return new() { Success = false };
 		}
 		PublicationPreview resultPreview = _mapper.Map<PublicationPreview>(publicationDomain);
-		resultPreview.Names = (await _mediator.Send(new GetPublicationNamesQuery()
+		resultPreview.Names = (await _mediator.Send(new GetPublicationPublicationNamesQuery()
 		{
 			PublicationId = publicationId
 		})).PublicationNames;
 
-		resultPreview.Identifiers = (await _mediator.Send(new GetPublicationIdentifiersQuery()
+		resultPreview.Identifiers = (await _mediator.Send(new GetPublicationPublicationIdentifiersQuery()
 		{
 			PublicationId = publicationId
 		})).PublicationIdentifiers;

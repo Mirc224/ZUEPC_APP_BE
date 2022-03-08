@@ -35,7 +35,7 @@ public partial class ImportService
 																								versionDate,
 																								source);
 
-		IEnumerable<PublicationAuthor> foundPublicationAuthors = (await _mediator.Send(new GetPublicationAuthorsQuery()
+		IEnumerable<PublicationAuthor> foundPublicationAuthors = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery()
 		{
 			PublicationId = updatedPublication.Id
 		})).Authors;

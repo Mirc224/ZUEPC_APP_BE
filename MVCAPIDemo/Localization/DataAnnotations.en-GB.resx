@@ -135,8 +135,41 @@
   <data name="PersonWithIdNotExist" xml:space="preserve">
     <value>Person with ID {0} does not exist.</value>
   </data>
+  <data name="PublicationAuthorRecordNotExist" xml:space="preserve">
+    <value>Publication author record with ID {0} does not exist.</value>
+  </data>
+  <data name="PublicationAuthorRecordNotMatchPublicationId" xml:space="preserve">
+    <value>Publication author with ID {0} is not related to publication with ID {1}.</value>
+  </data>
+  <data name="PublicationExternDatabaseIdNotExist" xml:space="preserve">
+    <value>Publication extern database id with ID {0} does not exist.</value>
+  </data>
+  <data name="PublicationExternDatabaseIdNotMatchPublicationId" xml:space="preserve">
+    <value>Publication extern database id with ID {0} is not related to publication with ID {1}.</value>
+  </data>
+  <data name="PublicationIdentifierNotMatchPublicationId" xml:space="preserve">
+    <value>Publication identifier with ID {0} is not related to publication with ID {1}.</value>
+  </data>
+  <data name="PublicationIdentifierRecordNotExist" xml:space="preserve">
+    <value>Publication identifier with ID {0} does not exist.</value>
+  </data>
+  <data name="PublicationNameNotMatchPublicationId" xml:space="preserve">
+    <value>Publication name with ID {0} is not related to publication with ID {1}.</value>
+  </data>
+  <data name="PublicationNameRecordNotExist" xml:space="preserve">
+    <value>Publication name with ID {0} does not exists.</value>
+  </data>
+  <data name="PublicationWithIdNotExist" xml:space="preserve">
+    <value>Publication with ID {0} does not exist.</value>
+  </data>
   <data name="RefreshTokenExpired" xml:space="preserve">
     <value>Refresh token has benn expired.</value>
+  </data>
+  <data name="RelatedPublicationRecordNotMatchPublicationId" xml:space="preserve">
+    <value>Record of related publication with ID {0} is not related to publication with ID {1}.</value>
+  </data>
+  <data name="RelatedPublicationRecordWithIdNotExist" xml:space="preserve">
+    <value>Record of related publication with ID {0} does not exist.</value>
   </data>
   <data name="TokenIsRevoked" xml:space="preserve">
     <value>Token has been revoked.</value>

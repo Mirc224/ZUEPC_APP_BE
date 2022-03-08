@@ -2,50 +2,50 @@
 using MediatR;
 using Microsoft.Extensions.Localization;
 using ZUEPC.Application.Institutions.Entities.Previews;
-using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Application.Persons.Entities.Previews;
-using ZUEPC.Application.Persons.Queries.Persons.Previews;
 using ZUEPC.Application.PublicationAuthors.Commands;
 using ZUEPC.Application.PublicationAuthors.Entities.Details;
 using ZUEPC.Application.PublicationAuthors.Entities.Inputs.PublicationAuthor;
 using ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Commands.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Commands.PublicationNames;
+using ZUEPC.Application.Publications.Commands.Publications.Common;
 using ZUEPC.Application.Publications.Entities.Details;
-using ZUEPC.Application.Publications.Entities.Inputs.Common;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationNames;
-using ZUEPC.Common.Extensions;
-using ZUEPC.Common.Responses;
+using ZUEPC.Application.Publications.Entities.Previews;
+using ZUEPC.Application.RelatedPublications.Commands;
+using ZUEPC.Application.RelatedPublications.Entities.Details;
+using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
+using ZUEPC.Common.Services;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Application.Publications.Commands.Publications;
 
-public class CreatePublicationWithDetailsCommandHandler :
+public class CreatePublicationWithDetailsCommandHandler : 
+	ActionPublicationWithDetailsCommandBaseHandler,
 	IRequestHandler<CreatePublicationWithDetailsCommand, CreatePublicationWithDetailsCommandResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IMediator _mediator;
-	private readonly IStringLocalizer<DataAnnotations> _localizer;
-
 	public CreatePublicationWithDetailsCommandHandler(
 		IMapper mapper, 
 		IMediator mediator, 
-		IStringLocalizer<DataAnnotations> localizer)
+		IStringLocalizer<DataAnnotations> localizer,
+		PublicationItemCheckService itemCheckService)
+		: base(mapper, mediator, localizer, itemCheckService)
 	{
-		_mapper = mapper;
-		_mediator = mediator;
-		_localizer = localizer;
 	}
 
 	public async Task<CreatePublicationWithDetailsCommandResponse> Handle(CreatePublicationWithDetailsCommand request, CancellationToken cancellationToken)
 	{
 		CreatePublicationWithDetailsCommandResponse response = new() { Success = true };
-		ICollection<Tuple<PublicationAuthorCreateDto, PersonPreview, InstitutionPreview>> authorsTuples = await GetAuthorsTuplesOrFillWithErrors(request.Authors, response);
+		ICollection<Tuple<PublicationAuthorCreateDto, PersonPreview, InstitutionPreview>> authorsTuples = 
+			await GetAuthorsTuplesOrFillWithErrors(request.Authors, response);
+		ICollection<Tuple<RelatedPublicationCreateDto, PublicationPreview>> relatedPublicationsTuples = 
+			await GetRelatedPublicationsTuplesOrFillWithErrors(request.RelatedPublications, response);
 
-		if(!response.Success)
+		if (!response.Success)
 		{
 			return response;
 		}
@@ -59,53 +59,46 @@ public class CreatePublicationWithDetailsCommandHandler :
 		responseObject.ExternDatabaseIds = await ProcessPublicationExternDatabaseIdsAsync(request, publicationId);
 		responseObject.Identifiers = await ProcessPublicationIdentifiersAsync(request, publicationId);
 		responseObject.Authors = await ProcessPublicationAuthorsAsync(request, authorsTuples, publicationId);
+		responseObject.RelatedPublications = await ProcessRelatedPublicationsAsync(request, relatedPublicationsTuples, publicationId);
 
 		return new() { Success = true, CreatedPublicationDetails = responseObject};
 	}
 
-	private async Task<ICollection<Tuple<PublicationAuthorCreateDto, PersonPreview, InstitutionPreview>>> GetAuthorsTuplesOrFillWithErrors(
-		IEnumerable<PublicationAuthorCreateDto>? authors, 
-		ResponseBase response)
+	private async Task<ICollection<RelatedPublicationDetails>> ProcessRelatedPublicationsAsync(
+		CreatePublicationWithDetailsCommand request, 
+		ICollection<Tuple<RelatedPublicationCreateDto, PublicationPreview>> relatedPublicationsTuples, 
+		long publicationId)
 	{
-		long personId = -1;
-		long institutionId = -1;
-		PersonPreview? personPreview = null;
-		InstitutionPreview? institutionPreview = null;
-		List<Tuple<PublicationAuthorCreateDto, PersonPreview, InstitutionPreview>> result = new();
-		List<string> errorMessages = new();
-		
-		foreach(PublicationAuthorCreateDto authorDto in authors.OrEmptyIfNull())
+		List<RelatedPublicationDetails> resultList = new();
+		foreach (Tuple<RelatedPublicationCreateDto, PublicationPreview> relatedPublicationTuple in relatedPublicationsTuples)
 		{
-			personId = authorDto.PersonId;
-			
-			GetPersonPreviewQueryResponse personDetailsResponse = await _mediator.Send(new GetPersonPreviewQuery() { PersonId = personId });
-			personPreview = personDetailsResponse.PersonPreview;
-			if(!personDetailsResponse.Success)
-			{
-				response.Success = false;
-				string errorMessage = string.Format(_localizer["PersonWithIdNotExist"].Value, personId);
-				errorMessages.Add(errorMessage);
-			}
+			RelatedPublicationDetails createdRelatedPublication = await ProcessRelatedPublicationAsync(
+				request,
+				relatedPublicationTuple.Item1,
+				relatedPublicationTuple.Item2,
+				publicationId);
+			resultList.Add(createdRelatedPublication);
+		}
 
-			institutionId = authorDto.InstitutionId;
-			GetInstitutionPreviewQueryResponse institutionDetailsResponse = await _mediator.Send(new GetInstitutionPreviewQuery() { InstitutionId = institutionId});
-			institutionPreview = institutionDetailsResponse.InstitutionPreview;
-			if (!institutionDetailsResponse.Success)
-			{
-				response.Success = false;
-				string errorMessage = string.Format(_localizer["InstitutionWithIdNotExist"].Value, institutionId);
-				errorMessages.Add(errorMessage);
-			}
-			result.Add(new Tuple<PublicationAuthorCreateDto, PersonPreview, InstitutionPreview>(authorDto, personPreview, institutionPreview));
-		}
-		if(errorMessages.Any())
-		{
-			response.ErrorMessages = response.ErrorMessages is null ? new List<string>() : response.ErrorMessages;
-			List<string> responseMessages = response.ErrorMessages.ToList();
-			responseMessages.AddRange(errorMessages);
-			response.ErrorMessages = responseMessages;
-		}
-		return result;
+		return resultList;
+	}
+
+	private async Task<RelatedPublicationDetails> ProcessRelatedPublicationAsync(
+		CreatePublicationWithDetailsCommand request,
+		RelatedPublicationCreateDto relatedPublicationCreateDto,
+		PublicationPreview publictionPreview,
+		long publicationId)
+	{
+
+		CreateRelatedPublicationCommandResponse response = await ProcessPublicationPropertyAsync<
+			CreateRelatedPublicationCommandResponse,
+			RelatedPublicationCreateDto,
+			CreateRelatedPublicationCommand>(request, relatedPublicationCreateDto, publicationId);
+		
+		RelatedPublicationDetails relatedPublication = _mapper.Map<RelatedPublicationDetails>(response.RelatedPublication);
+		relatedPublication.RelatedPublication = publictionPreview;
+
+		return relatedPublication;
 	}
 
 	private async Task<ICollection<PublicationAuthorDetails>> ProcessPublicationAuthorsAsync(
@@ -175,38 +168,5 @@ public class CreatePublicationWithDetailsCommandHandler :
 			CreatePublicationNameCommand>(request, request.Names, publicationId);
 
 		return responses.Select(x => x.PublicationName).ToList();
-	}
-
-	private async Task<ICollection<TResponse>> ProcessPublicationPropertiesAsync<TResponse, TCreateDto, TCommand>(
-		CreatePublicationWithDetailsCommand request,
-		IEnumerable<TCreateDto>? propertyObjects,
-		long publicationId)
-		where TCreateDto : PublicationPropertyBaseDto
-	{
-		List<TResponse> responses = new();
-		foreach (TCreateDto propertyObject in propertyObjects.OrEmptyIfNull())
-		{
-			TResponse createdResponse = await ProcessPublicationPropertyAsync<TResponse, TCreateDto, TCommand>(
-				request, 
-				propertyObject, 
-				publicationId);
-			responses.Add(createdResponse);
-		}
-
-		return responses;
-	}
-
-	private async Task<TResponse> ProcessPublicationPropertyAsync<TResponse, TCreateDto, TCommand>(
-		CreatePublicationWithDetailsCommand request,
-		TCreateDto propertyObject,
-		long publicationId)
-		where TCreateDto : PublicationPropertyBaseDto
-	{
-		propertyObject.PublicationId = publicationId;
-		propertyObject.OriginSourceType = request.OriginSourceType;
-		propertyObject.VersionDate = request.VersionDate;
-		TCommand createPropertyObjectCommand = _mapper.Map<TCommand>(propertyObject);
-		TResponse createdResponse = (TResponse)await _mediator.Send(createPropertyObjectCommand);
-		return createdResponse;
 	}
 }

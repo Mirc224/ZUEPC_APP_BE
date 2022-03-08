@@ -17,6 +17,7 @@ using ZUEPC.DataAccess.Data.PublicationAuthors;
 using ZUEPC.DataAccess.Data.RelatedPublications;
 using ZUEPC.Localization;
 using ZUEPC.DataAccess.Data.Persons;
+using ZUEPC.Common.Services;
 
 namespace ZUEPC.Options;
 
@@ -47,6 +48,8 @@ public static class ApiServices
 		builder.Services.AddSingleton<IPublicationAuthorData, PublicationAuthorInMemoryData>();
 		// Related publication
 		builder.Services.AddSingleton<IRelatedPublicationData, RelatedPublicationInMemoryData>();
+		
+		builder.Services.AddSingleton<PublicationItemCheckService>();
 
 		builder.Services.AddMediatR(typeof(Program));
         builder.Services.AddAutoMapper(typeof(Program));

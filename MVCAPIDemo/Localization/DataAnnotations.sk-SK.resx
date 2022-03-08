@@ -135,8 +135,41 @@
   <data name="PersonWithIdNotExist" xml:space="preserve">
     <value>Osoba s ID {0} neexistuje.</value>
   </data>
+  <data name="PublicationAuthorRecordNotExist" xml:space="preserve">
+    <value>Záznam autora s ID {0} neexistuje.</value>
+  </data>
+  <data name="PublicationAuthorRecordNotMatchPublicationId" xml:space="preserve">
+    <value>Autor publikcácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
+  </data>
+  <data name="PublicationExternDatabaseIdNotExist" xml:space="preserve">
+    <value>Externý identifikátor publikácie s ID {0} neexistuje.</value>
+  </data>
+  <data name="PublicationExternDatabaseIdNotMatchPublicationId" xml:space="preserve">
+    <value>Externý identifikátor publikácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
+  </data>
+  <data name="PublicationIdentifierNotMatchPublicationId" xml:space="preserve">
+    <value>Identifikátor publikácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
+  </data>
+  <data name="PublicationIdentifierRecordNotExist" xml:space="preserve">
+    <value>Identifikátor publikácie s ID {0} neexistuje.</value>
+  </data>
+  <data name="PublicationNameNotMatchPublicationId" xml:space="preserve">
+    <value>Názov publikácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
+  </data>
+  <data name="PublicationNameRecordNotExist" xml:space="preserve">
+    <value>Záznam názvu publikácie s ID {0} neexistuje.</value>
+  </data>
+  <data name="PublicationWithIdNotExist" xml:space="preserve">
+    <value>Publikácia s ID {0} neexistuje.</value>
+  </data>
   <data name="RefreshTokenExpired" xml:space="preserve">
     <value>Platnosť obnovovacieho tokenu vypršala.</value>
+  </data>
+  <data name="RelatedPublicationRecordNotMatchPublicationId" xml:space="preserve">
+    <value>Záznam suvisiacej publikácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
+  </data>
+  <data name="RelatedPublicationRecordWithIdNotExist" xml:space="preserve">
+    <value>Záznam suvisiacej publikácie s ID {0} neexistuje.</value>
   </data>
   <data name="TokenIsRevoked" xml:space="preserve">
     <value>Token bol zrušený.</value>

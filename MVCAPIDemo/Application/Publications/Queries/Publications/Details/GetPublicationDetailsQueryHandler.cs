@@ -35,17 +35,17 @@ public class GetPublicationDetailsQueryHandler : IRequestHandler<GetPublicationD
 			return new() { Success = false };
 		}
 		PublicationDetails result = _mapper.Map<PublicationDetails>(publication);
-		result.Names = (await _mediator.Send(new GetPublicationNamesQuery()
+		result.Names = (await _mediator.Send(new GetPublicationPublicationNamesQuery()
 		{
 			PublicationId = publicationId
 		})).PublicationNames;
 
-		result.Identifiers = (await _mediator.Send(new GetPublicationIdentifiersQuery() 
+		result.Identifiers = (await _mediator.Send(new GetPublicationPublicationIdentifiersQuery() 
 		{ 
 			PublicationId = publicationId 
 		})).PublicationIdentifiers;
 
-		result.ExternDatabaseIds = (await _mediator.Send(new GetPublicationExternDatabaseIdsQuery()
+		result.ExternDatabaseIds = (await _mediator.Send(new GetPublicationPublicationExternDatabaseIdsQuery()
 		{
 			PublicationId = publicationId
 		})).PublicationExternDatabaseIds;

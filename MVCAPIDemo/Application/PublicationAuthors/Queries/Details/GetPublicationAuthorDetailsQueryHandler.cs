@@ -20,7 +20,7 @@ public class GetPublicationAuthorDetailsQueryHandler : IRequestHandler<GetPublic
 	public async Task<GetPublicationAuthorDetailsQueryResponse> Handle(GetPublicationAuthorDetailsQuery request, CancellationToken cancellationToken)
 	{
 		long publicationId = request.PublicationId;
-		ICollection<PublicationAuthor> publicationAuthors = (await _mediator.Send(new GetPublicationAuthorsQuery() { PublicationId = publicationId })).Authors;
+		ICollection<PublicationAuthor> publicationAuthors = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery() { PublicationId = publicationId })).Authors;
 		List<PublicationAuthorDetails> resultDetails = new();
 		foreach(PublicationAuthor pubAuthor in publicationAuthors)
 		{

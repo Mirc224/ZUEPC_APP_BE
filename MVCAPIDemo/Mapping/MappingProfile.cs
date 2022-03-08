@@ -31,6 +31,7 @@ using ZUEPC.Application.Publications.Entities.Inputs.PublicationNames;
 using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
+using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Auth.Domain;
 using ZUEPC.Common.Entities;
 using ZUEPC.Common.Entities.Inputs;
@@ -146,6 +147,21 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ForMember(dest => dest.ContributionRatio, opts => opts.MapFrom(src => src.ContributionRatio))
 			.ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role));
+
+		CreateMap<RelatedPublicationCreateDto, CreateRelatedPublicationCommand>()
+			.IncludeBase<EPCBaseDto, EPCCreateBaseCommand>()
+			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
+			.ForMember(dest => dest.RelatedPublicationId, opts => opts.MapFrom(src => src.RelatedPublicationId))
+			.ForMember(dest => dest.RelationType, opts => opts.MapFrom(src => src.RelationType))
+			.ForMember(dest => dest.CitationCategory, opts => opts.MapFrom(src => src.CitationCategory));
+
+		CreateMap<RelatedPublicationUpdateDto, UpdateRelatedPublicationCommand>()
+			.IncludeBase<EPCBaseDto, EPCUpdateBaseCommand>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
+			.ForMember(dest => dest.RelatedPublicationId, opts => opts.MapFrom(src => src.RelatedPublicationId))
+			.ForMember(dest => dest.RelationType, opts => opts.MapFrom(src => src.RelationType))
+			.ForMember(dest => dest.CitationCategory, opts => opts.MapFrom(src => src.CitationCategory));
 
 		// Person
 		CreateMap<PersonNameCreateDto, CreatePersonNameCommand>()

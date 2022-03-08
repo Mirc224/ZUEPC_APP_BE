@@ -1,11 +1,11 @@
 ﻿using ZUEPC.Common.Responses;
-using ZUEPC.EvidencePublication.Base.PublicationAuthors;
+using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
-namespace ZUEPC.Application.PublicationAuthors.Queries;
+namespace ZUEPC.Application.Publications.Queries.PublicationNames;
 
-public class GetPublicationAuthorsQueryResponse : ResponseBase
+public class GetPublicationPublicationNamesQueryResponse : ResponseBase
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-	public ICollection<PublicationAuthor> Authors { get; set; }
+	public ICollection<PublicationName> PublicationNames { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 }

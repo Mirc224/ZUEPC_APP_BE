@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 
-public class GetPublicationExternDatabaseIdsQuery : IRequest<GetPublicationExternDatabaseIdsQueryResponse>
+public class GetPublicationPublicationExternDatabaseIdsQuery : IRequest<GetPublicationPublicationExternDatabaseIdsQueryResponse>
 {
 	public long PublicationId { get; set; }
 }

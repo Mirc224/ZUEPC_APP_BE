@@ -110,7 +110,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 
-		GetPublicationIdentifiersQuery request = new() { PublicationId = currentPublication.Id };
+		GetPublicationPublicationIdentifiersQuery request = new() { PublicationId = currentPublication.Id };
 		IEnumerable<PublicationIdentifier>? publicationCurrentIdentifiers = (await _mediator.Send(request)).PublicationIdentifiers;
 		if (publicationCurrentIdentifiers is null)
 		{
@@ -183,7 +183,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		GetPublicationExternDatabaseIdsQuery request = new() { PublicationId = currentPublication.Id };
+		GetPublicationPublicationExternDatabaseIdsQuery request = new() { PublicationId = currentPublication.Id };
 		IEnumerable<PublicationExternDatabaseId> publicationCurrentExternIds = (await _mediator.Send(request))
 																				.PublicationExternDatabaseIds;
 
@@ -260,7 +260,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		GetPublicationNamesQuery request = new() { PublicationId = currentPublication.Id };
+		GetPublicationPublicationNamesQuery request = new() { PublicationId = currentPublication.Id };
 		IEnumerable<PublicationName> publicationCurrentNames = (await _mediator.Send(request)).PublicationNames;
 
 		List<string> allImportedNamesString = importPublicationNames.Select(identifier => identifier.Name).ToList();

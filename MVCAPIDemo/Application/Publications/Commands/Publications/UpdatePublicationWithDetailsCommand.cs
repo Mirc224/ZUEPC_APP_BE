@@ -3,6 +3,7 @@ using ZUEPC.Application.PublicationAuthors.Entities.Inputs.PublicationAuthor;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationNames;
+using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Publications.Commands.Publications;
@@ -25,4 +26,7 @@ public class UpdatePublicationWithDetailsCommand :
 	public IEnumerable<PublicationAuthorCreateDto>? AuthorsToInsert { get; set; }
 	public IEnumerable<PublicationAuthorUpdateDto>? AuthorsToUpdate { get; set; }
 	public IEnumerable<long>? AuthorsToDelete { get; set; }
+	public IEnumerable<RelatedPublicationCreateDto>? RelatedPublicationsToInsert { get; set; }
+	public IEnumerable<RelatedPublicationUpdateDto>? RelatedPublicationsToUpdate { get; set; }
+	public IEnumerable<long>? RelatedPublicationsToDelete { get; set; }
 }
