@@ -60,7 +60,7 @@ public class GetPublicationDetailsQueryHandler : IRequestHandler<GetPublicationD
 			SourcePublicationId = publicationId
 		})).RelatedPublications;
 
-		result.PublicationActivities = (await _mediator.Send(new GetPublicationActivitiesQuery()
+		result.PublicationActivities = (await _mediator.Send(new GetPublicationPublicationActivitiesQuery()
 		{
 			PublicationId = publicationId
 		})).PublicationActivities;

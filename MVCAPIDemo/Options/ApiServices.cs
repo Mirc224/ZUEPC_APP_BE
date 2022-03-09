@@ -53,7 +53,7 @@ public static class ApiServices
 
 		builder.Services.AddMediatR(typeof(Program));
         builder.Services.AddAutoMapper(typeof(Program));
-        builder.Services.AddTransient<DataAnnotations>();
+        builder.Services.AddSingleton<DataAnnotations>();
 		ConfigureAuthentication(builder);
 
         builder.Services

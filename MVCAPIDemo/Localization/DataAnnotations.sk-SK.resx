@@ -135,11 +135,17 @@
   <data name="PersonWithIdNotExist" xml:space="preserve">
     <value>Osoba s ID {0} neexistuje.</value>
   </data>
+  <data name="PublicationActivityNotMatchPublicationId" xml:space="preserve">
+    <value>Publikačná aktivita s ID {0} nesúvisí s publikáciou {1}.</value>
+  </data>
+  <data name="PublicationActivityRecordNotExist" xml:space="preserve">
+    <value>Publikačná aktivita s ID {0} neexistuje.</value>
+  </data>
+  <data name="PublicationAuthorNotMatchPublicationId" xml:space="preserve">
+    <value>Autor publikcácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
+  </data>
   <data name="PublicationAuthorRecordNotExist" xml:space="preserve">
     <value>Záznam autora s ID {0} neexistuje.</value>
-  </data>
-  <data name="PublicationAuthorRecordNotMatchPublicationId" xml:space="preserve">
-    <value>Autor publikcácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
   </data>
   <data name="PublicationExternDatabaseIdNotExist" xml:space="preserve">
     <value>Externý identifikátor publikácie s ID {0} neexistuje.</value>
@@ -165,7 +171,7 @@
   <data name="RefreshTokenExpired" xml:space="preserve">
     <value>Platnosť obnovovacieho tokenu vypršala.</value>
   </data>
-  <data name="RelatedPublicationRecordNotMatchPublicationId" xml:space="preserve">
+  <data name="RelatedPublicationNotMatchPublicationId" xml:space="preserve">
     <value>Záznam suvisiacej publikácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
   </data>
   <data name="RelatedPublicationRecordWithIdNotExist" xml:space="preserve">

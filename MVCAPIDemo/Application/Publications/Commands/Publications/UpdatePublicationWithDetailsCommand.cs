@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using ZUEPC.Application.PublicationActivities.Entities.Inputs.PublicationActivities;
 using ZUEPC.Application.PublicationAuthors.Entities.Inputs.PublicationAuthor;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationIdentifiers;
@@ -29,4 +30,7 @@ public class UpdatePublicationWithDetailsCommand :
 	public IEnumerable<RelatedPublicationCreateDto>? RelatedPublicationsToInsert { get; set; }
 	public IEnumerable<RelatedPublicationUpdateDto>? RelatedPublicationsToUpdate { get; set; }
 	public IEnumerable<long>? RelatedPublicationsToDelete { get; set; }
+	public IEnumerable<PublicationActivityCreateDto>? PublicationActivitiesToInsert { get; set; }
+	public IEnumerable<PublicationActivityUpdateDto>? PublicationActivitiesToUpdate { get; set; }
+	public IEnumerable<long>? PublicationActivitiesToDelete { get; set; }
 }

@@ -18,7 +18,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		IEnumerable<PublicationActivity> currPublicationActivities = (await _mediator.Send(
-				new GetPublicationActivitiesQuery()
+				new GetPublicationPublicationActivitiesQuery()
 				{
 					PublicationId = currPublication.Id
 				})).PublicationActivities;

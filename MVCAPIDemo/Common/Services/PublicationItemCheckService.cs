@@ -5,6 +5,7 @@ using ZUEPC.Application.Institutions.Queries.Institutions;
 using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Application.Persons.Entities.Previews;
 using ZUEPC.Application.Persons.Queries.Persons.Previews;
+using ZUEPC.Application.PublicationActivities.Queries;
 using ZUEPC.Application.PublicationAuthors.Queries;
 using ZUEPC.Application.Publications.Commands.Publications;
 using ZUEPC.Application.Publications.Entities.Previews;
@@ -15,6 +16,7 @@ using ZUEPC.Application.Publications.Queries.Publications.Previews;
 using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Application.RelatedPublications.Queries;
 using ZUEPC.Common.Responses;
+using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 using ZUEPC.EvidencePublication.Base.PublicationAuthors;
@@ -93,6 +95,37 @@ public class PublicationItemCheckService
 		return result;
 	}
 
+	public async Task<PublicationActivity?> CheckAndGetIfPublicationAcitivityExistsAndRelatedToPublicationAsync(
+		long recordId,
+		long publicationId,
+		ResponseBase? response = null)
+	{
+		PublicationActivity? result = await CheckAndGetIfPublicationActivityExistsAsync(recordId, response);
+		if (response != null &&
+			result != null &&
+			publicationId != result.PublicationId)
+		{
+			result = null;
+			string errorMessage = string.Format(_localizer["PublicationActivityNotMatchPublicationId"].Value,
+				recordId,
+				publicationId);
+			ProcessErrorMessages(response, new string[] { errorMessage });
+		}
+		return result;
+	}
+
+	public async Task<PublicationActivity?> CheckAndGetIfPublicationActivityExistsAsync(long recordId, ResponseBase? response)
+	{
+		GetPublicationActivityQueryResponse queryResponse =
+			await _mediator.Send(new GetPublicationActivityQuery() { PublicationActivityRecordId = recordId });
+		PublicationActivity? result = queryResponse.PublicationActivity;
+		if (!queryResponse.Success && response != null)
+		{
+			string errorMessage = string.Format(_localizer["PublicationActivityRecordNotExist"].Value, recordId);
+			ProcessErrorMessages(response, new string[] { errorMessage });
+		}
+		return result;
+	}
 
 	public async Task<RelatedPublication?> CheckAndGetIfRelatedPublicationExistsAndRelatedToPublicationAsync(
 		long recordId,
@@ -105,7 +138,7 @@ public class PublicationItemCheckService
 			publicationId != result.PublicationId)
 		{
 			result = null;
-			string errorMessage = string.Format(_localizer["RelatedPublicationRecordNotMatchPublicationId"].Value, 
+			string errorMessage = string.Format(_localizer["RelatedPublicationNotMatchPublicationId"].Value, 
 				recordId, 
 				publicationId);
 			ProcessErrorMessages(response, new string[] { errorMessage });
@@ -164,7 +197,7 @@ public class PublicationItemCheckService
 		return result;
 	}
 
-	private async Task<PublicationName?> CheckAndGetIfPublicationNameExistsAsync(
+	public async Task<PublicationName?> CheckAndGetIfPublicationNameExistsAsync(
 		long recordId, 
 		ResponseBase response)
 	{
@@ -205,7 +238,7 @@ public class PublicationItemCheckService
 			publicationId != result.PublicationId)
 		{
 			result = null;
-			string errorMessage = string.Format(_localizer["PublicationAuthorRecordNotMatchPublicationId"].Value,
+			string errorMessage = string.Format(_localizer["PublicationAuthorNotMatchPublicationId"].Value,
 				recordId,
 				publicationId);
 			ProcessErrorMessages(response, new string[] { errorMessage });

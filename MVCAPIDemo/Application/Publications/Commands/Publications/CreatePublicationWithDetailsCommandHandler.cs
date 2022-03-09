@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.Extensions.Localization;
 using ZUEPC.Application.Institutions.Entities.Previews;
 using ZUEPC.Application.Persons.Entities.Previews;
+using ZUEPC.Application.PublicationActivities.Commands;
+using ZUEPC.Application.PublicationActivities.Entities.Inputs.PublicationActivities;
 using ZUEPC.Application.PublicationAuthors.Commands;
 using ZUEPC.Application.PublicationAuthors.Entities.Details;
 using ZUEPC.Application.PublicationAuthors.Entities.Inputs.PublicationAuthor;
@@ -18,7 +20,9 @@ using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
+using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Services;
+using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 using ZUEPC.Localization;
 
@@ -60,8 +64,36 @@ public class CreatePublicationWithDetailsCommandHandler :
 		responseObject.Identifiers = await ProcessPublicationIdentifiersAsync(request, publicationId);
 		responseObject.Authors = await ProcessPublicationAuthorsAsync(request, authorsTuples, publicationId);
 		responseObject.RelatedPublications = await ProcessRelatedPublicationsAsync(request, relatedPublicationsTuples, publicationId);
+		responseObject.PublicationActivities = await ProcessPublicationActivitiesAsync(request, publicationId);
 
 		return new() { Success = true, CreatedPublicationDetails = responseObject};
+	}
+
+	private async Task<ICollection<PublicationActivity>> ProcessPublicationActivitiesAsync(CreatePublicationWithDetailsCommand request, long publicationId)
+	{
+		List<PublicationActivity> resultList = new();
+		foreach(PublicationActivityCreateDto publicationActivityDto in request.PublicationActivities.OrEmptyIfNull())
+		{
+			PublicationActivity publicationActivity = await ProcessPublicationActivityAsync(request, publicationActivityDto, publicationId);
+			resultList.Add(publicationActivity);
+		}
+		return resultList;
+	}
+
+	private async Task<PublicationActivity> ProcessPublicationActivityAsync(
+		CreatePublicationWithDetailsCommand request,
+		PublicationActivityCreateDto publicationActivityCreateDto,
+		long publicationId)
+	{
+
+		CreatePublicationActivityCommandResponse response = await ProcessPublicationPropertyAsync<
+			CreatePublicationActivityCommandResponse,
+			PublicationActivityCreateDto,
+			CreatePublicationActivityCommand>(request, publicationActivityCreateDto, publicationId);
+
+		PublicationActivity publicationActivity = _mapper.Map<PublicationActivity>(response.PublicationActivity);
+
+		return publicationActivity;
 	}
 
 	private async Task<ICollection<RelatedPublicationDetails>> ProcessRelatedPublicationsAsync(

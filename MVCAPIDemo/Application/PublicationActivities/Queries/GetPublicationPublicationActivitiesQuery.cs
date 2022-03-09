@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Application.PublicationActivities.Queries;
 
-public class GetPublicationActivitiesQuery : IRequest<GetPublicationActivitiesQueryResponse>
+public class GetPublicationPublicationActivitiesQuery : IRequest<GetPublicationPublicationActivitiesQueryResponse>
 {
 	public long PublicationId { get; set; }
 }

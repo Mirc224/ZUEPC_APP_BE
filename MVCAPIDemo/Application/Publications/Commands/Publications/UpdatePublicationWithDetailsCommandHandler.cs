@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.Extensions.Localization;
 using ZUEPC.Application.Institutions.Entities.Previews;
 using ZUEPC.Application.Persons.Entities.Previews;
+using ZUEPC.Application.PublicationActivities.Commands;
+using ZUEPC.Application.PublicationActivities.Entities.Inputs.PublicationActivities;
 using ZUEPC.Application.PublicationAuthors.Commands;
 using ZUEPC.Application.PublicationAuthors.Entities.Inputs.PublicationAuthor;
 using ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
@@ -19,6 +21,7 @@ using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Responses;
 using ZUEPC.Common.Services;
+using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 using ZUEPC.EvidencePublication.Base.PublicationAuthors;
@@ -56,6 +59,7 @@ public class UpdatePublicationWithDetailsCommandHandler :
 		await CheckIfPublicationNamesForUpdateAreValid(request, response);
 		await CheckIfPublicationIdentifiersForUpdateAreValid(request, response);
 		await CheckIfPublicationExternDatabaseIdsForUpdateAreValid(request, response);
+		await CheckIfPublicationActivitiesForUpdateAreValid(request, response);
 
 		if (!response.Success)
 		{
@@ -78,7 +82,30 @@ public class UpdatePublicationWithDetailsCommandHandler :
 		
 		await ProcessRelatedPublicationAsync(relatedPublicationsTuplesToInsert, relatedPublicationsTuplesToUpdate, request);
 		
+		await ProcessPublicationActivitiesAsync(request);
+		
 		return new() { Success = true };
+	}
+
+	private async Task CheckIfPublicationActivitiesForUpdateAreValid(
+		UpdatePublicationWithDetailsCommand request,
+		UpdatePublicationWithDetailsCommandResponse response)
+	{
+		long publicationId = request.Id;
+		foreach (PublicationActivityUpdateDto updateCommand in request.PublicationActivitiesToUpdate.OrEmptyIfNull())
+		{
+			long publicationActivityId = updateCommand.Id;
+			PublicationActivity? publicationActivity =
+				await _itemCheckService.CheckAndGetIfPublicationAcitivityExistsAndRelatedToPublicationAsync(
+					publicationActivityId,
+					publicationId,
+					response);
+
+			if (publicationActivity is null)
+			{
+				response.Success = false;
+			}
+		}
 	}
 
 	private async Task CheckIfPublicationIdentifiersForUpdateAreValid(
@@ -206,6 +233,28 @@ public class UpdatePublicationWithDetailsCommandHandler :
 				response.Success = false;
 			}
 		}
+	}
+
+	private async Task ProcessPublicationActivitiesAsync(
+		UpdatePublicationWithDetailsCommand request)
+	{
+		long publicationId = request.Id;
+
+		foreach (long idToDelete in request.PublicationActivitiesToDelete.OrEmptyIfNull())
+		{
+			DeletePublicationActivityCommand deleteCommand = new() { Id = idToDelete };
+			await _mediator.Send(deleteCommand);
+		}
+
+		await ProcessPublicationPropertyAsync<PublicationActivityUpdateDto, UpdatePublicationActivityCommand>(
+			request,
+			request.PublicationActivitiesToUpdate,
+			publicationId); ;
+
+		await ProcessPublicationPropertyAsync<PublicationActivityCreateDto, CreatePublicationActivityCommand>(
+			request,
+			request.PublicationActivitiesToInsert,
+			publicationId);
 	}
 
 	private async Task ProcessRelatedPublicationAsync(

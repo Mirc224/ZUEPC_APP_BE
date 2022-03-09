@@ -6,17 +6,17 @@ using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 
 namespace ZUEPC.Application.PublicationActivities.Queries;
 
-public class GetPublicationActivitiesQueryHandler : IRequestHandler<GetPublicationActivitiesQuery, GetPublicationActivitiesQueryResponse>
+public class GetPublicationPublicationActivitiesQueryHandler : IRequestHandler<GetPublicationPublicationActivitiesQuery, GetPublicationPublicationActivitiesQueryResponse>
 {
 	private readonly IMapper _mapper;
 	private readonly IPublicationActivityData _repository;
 
-	public GetPublicationActivitiesQueryHandler(IMapper mapper, IPublicationActivityData repository)
+	public GetPublicationPublicationActivitiesQueryHandler(IMapper mapper, IPublicationActivityData repository)
 	{
 		_mapper = mapper;
 		_repository = repository;
 	}
-	public async Task<GetPublicationActivitiesQueryResponse> Handle(GetPublicationActivitiesQuery request, CancellationToken cancellationToken)
+	public async Task<GetPublicationPublicationActivitiesQueryResponse> Handle(GetPublicationPublicationActivitiesQuery request, CancellationToken cancellationToken)
 	{
 		IEnumerable<PublicationActivityModel> queryResult = await _repository.GetPublicationActivitiesByPublicationIdAsync(request.PublicationId);
 
