@@ -127,7 +127,7 @@ public class CreatePublicationWithDetailsCommandHandler :
 			RelatedPublicationCreateDto,
 			CreateRelatedPublicationCommand>(request, relatedPublicationCreateDto, publicationId);
 		
-		RelatedPublicationDetails relatedPublication = _mapper.Map<RelatedPublicationDetails>(response.RelatedPublication);
+		RelatedPublicationDetails relatedPublication = _mapper.Map<RelatedPublicationDetails>(response.Data);
 		relatedPublication.RelatedPublication = publictionPreview;
 
 		return relatedPublication;

@@ -1,28 +1,20 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.CQRS.Commands;
 using ZUEPC.DataAccess.Data.RelatedPublications;
 using ZUEPC.DataAccess.Models.RelatedPublication;
 using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 
 namespace ZUEPC.Application.RelatedPublications.Commands;
 
-public class CreateRelatedPublicationCommandHandler : IRequestHandler<CreateRelatedPublicationCommand, CreateRelatedPublicationCommandResponse>
+public class CreateRelatedPublicationCommandHandler :
+	EPCCreateSimpleModelCommandHandlerBase<RelatedPublication, RelatedPublicationModel>,
+	IRequestHandler<CreateRelatedPublicationCommand, CreateRelatedPublicationCommandResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IRelatedPublicationData _repository;
-
 	public CreateRelatedPublicationCommandHandler(IMapper mapper, IRelatedPublicationData repository)
-	{
-		_mapper = mapper;
-		_repository = repository;
-	}
+		: base(mapper, repository) { }
 	public async Task<CreateRelatedPublicationCommandResponse> Handle(CreateRelatedPublicationCommand request, CancellationToken cancellationToken)
 	{
-		RelatedPublicationModel insertModel = _mapper.Map<RelatedPublicationModel>(request);
-		long insertedItemId = await _repository.InsertModelAsync(insertModel);
-		insertModel.Id = insertedItemId;
-
-		RelatedPublication domain = _mapper.Map<RelatedPublication>(insertModel);
-		return new() { Success = true, RelatedPublication = domain };
+		return await ProcessInsertCommandAsync<CreateRelatedPublicationCommand, CreateRelatedPublicationCommandResponse>(request);
 	}
 }

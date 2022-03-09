@@ -5,7 +5,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 
-public class CreateInstitutionWithDetailsCommand : EPCCreateBaseCommand, IRequest<CreateInstitutionWithDetailsCommandResponse>
+public class CreateInstitutionWithDetailsCommand : EPCCreateCommandBase, IRequest<CreateInstitutionWithDetailsCommandResponse>
 {
 	public int? Level { get; set; }
 	public string? InstitutionType { get; set; }

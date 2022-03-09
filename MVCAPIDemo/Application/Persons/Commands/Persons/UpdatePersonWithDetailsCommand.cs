@@ -5,7 +5,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Persons.Commands.Persons;
 
-public class UpdatePersonWithDetailsCommand : EPCUpdateBaseCommand, IRequest<UpdatePersonWithDetailsCommandResponse>
+public class UpdatePersonWithDetailsCommand : EPCUpdateCommandBase, IRequest<UpdatePersonWithDetailsCommandResponse>
 {
 	public int? BirthYear { get; set; }
 	public int? DeathYear { get; set; }

@@ -5,10 +5,10 @@ using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.EvidencePublication.Base.Commands;
 using ZUEPC.EvidencePublication.Base.Domain.Common;
 
-namespace ZUEPC.Common.Commands;
+namespace ZUEPC.Common.CQRS.Commands;
 
 public abstract class EPCCreateSimpleModelCommandHandlerBase<TDomain, TModel> 
-	: EPCSimpleModelCommandHandlerBase<TModel>
+	: EPCSimpleModelHandlerBase<TModel>
 	where TDomain : EPCBase
 	where TModel : EPCBaseModel
 {
@@ -20,7 +20,7 @@ public abstract class EPCCreateSimpleModelCommandHandlerBase<TDomain, TModel>
 	}
 
 	protected TModel CreateInsertModelFromRequest<TCreateCommand>(TCreateCommand request)
-	where TCreateCommand : EPCCreateBaseCommand
+	where TCreateCommand : EPCCreateCommandBase
 	{
 		TModel insertModel = _mapper.Map<TModel>(request);
 		insertModel.CreatedAt = DateTime.UtcNow;
@@ -32,8 +32,8 @@ public abstract class EPCCreateSimpleModelCommandHandlerBase<TDomain, TModel>
 	}
 
 	protected async Task<TResponse> ProcessInsertCommandAsync<TCreateCommand, TResponse>(TCreateCommand request)
-		where TCreateCommand :EPCCreateBaseCommand
-		where TResponse : ResponseBaseWithData<TDomain>, new()
+		where TCreateCommand :EPCCreateCommandBase
+		where TResponse : ResponseWithDataBase<TDomain>, new()
 	{
 		TModel insertModel = CreateInsertModelFromRequest(request);
 
@@ -42,7 +42,7 @@ public abstract class EPCCreateSimpleModelCommandHandlerBase<TDomain, TModel>
 	}
 
 	protected TResponse CreateSuccessResponseWithDataFromInsertModel<TResponse>(TModel insertModel, long insertedId)
-	where TResponse : ResponseBaseWithData<TDomain>, new()
+	where TResponse : ResponseWithDataBase<TDomain>, new()
 	{
 		TDomain domain = _mapper.Map<TDomain>(insertModel);
 		domain.Id = insertedId;

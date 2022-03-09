@@ -1,20 +1,20 @@
 ﻿using MediatR;
+using ZUEPC.Common.CQRS.Commands;
 using ZUEPC.DataAccess.Data.RelatedPublications;
+using ZUEPC.DataAccess.Models.RelatedPublication;
 
 namespace ZUEPC.Application.RelatedPublications.Commands;
 
-public class DeleteRelatedPublicationCommandHandler : IRequestHandler<DeleteRelatedPublicationCommand, DeleteRelatedPublicationCommandResponse>
+public class DeleteRelatedPublicationCommandHandler :
+	EPCDeleteSimpleBaseCommandHandler<RelatedPublicationModel>,
+	IRequestHandler<DeleteRelatedPublicationCommand, DeleteRelatedPublicationCommandResponse>
 {
-	private readonly IRelatedPublicationData _repository;
-
 	public DeleteRelatedPublicationCommandHandler(IRelatedPublicationData repository)
-	{
-		_repository = repository;
-	}
+	: base(repository) { }
+
 	public async Task<DeleteRelatedPublicationCommandResponse> Handle(DeleteRelatedPublicationCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
-
-		return new() { Success = rowsDeleted == 1 };
+		return await ProcessDeleteCommandAsync
+			<DeleteRelatedPublicationCommand, DeleteRelatedPublicationCommandResponse>(request);
 	}
 }

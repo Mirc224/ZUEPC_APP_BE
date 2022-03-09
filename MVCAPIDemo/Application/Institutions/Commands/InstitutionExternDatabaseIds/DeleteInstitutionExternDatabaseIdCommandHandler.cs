@@ -1,23 +1,22 @@
 ﻿using MediatR;
+using ZUEPC.Common.CQRS.Commands;
 using ZUEPC.DataAccess.Data.Institutions;
+using ZUEPC.DataAccess.Models.Institution;
 
 namespace ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 
-public class DeleteInstitutionExternDatabaseIdCommandHandler : 
+public class DeleteInstitutionExternDatabaseIdCommandHandler :
+	EPCDeleteSimpleBaseCommandHandler<InstitutionExternDatabaseIdModel>,
 	IRequestHandler<
 		DeleteInstitutionExternDatabaseIdCommand, 
 		DeleteInstitutionExternDatabaseIdCommandResponse>
 {
-	private readonly IInstitutionExternDatabaseIdData _repository;
-
 	public DeleteInstitutionExternDatabaseIdCommandHandler(IInstitutionExternDatabaseIdData repository)
-	{
-		_repository = repository;
-	}
+		:base(repository) {}
 
 	public async Task<DeleteInstitutionExternDatabaseIdCommandResponse> Handle(DeleteInstitutionExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
-		return new() { Success = rowsDeleted == 1};
+		return await ProcessDeleteCommandAsync
+			<DeleteInstitutionExternDatabaseIdCommand, DeleteInstitutionExternDatabaseIdCommandResponse>(request);
 	}
 }

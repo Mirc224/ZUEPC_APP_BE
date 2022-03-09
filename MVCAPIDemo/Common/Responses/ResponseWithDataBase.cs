@@ -1,6 +1,6 @@
 ﻿namespace ZUEPC.Common.Responses;
 
-public class ResponseBaseWithData<T> : ResponseBase
+public class ResponseWithDataBase<T> : ResponseBase
 {
 	public T? Data { get; set; }
 }

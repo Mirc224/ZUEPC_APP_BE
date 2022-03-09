@@ -1,24 +1,21 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.CQRS.Commands;
 using ZUEPC.DataAccess.Data.Publications;
+using ZUEPC.DataAccess.Models.Publication;
 
 namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 
-public class DeletePublicationExternDatabaseIdCommandHandler : IRequestHandler<DeletePublicationExternDatabaseIdCommand, DeletePublicationExternDatabaseIdCommandResponse>
+public class DeletePublicationExternDatabaseIdCommandHandler :
+	EPCDeleteSimpleBaseCommandHandler<PublicationExternDatabaseIdModel>,
+	IRequestHandler<DeletePublicationExternDatabaseIdCommand, DeletePublicationExternDatabaseIdCommandResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IPublicationExternDatabaseIdData _repository;
-
 	public DeletePublicationExternDatabaseIdCommandHandler(IMapper mapper, IPublicationExternDatabaseIdData repository)
-	{
-		_mapper = mapper;
-		_repository = repository;
-	}
+	: base(repository) { }
 
 	public async Task<DeletePublicationExternDatabaseIdCommandResponse> Handle(DeletePublicationExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
-
-		return new() { Success = true };
+		return await ProcessDeleteCommandAsync
+			<DeletePublicationExternDatabaseIdCommand, DeletePublicationExternDatabaseIdCommandResponse>(request);
 	}
 }

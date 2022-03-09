@@ -3,12 +3,11 @@ using ZUEPC.Common.Responses;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.EvidencePublication.Base.Commands;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
 
-namespace ZUEPC.Common.Commands;
+namespace ZUEPC.Common.CQRS.Commands;
 
 public abstract class EPCUpdateSimpleModelCommandHandlerBase<TModel> : 
-	EPCSimpleModelCommandHandlerBase<TModel>
+	EPCSimpleModelHandlerBase<TModel>
 	where TModel : EPCBaseModel
 {
 	protected readonly IMapper _mapper;
@@ -19,7 +18,7 @@ public abstract class EPCUpdateSimpleModelCommandHandlerBase<TModel> :
 	}
 
 	protected async Task<TResponse> ProcessUpdateCommandFromRequestAsync<TUpdateCommand, TResponse>(TUpdateCommand request)
-	where TUpdateCommand : EPCUpdateBaseCommand
+	where TUpdateCommand : EPCUpdateCommandBase
 	where TResponse : ResponseBase, new()
 	{
 		TModel? currentModel = await _repository.GetModelByIdAsync(request.Id);

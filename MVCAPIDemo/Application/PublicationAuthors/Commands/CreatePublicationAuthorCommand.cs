@@ -3,7 +3,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.PublicationAuthors.Commands;
 
-public class CreatePublicationAuthorCommand : EPCCreateBaseCommand, IRequest<CreatePublicationAuthorCommandResponse>
+public class CreatePublicationAuthorCommand : EPCCreateCommandBase, IRequest<CreatePublicationAuthorCommandResponse>
 {
 	public long PublicationId { get; set; }
 	public long PersonId { get; set; }

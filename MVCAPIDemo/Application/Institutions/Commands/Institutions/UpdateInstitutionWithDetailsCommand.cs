@@ -6,7 +6,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 
 public class UpdateInstitutionWithDetailsCommand : 
-	EPCUpdateBaseCommand, 
+	EPCUpdateCommandBase, 
 	IRequest<UpdateInstitutionWithDetailsCommandResponse>
 {
 	public int? Level { get; set; }

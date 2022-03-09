@@ -5,7 +5,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Persons.Commands.Persons;
 
-public class CreatePersonWithDetailsCommand : EPCCreateBaseCommand, IRequest<CreatePersonWithDetailsCommandResponse>
+public class CreatePersonWithDetailsCommand : EPCCreateCommandBase, IRequest<CreatePersonWithDetailsCommandResponse>
 {
 	public int? BirthYear { get; set; }
 	public int? DeathYear { get; set; }

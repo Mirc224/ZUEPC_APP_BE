@@ -1,19 +1,20 @@
 ﻿using MediatR;
+using ZUEPC.Common.CQRS.Commands;
 using ZUEPC.DataAccess.Data.Persons;
+using ZUEPC.DataAccess.Models.Person;
 
 namespace ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 
-public class DeletePersonExternDatabaseIdCommandHandler : IRequestHandler<DeletePersonExternDatabaseIdCommand, DeletePersonExternDatabaseIdCommandResponse>
+public class DeletePersonExternDatabaseIdCommandHandler :
+	EPCDeleteSimpleBaseCommandHandler<PersonExternDatabaseIdModel>,
+	IRequestHandler<DeletePersonExternDatabaseIdCommand, DeletePersonExternDatabaseIdCommandResponse>
 {
-	private readonly IPersonExternDatabaseIdData _repository;
 
 	public DeletePersonExternDatabaseIdCommandHandler(IPersonExternDatabaseIdData repository)
-	{
-		_repository = repository;
-	}
+	: base(repository) { }
 	public async Task<DeletePersonExternDatabaseIdCommandResponse> Handle(DeletePersonExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
-		return new() { Success = rowsDeleted > 0 };
+		return await ProcessDeleteCommandAsync
+			<DeletePersonExternDatabaseIdCommand, DeletePersonExternDatabaseIdCommandResponse>(request);
 	}
 }

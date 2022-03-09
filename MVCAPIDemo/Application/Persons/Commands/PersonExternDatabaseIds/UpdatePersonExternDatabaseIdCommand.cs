@@ -3,7 +3,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 
-public class UpdatePersonExternDatabaseIdCommand : EPCUpdateBaseCommand, IRequest<UpdatePersonExternDatabaseIdCommandResponse>
+public class UpdatePersonExternDatabaseIdCommand : EPCUpdateCommandBase, IRequest<UpdatePersonExternDatabaseIdCommandResponse>
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	public long PersonId { get; set; }

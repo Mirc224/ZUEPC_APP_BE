@@ -3,6 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Commands.PersonNames;
 
-public class CreatePersonNameCommandResponse : ResponseBaseWithData<PersonName>
+public class CreatePersonNameCommandResponse : ResponseWithDataBase<PersonName>
 {
 }

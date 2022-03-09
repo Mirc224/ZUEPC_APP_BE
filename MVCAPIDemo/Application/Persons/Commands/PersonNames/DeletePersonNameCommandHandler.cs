@@ -1,21 +1,20 @@
 ﻿using MediatR;
+using ZUEPC.Common.CQRS.Commands;
 using ZUEPC.DataAccess.Data.Persons;
+using ZUEPC.DataAccess.Models.Person;
 
 namespace ZUEPC.Application.Persons.Commands.PersonNames;
 
-public class DeletePersonNameCommandHandler : IRequestHandler<DeletePersonNameCommand, DeletePersonNameCommandResponse>
+public class DeletePersonNameCommandHandler :
+	EPCDeleteSimpleBaseCommandHandler<PersonNameModel>,
+	IRequestHandler<DeletePersonNameCommand, DeletePersonNameCommandResponse>
 {
-	private readonly IPersonNameData _repository;
-
 	public DeletePersonNameCommandHandler(IPersonNameData repository)
-	{
-		_repository = repository;
-	}
+	:base(repository) { }
 
 	public async Task<DeletePersonNameCommandResponse> Handle(DeletePersonNameCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
-
-		return new() { Success = rowsDeleted == 1 };
+		return await ProcessDeleteCommandAsync
+			<DeletePersonNameCommand, DeletePersonNameCommandResponse>(request);
 	}
 }

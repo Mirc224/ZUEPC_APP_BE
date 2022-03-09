@@ -3,6 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 
 namespace ZUEPC.Application.RelatedPublications.Queries;
 
-public class GetRelatedPublicationQueryResponse : ResponseBaseWithData<RelatedPublication>
+public class GetRelatedPublicationQueryResponse : ResponseWithDataBase<RelatedPublication>
 {
 }

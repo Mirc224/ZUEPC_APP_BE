@@ -3,6 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 
-public class CreatePublicationExternDatabaseIdCommandResponse : ResponseBaseWithData<PublicationExternDatabaseId>
+public class CreatePublicationExternDatabaseIdCommandResponse : ResponseWithDataBase<PublicationExternDatabaseId>
 {
 }

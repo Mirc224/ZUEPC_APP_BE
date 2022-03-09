@@ -2,7 +2,7 @@
 
 namespace ZUEPC.EvidencePublication.Base.Commands;
 
-public class EPCCreateBaseCommand
+public class EPCCreateCommandBase
 {
 	public OriginSourceType OriginSourceType { get; set; }
 	public DateTime? VersionDate { get; set; }

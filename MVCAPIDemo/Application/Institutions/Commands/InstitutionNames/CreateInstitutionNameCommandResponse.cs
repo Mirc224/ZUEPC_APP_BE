@@ -3,6 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Commands.InstitutionNames;
 
-public class CreateInstitutionNameCommandResponse : ResponseBaseWithData<InstitutionName>
+public class CreateInstitutionNameCommandResponse : ResponseWithDataBase<InstitutionName>
 {
 }

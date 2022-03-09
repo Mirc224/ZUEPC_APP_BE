@@ -3,7 +3,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Persons.Commands.PersonNames;
 
-public class CreatePersonNameCommand : EPCCreateBaseCommand, IRequest<CreatePersonNameCommandResponse>
+public class CreatePersonNameCommand : EPCCreateCommandBase, IRequest<CreatePersonNameCommandResponse>
 {
 	public long PersonId { get; set; }
 	public string? NameType { get; set; }

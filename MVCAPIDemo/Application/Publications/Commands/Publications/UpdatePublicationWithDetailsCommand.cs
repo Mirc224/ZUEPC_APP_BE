@@ -10,7 +10,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 namespace ZUEPC.Application.Publications.Commands.Publications;
 
 public class UpdatePublicationWithDetailsCommand :
-	EPCUpdateBaseCommand, 
+	EPCUpdateCommandBase, 
 	IRequest<UpdatePublicationWithDetailsCommandResponse>
 {
 	public string? DocumentType { get; set; }

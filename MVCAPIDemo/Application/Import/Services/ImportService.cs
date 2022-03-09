@@ -95,7 +95,7 @@ public partial class ImportService
 		IEnumerable<TDomain> recordsToUpdate,
 		DateTime versionDate,
 		OriginSourceType source)
-		where TCommand : EPCUpdateBaseCommand, new()
+		where TCommand : EPCUpdateCommandBase, new()
 		where TDomain : EPCBase
 	{
 		foreach (TDomain recordForUpdate in recordsToUpdate)
@@ -108,7 +108,7 @@ public partial class ImportService
 		TDomain objectForUpdate,
 		DateTime versionDate,
 		OriginSourceType source)
-		where TCommand : EPCUpdateBaseCommand, new()
+		where TCommand : EPCUpdateCommandBase, new()
 		where TDomain : EPCBase
 	{
 		TCommand updateRequest = _mapper.Map<TCommand>(objectForUpdate);

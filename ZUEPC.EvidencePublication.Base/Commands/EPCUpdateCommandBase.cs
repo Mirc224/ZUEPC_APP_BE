@@ -2,7 +2,7 @@
 
 namespace ZUEPC.EvidencePublication.Base.Commands;
 
-public class EPCUpdateBaseCommand
+public class EPCUpdateCommandBase
 {
 	public long Id { get; set; }
 	public OriginSourceType OriginSourceType { get; set; }

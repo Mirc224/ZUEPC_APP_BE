@@ -3,6 +3,6 @@ using ZUEPC.Common.Responses;
 
 namespace ZUEPC.Application.PublicationAuthors.Queries.Details;
 
-public class GetPublicationAuthorDetailsQueryResponse : ResponseBaseWithData<ICollection<PublicationAuthorDetails>>
+public class GetPublicationAuthorDetailsQueryResponse : ResponseWithDataBase<ICollection<PublicationAuthorDetails>>
 {
 }

@@ -38,6 +38,7 @@
     <Folder Include="Application\RelatedPublications\Controllers\" />
     <Folder Include="Application\RelatedPublications\Entities\Previews\" />
     <Folder Include="Application\RelatedPublications\Queries\Previews\" />
+    <Folder Include="Common\CQRS\Queries\" />
   </ItemGroup>
 
 </Project>

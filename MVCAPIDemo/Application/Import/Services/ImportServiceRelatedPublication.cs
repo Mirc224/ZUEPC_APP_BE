@@ -141,7 +141,7 @@ public partial class ImportService
 		CreateRelatedPublicationCommand createCommand = _mapper.Map<CreateRelatedPublicationCommand>(relatedPublication);
 		createCommand.VersionDate = versionDate;
 		createCommand.OriginSourceType = source;
-		return (await _mediator.Send(createCommand)).RelatedPublication;
+		return (await _mediator.Send(createCommand)).Data;
 	}
 
 	private async Task<Tuple<ImportRelatedPublication, Publication, Publication>?> ProcessRelatedPublicationImportPublicationAsync(
