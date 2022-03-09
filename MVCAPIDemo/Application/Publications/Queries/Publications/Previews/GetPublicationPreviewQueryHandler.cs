@@ -22,7 +22,7 @@ public class GetPublicationPreviewQueryHandler : IRequestHandler<GetPublicationP
 
 	public async Task<GetPublicationPreviewQueryResponse> Handle(GetPublicationPreviewQuery request, CancellationToken cancellationToken)
 	{
-		long publicationId = request.PublicationId;
+		long publicationId = request.Id;
 		Publication? publicationDomain = (await _mediator.Send(new GetPublicationQuery() { Id = publicationId })).Data;
 		if (publicationDomain is null)
 		{
@@ -44,6 +44,6 @@ public class GetPublicationPreviewQueryHandler : IRequestHandler<GetPublicationP
 			PublicationId = publicationId
 		})).Data;
 
-		return new() { Success = true, PublicationPreview = resultPreview };
+		return new() { Success = true, Data = resultPreview };
 	}
 }

@@ -19,7 +19,7 @@ public class GetPersonPreviewQueryHandler : IRequestHandler<GetPersonPreviewQuer
 	}
 	public async Task<GetPersonPreviewQueryResponse> Handle(GetPersonPreviewQuery request, CancellationToken cancellationToken)
 	{
-		long personId = request.PersonId;
+		long personId = request.Id;
 		Person? personDomain = (await _mediator.Send(new GetPersonQuery() { Id = personId})).Data;
 		if(personDomain is null)
 		{

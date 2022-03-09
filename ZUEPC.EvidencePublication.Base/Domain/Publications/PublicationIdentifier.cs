@@ -1,8 +1,9 @@
 ﻿using ZUEPC.EvidencePublication.Base.Domain.Common;
+using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 
 namespace ZUEPC.EvidencePublication.Base.Domain.Publications;
 
-public class PublicationIdentifier : EPCBase
+public class PublicationIdentifier : EPCBase, IPublicationRelated
 {
 	public long PublicationId { get; set; }
 	public string? IdentifierValue { get; set; }

@@ -19,7 +19,7 @@ public class GetInstitutionPreviewQueryHandler : IRequestHandler<GetInstitutionP
 	}
 	public async Task<GetInstitutionPreviewQueryResponse> Handle(GetInstitutionPreviewQuery request, CancellationToken cancellationToken)
 	{
-		long institutionId = request.InstitutionId;
+		long institutionId = request.Id;
 		Institution? institutionDomain = (await _mediator.Send(new GetInstitutionQuery() { Id = institutionId })).Data;
 		if (institutionDomain is null)
 		{

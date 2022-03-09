@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Localization;
+using System;
 using ZUEPC.Application.Institutions.Entities.Previews;
-using ZUEPC.Application.Institutions.Queries.Institutions;
 using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Application.Persons.Entities.Previews;
 using ZUEPC.Application.Persons.Queries.Persons.Previews;
 using ZUEPC.Application.PublicationActivities.Queries;
 using ZUEPC.Application.PublicationAuthors.Queries;
-using ZUEPC.Application.Publications.Commands.Publications;
 using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
@@ -16,10 +15,12 @@ using ZUEPC.Application.Publications.Queries.Publications.Previews;
 using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Application.RelatedPublications.Queries;
 using ZUEPC.Common.Responses;
+using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 using ZUEPC.EvidencePublication.Base.PublicationAuthors;
+using ZUEPC.EvidencePublication.Base.Queries;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Common.Services;
@@ -39,60 +40,49 @@ public class PublicationItemCheckService
 		long publicationId, 
 		ResponseBase? response = null)
 	{
-		GetPublicationPreviewQueryResponse queryResponse = 
-			await _mediator.Send(new GetPublicationPreviewQuery() { PublicationId = publicationId });
-		PublicationPreview? result = queryResponse.PublicationPreview;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["PublicationWithIdNotExist"].Value, publicationId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<PublicationPreview,
+			GetPublicationPreviewQuery,
+			GetPublicationPreviewQueryResponse>(
+			publicationId, 
+			"PublicationWithIdNotExist",
+			response);
 	}
 
 	public async Task<Publication?> CheckAndGetIfPublicationExistsAsync(
-		long publicationId,
+		long recordId,
 		ResponseBase? response = null)
 	{
-		GetPublicationQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationQuery() { Id = publicationId });
-		Publication? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["PublicationWithIdNotExist"].Value, publicationId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<Publication,
+			GetPublicationQuery,
+			GetPublicationQueryResponse>(recordId, "PublicationWithIdNotExist", response);
 	}
 
 	public async Task<PersonPreview?> CheckAndGetPreviewIfPersonExistsAsync(
 		long personId, 
 		ResponseBase? response = null)
 	{
-		GetPersonPreviewQueryResponse queryResponse =
-			await _mediator.Send(new GetPersonPreviewQuery() { PersonId = personId});
-		PersonPreview? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["PersonWithIdNotExist"].Value, personId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<PersonPreview,
+			GetPersonPreviewQuery,
+			GetPersonPreviewQueryResponse>(
+			personId,
+			"PersonWithIdNotExist",
+			response);
 	}
 
 	public async Task<InstitutionPreview?> CheckAndGetPreviewIfInstitutionExistsAsync(
 		long institutionId, 
 		ResponseBase? response = null)
 	{
-		GetInstitutionPreviewQueryResponse queryResponse =
-			await _mediator.Send(new GetInstitutionPreviewQuery() { InstitutionId = institutionId });
-		InstitutionPreview? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["InstitutionWithIdNotExist"].Value, institutionId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<InstitutionPreview,
+			GetInstitutionPreviewQuery,
+			GetInstitutionPreviewQueryResponse>(
+			institutionId, 
+			"InstitutionWithIdNotExist",
+			response);
 	}
 
 	public async Task<PublicationActivity?> CheckAndGetIfPublicationAcitivityExistsAndRelatedToPublicationAsync(
@@ -100,131 +90,103 @@ public class PublicationItemCheckService
 		long publicationId,
 		ResponseBase? response = null)
 	{
-		PublicationActivity? result = await CheckAndGetIfPublicationActivityExistsAsync(recordId, response);
-		if (response != null &&
-			result != null &&
-			publicationId != result.PublicationId)
-		{
-			result = null;
-			string errorMessage = string.Format(_localizer["PublicationActivityNotMatchPublicationId"].Value,
-				recordId,
-				publicationId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfObjectExistsAndRelatedToPublicationAsync
+			<PublicationActivity,
+			GetPublicationActivityQuery,
+			GetPublicationActivityQueryResponse>(
+			recordId,
+			publicationId,
+			"PublicationActivityNotMatchPublicationId",
+			CheckAndGetIfPublicationActivityExistsAsync,
+			response);
 	}
 
-	public async Task<PublicationActivity?> CheckAndGetIfPublicationActivityExistsAsync(long recordId, ResponseBase? response)
-	{
-		GetPublicationActivityQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationActivityQuery() { Id = recordId });
-		PublicationActivity? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["PublicationActivityRecordNotExist"].Value, recordId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
-	}
-
-	public async Task<RelatedPublication?> CheckAndGetIfRelatedPublicationExistsAndRelatedToPublicationAsync(
-		long recordId,
-		long publicationId,
+	public async Task<PublicationActivity?> CheckAndGetIfPublicationActivityExistsAsync(
+		long recordId, 
 		ResponseBase? response = null)
 	{
-		RelatedPublication? result = await CheckAndGetIfRelatedPublicationExistsAsync(recordId, response);
-		if (response != null && 
-			result != null &&
-			publicationId != result.PublicationId)
-		{
-			result = null;
-			string errorMessage = string.Format(_localizer["RelatedPublicationNotMatchPublicationId"].Value, 
-				recordId, 
-				publicationId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<PublicationActivity,
+			GetPublicationActivityQuery,
+			GetPublicationActivityQueryResponse>(recordId, "PublicationActivityRecordNotExist", response);
 	}
 
 	public async Task<PublicationIdentifier?> CheckAndGetIfPublicationIdentifierExistsAndRelatedToPublicationAsync(
 		long recordId, 
 		long publicationId, 
-		ResponseBase response)
+		ResponseBase? response = null)
 	{
-		PublicationIdentifier? result = await CheckAndGetIfPublicationIdentifierExistsAsync(recordId, response);
-		if (response != null &&
-			result != null &&
-			publicationId != result.PublicationId)
-		{
-			result = null;
-			string errorMessage = string.Format(_localizer["PublicationIdentifierNotMatchPublicationId"].Value,
-				recordId,
-				publicationId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfObjectExistsAndRelatedToPublicationAsync
+			<PublicationIdentifier,
+			GetPublicationIdentifierQuery,
+			GetPublicationIdentifierQueryResponse>(
+			recordId,
+			publicationId,
+			"PublicationIdentifierNotMatchPublicationId",
+			CheckAndGetIfPublicationIdentifierExistsAsync,
+			response);
 	}
 
-	public async Task<PublicationIdentifier?> CheckAndGetIfPublicationIdentifierExistsAsync(long recordId, ResponseBase response)
+	public async Task<PublicationIdentifier?> CheckAndGetIfPublicationIdentifierExistsAsync(
+		long recordId,
+		ResponseBase? response = null)
 	{
-		GetPublicationIdentifierQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationIdentifierQuery() { Id = recordId });
-		PublicationIdentifier? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["PublicationIdentifierRecordNotExist"].Value, recordId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<PublicationIdentifier,
+			GetPublicationIdentifierQuery,
+			GetPublicationIdentifierQueryResponse>(recordId, "PublicationIdentifierRecordNotExist", response);
 	}
 
 	public async Task<PublicationName?> CheckAndGetIfPublicationNameExistsAndRelatedToPublicationAsync(
 		long recordId, 
 		long publicationId, 
-		ResponseBase response)
+		ResponseBase? response = null)
 	{
-		PublicationName? result = await CheckAndGetIfPublicationNameExistsAsync(recordId, response);
-		if (response != null &&
-			result != null &&
-			publicationId != result.PublicationId)
-		{
-			result = null;
-			string errorMessage = string.Format(_localizer["PublicationNameNotMatchPublicationId"].Value,
-				recordId,
-				publicationId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfObjectExistsAndRelatedToPublicationAsync
+			<PublicationName,
+			GetPublicationNameQuery,
+			GetPublicationNameQueryResponse>(
+			recordId,
+			publicationId,
+			"PublicationNameNotMatchPublicationId",
+			CheckAndGetIfPublicationNameExistsAsync,
+			response);
 	}
 
 	public async Task<PublicationName?> CheckAndGetIfPublicationNameExistsAsync(
 		long recordId, 
-		ResponseBase response)
+		ResponseBase? response = null)
 	{
-		GetPublicationNameQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationNameQuery() { Id = recordId });
-		PublicationName? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["PublicationNameRecordNotExist"].Value, recordId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<PublicationName,
+			GetPublicationNameQuery,
+			GetPublicationNameQueryResponse>(recordId, "PublicationNameRecordNotExist", response);
+	}
+
+	public async Task<RelatedPublication?> CheckAndGetIfRelatedPublicationExistsAndRelatedToPublicationAsync(
+	long recordId,
+	long publicationId,
+	ResponseBase? response = null)
+	{
+		return await CheckAndGetIfObjectExistsAndRelatedToPublicationAsync
+			<RelatedPublication,
+			GetRelatedPublicationQuery,
+			GetRelatedPublicationQueryResponse>(
+			recordId,
+			publicationId,
+			"RelatedPublicationNotMatchPublicationId",
+			CheckAndGetIfRelatedPublicationExistsAsync,
+			response);
 	}
 
 	public async Task<RelatedPublication?> CheckAndGetIfRelatedPublicationExistsAsync(
 		long recordId,
 		ResponseBase? response = null)
 	{
-		GetRelatedPublicationQueryResponse queryResponse =
-			await _mediator.Send(new GetRelatedPublicationQuery() { Id = recordId });
-		RelatedPublication? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["RelatedPublicationRecordWithIdNotExist"].Value, recordId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<RelatedPublication,
+			GetRelatedPublicationQuery,
+			GetRelatedPublicationQueryResponse>(recordId, "RelatedPublicationRecordWithIdNotExist", response);
 	}
 
 	public async Task<PublicationAuthor?> CheckAndGetIfPublicationAuthorExistsAndRelatedToPublicationAsync(
@@ -232,33 +194,25 @@ public class PublicationItemCheckService
 		long publicationId,
 		ResponseBase? response = null)
 	{
-		PublicationAuthor? result = await CheckAndGetIfPublicationAuthorExistsAsync(recordId, response);
-		if (response != null &&
-			result != null &&
-			publicationId != result.PublicationId)
-		{
-			result = null;
-			string errorMessage = string.Format(_localizer["PublicationAuthorNotMatchPublicationId"].Value,
-				recordId,
-				publicationId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfObjectExistsAndRelatedToPublicationAsync
+			<PublicationAuthor,
+			GetPublicationAuthorQuery,
+			GetPublicationAuthorQueryResponse>(
+			recordId,
+			publicationId,
+			"PublicationAuthorNotMatchPublicationId",
+			CheckAndGetIfPublicationAuthorExistsAsync,
+			response);
 	}
 
 	public async Task<PublicationAuthor?> CheckAndGetIfPublicationAuthorExistsAsync(
 		long recordId,
 		ResponseBase? response = null)
 	{
-		GetPublicationAuthorQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationAuthorQuery() { Id = recordId });
-		PublicationAuthor? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer["PublicationAuthorRecordNotExist"].Value, recordId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<PublicationAuthor,
+			GetPublicationAuthorQuery,
+			GetPublicationAuthorQueryResponse>(recordId, "PublicationAuthorRecordNotExist", response);
 	}
 
 	public async Task<PublicationExternDatabaseId?> CheckAndGetIfPublicationExternDatabaseIdExistsAndRelatedToPublicationAsync(
@@ -266,13 +220,43 @@ public class PublicationItemCheckService
 		long publicationId,
 		ResponseBase? response = null)
 	{
-		PublicationExternDatabaseId? result = await CheckAndGetIfPublicationExternDatabaseIdExistsAsync(recordId, response);
+		return await CheckAndGetIfObjectExistsAndRelatedToPublicationAsync<PublicationExternDatabaseId,
+			GetPublicationExternDatabaseIdQuery,
+			GetPublicationExternDatabaseIdQueryResponse>(
+			recordId,
+			publicationId,
+			"PublicationExternDatabaseIdNotMatchPublicationId",
+			CheckAndGetIfPublicationExternDatabaseIdExistsAsync,
+			response);
+	}
+
+	public async Task<PublicationExternDatabaseId?> CheckAndGetIfPublicationExternDatabaseIdExistsAsync(
+		long recordId,
+		ResponseBase? response = null)
+	{
+		return await CheckAndGetIfSimpleObjectExistsAsync
+			<PublicationExternDatabaseId,
+			GetPublicationExternDatabaseIdQuery,
+			GetPublicationExternDatabaseIdQueryResponse>(recordId, "PublicationExternDatabaseIdNotExist", response);
+	}
+
+	protected async Task<TDomain?> CheckAndGetIfObjectExistsAndRelatedToPublicationAsync<TDomain, TQuery, TResponse>(
+		long recordId,
+		long publicationId,
+		string annotationNotRelatedKey,
+		Func<long, ResponseBase?, Task<TDomain?>> existenceCheckFunc,
+		ResponseBase? response = null)
+		where TDomain : class, IPublicationRelated
+		where TQuery : EPCSimpleQueryBase, new()
+		where TResponse : ResponseWithDataBase<TDomain>
+	{
+		TDomain? result = await existenceCheckFunc(recordId, response);
 		if (response != null &&
 			result != null &&
 			publicationId != result.PublicationId)
 		{
 			result = null;
-			string errorMessage = string.Format(_localizer["PublicationExternDatabaseIdNotMatchPublicationId"].Value,
+			string errorMessage = string.Format(_localizer[annotationNotRelatedKey].Value,
 				recordId,
 				publicationId);
 			ProcessErrorMessages(response, new string[] { errorMessage });
@@ -280,20 +264,39 @@ public class PublicationItemCheckService
 		return result;
 	}
 
-	public async Task<PublicationExternDatabaseId?> CheckAndGetIfPublicationExternDatabaseIdExistsAsync(
+	protected async Task<TDomain?> CheckAndGetIfSimpleObjectExistsAsync<TDomain, TQuery, TResponse>(
 		long recordId,
+		string annotationKey,
 		ResponseBase? response = null)
+		where TQuery : EPCSimpleQueryBase, new()
+		where TResponse : ResponseWithDataBase<TDomain>
 	{
-		GetPublicationExternDatabaseIdQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationExternDatabaseIdQuery() { Id = recordId });
-		PublicationExternDatabaseId? result = queryResponse.Data;
+		TQuery simpleQuery = new TQuery() { Id = recordId };
+		return await CheckAndGetIfObjectExistsAsync<TDomain, TQuery, TResponse>(
+			simpleQuery, 
+			recordId, 
+			annotationKey, 
+			response);
+	}
+
+	protected async Task<TDomain?> CheckAndGetIfObjectExistsAsync<TDomain, TQuery, TResponse>(
+		TQuery query,
+		long recordId,
+		string annotationKey,
+		ResponseBase? response = null)
+		where TQuery : new()
+		where TResponse : ResponseWithDataBase<TDomain>
+	{
+		TResponse queryResponse = (TResponse)await _mediator.Send(query);
+		TDomain? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
-			string errorMessage = string.Format(_localizer["PublicationExternDatabaseIdNotExist"].Value, recordId);
+			string errorMessage = string.Format(_localizer[annotationKey].Value, recordId);
 			ProcessErrorMessages(response, new string[] { errorMessage });
 		}
 		return result;
 	}
+
 
 	protected void ProcessErrorMessages(ResponseBase response, IEnumerable<string> errorMessages)
 	{

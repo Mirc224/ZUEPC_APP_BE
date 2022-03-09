@@ -3,7 +3,7 @@ using ZUEPC.Common.Responses;
 
 namespace ZUEPC.Application.Publications.Queries.Publications.Previews;
 
-public class GetPublicationPreviewQueryResponse : ResponseBase
+public class GetPublicationPreviewQueryResponse : 
+	ResponseWithDataBase<PublicationPreview>
 {
-	public PublicationPreview? PublicationPreview { get; set; }
 }

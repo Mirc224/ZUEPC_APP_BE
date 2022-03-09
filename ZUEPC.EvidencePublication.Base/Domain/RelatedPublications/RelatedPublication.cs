@@ -1,8 +1,11 @@
 ﻿using ZUEPC.EvidencePublication.Base.Domain.Common;
+using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 
 namespace ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 
-public class RelatedPublication : EPCBase
+public class RelatedPublication : 
+	EPCBase,
+	IPublicationRelated
 {
 	public long PublicationId { get; set; }
 	public long RelatedPublicationId { get; set; }

@@ -35,8 +35,8 @@ public class GetPublicationRelatedPublicationsDetailsQueryHandler : IRequestHand
 			RelatedPublicationDetails mappedResult = _mapper.Map<RelatedPublicationDetails>(relatedPublication);
 			mappedResult.RelatedPublication = (await _mediator.Send(new GetPublicationPreviewQuery() 
 			{ 
-				PublicationId = destinationId 
-			})).PublicationPreview;
+				Id = destinationId 
+			})).Data;
 			resultRelatedPub.Add(mappedResult);
 		}
 		return new() { Success = true, RelatedPublications = resultRelatedPub };

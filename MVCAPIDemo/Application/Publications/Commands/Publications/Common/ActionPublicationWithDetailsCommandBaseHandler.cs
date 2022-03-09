@@ -6,7 +6,6 @@ using ZUEPC.Application.Persons.Entities.Previews;
 using ZUEPC.Application.PublicationAuthors.Entities.Inputs.PublicationAuthor;
 using ZUEPC.Application.Publications.Entities.Inputs.Common;
 using ZUEPC.Application.Publications.Entities.Previews;
-using ZUEPC.Application.Publications.Queries.Publications.Previews;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Responses;
@@ -67,7 +66,6 @@ public abstract class ActionPublicationWithDetailsCommandBaseHandler
 		PersonPreview? personPreview = null;
 		InstitutionPreview? institutionPreview = null;
 		List<Tuple<TActionDto, PersonPreview, InstitutionPreview>> result = new();
-		List<string> errorMessages = new();
 
 		foreach (TActionDto authorDto in authors.OrEmptyIfNull())
 		{

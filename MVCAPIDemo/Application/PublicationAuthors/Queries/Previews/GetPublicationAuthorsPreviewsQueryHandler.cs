@@ -29,10 +29,10 @@ public class GetPublicationAuthorsPreviewsQueryHandler : IRequestHandler<GetPubl
 			long personId = author.PersonId;
 			long institutionId = author.InstitutionId;
 			PublicationAuthorDetails publicationAuthorDetails = _mapper.Map<PublicationAuthorDetails>(author);
-			publicationAuthorDetails.PersonPreview = (await _mediator.Send(new GetPersonPreviewQuery() { PersonId = personId })).Data;
+			publicationAuthorDetails.PersonPreview = (await _mediator.Send(new GetPersonPreviewQuery() { Id = personId })).Data;
 			publicationAuthorDetails.InstitutionPreview = (await _mediator.Send(new GetInstitutionPreviewQuery() 
 			{ 
-				InstitutionId = institutionId
+				Id = institutionId
 			})).Data;
 			resultAuthorsList.Add(publicationAuthorDetails);
 		}
