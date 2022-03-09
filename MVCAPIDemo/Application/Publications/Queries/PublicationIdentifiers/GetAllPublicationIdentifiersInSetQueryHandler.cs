@@ -30,7 +30,7 @@ public class GetAllPublicationIdentifiersInSetQueryHandler : IRequestHandler<Get
 		GetAllPublicationIdentifiersInSetQueryResponse result = new GetAllPublicationIdentifiersInSetQueryResponse()
 		{
 			Success = true,
-			Identifiers = mappedResult
+			Data = mappedResult
 		};
 		return result;
 	}

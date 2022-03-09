@@ -72,10 +72,10 @@ public partial class ImportService
 			SearchedIdentifiers = imPublicationIdentifiers
 		});
 
-		if (foundPublicationIdentifiers.Identifiers != null &&
-			foundPublicationIdentifiers.Identifiers.Any())
+		if (foundPublicationIdentifiers.Data != null &&
+			foundPublicationIdentifiers.Data.Any())
 		{
-			publicationId = foundPublicationIdentifiers.Identifiers.First().PublicationId;
+			publicationId = foundPublicationIdentifiers.Data.First().PublicationId;
 			resultModel = await GetPublicationById(publicationId);
 			if (resultModel != null)
 			{
@@ -89,10 +89,10 @@ public partial class ImportService
 			SearchedExternIdentifiers = imPublicationExternIds
 		});
 
-		if (foundPublicationExternIdentifiers.ExternDatabaseIds != null &&
-			foundPublicationExternIdentifiers.ExternDatabaseIds.Any())
+		if (foundPublicationExternIdentifiers.Data != null &&
+			foundPublicationExternIdentifiers.Data.Any())
 		{
-			publicationId = foundPublicationExternIdentifiers.ExternDatabaseIds.First().PublicationId;
+			publicationId = foundPublicationExternIdentifiers.Data.First().PublicationId;
 			resultModel = await GetPublicationById(publicationId);
 			if (resultModel != null)
 			{
@@ -111,7 +111,7 @@ public partial class ImportService
 	{
 
 		GetPublicationPublicationIdentifiersQuery request = new() { PublicationId = currentPublication.Id };
-		IEnumerable<PublicationIdentifier>? publicationCurrentIdentifiers = (await _mediator.Send(request)).PublicationIdentifiers;
+		IEnumerable<PublicationIdentifier>? publicationCurrentIdentifiers = (await _mediator.Send(request)).Data;
 		if (publicationCurrentIdentifiers is null)
 		{
 			return;
@@ -185,7 +185,7 @@ public partial class ImportService
 	{
 		GetPublicationPublicationExternDatabaseIdsQuery request = new() { PublicationId = currentPublication.Id };
 		IEnumerable<PublicationExternDatabaseId> publicationCurrentExternIds = (await _mediator.Send(request))
-																				.PublicationExternDatabaseIds;
+																				.Data;
 
 		IEnumerable<ImportPublicationExternDatabaseId> importExternIdsToInsert = GetEPCObjectExternDatabaseIdsForInsertAsync(
 			importExternIdentifiers,
@@ -261,7 +261,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		GetPublicationPublicationNamesQuery request = new() { PublicationId = currentPublication.Id };
-		IEnumerable<PublicationName> publicationCurrentNames = (await _mediator.Send(request)).PublicationNames;
+		IEnumerable<PublicationName> publicationCurrentNames = (await _mediator.Send(request)).Data;
 
 		List<string> allImportedNamesString = importPublicationNames.Select(identifier => identifier.Name).ToList();
 		List<string> allCurrentNamesString = publicationCurrentNames.Select(identifier => identifier.Name).ToList();
@@ -344,7 +344,7 @@ public partial class ImportService
 		CreatePublicationCommand createCommand = _mapper.Map<CreatePublicationCommand>(importPublication);
 		createCommand.VersionDate = versionDate;
 		createCommand.OriginSourceType = source;
-		Publication currentPublication = (await _mediator.Send(createCommand)).Publication;
+		Publication currentPublication = (await _mediator.Send(createCommand)).Data;
 		await InsertPublicationIdentifierCollectionAsync(
 				currentPublication,
 				importPublication.PublicationIdentifiers,

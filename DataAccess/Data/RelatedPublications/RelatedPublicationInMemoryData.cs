@@ -5,7 +5,7 @@ namespace ZUEPC.DataAccess.Data.RelatedPublications;
 
 public class RelatedPublicationInMemoryData : InMemoryBaseRepository<RelatedPublicationModel>, IRelatedPublicationData
 {
-	public async Task<int> DeleteRelatedPublicationByIdAsync(long id)
+	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		var deletedObject = _repository.Where(x => x.Id == id);
 		return await DeleteRecordsAsync(deletedObject);
@@ -23,7 +23,7 @@ public class RelatedPublicationInMemoryData : InMemoryBaseRepository<RelatedPubl
 		return await DeleteRecordsAsync(deletedObject);
 	}
 
-	public async Task<RelatedPublicationModel?> GetRelatedPublicationByIdAsync(long id)
+	public async Task<RelatedPublicationModel?> GetModelByIdAsync(long id)
 	{
 		return _repository.FirstOrDefault(x => x.Id == id);
 	}
@@ -38,12 +38,12 @@ public class RelatedPublicationInMemoryData : InMemoryBaseRepository<RelatedPubl
 		return _repository.Where(x => x.RelatedPublicationId == relatedPublicationId);
 	}
 
-	public async Task<long> InsertRelatedPublicationAsync(RelatedPublicationModel model)
+	public async Task<long> InsertModelAsync(RelatedPublicationModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdateRelatedPublicationAsync(RelatedPublicationModel model)
+	public async Task<int> UpdateModelAsync(RelatedPublicationModel model)
 	{
 		return await UpdateRecordAsync(model);
 	}

@@ -27,7 +27,11 @@ public class CreateInstitutionWithDetailsCommandHandler :
 	public async Task<CreateInstitutionWithDetailsCommandResponse> Handle(CreateInstitutionWithDetailsCommand request, CancellationToken cancellationToken)
 	{
 		CreateInstitutionCommand createInstitutionCommand = _mapper.Map<CreateInstitutionCommand>(request);
-		Institution createdInstitution = (await _mediator.Send(createInstitutionCommand)).Institution;
+		Institution? createdInstitution = (await _mediator.Send(createInstitutionCommand)).Data;
+		if(createdInstitution is null)
+		{
+			return new() { Success = false };
+		}
 		InstitutionDetails responseObject = _mapper.Map<InstitutionDetails>(createdInstitution);
 		long institutionId = createdInstitution.Id;
 		
@@ -45,7 +49,7 @@ public class CreateInstitutionWithDetailsCommandHandler :
 			InstitutionNameCreateDto,
 			CreateInstitutionNameCommand>(request, request.Names, institutionId);
 
-		return responses.Select(x => x.InstitutionName).ToList();
+		return responses.Select(x => x.Data).ToList();
 	}
 
 	private async Task<ICollection<InstitutionExternDatabaseId>> ProcessInstitutionExternDatabaseIdsAsync(
@@ -57,7 +61,7 @@ public class CreateInstitutionWithDetailsCommandHandler :
 			InstitutionExternDatabaseIdCreateDto,
 			CreateInstitutionExternDatabaseIdCommand>(request, request.ExternDatabaseIds, institutionId);
 
-		return responses.Select(x => x.InstitutionExternDatabaseId).ToList();
+		return responses.Select(x => x.Data).ToList();
 	}
 
 	private async Task<ICollection<TResponse>> ProcessInstitutionPropertyAsync<TResponse, TCreateDto, TCommand>(

@@ -17,7 +17,7 @@ public class DeletePublicationExternDatabaseIdCommandHandler : IRequestHandler<D
 
 	public async Task<DeletePublicationExternDatabaseIdCommandResponse> Handle(DeletePublicationExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeletePublicationExternDbIdByIdAsync(request.Id);
+		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
 
 		return new() { Success = true };
 	}

@@ -16,7 +16,7 @@ public class DeleteInstitutionNameCommandHandler :
 	}
 	public async Task<DeleteInstitutionNameCommandResponse> Handle(DeleteInstitutionNameCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeleteInstitutionNameByIdAsync(request.Id);
+		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
 		return new() { Success = rowsDeleted == 1 };
 	}
 }

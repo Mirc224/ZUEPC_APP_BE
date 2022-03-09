@@ -24,10 +24,10 @@ public class CreatePublicationNameCommandHandler : IRequestHandler<CreatePublica
 		{
 			insertModel.CreatedAt = DateTime.UtcNow;
 		}
-		long insertedItemId = await _repository.InsertPublicationNameAsync(insertModel);
+		long insertedItemId = await _repository.InsertModelAsync(insertModel);
 		insertModel.Id = insertedItemId;
 		
 		PublicationName domain = _mapper.Map<PublicationName>(insertModel);
-		return new CreatePublicationNameCommandResponse() { Success = true, PublicationName = domain};
+		return new CreatePublicationNameCommandResponse() { Success = true, Data = domain};
 	}
 }

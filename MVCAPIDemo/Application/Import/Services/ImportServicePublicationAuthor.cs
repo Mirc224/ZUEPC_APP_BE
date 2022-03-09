@@ -38,7 +38,7 @@ public partial class ImportService
 		IEnumerable<PublicationAuthor> foundPublicationAuthors = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery()
 		{
 			PublicationId = updatedPublication.Id
-		})).Authors;
+		})).Data;
 
 		IEnumerable<Tuple<ImportPublicationAuthor, Publication, Person, Institution>> authorsTuples = GetPublicationAuthorTuples(
 																												updatedPublication,
@@ -191,6 +191,6 @@ public partial class ImportService
 		publicationAuthor.InstitutionId = reportingInstitution.Id;
 
 		CreatePublicationAuthorCommand request = _mapper.Map<CreatePublicationAuthorCommand>(publicationAuthor);
-		return (await _mediator.Send(request)).PublicationAuthor;
+		return (await _mediator.Send(request)).Data;
 	}
 }

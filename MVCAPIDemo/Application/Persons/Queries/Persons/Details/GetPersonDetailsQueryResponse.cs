@@ -3,7 +3,6 @@ using ZUEPC.Common.Responses;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Details;
 
-public class GetPersonDetailsQueryResponse : ResponseBase
+public class GetPersonDetailsQueryResponse : ResponseBaseWithData<PersonDetails>
 {
-	public PersonDetails? PersonDetails { get; set; }
 }

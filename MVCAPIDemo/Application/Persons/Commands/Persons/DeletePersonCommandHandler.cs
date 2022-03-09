@@ -30,7 +30,7 @@ public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, D
 		await _mediator.Send(new DeletePersonNamesByPersonIdCommand() { PersonId = personId });
 		await _mediator.Send(new DeletePersonExternDatabaseIdsByPersonIdCommand() { PersonId = personId });
 		await _mediator.Send(new DeletePublicationAuthorsByPersonIdCommand() { PersonId = personId });
-		await _repository.DeletePersonByIdAsync(personId);
+		await _repository.DeleteModelByIdAsync(personId);
 		return new() { Success = true };
 	}
 }

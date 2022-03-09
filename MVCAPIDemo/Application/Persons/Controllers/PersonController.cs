@@ -26,7 +26,7 @@ public class PersonController : ControllerBase
 		{
 			return NotFound();
 		}
-		return Ok(response.PersonDetails);
+		return Ok(response.Data);
 	}
 
 	[HttpDelete("{id}")]

@@ -24,7 +24,7 @@ public class GetPersonDetailsQueryHandler : IRequestHandler<GetPersonDetailsQuer
 		Person? person = (await _mediator.Send(new GetPersonQuery()
 		{
 			PersonId = personId
-		})).Person;
+		})).Data;
 
 		if (person is null)
 		{
@@ -34,14 +34,14 @@ public class GetPersonDetailsQueryHandler : IRequestHandler<GetPersonDetailsQuer
 		result.Names = (await _mediator.Send(new GetPersonNamesQuery()
 		{
 			PersonId = personId
-		})).PersonNames;
+		})).Data;
 
 		result.ExternDatabaseIds = (await _mediator.Send(new GetPersonExternDatabaseIdsQuery()
 		{
 			PersonId = personId
-		})).PersonExternDatabaseIds;
+		})).Data;
 
 
-		return new() { Success = true, PersonDetails = result };
+		return new() { Success = true, Data = result };
 	}
 }

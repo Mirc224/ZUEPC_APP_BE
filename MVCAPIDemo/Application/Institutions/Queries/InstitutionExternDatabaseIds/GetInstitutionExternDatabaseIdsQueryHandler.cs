@@ -24,6 +24,6 @@ public class GetInstitutionExternDatabaseIdsQueryHandler : IRequestHandler<GetIn
 
 		List<InstitutionExternDatabaseId> mappedResult = _mapper.Map<List<InstitutionExternDatabaseId>>(queryResult);
 
-		return new() { Success = true, InstitutionExternDatabaseIds = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

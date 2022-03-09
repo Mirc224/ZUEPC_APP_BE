@@ -13,7 +13,7 @@ public class DeleteRelatedPublicationCommandHandler : IRequestHandler<DeleteRela
 	}
 	public async Task<DeleteRelatedPublicationCommandResponse> Handle(DeleteRelatedPublicationCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeleteRelatedPublicationByIdAsync(request.Id);
+		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
 
 		return new() { Success = rowsDeleted == 1 };
 	}

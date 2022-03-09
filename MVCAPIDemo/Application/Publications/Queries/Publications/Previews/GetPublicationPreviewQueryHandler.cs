@@ -32,17 +32,17 @@ public class GetPublicationPreviewQueryHandler : IRequestHandler<GetPublicationP
 		resultPreview.Names = (await _mediator.Send(new GetPublicationPublicationNamesQuery()
 		{
 			PublicationId = publicationId
-		})).PublicationNames;
+		})).Data;
 
 		resultPreview.Identifiers = (await _mediator.Send(new GetPublicationPublicationIdentifiersQuery()
 		{
 			PublicationId = publicationId
-		})).PublicationIdentifiers;
+		})).Data;
 
 		resultPreview.Authors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
 		{
 			PublicationId = publicationId
-		})).PublicationAuthorDetails;
+		})).Data;
 
 		return new() { Success = true, PublicationPreview = resultPreview };
 	}

@@ -21,6 +21,6 @@ public class GetPersonNamesQueryHandler : IRequestHandler<GetPersonNamesQuery, G
 		IEnumerable<PersonNameModel> queryResult = await _repository.GetPersonNamesByPersonIdAsync(request.PersonId);
 		List<PersonName> mappedResult = _mapper.Map<List<PersonName>>(queryResult);
 
-		return new() { Success = true, PersonNames = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

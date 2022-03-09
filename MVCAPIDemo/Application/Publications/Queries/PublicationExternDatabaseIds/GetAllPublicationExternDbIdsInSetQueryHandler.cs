@@ -28,6 +28,6 @@ public class GetAllPublicationExternDbIdsInSetQueryHandler : IRequestHandler<Get
 		}
 
 		List<PublicationExternDatabaseId>? mapedResult = _mapper.Map<List<PublicationExternDatabaseId>>(externIds);
-		return new GetAllPublicationExternDbIdsInSetQueryResponse() { Success = true, ExternDatabaseIds = mapedResult };
+		return new GetAllPublicationExternDbIdsInSetQueryResponse() { Success = true, Data = mapedResult };
 	}
 }

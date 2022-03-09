@@ -1,15 +1,12 @@
-﻿using ZUEPC.DataAccess.Models.Institution;
+﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Models.Institution;
 
 namespace ZUEPC.DataAccess.Data.Institutions;
 
-public interface IInstitutionExternDatabaseIdData
+public interface IInstitutionExternDatabaseIdData : IRepositoryBase<InstitutionExternDatabaseIdModel>
 {
-	Task<InstitutionExternDatabaseIdModel?> GetInstitutionExternDatabaseIdByIdAsync(long id);
 	Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId);
 	Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByExternIdAsync(string externDbId);
 	Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetAllInstitutionExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues);
-	Task<long> InsertInstitutionExternDatabaseIdAsync(InstitutionExternDatabaseIdModel model);
-	Task<int> UpdateInstitutionExternDatabaseIdAsync(InstitutionExternDatabaseIdModel model);
-	Task<int> DeleteInstitutionExternDatabaseIdByIdAsync(long id);
 	Task<int> DeleteInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId);
 }

@@ -1,13 +1,10 @@
-﻿using ZUEPC.DataAccess.Models.PublicationActivity;
+﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Models.PublicationActivity;
 
 namespace ZUEPC.DataAccess.Data.PublicationActivities;
 
-public interface IPublicationActivityData
+public interface IPublicationActivityData : IRepositoryBase<PublicationActivityModel>
 {
-	Task<PublicationActivityModel?> GetPublicationActivityByIdAsync(long id);
 	Task<IEnumerable<PublicationActivityModel>> GetPublicationActivitiesByPublicationIdAsync(long publicationId);
-	Task<long> InsertPublicationActivityAsync(PublicationActivityModel model);
-	Task<int> UpdatePublicationActivityAsync(PublicationActivityModel model);
-	Task<int> DeletePublicationActivityByIdAsync(long id);
 	Task<int> DeletePublicationActivityByPublicationIdAsync(long publicationId);
 }

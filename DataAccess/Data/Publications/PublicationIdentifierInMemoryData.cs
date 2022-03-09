@@ -32,18 +32,24 @@ public class PublicationIdentifierInMemoryData : InMemoryBaseRepository<Publicat
 		return _repository.Where(x => x.PublicationId == publicationId);
 	}
 
-	public async Task<PublicationIdentifierModel?> GetPublicationIdentifierByIdAsync(long id)
+	public async Task<PublicationIdentifierModel?> GetModelByIdAsync(long id)
 	{
 		return _repository.FirstOrDefault(x => x.Id == id);
 	}
 
-	public async Task<long> InsertPublicationIdentifierAsync(PublicationIdentifierModel model)
+	public async Task<long> InsertModelAsync(PublicationIdentifierModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdatePublicationIdentifierAsync(PublicationIdentifierModel model)
+	public async Task<int> UpdateModelAsync(PublicationIdentifierModel model)
 	{
 		return await UpdateRecordAsync(model);
+	}
+
+	public async Task<int> DeleteModelByIdAsync(long id)
+	{
+		var deletedObjects = _repository.Where(x => x.Id == id);
+		return await DeleteRecordsAsync(deletedObjects);
 	}
 }

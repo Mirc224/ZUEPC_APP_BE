@@ -3,9 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Commands.InstitutionNames;
 
-public class CreateInstitutionNameCommandResponse : ResponseBase
+public class CreateInstitutionNameCommandResponse : ResponseBaseWithData<InstitutionName>
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-	public InstitutionName InstitutionName { get; set; }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 }

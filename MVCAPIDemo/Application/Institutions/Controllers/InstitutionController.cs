@@ -27,7 +27,7 @@ public class InstitutionController : ControllerBase
 		{
 			return NotFound();
 		}
-		return Ok(response.InstitutionDetails);
+		return Ok(response.Data);
 	}
 
 	[HttpDelete("{id}")]

@@ -24,10 +24,10 @@ public class CreatePublicationIdentifierCommandHandler : IRequestHandler<CreateP
 		{
 			insertModel.CreatedAt = DateTime.UtcNow;
 		}
-		long newId = await _repository.InsertPublicationIdentifierAsync(insertModel);
+		long newId = await _repository.InsertModelAsync(insertModel);
 		insertModel.Id = newId;
 		PublicationIdentifier domain = _mapper.Map<PublicationIdentifier>(insertModel);
 
-		return new() { Success = newId > 0, PublicationIdentifier = domain };
+		return new() { Success = newId > 0, Data = domain };
 	}
 }

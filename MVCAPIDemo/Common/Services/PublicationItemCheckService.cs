@@ -71,7 +71,7 @@ public class PublicationItemCheckService
 	{
 		GetPersonPreviewQueryResponse queryResponse =
 			await _mediator.Send(new GetPersonPreviewQuery() { PersonId = personId});
-		PersonPreview? result = queryResponse.PersonPreview;
+		PersonPreview? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["PersonWithIdNotExist"].Value, personId);
@@ -86,7 +86,7 @@ public class PublicationItemCheckService
 	{
 		GetInstitutionPreviewQueryResponse queryResponse =
 			await _mediator.Send(new GetInstitutionPreviewQuery() { InstitutionId = institutionId });
-		InstitutionPreview? result = queryResponse.InstitutionPreview;
+		InstitutionPreview? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["InstitutionWithIdNotExist"].Value, institutionId);
@@ -118,7 +118,7 @@ public class PublicationItemCheckService
 	{
 		GetPublicationActivityQueryResponse queryResponse =
 			await _mediator.Send(new GetPublicationActivityQuery() { PublicationActivityRecordId = recordId });
-		PublicationActivity? result = queryResponse.PublicationActivity;
+		PublicationActivity? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["PublicationActivityRecordNotExist"].Value, recordId);
@@ -169,7 +169,7 @@ public class PublicationItemCheckService
 	{
 		GetPublicationIdentifierQueryResponse queryResponse =
 			await _mediator.Send(new GetPublicationIdentifierQuery() { PublicationIdentifierRecordId = recordId });
-		PublicationIdentifier? result = queryResponse.PublicationIdentifier;
+		PublicationIdentifier? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["PublicationIdentifierRecordNotExist"].Value, recordId);
@@ -203,7 +203,7 @@ public class PublicationItemCheckService
 	{
 		GetPublicationNameQueryResponse queryResponse =
 			await _mediator.Send(new GetPublicationNameQuery() { PublicatioNameRecordId = recordId });
-		PublicationName? result = queryResponse.PublicationName;
+		PublicationName? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["PublicationNameRecordNotExist"].Value, recordId);
@@ -218,7 +218,7 @@ public class PublicationItemCheckService
 	{
 		GetRelatedPublicationQueryResponse queryResponse =
 			await _mediator.Send(new GetRelatedPublicationQuery() { RelatedPublicationRecordId = recordId });
-		RelatedPublication? result = queryResponse.RelatedPublication;
+		RelatedPublication? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["RelatedPublicationRecordWithIdNotExist"].Value, recordId);
@@ -252,7 +252,7 @@ public class PublicationItemCheckService
 	{
 		GetPublicationAuthorQueryResponse queryResponse =
 			await _mediator.Send(new GetPublicationAuthorQuery() { PublicationAuthorRecordId = recordId });
-		PublicationAuthor? result = queryResponse.PublicationAuthor;
+		PublicationAuthor? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["PublicationAuthorRecordNotExist"].Value, recordId);
@@ -286,7 +286,7 @@ public class PublicationItemCheckService
 	{
 		GetPublicationExternDatabaseIdQueryResponse queryResponse =
 			await _mediator.Send(new GetPublicationExternDatabaseIdQuery() { PublicationExternDatabaseIdId = recordId });
-		PublicationExternDatabaseId? result = queryResponse.PublicationExternDatabaseId;
+		PublicationExternDatabaseId? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["PublicationExternDatabaseIdNotExist"].Value, recordId);

@@ -5,7 +5,7 @@ namespace ZUEPC.DataAccess.Data.Persons;
 
 public class PersonExternDatabaseIdInMemoryData : InMemoryBaseRepository<PersonExternDatabaseIdModel>, IPersonExternDatabaseIdData
 {
-	public async Task<int> DeletePersonExternDatabaseIdByIdAsync(long id)
+	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		var deletedObjects = _repository.Where(x => x.Id == id).ToList();
 		return await DeleteRecordsAsync(deletedObjects);
@@ -22,7 +22,7 @@ public class PersonExternDatabaseIdInMemoryData : InMemoryBaseRepository<PersonE
 		return _repository.Where(x => identifierValues.Contains(x.ExternIdentifierValue));
 	}
 
-	public async Task<PersonExternDatabaseIdModel?> GetPersonExternDatabaseIdByIdAsync(long id)
+	public async Task<PersonExternDatabaseIdModel?> GetModelByIdAsync(long id)
 	{
 		return _repository.FirstOrDefault(x => x.Id == id);
 	}
@@ -37,12 +37,12 @@ public class PersonExternDatabaseIdInMemoryData : InMemoryBaseRepository<PersonE
 		return _repository.Where(x => x.PersonId == personId).ToList();
 	}
 
-	public async Task<long> InsertPersonExternDatabaseIdAsync(PersonExternDatabaseIdModel model)
+	public async Task<long> InsertModelAsync(PersonExternDatabaseIdModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdatePersonExternDatabaseIdAsync(PersonExternDatabaseIdModel model)
+	public async Task<int> UpdateModelAsync(PersonExternDatabaseIdModel model)
 	{
 		return await UpdateRecordAsync(model);
 	}

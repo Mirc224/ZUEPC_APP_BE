@@ -27,6 +27,6 @@ public class GetAllPersonsExternDbIdsInSetQueryHandler :
 		}
 
 		List<PersonExternDatabaseId> mapedResult = _mapper.Map<List<PersonExternDatabaseId>>(externIds);
-		return new() { Success = true, ExternDatabaseIds = mapedResult };
+		return new() { Success = true, Data = mapedResult };
 	}
 }

@@ -5,7 +5,7 @@ namespace ZUEPC.DataAccess.Data.Institutions;
 
 public class InstitutionInMemoryData : InMemoryBaseRepository<InstitutionModel>, IInstitutionData
 {
-	public async Task<int> DeleteInstitutionByIdAsync(long id)
+	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		var deletedObjects = _repository.Where(x => x.Id == id);
 		return await DeleteRecordsAsync(deletedObjects);
@@ -16,17 +16,17 @@ public class InstitutionInMemoryData : InMemoryBaseRepository<InstitutionModel>,
 		return _repository.ToList();
 	}
 
-	public async Task<InstitutionModel?> GetInstitutionByIdAsync(long id)
+	public async Task<InstitutionModel?> GetModelByIdAsync(long id)
 	{
 		return _repository.FirstOrDefault(x => x.Id == id);
 	}
 
-	public async Task<long> InsertInstitutionAsync(InstitutionModel model)
+	public async Task<long> InsertModelAsync(InstitutionModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdateInstitutionAsync(InstitutionModel model)
+	public async Task<int> UpdateModelAsync(InstitutionModel model)
 	{
 		return await UpdateRecordAsync(model);
 	}

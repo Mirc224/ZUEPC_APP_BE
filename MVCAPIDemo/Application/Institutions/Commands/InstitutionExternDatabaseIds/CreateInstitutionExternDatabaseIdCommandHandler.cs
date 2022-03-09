@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.Commands;
 using ZUEPC.DataAccess.Data.Institutions;
 using ZUEPC.DataAccess.Models.Institution;
 using ZUEPC.EvidencePublication.Base.Domain.Institutions;
@@ -7,11 +8,11 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 namespace ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 
 public class CreateInstitutionExternDatabaseIdCommandHandler : 
+	CreateBaseHandler,
 	IRequestHandler<
 		CreateInstitutionExternDatabaseIdCommand, 
 		CreateInstitutionExternDatabaseIdCommandResponse>
 {
-	private readonly IMapper _mapper;
 	private readonly IInstitutionExternDatabaseIdData _repository;
 
 	public CreateInstitutionExternDatabaseIdCommandHandler(IMapper mapper, IInstitutionExternDatabaseIdData repository)
@@ -22,15 +23,13 @@ public class CreateInstitutionExternDatabaseIdCommandHandler :
 
 	public async Task<CreateInstitutionExternDatabaseIdCommandResponse> Handle(CreateInstitutionExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		InstitutionExternDatabaseIdModel insertModel = _mapper.Map<InstitutionExternDatabaseIdModel>(request);
-		insertModel.CreatedAt = DateTime.UtcNow;
-		if (request.VersionDate is null)
-		{
-			insertModel.CreatedAt = DateTime.UtcNow;
-		}
-		long insertedId = await _repository.InsertInstitutionExternDatabaseIdAsync(insertModel);
-		InstitutionExternDatabaseId domain = _mapper.Map<InstitutionExternDatabaseId>(insertModel);
-		domain.Id = insertedId;
-		return new() { Success = true, InstitutionExternDatabaseId = domain };
+		InstitutionExternDatabaseIdModel insertModel = 
+			CreateInsertModelFromRequest<InstitutionExternDatabaseIdModel, CreateInstitutionExternDatabaseIdCommand>(request);
+		
+		long insertedId = await _repository.InsertModelAsync(insertModel);
+		return CreateSuccessResponseWithDataFromInsertModel
+			<CreateInstitutionExternDatabaseIdCommandResponse,
+			InstitutionExternDatabaseId,
+			InstitutionExternDatabaseIdModel>(insertModel, insertedId);
 	}
 }

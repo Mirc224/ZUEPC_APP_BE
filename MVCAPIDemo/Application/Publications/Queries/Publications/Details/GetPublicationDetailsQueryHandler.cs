@@ -38,22 +38,22 @@ public class GetPublicationDetailsQueryHandler : IRequestHandler<GetPublicationD
 		result.Names = (await _mediator.Send(new GetPublicationPublicationNamesQuery()
 		{
 			PublicationId = publicationId
-		})).PublicationNames;
+		})).Data;
 
 		result.Identifiers = (await _mediator.Send(new GetPublicationPublicationIdentifiersQuery() 
 		{ 
 			PublicationId = publicationId 
-		})).PublicationIdentifiers;
+		})).Data;
 
 		result.ExternDatabaseIds = (await _mediator.Send(new GetPublicationPublicationExternDatabaseIdsQuery()
 		{
 			PublicationId = publicationId
-		})).PublicationExternDatabaseIds;
+		})).Data;
 
 		result.Authors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
 		{
 			PublicationId = publicationId
-		})).PublicationAuthorDetails;
+		})).Data;
 
 		result.RelatedPublications = (await _mediator.Send(new GetPublicationRelatedPublicationsDetailsQuery()
 		{
@@ -63,8 +63,8 @@ public class GetPublicationDetailsQueryHandler : IRequestHandler<GetPublicationD
 		result.PublicationActivities = (await _mediator.Send(new GetPublicationPublicationActivitiesQuery()
 		{
 			PublicationId = publicationId
-		})).PublicationActivities;
+		})).Data;
 
-		return new() { Success = true, PublicationWithDetails = result };
+		return new() { Success = true, Data = result };
 	}
 }

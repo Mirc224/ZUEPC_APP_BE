@@ -26,6 +26,6 @@ public class GetAllInstitutionExternDbIdsInSetQueryHandler : IRequestHandler<Get
 		}
 
 		List<InstitutionExternDatabaseId> mapedResult = _mapper.Map<List<InstitutionExternDatabaseId>>(externIds);
-		return new() { Success = true, ExternDatabaseIds = mapedResult };
+		return new() { Success = true, Data = mapedResult };
 	}
 }

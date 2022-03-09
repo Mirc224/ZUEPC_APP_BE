@@ -5,21 +5,16 @@ namespace ZUEPC.DataAccess.Data.Institutions;
 
 public class InstitutionNameInMemoryData : InMemoryBaseRepository<InstitutionNameModel>, IInstitutionNameData
 {
-	public async Task<int> DeleteInstitutionNameByIdAsync(long id)
-	{
-		var deletedObject = _repository.Where(x => x.Id == id);
-		return await DeleteRecordsAsync(deletedObject);
-	}
-
 	public async Task<int> DeleteInstitutionNamesByInstitutionIdAsync(long institutionId)
 	{
 		var deletedObject = _repository.Where(x => x.InstitutionId == institutionId);
 		return await DeleteRecordsAsync(deletedObject);
 	}
 
-	public async Task<InstitutionNameModel?> GetInstitutionNameByIdAsync(long id)
+	public async Task<int> DeleteModelByIdAsync(long id)
 	{
-		return _repository.FirstOrDefault(x => x.Id == id);
+		var deletedObject = _repository.Where(x => x.Id == id);
+		return await DeleteRecordsAsync(deletedObject);
 	}
 
 	public async Task<IEnumerable<InstitutionNameModel>> GetInstitutionNamesByInstitutionIdAsync(long institutionId)
@@ -32,12 +27,17 @@ public class InstitutionNameInMemoryData : InMemoryBaseRepository<InstitutionNam
 		return _repository.Where(x => x.Name == institutionName);
 	}
 
-	public async Task<long> InsertInstitutionNameAsync(InstitutionNameModel model)
+	public async Task<InstitutionNameModel?> GetModelByIdAsync(long id)
+	{
+		return _repository.FirstOrDefault(x => x.Id == id);
+	}
+
+	public async Task<long> InsertModelAsync(InstitutionNameModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdateInstitutionNameAsync(InstitutionNameModel model)
+	public async Task<int> UpdateModelAsync(InstitutionNameModel model)
 	{
 		return await UpdateRecordAsync(model);
 	}

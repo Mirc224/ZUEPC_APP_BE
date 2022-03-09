@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.Commands;
 using ZUEPC.DataAccess.Data.PublicationAuthors;
 using ZUEPC.DataAccess.Models.PublicationAuthor;
 using ZUEPC.EvidencePublication.Base.PublicationAuthors;
 
 namespace ZUEPC.Application.PublicationAuthors.Commands;
 
-public class CreatePublicationAuthorCommandHandler : IRequestHandler<CreatePublicationAuthorCommand, CreatePublicationAuthorCommandResponse>
+public class CreatePublicationAuthorCommandHandler : 
+	CreateBaseHandler,
+	IRequestHandler<CreatePublicationAuthorCommand, CreatePublicationAuthorCommandResponse>
 {
-	private readonly IMapper _mapper;
 	private readonly IPublicationAuthorData _repository;
 
 	public CreatePublicationAuthorCommandHandler(IMapper mapper, IPublicationAuthorData repository)
@@ -18,15 +20,13 @@ public class CreatePublicationAuthorCommandHandler : IRequestHandler<CreatePubli
 	}
 	public async Task<CreatePublicationAuthorCommandResponse> Handle(CreatePublicationAuthorCommand request, CancellationToken cancellationToken)
 	{
-		PublicationAuthorModel insertModel = _mapper.Map<PublicationAuthorModel>(request);
-		insertModel.CreatedAt = DateTime.UtcNow;
-		if (request.VersionDate is null)
-		{
-			insertModel.CreatedAt = DateTime.UtcNow;
-		}
-		long insertedId = await _repository.InsertPublicationAuthorAsync(insertModel);
-		PublicationAuthor domain = _mapper.Map<PublicationAuthor>(insertModel);
-		insertModel.Id = insertedId;
-		return new() { Success = true, PublicationAuthor = domain };
+		PublicationAuthorModel insertModel = CreateInsertModelFromRequest
+			<PublicationAuthorModel, CreatePublicationAuthorCommand>(request);
+		long insertedId = await _repository.InsertModelAsync(insertModel);
+		
+		return CreateSuccessResponseWithDataFromInsertModel
+			<CreatePublicationAuthorCommandResponse,
+			PublicationAuthor,
+			PublicationAuthorModel>(insertModel, insertedId);
 	}
 }

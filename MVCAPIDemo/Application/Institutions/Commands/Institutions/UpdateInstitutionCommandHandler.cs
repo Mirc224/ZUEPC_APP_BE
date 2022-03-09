@@ -18,14 +18,14 @@ public class UpdateInstitutionCommandHandler : IRequestHandler<UpdateInstitution
 
 	public async Task<UpdateInstitutionCommandResponse> Handle(UpdateInstitutionCommand request, CancellationToken cancellationToken)
 	{
-		InstitutionModel? institutionRecord = await _repository.GetInstitutionByIdAsync(request.Id);
+		InstitutionModel? institutionRecord = await _repository.GetModelByIdAsync(request.Id);
 		if (institutionRecord is null)
 		{
 			return new() { Success = false };
 		}
 
 		InstitutionModel institutionModel = _mapper.Map<InstitutionModel>(request);
-		int rowsUpdated = await _repository.UpdateInstitutionAsync(institutionModel);
+		int rowsUpdated = await _repository.UpdateModelAsync(institutionModel);
 
 		return new() { Success = rowsUpdated == 1 };
 	}

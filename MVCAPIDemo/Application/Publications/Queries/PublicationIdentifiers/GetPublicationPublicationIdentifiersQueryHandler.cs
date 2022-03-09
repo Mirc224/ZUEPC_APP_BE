@@ -21,7 +21,7 @@ public class GetPublicationPublicationIdentifiersQueryHandler : IRequestHandler<
 		IEnumerable<PublicationIdentifierModel> publicationIdentifierModels = await _repository.GetPublicationIdentifiersByPublicationIdAsync(request.PublicationId);
 		ICollection<PublicationIdentifier> mappedResult = _mapper.Map<List<PublicationIdentifier>>(publicationIdentifierModels);
 
-		return new() { Success = true, PublicationIdentifiers = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 
 	}
 }

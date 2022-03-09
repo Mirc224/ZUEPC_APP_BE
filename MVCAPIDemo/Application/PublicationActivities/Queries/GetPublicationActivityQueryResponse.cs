@@ -3,7 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 
 namespace ZUEPC.Application.PublicationActivities.Queries;
 
-public class GetPublicationActivityQueryResponse : ResponseBase
+public class GetPublicationActivityQueryResponse : ResponseBaseWithData<PublicationActivity>
 {
-	public PublicationActivity? PublicationActivity { get; set; }
 }

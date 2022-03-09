@@ -17,13 +17,13 @@ public class UpdatePersonExternDatabaseIdCommandHandler : IRequestHandler<Update
 	}
 	public async Task<UpdatePersonExternDatabaseIdCommandResponse> Handle(UpdatePersonExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		PersonExternDatabaseIdModel? currentModel = await _repository.GetPersonExternDatabaseIdByIdAsync(request.Id);
+		PersonExternDatabaseIdModel? currentModel = await _repository.GetModelByIdAsync(request.Id);
 		if (currentModel is null)
 		{
 			return new() { Success = false };
 		}
 		PersonExternDatabaseIdModel updatedModel = _mapper.Map<PersonExternDatabaseIdModel>(request);
-		int rowsUpdated = await _repository.UpdatePersonExternDatabaseIdAsync(updatedModel);
+		int rowsUpdated = await _repository.UpdateModelAsync(updatedModel);
 		return new() { Success = rowsUpdated == 1 };
 	}
 }

@@ -19,12 +19,12 @@ public class GetPublicationNameQueryHandler : IRequestHandler<GetPublicationName
 	
 	public async Task<GetPublicationNameQueryResponse> Handle(GetPublicationNameQuery request, CancellationToken cancellationToken)
 	{
-		PublicationNameModel? result = await _repository.GetPublicationNameByIdAsync(request.PublicatioNameRecordId);
+		PublicationNameModel? result = await _repository.GetModelByIdAsync(request.PublicatioNameRecordId);
 		if (result is null)
 		{
 			return new() { Success = false };
 		}
 		PublicationName mappedResult = _mapper.Map<PublicationName>(result);
-		return new() { Success = true, PublicationName = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

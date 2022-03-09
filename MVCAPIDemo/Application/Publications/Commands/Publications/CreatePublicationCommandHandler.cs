@@ -25,10 +25,10 @@ public class CreatePublicationCommandHandler : IRequestHandler<CreatePublication
 		{
 			model.CreatedAt = DateTime.UtcNow;
 		}
-		var newPublicationId = await _repository.InsertPublicationAsync(model);
+		var newPublicationId = await _repository.InsertModelAsync(model);
 		var createdPublication = _mapper.Map<Publication>(model);
 		createdPublication.Id = newPublicationId;
 
-		return new CreatePublicationCommandResponse() { Success = true, Publication = createdPublication};
+		return new CreatePublicationCommandResponse() { Success = true, Data = createdPublication};
 	}
 }

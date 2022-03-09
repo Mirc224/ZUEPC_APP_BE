@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.Commands;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Models.Publication;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 
-public class CreatePublicationExternDatabaseIdCommandHandler : IRequestHandler<CreatePublicationExternDatabaseIdCommand, CreatePublicationExternDatabaseIdCommandResponse>
+public class CreatePublicationExternDatabaseIdCommandHandler : 
+	CreateBaseHandler,
+	IRequestHandler<CreatePublicationExternDatabaseIdCommand, CreatePublicationExternDatabaseIdCommandResponse>
 {
-	private readonly IMapper _mapper;
 	private readonly IPublicationExternDatabaseIdData _repository;
 
 	public CreatePublicationExternDatabaseIdCommandHandler(IMapper mapper, IPublicationExternDatabaseIdData repository)
@@ -19,11 +21,12 @@ public class CreatePublicationExternDatabaseIdCommandHandler : IRequestHandler<C
 
 	public async Task<CreatePublicationExternDatabaseIdCommandResponse> Handle(CreatePublicationExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		PublicationExternDatabaseIdModel insertModel = _mapper.Map<PublicationExternDatabaseIdModel>(request);
-		insertModel.CreatedAt = DateTime.UtcNow;
-		long insertedId = await _repository.InsertPublicationExternDbIdAsync(insertModel);
-		insertModel.Id = insertedId;
-		PublicationExternDatabaseId domain = _mapper.Map<PublicationExternDatabaseId>(insertModel);
-		return new CreatePublicationExternDatabaseIdCommandResponse() { Success = true, PublicationExternDatabaseId = domain };
+		PublicationExternDatabaseIdModel insertModel = CreateInsertModelFromRequest
+			<PublicationExternDatabaseIdModel, CreatePublicationExternDatabaseIdCommand>(request);
+		long insertedId = await _repository.InsertModelAsync(insertModel);
+		return CreateSuccessResponseWithDataFromInsertModel
+			<CreatePublicationExternDatabaseIdCommandResponse,
+			PublicationExternDatabaseId,
+			PublicationExternDatabaseIdModel>(insertModel, insertedId);
 	}
 }

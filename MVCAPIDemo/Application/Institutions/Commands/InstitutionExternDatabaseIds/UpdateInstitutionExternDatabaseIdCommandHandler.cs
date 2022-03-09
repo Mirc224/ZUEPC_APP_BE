@@ -20,13 +20,13 @@ public class UpdateInstitutionExternDatabaseIdCommandHandler :
 	}
 	public async Task<UpdateInstitutionExternDatabaseIdCommandResponse> Handle(UpdateInstitutionExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		InstitutionExternDatabaseIdModel? currentModel = await _repository.GetInstitutionExternDatabaseIdByIdAsync(request.Id);
+		InstitutionExternDatabaseIdModel? currentModel = await _repository.GetModelByIdAsync(request.Id);
 		if (currentModel is null)
 		{
 			return new() { Success = false };
 		}
 		InstitutionExternDatabaseIdModel updatedModel = _mapper.Map<InstitutionExternDatabaseIdModel>(request);
-		int rowsUpdated = await _repository.UpdateInstitutionExternDatabaseIdAsync(updatedModel);
+		int rowsUpdated = await _repository.UpdateModelAsync(updatedModel);
 		return new() { Success = rowsUpdated == 1 };
 	}
 }

@@ -3,7 +3,6 @@ using ZUEPC.Common.Responses;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Details;
 
-public class GetInstitutionDetailsQueryResponse : ResponseBase
+public class GetInstitutionDetailsQueryResponse : ResponseBaseWithData<InstitutionDetails>
 {
-	public InstitutionDetails? InstitutionDetails { get; set; }
 }

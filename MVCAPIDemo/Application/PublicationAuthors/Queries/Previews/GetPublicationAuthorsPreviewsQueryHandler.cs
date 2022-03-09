@@ -22,20 +22,20 @@ public class GetPublicationAuthorsPreviewsQueryHandler : IRequestHandler<GetPubl
 	{
 		long publicationId = request.PublicationId;
 		ICollection<PublicationAuthor> pubAuthorDomain = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery() 
-															{ PublicationId = publicationId })).Authors;
+															{ PublicationId = publicationId })).Data;
 		List<PublicationAuthorDetails> resultAuthorsList = new List<PublicationAuthorDetails>();
 		foreach(PublicationAuthor author in pubAuthorDomain)
 		{
 			long personId = author.PersonId;
 			long institutionId = author.InstitutionId;
 			PublicationAuthorDetails publicationAuthorDetails = _mapper.Map<PublicationAuthorDetails>(author);
-			publicationAuthorDetails.PersonPreview = (await _mediator.Send(new GetPersonPreviewQuery() { PersonId = personId })).PersonPreview;
+			publicationAuthorDetails.PersonPreview = (await _mediator.Send(new GetPersonPreviewQuery() { PersonId = personId })).Data;
 			publicationAuthorDetails.InstitutionPreview = (await _mediator.Send(new GetInstitutionPreviewQuery() 
 			{ 
 				InstitutionId = institutionId
-			})).InstitutionPreview;
+			})).Data;
 			resultAuthorsList.Add(publicationAuthorDetails);
 		}
-		return new() { Success = true, PublicationAuthorPreviews = resultAuthorsList };
+		return new() { Success = true, Data = resultAuthorsList };
 	}
 }

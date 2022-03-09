@@ -13,7 +13,7 @@ public class DeletePersonExternDatabaseIdCommandHandler : IRequestHandler<Delete
 	}
 	public async Task<DeletePersonExternDatabaseIdCommandResponse> Handle(DeletePersonExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeletePersonExternDatabaseIdByIdAsync(request.Id);
+		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
 		return new() { Success = rowsDeleted > 0 };
 	}
 }

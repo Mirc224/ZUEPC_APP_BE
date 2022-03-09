@@ -30,7 +30,7 @@ public class DeleteInstitutionCommandHandler : IRequestHandler<DeleteInstitution
 		await _mediator.Send(new DeleteInstitutionNamesByInstitutionIdCommand() { InstitutionId = institutionId });
 		await _mediator.Send(new DeleteInstitutionExternDatabaseIdsByInstitutionIdCommand() { InstitutionId = institutionId });
 		await _mediator.Send(new DeletePublicationAuthorsByInstitutionIdCommand() { InstitutionId = institutionId });
-		await _repository.DeleteInstitutionByIdAsync(institutionId);
+		await _repository.DeleteModelByIdAsync(institutionId);
 		return new() { Success = true };
 	}
 }

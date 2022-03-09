@@ -21,6 +21,6 @@ public class GetPublicationPublicationActivitiesQueryHandler : IRequestHandler<G
 		IEnumerable<PublicationActivityModel> queryResult = await _repository.GetPublicationActivitiesByPublicationIdAsync(request.PublicationId);
 
 		List<PublicationActivity> mappedResult = _mapper.Map<List<PublicationActivity>>(queryResult);
-		return new() { Success = true, PublicationActivities = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

@@ -1,12 +1,10 @@
-﻿using ZUEPC.DataAccess.Models.Institution;
+﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Models.Institution;
 
 namespace ZUEPC.DataAccess.Data.Institutions;
 
-public interface IInstitutionData
+public interface IInstitutionData : 
+	IRepositoryBase<InstitutionModel>
 {
-	Task<InstitutionModel?> GetInstitutionByIdAsync(long id);
 	Task<IEnumerable<InstitutionModel>> GetAllInstitutionsAsync();
-	Task<long> InsertInstitutionAsync(InstitutionModel model);
-	Task<int> UpdateInstitutionAsync(InstitutionModel model);
-	Task<int> DeleteInstitutionByIdAsync(long id);
 }

@@ -3,7 +3,6 @@ using ZUEPC.Common.Responses;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 
-public class GetInstitutionPreviewQueryResponse : ResponseBase
+public class GetInstitutionPreviewQueryResponse : ResponseBaseWithData<InstitutionPreview>
 {
-	public InstitutionPreview? InstitutionPreview { get; set; }
 }

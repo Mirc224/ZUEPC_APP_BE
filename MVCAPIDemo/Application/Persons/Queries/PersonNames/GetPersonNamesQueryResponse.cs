@@ -3,7 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.PersonNames;
 
-public class GetPersonNamesQueryResponse: ResponseBase
+public class GetPersonNamesQueryResponse: ResponseBaseWithData<ICollection<PersonName>>
 {
-	public ICollection<PersonName> PersonNames { get; set; }
 }

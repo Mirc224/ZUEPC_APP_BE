@@ -5,8 +5,7 @@ namespace ZUEPC.DataAccess.Data.Publications;
 
 public class PublicationNameInMemoryData : InMemoryBaseRepository<PublicationNameModel>, IPublicationNameData
 {
-	
-	public async Task<int> DeletePublicationNameByIdAsync(long id)
+	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		var deletedObjects = _repository.Where(x => x.Id == id);
 		return await DeleteRecordsAsync(deletedObjects);
@@ -18,9 +17,9 @@ public class PublicationNameInMemoryData : InMemoryBaseRepository<PublicationNam
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
-	public async Task<PublicationNameModel?> GetPublicationNameByIdAsync(long nameId)
+	public async Task<PublicationNameModel?> GetModelByIdAsync(long id)
 	{
-		return _repository.FirstOrDefault(x => x.Id == nameId);
+		return _repository.FirstOrDefault(x => x.Id == id);
 	}
 
 	public async Task<IEnumerable<PublicationNameModel>> GetPublicationNamesByNameAsync(string name)
@@ -38,12 +37,11 @@ public class PublicationNameInMemoryData : InMemoryBaseRepository<PublicationNam
 		return _repository.Where(x => x.PublicationId == publicationId);
 	}
 
-	public async Task<long> InsertPublicationNameAsync(PublicationNameModel model)
+	public async Task<long> InsertModelAsync(PublicationNameModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
-
-	public async Task<int> UpdatePublicationNameAsync(PublicationNameModel model)
+	public async Task<int> UpdateModelAsync(PublicationNameModel model)
 	{
 		return await UpdateRecordAsync(model);
 	}

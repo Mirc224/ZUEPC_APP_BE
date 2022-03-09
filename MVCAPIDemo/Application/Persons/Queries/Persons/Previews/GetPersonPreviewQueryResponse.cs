@@ -3,7 +3,6 @@ using ZUEPC.Common.Responses;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews;
 
-public class GetPersonPreviewQueryResponse : ResponseBase
+public class GetPersonPreviewQueryResponse : ResponseBaseWithData<PersonPreview>
 {
-	public PersonPreview? PersonPreview { get; set; }
 }

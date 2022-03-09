@@ -21,6 +21,6 @@ public class GetInstitutionNamesQueryHandler : IRequestHandler<GetInstitutionNam
 	{
 		IEnumerable<InstitutionNameModel> queryResult = await _repository.GetInstitutionNamesByInstitutionIdAsync(request.InstitutionId);
 		List<InstitutionName> mappedResult = _mapper.Map<List<InstitutionName>>(queryResult);
-		return new() { Success = true, InstitutionNames = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

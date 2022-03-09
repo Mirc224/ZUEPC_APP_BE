@@ -5,7 +5,7 @@ namespace ZUEPC.DataAccess.Data.PublicationActivities;
 
 public class PublicationActivityInMemoryData : InMemoryBaseRepository<PublicationActivityModel>, IPublicationActivityData
 {
-	public async Task<int> DeletePublicationActivityByIdAsync(long id)
+	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		var deletedObject = _repository.Where(x => x.Id == id);
 		return await DeleteRecordsAsync(deletedObject);
@@ -17,14 +17,19 @@ public class PublicationActivityInMemoryData : InMemoryBaseRepository<Publicatio
 		return await DeleteRecordsAsync(deletedObject);
 	}
 
+	public async Task<PublicationActivityModel?> GetModelByIdAsync(long id)
+	{
+		return _repository.FirstOrDefault(x => x.Id == id);
+	}
+
 	public async Task<IEnumerable<PublicationActivityModel>> GetPublicationActivitiesByPublicationIdAsync(long publicationId)
 	{
 		return _repository.Where(x => x.PublicationId == publicationId);
 	}
 
-	public async Task<PublicationActivityModel?> GetPublicationActivityByIdAsync(long id)
+	public async Task<long> InsertModelAsync(PublicationActivityModel model)
 	{
-		return _repository.FirstOrDefault(x => x.Id == id);
+		return await InsertRecordAsync(model);
 	}
 
 	public async Task<long> InsertPublicationActivityAsync(PublicationActivityModel model)
@@ -32,7 +37,7 @@ public class PublicationActivityInMemoryData : InMemoryBaseRepository<Publicatio
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdatePublicationActivityAsync(PublicationActivityModel model)
+	public async Task<int> UpdateModelAsync(PublicationActivityModel model)
 	{
 		return await UpdateRecordAsync(model);
 	}

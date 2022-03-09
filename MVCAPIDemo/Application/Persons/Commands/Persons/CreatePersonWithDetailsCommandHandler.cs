@@ -25,7 +25,11 @@ public class CreatePersonWithDetailsCommandHandler : IRequestHandler<CreatePerso
 	public async Task<CreatePersonWithDetailsCommandResponse> Handle(CreatePersonWithDetailsCommand request, CancellationToken cancellationToken)
 	{
 		CreatePersonCommand createPersonCommand = _mapper.Map<CreatePersonCommand>(request);
-		Person createdPerson = (await _mediator.Send(createPersonCommand)).Person;
+		Person? createdPerson = (await _mediator.Send(createPersonCommand)).Data;
+		if(createdPerson is null)
+		{
+			return new() { Success = false };
+		}
 		PersonDetails responseObject = _mapper.Map<PersonDetails>(createdPerson);
 		long personId = createdPerson.Id;
 		
@@ -45,18 +49,7 @@ public class CreatePersonWithDetailsCommandHandler : IRequestHandler<CreatePerso
 			PersonNameCreateDto,
 			CreatePersonNameCommand>(request, request.Names, personId);
 
-		return responses.Select(x => x.PersonName).ToList();
-		//List<PersonName> personNames = new();
-		//foreach (PersonNameCreateDto name in request.Names.OrEmptyIfNull())
-		//{
-		//	name.PersonId = personId;
-		//	name.VersionDate = request.VersionDate;
-		//	name.OriginSourceType = request.OriginSourceType;
-		//	CreatePersonNameCommand createPersonNameCommand = _mapper.Map<CreatePersonNameCommand>(name);
-		//	PersonName createdName = (await _mediator.Send(createPersonNameCommand)).PersonName;
-		//	personNames.Add(createdName);
-		//}
-		//return personNames;
+		return responses.Select(x => x.Data).ToList();
 	}
 
 	private async Task<ICollection<PersonExternDatabaseId>> ProcessPersonExternDatabaseIdsAsync(
@@ -68,18 +61,7 @@ public class CreatePersonWithDetailsCommandHandler : IRequestHandler<CreatePerso
 			PersonExternDatabaseIdCreateDto,
 			CreatePersonExternDatabaseIdCommand>(request, request.ExternDatabaseIds, personId);
 
-		return responses.Select(x => x.PersonExternDatabaseId).ToList();
-		//List<PersonExternDatabaseId> personExternIds = new();
-		//foreach (PersonExternDatabaseIdCreateDto externIdentifier in request.ExternDatabaseIds.OrEmptyIfNull())
-		//{
-		//	externIdentifier.PersonId = personId;
-		//	externIdentifier.VersionDate = request.VersionDate;
-		//	externIdentifier.OriginSourceType = request.OriginSourceType;
-		//	CreatePersonExternDatabaseIdCommand? createPersonIdentifierCommand = _mapper.Map<CreatePersonExternDatabaseIdCommand>(externIdentifier);
-		//	PersonExternDatabaseId createdExternDbId = (await _mediator.Send(createPersonIdentifierCommand)).PersonExternDatabaseId;
-		//	personExternIds.Add(createdExternDbId);
-		//}
-		//return personExternIds;
+		return responses.Select(x => x.Data).ToList();
 	}
 
 	private async Task<ICollection<TResponse>> ProcessPersonPropertyAsync<TResponse, TCreateDto, TCommand>(

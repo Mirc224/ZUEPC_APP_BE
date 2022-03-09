@@ -18,14 +18,14 @@ public class UpdatePublicationCommandHandler : IRequestHandler<UpdatePublication
 
 	public async Task<UpdatePublicationCommandResponse> Handle(UpdatePublicationCommand request, CancellationToken cancellationToken)
 	{
-		var publication = await _repository.GetPublicationByIdAsync(request.Id);
+		var publication = await _repository.GetModelByIdAsync(request.Id);
 		if(publication is null)
 		{
 			return new() { Success = false };
 		}
 		
 		var publicationModel = _mapper.Map<PublicationModel>(request);
-		int rowsUpdated = await _repository.UpdatePublicationAsync(publicationModel);
+		int rowsUpdated = await _repository.UpdateModelAsync(publicationModel);
 		if(rowsUpdated != 1)
 		{
 			return new() { Success = false };

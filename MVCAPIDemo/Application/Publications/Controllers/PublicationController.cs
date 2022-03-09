@@ -26,7 +26,7 @@ public class PublicationController : ControllerBase
 		{
 			return NotFound();
 		}
-		return Ok(response.PublicationWithDetails);
+		return Ok(response.Data);
 	}
 
 	[HttpPost]
@@ -44,7 +44,7 @@ public class PublicationController : ControllerBase
 		{
 			return StatusCode(500);
 		}
-		return StatusCode(201, response.CreatedPublicationDetails);
+		return StatusCode(201, response.Data);
 	}
 
 	[HttpPut("{id}")]

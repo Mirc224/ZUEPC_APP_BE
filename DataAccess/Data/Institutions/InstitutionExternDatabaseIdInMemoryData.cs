@@ -3,17 +3,18 @@ using ZUEPC.DataAccess.Models.Institution;
 
 namespace ZUEPC.DataAccess.Data.Institutions;
 
-public class InstitutionExternDatabaseIdInMemoryData : InMemoryBaseRepository<InstitutionExternDatabaseIdModel>, IInstitutionExternDatabaseIdData
+public class InstitutionExternDatabaseIdInMemoryData : InMemoryBaseRepository<InstitutionExternDatabaseIdModel>, 
+	IInstitutionExternDatabaseIdData
 {
-	public async Task<int> DeleteInstitutionExternDatabaseIdByIdAsync(long id)
-	{
-		IEnumerable<InstitutionExternDatabaseIdModel> deletedObjects = _repository.Where(x => x.Id == id);
-		return await DeleteRecordsAsync(deletedObjects);
-	}
-
 	public async Task<int> DeleteInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId)
 	{
 		IEnumerable<InstitutionExternDatabaseIdModel> deletedObjects = _repository.Where(x => x.InstitutionId == institutionId);
+		return await DeleteRecordsAsync(deletedObjects);
+	}
+
+	public async Task<int> DeleteModelByIdAsync(long id)
+	{
+		IEnumerable<InstitutionExternDatabaseIdModel> deletedObjects = _repository.Where(x => x.Id == id);
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
@@ -21,11 +22,6 @@ public class InstitutionExternDatabaseIdInMemoryData : InMemoryBaseRepository<In
 		IEnumerable<string> identifierValues)
 	{
 		return _repository.Where(x => identifierValues.Contains(x.ExternIdentifierValue));
-	}
-
-	public async Task<InstitutionExternDatabaseIdModel?> GetInstitutionExternDatabaseIdByIdAsync(long id)
-	{
-		return _repository.FirstOrDefault(x => x.Id == id);
 	}
 
 	public async Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByExternIdAsync(string externDbId)
@@ -38,12 +34,17 @@ public class InstitutionExternDatabaseIdInMemoryData : InMemoryBaseRepository<In
 		return _repository.Where(x => x.InstitutionId == institutionId).ToList();
 	}
 
-	public async Task<long> InsertInstitutionExternDatabaseIdAsync(InstitutionExternDatabaseIdModel model)
+	public async Task<InstitutionExternDatabaseIdModel?> GetModelByIdAsync(long id)
+	{
+		return _repository.FirstOrDefault(x => x.Id == id);
+	}
+
+	public async Task<long> InsertModelAsync(InstitutionExternDatabaseIdModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdateInstitutionExternDatabaseIdAsync(InstitutionExternDatabaseIdModel model)
+	public async Task<int> UpdateModelAsync(InstitutionExternDatabaseIdModel model)
 	{
 		return await UpdateRecordAsync(model);
 	}

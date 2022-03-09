@@ -16,7 +16,7 @@ public class DeletePublicationCommandHandler :
 	}
 	public async Task<DeletePublicationCommandResponse> Handle(DeletePublicationCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeletePublicationByIdAsync(request.Id);
+		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
 
 		return new() { Success = rowsDeleted == 1 };
 	}

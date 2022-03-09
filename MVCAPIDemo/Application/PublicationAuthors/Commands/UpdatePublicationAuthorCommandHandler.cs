@@ -20,13 +20,13 @@ public class UpdatePublicationAuthorCommandHandler :
 	}
 	public async Task<UpdatePublicationAuthorCommandResponse> Handle(UpdatePublicationAuthorCommand request, CancellationToken cancellationToken)
 	{
-		PublicationAuthorModel? currentModel = await _repository.GetPublicationAuthorByIdAsync(request.Id);
+		PublicationAuthorModel? currentModel = await _repository.GetModelByIdAsync(request.Id);
 		if (currentModel is null)
 		{
 			return new() { Success = false };
 		}
 		PublicationAuthorModel updatedModel = _mapper.Map<PublicationAuthorModel>(request);
-		int rowsUpdated = await _repository.UpdatePublicationAuthorAsync(updatedModel);
+		int rowsUpdated = await _repository.UpdateModelAsync(updatedModel);
 		return new() { Success = rowsUpdated == 1 };
 	}
 }

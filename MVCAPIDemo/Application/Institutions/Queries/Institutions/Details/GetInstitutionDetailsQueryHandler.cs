@@ -26,7 +26,7 @@ public class GetInstitutionDetailsQueryHandler :
 		Institution? institution = (await _mediator.Send(new GetInstitutionQuery()
 		{
 			InstitutionId= institutionId
-		})).Institution;
+		})).Data;
 
 		if (institution is null)
 		{
@@ -36,14 +36,14 @@ public class GetInstitutionDetailsQueryHandler :
 		result.Names = (await _mediator.Send(new GetInstitutionNamesQuery()
 		{
 			InstitutionId = institutionId
-		})).InstitutionNames;
+		})).Data;
 
 		result.ExternDatabaseIds = (await _mediator.Send(new GetInstitutionExternDatabaseIdsQuery()
 		{
 			InstitutionId = institutionId
-		})).InstitutionExternDatabaseIds;
+		})).Data;
 
 
-		return new() { Success = true, InstitutionDetails = result };
+		return new() { Success = true, Data = result };
 	}
 }

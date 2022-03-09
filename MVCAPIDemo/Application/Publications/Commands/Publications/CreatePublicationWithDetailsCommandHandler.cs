@@ -55,7 +55,7 @@ public class CreatePublicationWithDetailsCommandHandler :
 		}
 
 		CreatePublicationCommand createPublicationCommand = _mapper.Map<CreatePublicationCommand>(request);
-		Publication createdPublication = (await _mediator.Send(createPublicationCommand)).Publication;
+		Publication createdPublication = (await _mediator.Send(createPublicationCommand)).Data;
 		PublicationDetails responseObject = _mapper.Map<PublicationDetails>(createdPublication);
 		long publicationId = createdPublication.Id;
 
@@ -66,7 +66,7 @@ public class CreatePublicationWithDetailsCommandHandler :
 		responseObject.RelatedPublications = await ProcessRelatedPublicationsAsync(request, relatedPublicationsTuples, publicationId);
 		responseObject.PublicationActivities = await ProcessPublicationActivitiesAsync(request, publicationId);
 
-		return new() { Success = true, CreatedPublicationDetails = responseObject};
+		return new() { Success = true, Data = responseObject};
 	}
 
 	private async Task<ICollection<PublicationActivity>> ProcessPublicationActivitiesAsync(CreatePublicationWithDetailsCommand request, long publicationId)
@@ -91,7 +91,7 @@ public class CreatePublicationWithDetailsCommandHandler :
 			PublicationActivityCreateDto,
 			CreatePublicationActivityCommand>(request, publicationActivityCreateDto, publicationId);
 
-		PublicationActivity publicationActivity = _mapper.Map<PublicationActivity>(response.PublicationActivity);
+		PublicationActivity publicationActivity = _mapper.Map<PublicationActivity>(response.Data);
 
 		return publicationActivity;
 	}
@@ -165,7 +165,7 @@ public class CreatePublicationWithDetailsCommandHandler :
 			CreatePublicationAuthorCommandResponse,
 			PublicationAuthorCreateDto,
 			CreatePublicationAuthorCommand>(request, publicationAuthorCreateDto, publicationId);
-		PublicationAuthorDetails author = _mapper.Map<PublicationAuthorDetails>(response.PublicationAuthor);
+		PublicationAuthorDetails author = _mapper.Map<PublicationAuthorDetails>(response.Data);
 		author.PersonPreview = personPreview;
 		author.InstitutionPreview = institutionPreview;
 
@@ -179,7 +179,7 @@ public class CreatePublicationWithDetailsCommandHandler :
 			PublicationIdentifierCreateDto,
 			CreatePublicationIdentifierCommand>(request, request.Identifiers, publicationId);
 
-		return responses.Select(x => x.PublicationIdentifier).ToList();
+		return responses.Select(x => x.Data).ToList();
 	}
 
 	private async Task<ICollection<PublicationExternDatabaseId>> ProcessPublicationExternDatabaseIdsAsync(CreatePublicationWithDetailsCommand request, long publicationId)
@@ -189,7 +189,7 @@ public class CreatePublicationWithDetailsCommandHandler :
 			PublicationExternDatabaseIdCreateDto,
 			CreatePublicationExternDatabaseIdCommand>(request, request.ExternDatabaseIds, publicationId);
 
-		return responses.Select(x => x.PublicationExternDatabaseId).ToList();
+		return responses.Select(x => x.Data).ToList();
 	}
 
 	private async Task<ICollection<PublicationName>> ProcessPublicationNamesAsync(CreatePublicationWithDetailsCommand request, long publicationId)
@@ -199,6 +199,6 @@ public class CreatePublicationWithDetailsCommandHandler :
 			PublicationNameCreateDto,
 			CreatePublicationNameCommand>(request, request.Names, publicationId);
 
-		return responses.Select(x => x.PublicationName).ToList();
+		return responses.Select(x => x.Data).ToList();
 	}
 }

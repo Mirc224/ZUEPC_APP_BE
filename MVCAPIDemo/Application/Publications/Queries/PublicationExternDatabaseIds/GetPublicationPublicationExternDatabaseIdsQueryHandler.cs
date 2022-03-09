@@ -22,6 +22,6 @@ public class GetPublicationPublicationExternDatabaseIdsQueryHandler : IRequestHa
 		IEnumerable<PublicationExternDatabaseIdModel> queryResult = await _repository.GetPublicationExternDbIdsByPublicationIdAsync(request.PublicationId);
 		List<PublicationExternDatabaseId> externDbIds = _mapper.Map<List<PublicationExternDatabaseId>>(queryResult);
 
-		return new() { Success = true, PublicationExternDatabaseIds = externDbIds };
+		return new() { Success = true, Data = externDbIds };
 	}
 }

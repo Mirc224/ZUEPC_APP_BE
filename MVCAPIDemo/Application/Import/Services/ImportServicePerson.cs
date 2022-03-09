@@ -63,7 +63,7 @@ public partial class ImportService
 	{
 		GetPersonExternDatabaseIdsQuery request = new() { PersonId = currentPerson.Id };
 		IEnumerable<PersonExternDatabaseId> personCurrentExternIds = (await _mediator.Send(request))
-			.PersonExternDatabaseIds;
+			.Data;
 
 		IEnumerable<ImportPersonExternDatabaseId> importExternIdToInsert = GetEPCObjectExternDatabaseIdsForInsertAsync(
 																					importExternIdentifiers,
@@ -131,7 +131,7 @@ public partial class ImportService
 	OriginSourceType source)
 	{
 		GetPersonNamesQuery request = new() { PersonId = currentPerson.Id };
-		IEnumerable<PersonName> personCurrentNames = (await _mediator.Send(request)).PersonNames;
+		IEnumerable<PersonName> personCurrentNames = (await _mediator.Send(request)).Data;
 
 		IEnumerable<ImportPersonName> namesToInsert = from personImpName in importPersonNames
 													  where !(from personCurrName in personCurrentNames
@@ -240,10 +240,10 @@ public partial class ImportService
 			SearchedExternIdentifiers = personExternDatabaseIds
 		});
 
-		if (foundPersonExternIdentifiers.ExternDatabaseIds != null &&
-			foundPersonExternIdentifiers.ExternDatabaseIds.Any())
+		if (foundPersonExternIdentifiers.Data != null &&
+			foundPersonExternIdentifiers.Data.Any())
 		{
-			personId = foundPersonExternIdentifiers.ExternDatabaseIds.First().PersonId;
+			personId = foundPersonExternIdentifiers.Data.First().PersonId;
 			resultModel = await GetPersonByIdAsync(personId);
 			if (resultModel != null)
 			{
@@ -257,7 +257,7 @@ public partial class ImportService
 	private async Task<Person?> GetPersonByIdAsync(long id)
 	{
 		GetPersonQueryResponse? personResponse = await _mediator.Send(new GetPersonQuery() { PersonId = id });
-		return personResponse.Person;
+		return personResponse.Data;
 	}
 
 	private async Task<Person> CreatePersonAsync(ImportPerson importPerson, DateTime versionDate, OriginSourceType source)
@@ -265,7 +265,7 @@ public partial class ImportService
 		CreatePersonCommand createCommand = _mapper.Map<CreatePersonCommand>(importPerson);
 		createCommand.VersionDate = versionDate;
 		createCommand.OriginSourceType = source;
-		Person newPerson = (await _mediator.Send(createCommand)).Person;
+		Person newPerson = (await _mediator.Send(createCommand)).Data;
 		await InsertPersonExternDatabaseIdCollectionAsync(newPerson, importPerson.PersonExternDatabaseIds, versionDate, source);
 		await InsertPersonNameCollectionAsync(newPerson, importPerson.PersonNames, versionDate, source);
 		return newPerson;

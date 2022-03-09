@@ -19,7 +19,7 @@ public class CreateRelatedPublicationCommandHandler : IRequestHandler<CreateRela
 	public async Task<CreateRelatedPublicationCommandResponse> Handle(CreateRelatedPublicationCommand request, CancellationToken cancellationToken)
 	{
 		RelatedPublicationModel insertModel = _mapper.Map<RelatedPublicationModel>(request);
-		long insertedItemId = await _repository.InsertRelatedPublicationAsync(insertModel);
+		long insertedItemId = await _repository.InsertModelAsync(insertModel);
 		insertModel.Id = insertedItemId;
 
 		RelatedPublication domain = _mapper.Map<RelatedPublication>(insertModel);

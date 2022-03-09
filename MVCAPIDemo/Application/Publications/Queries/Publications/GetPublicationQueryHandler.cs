@@ -19,7 +19,7 @@ public class GetPublicationQueryHandler : IRequestHandler<GetPublicationQuery, G
 
 	public async Task<GetPublicationQueryResponse> Handle(GetPublicationQuery request, CancellationToken cancellationToken)
 	{
-		PublicationModel? result = await _repository.GetPublicationByIdAsync(request.PublicationId);
+		PublicationModel? result = await _repository.GetModelByIdAsync(request.PublicationId);
 		if (result is null)
 		{
 			return new GetPublicationQueryResponse() { Success = false };

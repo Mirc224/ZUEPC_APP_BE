@@ -3,7 +3,6 @@ using ZUEPC.Common.Responses;
 
 namespace ZUEPC.Application.Publications.Queries.Publications.Details;
 
-public class GetPublicationDetailsQueryResponse : ResponseBase
+public class GetPublicationDetailsQueryResponse : ResponseBaseWithData<PublicationDetails>
 {
-	public PublicationDetails? PublicationWithDetails { get; set; }
 }

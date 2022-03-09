@@ -13,13 +13,13 @@ public class DeletePublicationIdentifierCommandHandler : IRequestHandler<DeleteP
 	}
 	public async Task<DeletePublicationIdentifierCommandResponse> Handle(DeletePublicationIdentifierCommand request, CancellationToken cancellationToken)
 	{
-		var identifierModel = await _repository.GetPublicationIdentifierByIdAsync(request.Id);
+		var identifierModel = await _repository.GetModelByIdAsync(request.Id);
 		if (identifierModel is null)
 		{
 			return new() { Success = false };
 		}
 
-		int rowsDeleted = await _repository.DeletePublicationIdentifierByIdAsync(request.Id);
+		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
 		return new() { Success = rowsDeleted > 0 };
 	}
 }

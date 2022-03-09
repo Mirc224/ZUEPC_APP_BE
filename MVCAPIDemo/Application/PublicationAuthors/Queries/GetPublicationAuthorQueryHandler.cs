@@ -19,12 +19,12 @@ public class GetPublicationAuthorQueryHandler : IRequestHandler<GetPublicationAu
 
 	public async Task<GetPublicationAuthorQueryResponse> Handle(GetPublicationAuthorQuery request, CancellationToken cancellationToken)
 	{
-		PublicationAuthorModel? result = await _repository.GetPublicationAuthorByIdAsync(request.PublicationAuthorRecordId);
+		PublicationAuthorModel? result = await _repository.GetModelByIdAsync(request.PublicationAuthorRecordId);
 		if (result is null)
 		{
 			return new() { Success = false };
 		}
 		PublicationAuthor mappedResult = _mapper.Map<PublicationAuthor>(result);
-		return new() { Success = true, PublicationAuthor = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

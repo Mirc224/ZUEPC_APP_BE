@@ -19,12 +19,12 @@ public class GetPublicationExternDatabaseIdQueryHandler : IRequestHandler<GetPub
 	
 	public async Task<GetPublicationExternDatabaseIdQueryResponse> Handle(GetPublicationExternDatabaseIdQuery request, CancellationToken cancellationToken)
 	{
-		PublicationExternDatabaseIdModel? result = await _repository.GetPublicationExternDbIdByIdAsync(request.PublicationExternDatabaseIdId);
+		PublicationExternDatabaseIdModel? result = await _repository.GetModelByIdAsync(request.PublicationExternDatabaseIdId);
 		if (result is null)
 		{
 			return new() { Success = false };
 		}
 		PublicationExternDatabaseId mappedResult = _mapper.Map<PublicationExternDatabaseId>(result);
-		return new() { Success = true, PublicationExternDatabaseId = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

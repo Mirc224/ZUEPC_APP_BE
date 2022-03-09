@@ -19,12 +19,12 @@ public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, GetPersonQu
 
 	public async Task<GetPersonQueryResponse> Handle(GetPersonQuery request, CancellationToken cancellationToken)
 	{
-		PersonModel? personModel = await _repository.GetPersonByIdAsync(request.PersonId);
+		PersonModel? personModel = await _repository.GetModelByIdAsync(request.PersonId);
 		if (personModel is null)
 		{
 			return new() { Success = false };
 		}
 		Person mappedPerson = _mapper.Map<Person>(personModel);
-		return new() { Success = true, Person = mappedPerson };
+		return new() { Success = true, Data = mappedPerson };
 	}
 }

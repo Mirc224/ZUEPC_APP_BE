@@ -25,6 +25,6 @@ public class GetPersonExternDatabaseIdsQueryHandler : IRequestHandler<GetPersonE
 		}
 		List<PersonExternDatabaseId> mappedResult = _mapper.Map<List<PersonExternDatabaseId>>(queryResult);
 
-		return new() { PersonExternDatabaseIds = mappedResult };
+		return new() { Data = mappedResult };
 	}
 }

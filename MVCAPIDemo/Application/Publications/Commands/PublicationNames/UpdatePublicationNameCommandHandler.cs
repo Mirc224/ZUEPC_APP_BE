@@ -17,14 +17,14 @@ public class UpdatePublicationNameCommandHandler : IRequestHandler<UpdatePublica
 	}
 	public async Task<UpdatePublicationNameCommandResponse> Handle(UpdatePublicationNameCommand request, CancellationToken cancellationToken)
 	{
-		PublicationNameModel? searchedModel = await _repository.GetPublicationNameByIdAsync(request.Id);
+		PublicationNameModel? searchedModel = await _repository.GetModelByIdAsync(request.Id);
 		if (searchedModel is null)
 		{
 			return new UpdatePublicationNameCommandResponse() { Success = false };
 		}
 
 		PublicationNameModel updateModel = _mapper.Map<PublicationNameModel>(request);
-		int rowsUpdated = await _repository.UpdatePublicationNameAsync(updateModel);
+		int rowsUpdated = await _repository.UpdateModelAsync(updateModel);
 		return new UpdatePublicationNameCommandResponse() { Success = rowsUpdated > 0 };
 	}
 }

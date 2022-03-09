@@ -20,15 +20,15 @@ public class GetInstitutionPreviewQueryHandler : IRequestHandler<GetInstitutionP
 	public async Task<GetInstitutionPreviewQueryResponse> Handle(GetInstitutionPreviewQuery request, CancellationToken cancellationToken)
 	{
 		long institutionId = request.InstitutionId;
-		Institution? institutionDomain = (await _mediator.Send(new GetInstitutionQuery() { InstitutionId = institutionId })).Institution;
+		Institution? institutionDomain = (await _mediator.Send(new GetInstitutionQuery() { InstitutionId = institutionId })).Data;
 		if (institutionDomain is null)
 		{
 			return new() { Success = false };
 		}
 		InstitutionPreview previewResult = _mapper.Map<InstitutionPreview>(institutionDomain);
-		previewResult.Names = (await _mediator.Send(new GetInstitutionNamesQuery() { InstitutionId = institutionId })).InstitutionNames;
+		previewResult.Names = (await _mediator.Send(new GetInstitutionNamesQuery() { InstitutionId = institutionId })).Data;
 		previewResult.ExternDatabaseIds = (await _mediator.Send(new GetInstitutionExternDatabaseIdsQuery() 
-		{ InstitutionId = institutionId })).InstitutionExternDatabaseIds;
-		return new() { Success = true, InstitutionPreview = previewResult };
+		{ InstitutionId = institutionId })).Data;
+		return new() { Success = true, Data = previewResult };
 	}
 }

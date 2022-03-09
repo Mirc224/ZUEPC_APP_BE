@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.Commands;
 using ZUEPC.DataAccess.Data.Persons;
 using ZUEPC.DataAccess.Models.Person;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 
-public class CreatePersonExternDatabaseIdCommandHandler : IRequestHandler<CreatePersonExternDatabaseIdCommand, CreatePersonExternDatabaseIdCommandResponse>
+public class CreatePersonExternDatabaseIdCommandHandler : 
+	CreateBaseHandler,
+	IRequestHandler<CreatePersonExternDatabaseIdCommand, CreatePersonExternDatabaseIdCommandResponse>
 {
-	private readonly IMapper _mapper;
 	private readonly IPersonExternDatabaseIdData _repository;
 
 	public CreatePersonExternDatabaseIdCommandHandler(IMapper mapper, IPersonExternDatabaseIdData repository)
@@ -18,15 +20,13 @@ public class CreatePersonExternDatabaseIdCommandHandler : IRequestHandler<Create
 	}
 	public async Task<CreatePersonExternDatabaseIdCommandResponse> Handle(CreatePersonExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		PersonExternDatabaseIdModel insertModel = _mapper.Map<PersonExternDatabaseIdModel>(request);
-		insertModel.CreatedAt = DateTime.UtcNow;
-		if (request.VersionDate is null)
-		{
-			insertModel.CreatedAt = DateTime.UtcNow;
-		}
-		long newId = await _repository.InsertPersonExternDatabaseIdAsync(insertModel);
-		insertModel.Id = newId;
-		PersonExternDatabaseId domain = _mapper.Map<PersonExternDatabaseId>(insertModel);
-		return new() { Success = true, PersonExternDatabaseId = domain };
+		PersonExternDatabaseIdModel insertModel = CreateInsertModelFromRequest
+			<PersonExternDatabaseIdModel, CreatePersonExternDatabaseIdCommand>(request);
+		long insertedId = await _repository.InsertModelAsync(insertModel);
+
+		return CreateSuccessResponseWithDataFromInsertModel
+			<CreatePersonExternDatabaseIdCommandResponse,
+			PersonExternDatabaseId,
+			PersonExternDatabaseIdModel>(insertModel, insertedId);
 	}
 }

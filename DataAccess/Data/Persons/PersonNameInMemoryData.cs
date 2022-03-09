@@ -6,12 +6,6 @@ namespace ZUEPC.DataAccess.Data.Persons;
 public class PersonNameInMemoryData : InMemoryBaseRepository<PersonNameModel>, IPersonNameData
 {
 
-	public async Task<int> DeletePersonNameByIdAsync(long id)
-	{
-		var deletedObjects = _repository.Where(x => x.Id == id).ToList();
-		return await DeleteRecordsAsync(deletedObjects);
-	}
-
 	public async Task<int> DeletePersonNameByPersonIdAsync(long personId)
 	{
 		var deletedObjects = _repository.Where(x => x.PersonId == personId).ToList();
@@ -33,18 +27,24 @@ public class PersonNameInMemoryData : InMemoryBaseRepository<PersonNameModel>, I
 		return _repository.Where(x => x.PersonId == personId);
 	}
 
-	public async Task<PersonNameModel?> GetPersonNameByIdAsync(long id)
+	public async Task<PersonNameModel?> GetModelByIdAsync(long id)
 	{
 		return _repository.FirstOrDefault(x => x.Id == id);
 	}
 
-	public async Task<long> InsertPersonNameAsync(PersonNameModel model)
+	public async Task<long> InsertModelAsync(PersonNameModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdatePersonNameAsync(PersonNameModel model)
+	public async Task<int> UpdateModelAsync(PersonNameModel model)
 	{
 		return await UpdateRecordAsync(model);
+	}
+
+	public async Task<int> DeleteModelByIdAsync(long id)
+	{
+		var deletedObjects = _repository.Where(x => x.Id == id).ToList();
+		return await DeleteRecordsAsync(deletedObjects);
 	}
 }

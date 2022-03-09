@@ -18,14 +18,14 @@ public class UpdateRelatedPublicationCommandHandler : IRequestHandler<UpdateRela
 
 	public async Task<UpdateRelatedPublicationCommandResponse> Handle(UpdateRelatedPublicationCommand request, CancellationToken cancellationToken)
 	{
-		RelatedPublicationModel searchedModel = await _repository.GetRelatedPublicationByIdAsync(request.Id);
+		RelatedPublicationModel? searchedModel = await _repository.GetModelByIdAsync(request.Id);
 		if (searchedModel is null)
 		{
 			return new() { Success = false };
 		}
 
 		RelatedPublicationModel updateModel = _mapper.Map<RelatedPublicationModel>(request);
-		int rowsUpdated = await _repository.UpdateRelatedPublicationAsync(updateModel);
+		int rowsUpdated = await _repository.UpdateModelAsync(updateModel);
 		return new() { Success = rowsUpdated > 0 };
 	}
 }

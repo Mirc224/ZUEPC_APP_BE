@@ -18,13 +18,13 @@ public class GetInstitutionQueryHandler : IRequestHandler<GetInstitutionQuery, G
 	}
 	public async Task<GetInstitutionQueryResponse> Handle(GetInstitutionQuery request, CancellationToken cancellationToken)
 	{
-		InstitutionModel? queryResult = await _repository.GetInstitutionByIdAsync(request.InstitutionId);
+		InstitutionModel? queryResult = await _repository.GetModelByIdAsync(request.InstitutionId);
 		if (queryResult is null)
 		{
 			return new() { Success = false };
 		}
 
 		Institution mappedModel = _mapper.Map<Institution>(queryResult);
-		return new() { Success = true, Institution = mappedModel };
+		return new() { Success = true, Data = mappedModel };
 	}
 }

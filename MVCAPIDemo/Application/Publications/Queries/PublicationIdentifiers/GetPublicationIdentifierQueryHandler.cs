@@ -19,12 +19,12 @@ public class GetPublicationIdentifierQueryHandler : IRequestHandler<GetPublicati
 	}
 	public async Task<GetPublicationIdentifierQueryResponse> Handle(GetPublicationIdentifierQuery request, CancellationToken cancellationToken)
 	{
-		PublicationIdentifierModel? result = await _repository.GetPublicationIdentifierByIdAsync(request.PublicationIdentifierRecordId);
+		PublicationIdentifierModel? result = await _repository.GetModelByIdAsync(request.PublicationIdentifierRecordId);
 		if (result is null)
 		{
 			return new() { Success = false };
 		}
 		PublicationIdentifier mappedResult = _mapper.Map<PublicationIdentifier>(result);
-		return new() { Success = true, PublicationIdentifier = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

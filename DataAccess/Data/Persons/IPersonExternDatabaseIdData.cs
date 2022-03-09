@@ -1,15 +1,12 @@
-﻿using ZUEPC.DataAccess.Models.Person;
+﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Models.Person;
 
 namespace ZUEPC.DataAccess.Data.Persons;
 
-public interface IPersonExternDatabaseIdData
+public interface IPersonExternDatabaseIdData : IRepositoryBase<PersonExternDatabaseIdModel>
 {
-	Task<PersonExternDatabaseIdModel?> GetPersonExternDatabaseIdByIdAsync(long id);
 	Task<IEnumerable<PersonExternDatabaseIdModel>> GetPersonExternDatabaseIdsByExternDbIdAsync(string externDbId);
 	Task<IEnumerable<PersonExternDatabaseIdModel>> GetPersonExternDatabaseIdsByPersonIdAsync(long personId);
 	Task<IEnumerable<PersonExternDatabaseIdModel>> GetAllPersonExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues);
-	Task<long> InsertPersonExternDatabaseIdAsync(PersonExternDatabaseIdModel model);
-	Task<int> UpdatePersonExternDatabaseIdAsync(PersonExternDatabaseIdModel model);
-	Task<int> DeletePersonExternDatabaseIdByIdAsync(long id);
 	Task<int> DeletePersonExternDatabaseIdsByPersonIdAsync(long personId);
 }

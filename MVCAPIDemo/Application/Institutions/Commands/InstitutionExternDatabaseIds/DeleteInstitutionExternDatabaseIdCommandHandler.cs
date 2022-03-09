@@ -17,7 +17,7 @@ public class DeleteInstitutionExternDatabaseIdCommandHandler :
 
 	public async Task<DeleteInstitutionExternDatabaseIdCommandResponse> Handle(DeleteInstitutionExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		int rowsDeleted = await _repository.DeleteInstitutionExternDatabaseIdByIdAsync(request.Id);
+		int rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
 		return new() { Success = rowsDeleted == 1};
 	}
 }

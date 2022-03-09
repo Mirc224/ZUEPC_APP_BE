@@ -5,13 +5,6 @@ namespace ZUEPC.DataAccess.Data.Publications;
 
 public class PublicationExternDatabaseIdInMemoryData : InMemoryBaseRepository<PublicationExternDatabaseIdModel>, IPublicationExternDatabaseIdData
 {
-
-	public async Task<int> DeletePublicationExternDbIdByIdAsync(long id)
-	{
-		var deletedObjects = _repository.Where(x => x.Id == id);
-		return await DeleteRecordsAsync(deletedObjects);
-	}
-
 	public async Task<int> DeletePublicationExternDbIdsByPublicationIdAsync(long publicationId)
 	{
 		var deletedObjects = _repository.Where(x => x.PublicationId == publicationId);
@@ -33,18 +26,24 @@ public class PublicationExternDatabaseIdInMemoryData : InMemoryBaseRepository<Pu
 		return _repository.Where(x => x.PublicationId == publicationId);
 	}
 
-	public async Task<PublicationExternDatabaseIdModel?> GetPublicationExternDbIdByIdAsync(long id)
+	public async Task<PublicationExternDatabaseIdModel?> GetModelByIdAsync(long id)
 	{
 		return _repository.Where(x => x.Id == id).FirstOrDefault();
 	}
 
-	public async Task<long> InsertPublicationExternDbIdAsync(PublicationExternDatabaseIdModel model)
+	public async Task<long> InsertModelAsync(PublicationExternDatabaseIdModel model)
 	{
 		return await InsertRecordAsync(model);
 	}
 
-	public async Task<int> UpdatePublicationExternDbIdAsync(PublicationExternDatabaseIdModel model)
+	public async Task<int> UpdateModelAsync(PublicationExternDatabaseIdModel model)
 	{
 		return await UpdateRecordAsync(model);
+	}
+
+	public async Task<int> DeleteModelByIdAsync(long id)
+	{
+		var deletedObjects = _repository.Where(x => x.Id == id);
+		return await DeleteRecordsAsync(deletedObjects);
 	}
 }

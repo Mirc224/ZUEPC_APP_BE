@@ -22,6 +22,6 @@ public class GetPublicationPublicationNamesQueryHandler : IRequestHandler<GetPub
 
 		List<PublicationName> mappedResult = _mapper.Map<List<PublicationName>>(resultModel);
 
-		return new GetPublicationPublicationNamesQueryResponse() { Success = true, PublicationNames = mappedResult };
+		return new GetPublicationPublicationNamesQueryResponse() { Success = true, Data = mappedResult };
 	}
 }

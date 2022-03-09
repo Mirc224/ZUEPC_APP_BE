@@ -17,7 +17,7 @@ public class DeletePublicationNameCommandHandler : IRequestHandler<DeletePublica
 
 	public async Task<DeletePublicationNameCommandResponse> Handle(DeletePublicationNameCommand request, CancellationToken cancellationToken)
 	{
-		var rowsDeleted = await _repository.DeletePublicationNameByIdAsync(request.Id);
+		var rowsDeleted = await _repository.DeleteModelByIdAsync(request.Id);
 
 		return new DeletePublicationNameCommandResponse() { Success = rowsDeleted == 1 };
 	}

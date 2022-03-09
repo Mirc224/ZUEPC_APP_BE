@@ -17,13 +17,13 @@ public class UpdatePersonNameCommandHandler : IRequestHandler<UpdatePersonNameCo
 	}
 	public async Task<UpdatePersonNameCommandResponse> Handle(UpdatePersonNameCommand request, CancellationToken cancellationToken)
 	{
-		PersonNameModel? currentModel = await _repository.GetPersonNameByIdAsync(request.Id);
+		PersonNameModel? currentModel = await _repository.GetModelByIdAsync(request.Id);
 		if (currentModel is null)
 		{
 			return new() { Success = false };
 		}
 		PersonNameModel updatedModel = _mapper.Map<PersonNameModel>(request);
-		int rowsUpdated = await _repository.UpdatePersonNameAsync(updatedModel);
+		int rowsUpdated = await _repository.UpdateModelAsync(updatedModel);
 		return new() { Success = rowsUpdated == 1 };
 	}
 }

@@ -20,7 +20,7 @@ public class GetPublicationAuthorDetailsQueryHandler : IRequestHandler<GetPublic
 	public async Task<GetPublicationAuthorDetailsQueryResponse> Handle(GetPublicationAuthorDetailsQuery request, CancellationToken cancellationToken)
 	{
 		long publicationId = request.PublicationId;
-		ICollection<PublicationAuthor> publicationAuthors = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery() { PublicationId = publicationId })).Authors;
+		ICollection<PublicationAuthor> publicationAuthors = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery() { PublicationId = publicationId })).Data;
 		List<PublicationAuthorDetails> resultDetails = new();
 		foreach(PublicationAuthor pubAuthor in publicationAuthors)
 		{
@@ -30,16 +30,16 @@ public class GetPublicationAuthorDetailsQueryHandler : IRequestHandler<GetPublic
 			authorDetails.PersonPreview = (await _mediator.Send(new GetPersonPreviewQuery() 
 			{ 
 				PersonId = personId 
-			})).PersonPreview;
+			})).Data;
 			authorDetails.InstitutionPreview = (await _mediator
 				.Send(new GetInstitutionPreviewQuery()
 				{
 					InstitutionId = institutionId
-				})).InstitutionPreview;
+				})).Data;
 
 			resultDetails.Add(authorDetails);
 		}
 
-		return new() { Success = true, PublicationAuthorDetails = resultDetails };
+		return new() { Success = true, Data = resultDetails };
 	}
 }

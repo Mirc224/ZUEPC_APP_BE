@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.Commands;
 using ZUEPC.DataAccess.Data.Persons;
 using ZUEPC.DataAccess.Models.Person;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Commands.PersonNames;
 
-public class CreatePersonNameCommandHandler : IRequestHandler<CreatePersonNameCommand, CreatePersonNameCommandResponse>
+public class CreatePersonNameCommandHandler :
+	CreateBaseHandler,
+	IRequestHandler<CreatePersonNameCommand, CreatePersonNameCommandResponse>
 {
-	private readonly IMapper _mapper;
 	private readonly IPersonNameData _repository;
 
 	public CreatePersonNameCommandHandler(IMapper mapper, IPersonNameData repository)
@@ -18,15 +20,13 @@ public class CreatePersonNameCommandHandler : IRequestHandler<CreatePersonNameCo
 	}
 	public async Task<CreatePersonNameCommandResponse> Handle(CreatePersonNameCommand request, CancellationToken cancellationToken)
 	{
-		PersonNameModel insertModel = _mapper.Map<PersonNameModel>(request);
-		insertModel.CreatedAt = DateTime.UtcNow;
-		if (request.VersionDate is null)
-		{
-			insertModel.CreatedAt = DateTime.UtcNow;
-		}
-		long createdRecordId = await _repository.InsertPersonNameAsync(insertModel);
-		insertModel.Id = createdRecordId;
-		PersonName domain = _mapper.Map<PersonName>(insertModel);
-		return new() { Success = true, PersonName = domain };
+		PersonNameModel insertModel = CreateInsertModelFromRequest
+			<PersonNameModel, CreatePersonNameCommand>(request);
+		long insertedId = await _repository.InsertModelAsync(insertModel);
+
+		return CreateSuccessResponseWithDataFromInsertModel
+			<CreatePersonNameCommandResponse,
+			PersonName,
+			PersonNameModel>(insertModel, insertedId);
 	}
 }

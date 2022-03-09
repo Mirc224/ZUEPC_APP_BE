@@ -21,7 +21,7 @@ public partial class ImportService
 				new GetPublicationPublicationActivitiesQuery()
 				{
 					PublicationId = currPublication.Id
-				})).PublicationActivities;
+				})).Data;
 
 		IEnumerable<ImportPublicationActivity> activitiesToInsert =
 										from importPubActivity in publicationActivities

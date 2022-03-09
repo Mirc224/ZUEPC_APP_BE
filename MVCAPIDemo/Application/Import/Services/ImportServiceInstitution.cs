@@ -97,10 +97,10 @@ public partial class ImportService
 				SearchedExternIdentifiers = institutionExternDatabaseIds
 			});
 
-		if (foundInstitutionExternIdentifiers.ExternDatabaseIds != null &&
-			foundInstitutionExternIdentifiers.ExternDatabaseIds.Any())
+		if (foundInstitutionExternIdentifiers.Data != null &&
+			foundInstitutionExternIdentifiers.Data.Any())
 		{
-			institutionId = foundInstitutionExternIdentifiers.ExternDatabaseIds.First().InstitutionId;
+			institutionId = foundInstitutionExternIdentifiers.Data.First().InstitutionId;
 			resultModel = await GetInstitutionByIdAsync(institutionId);
 			if (resultModel != null)
 			{
@@ -118,7 +118,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		GetInstitutionNamesQuery request = new() { InstitutionId = currentInstitution.Id };
-		IEnumerable<InstitutionName> institutionCurrentNames = (await _mediator.Send(request)).InstitutionNames;
+		IEnumerable<InstitutionName> institutionCurrentNames = (await _mediator.Send(request)).Data;
 		IEnumerable<ImportInstitutionName> namesToInsert = from institutionImpName in importInstitutionNames
 														   where !(from institutionCurrName in institutionCurrentNames
 																   where institutionCurrName.Name == institutionImpName.Name &&
@@ -196,7 +196,7 @@ public partial class ImportService
 	{
 		GetInstitutionExternDatabaseIdsQuery request = new() { InstitutionId = currentInstitution.Id };
 		IEnumerable<InstitutionExternDatabaseId> institutionCurrentExternIds = (await _mediator.Send(request))
-			.InstitutionExternDatabaseIds;
+			.Data;
 
 		IEnumerable<ImportInstitutionExternDatabaseId> importExternIdToInsert = GetEPCObjectExternDatabaseIdsForInsertAsync(
 																					importExternDatabaseIds,
@@ -287,7 +287,7 @@ public partial class ImportService
 		CreateInstitutionCommand createCommand = _mapper.Map<CreateInstitutionCommand>(importInstitution);
 		createCommand.VersionDate = versionDate;
 		createCommand.OriginSourceType = source;
-		Institution newInstitution = (await _mediator.Send(createCommand)).Institution;
+		Institution newInstitution = (await _mediator.Send(createCommand)).Data;
 		await InsertInstitutionExternDatabaseIdCollectionAsync(
 			newInstitution,
 			importInstitution.InstitutionExternDatabaseIds,
@@ -308,6 +308,6 @@ public partial class ImportService
 			{
 				InstitutionId = institutionId
 			});
-		return response.Institution;
+		return response.Data;
 	}
 }

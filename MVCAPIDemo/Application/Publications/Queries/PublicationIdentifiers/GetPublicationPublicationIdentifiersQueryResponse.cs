@@ -3,7 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 
-public class GetPublicationPublicationIdentifiersQueryResponse : ResponseBase
+public class GetPublicationPublicationIdentifiersQueryResponse : ResponseBaseWithData<ICollection<PublicationIdentifier>>
 {
-	public ICollection<PublicationIdentifier>? PublicationIdentifiers { get; set; }
 }

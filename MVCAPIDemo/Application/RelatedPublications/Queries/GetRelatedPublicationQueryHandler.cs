@@ -18,12 +18,12 @@ public class GetRelatedPublicationQueryHandler : IRequestHandler<GetRelatedPubli
 	}
 	public async Task<GetRelatedPublicationQueryResponse> Handle(GetRelatedPublicationQuery request, CancellationToken cancellationToken)
 	{
-		RelatedPublicationModel? result = await _repository.GetRelatedPublicationByIdAsync(request.RelatedPublicationRecordId);
+		RelatedPublicationModel? result = await _repository.GetModelByIdAsync(request.RelatedPublicationRecordId);
 		if (result is null)
 		{
 			return new() { Success = false };
 		}
 		RelatedPublication mappedResult = _mapper.Map<RelatedPublication>(result);
-		return new() { Success = true, RelatedPublication = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }
