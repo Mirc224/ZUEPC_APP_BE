@@ -61,7 +61,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		GetPersonExternDatabaseIdsQuery request = new() { PersonId = currentPerson.Id };
+		GetPersonPersonExternDatabaseIdsQuery request = new() { PersonId = currentPerson.Id };
 		IEnumerable<PersonExternDatabaseId> personCurrentExternIds = (await _mediator.Send(request))
 			.Data;
 
@@ -130,7 +130,7 @@ public partial class ImportService
 	DateTime versionDate,
 	OriginSourceType source)
 	{
-		GetPersonNamesQuery request = new() { PersonId = currentPerson.Id };
+		GetPersonPersonNamesQuery request = new() { PersonId = currentPerson.Id };
 		IEnumerable<PersonName> personCurrentNames = (await _mediator.Send(request)).Data;
 
 		IEnumerable<ImportPersonName> namesToInsert = from personImpName in importPersonNames
@@ -256,7 +256,7 @@ public partial class ImportService
 
 	private async Task<Person?> GetPersonByIdAsync(long id)
 	{
-		GetPersonQueryResponse? personResponse = await _mediator.Send(new GetPersonQuery() { PersonId = id });
+		GetPersonQueryResponse? personResponse = await _mediator.Send(new GetPersonQuery() { Id = id });
 		return personResponse.Data;
 	}
 

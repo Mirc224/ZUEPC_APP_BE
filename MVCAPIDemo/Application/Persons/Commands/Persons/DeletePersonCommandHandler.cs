@@ -21,7 +21,7 @@ public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, D
 	{
 		long personId = request.Id;
 
-		GetPersonQueryResponse model = await _mediator.Send(new GetPersonQuery() { PersonId = personId });
+		GetPersonQueryResponse model = await _mediator.Send(new GetPersonQuery() { Id = personId });
 
 		if(!model.Success)
 		{

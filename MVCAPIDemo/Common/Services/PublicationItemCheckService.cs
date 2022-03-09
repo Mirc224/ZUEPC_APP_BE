@@ -55,8 +55,8 @@ public class PublicationItemCheckService
 		ResponseBase? response = null)
 	{
 		GetPublicationQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationQuery() { PublicationId = publicationId });
-		Publication? result = queryResponse.Publication;
+			await _mediator.Send(new GetPublicationQuery() { Id = publicationId });
+		Publication? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
 			string errorMessage = string.Format(_localizer["PublicationWithIdNotExist"].Value, publicationId);
@@ -117,7 +117,7 @@ public class PublicationItemCheckService
 	public async Task<PublicationActivity?> CheckAndGetIfPublicationActivityExistsAsync(long recordId, ResponseBase? response)
 	{
 		GetPublicationActivityQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationActivityQuery() { PublicationActivityRecordId = recordId });
+			await _mediator.Send(new GetPublicationActivityQuery() { Id = recordId });
 		PublicationActivity? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
@@ -168,7 +168,7 @@ public class PublicationItemCheckService
 	public async Task<PublicationIdentifier?> CheckAndGetIfPublicationIdentifierExistsAsync(long recordId, ResponseBase response)
 	{
 		GetPublicationIdentifierQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationIdentifierQuery() { PublicationIdentifierRecordId = recordId });
+			await _mediator.Send(new GetPublicationIdentifierQuery() { Id = recordId });
 		PublicationIdentifier? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
@@ -202,7 +202,7 @@ public class PublicationItemCheckService
 		ResponseBase response)
 	{
 		GetPublicationNameQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationNameQuery() { PublicatioNameRecordId = recordId });
+			await _mediator.Send(new GetPublicationNameQuery() { Id = recordId });
 		PublicationName? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
@@ -217,7 +217,7 @@ public class PublicationItemCheckService
 		ResponseBase? response = null)
 	{
 		GetRelatedPublicationQueryResponse queryResponse =
-			await _mediator.Send(new GetRelatedPublicationQuery() { RelatedPublicationRecordId = recordId });
+			await _mediator.Send(new GetRelatedPublicationQuery() { Id = recordId });
 		RelatedPublication? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
@@ -251,7 +251,7 @@ public class PublicationItemCheckService
 		ResponseBase? response = null)
 	{
 		GetPublicationAuthorQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationAuthorQuery() { PublicationAuthorRecordId = recordId });
+			await _mediator.Send(new GetPublicationAuthorQuery() { Id = recordId });
 		PublicationAuthor? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{
@@ -285,7 +285,7 @@ public class PublicationItemCheckService
 		ResponseBase? response = null)
 	{
 		GetPublicationExternDatabaseIdQueryResponse queryResponse =
-			await _mediator.Send(new GetPublicationExternDatabaseIdQuery() { PublicationExternDatabaseIdId = recordId });
+			await _mediator.Send(new GetPublicationExternDatabaseIdQuery() { Id = recordId });
 		PublicationExternDatabaseId? result = queryResponse.Data;
 		if (!queryResponse.Success && response != null)
 		{

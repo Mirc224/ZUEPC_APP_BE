@@ -20,17 +20,17 @@ public class GetPersonPreviewQueryHandler : IRequestHandler<GetPersonPreviewQuer
 	public async Task<GetPersonPreviewQueryResponse> Handle(GetPersonPreviewQuery request, CancellationToken cancellationToken)
 	{
 		long personId = request.PersonId;
-		Person? personDomain = (await _mediator.Send(new GetPersonQuery() { PersonId = personId})).Data;
+		Person? personDomain = (await _mediator.Send(new GetPersonQuery() { Id = personId})).Data;
 		if(personDomain is null)
 		{
 			return new() { Success = false };
 		}
 		PersonPreview resultPreview = _mapper.Map<PersonPreview>(personDomain);
-		resultPreview.Names = (await _mediator.Send(new GetPersonNamesQuery()
+		resultPreview.Names = (await _mediator.Send(new GetPersonPersonNamesQuery()
 		{ 
 			PersonId = personId 
 		})).Data;
-		resultPreview.ExternDatabaseIds = (await _mediator.Send(new GetPersonExternDatabaseIdsQuery()
+		resultPreview.ExternDatabaseIds = (await _mediator.Send(new GetPersonPersonExternDatabaseIdsQuery()
 		{
 			PersonId = personId
 		})).Data;

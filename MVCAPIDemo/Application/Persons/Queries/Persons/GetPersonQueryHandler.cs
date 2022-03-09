@@ -1,30 +1,21 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.CQRS.Queries;
 using ZUEPC.DataAccess.Data.Persons;
 using ZUEPC.DataAccess.Models.Person;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.Persons;
 
-public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, GetPersonQueryResponse>
+public class GetPersonQueryHandler :
+	EPCSimpleModelQueryHandlerBase<Person, PersonModel>,
+	IRequestHandler<GetPersonQuery, GetPersonQueryResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IPersonData _repository;
-
 	public GetPersonQueryHandler(IMapper mapper, IPersonData repository)
-	{
-		_mapper = mapper;
-		_repository = repository;
-	}
+	:base(mapper, repository) { }
 
 	public async Task<GetPersonQueryResponse> Handle(GetPersonQuery request, CancellationToken cancellationToken)
 	{
-		PersonModel? personModel = await _repository.GetModelByIdAsync(request.PersonId);
-		if (personModel is null)
-		{
-			return new() { Success = false };
-		}
-		Person mappedPerson = _mapper.Map<Person>(personModel);
-		return new() { Success = true, Data = mappedPerson };
+		return await ProcessQueryAsync<GetPersonQuery, GetPersonQueryResponse>(request);
 	}
 }

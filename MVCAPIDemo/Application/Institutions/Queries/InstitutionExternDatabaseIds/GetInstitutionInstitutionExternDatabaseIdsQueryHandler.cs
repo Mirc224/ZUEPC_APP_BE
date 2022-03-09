@@ -6,18 +6,18 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 
-public class GetInstitutionExternDatabaseIdsQueryHandler : IRequestHandler<GetInstitutionExternDatabaseIdsQuery, GetInstitutionExternDatabaseIdsQueryResponse>
+public class GetInstitutionInstitutionExternDatabaseIdsQueryHandler : IRequestHandler<GetInstitutionInstitutionExternDatabaseIdsQuery, GetInstitutionInstitutionExternDatabaseIdsQueryResponse>
 {
 	private readonly IMapper _mapper;
 	private readonly IInstitutionExternDatabaseIdData _repository;
 
-	public GetInstitutionExternDatabaseIdsQueryHandler(IMapper mapper, IInstitutionExternDatabaseIdData repository)
+	public GetInstitutionInstitutionExternDatabaseIdsQueryHandler(IMapper mapper, IInstitutionExternDatabaseIdData repository)
 	{
 		_mapper = mapper;
 		_repository = repository;
 	}
 
-	public async Task<GetInstitutionExternDatabaseIdsQueryResponse> Handle(GetInstitutionExternDatabaseIdsQuery request, CancellationToken cancellationToken)
+	public async Task<GetInstitutionInstitutionExternDatabaseIdsQueryResponse> Handle(GetInstitutionInstitutionExternDatabaseIdsQuery request, CancellationToken cancellationToken)
 	{
 		IEnumerable<InstitutionExternDatabaseIdModel> queryResult = await _repository
 			.GetInstitutionExternDatabaseIdsByInstitutionIdAsync(request.InstitutionId);

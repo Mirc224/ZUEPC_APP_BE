@@ -1,30 +1,21 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.CQRS.Queries;
 using ZUEPC.DataAccess.Data.Institutions;
 using ZUEPC.DataAccess.Models.Institution;
 using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions;
 
-public class GetInstitutionQueryHandler : IRequestHandler<GetInstitutionQuery, GetInstitutionQueryResponse>
+public class GetInstitutionQueryHandler :
+	EPCSimpleModelQueryHandlerBase<Institution, InstitutionModel>,
+	IRequestHandler<GetInstitutionQuery, GetInstitutionQueryResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IInstitutionData _repository;
-
 	public GetInstitutionQueryHandler(IMapper mapper, IInstitutionData repository)
-	{
-		_mapper = mapper;
-		_repository = repository;
-	}
+		:base(mapper, repository) { }
+	
 	public async Task<GetInstitutionQueryResponse> Handle(GetInstitutionQuery request, CancellationToken cancellationToken)
 	{
-		InstitutionModel? queryResult = await _repository.GetModelByIdAsync(request.InstitutionId);
-		if (queryResult is null)
-		{
-			return new() { Success = false };
-		}
-
-		Institution mappedModel = _mapper.Map<Institution>(queryResult);
-		return new() { Success = true, Data = mappedModel };
+		return await ProcessQueryAsync<GetInstitutionQuery, GetInstitutionQueryResponse>(request);
 	}
 }

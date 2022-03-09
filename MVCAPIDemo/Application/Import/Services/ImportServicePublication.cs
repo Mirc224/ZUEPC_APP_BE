@@ -360,7 +360,7 @@ public partial class ImportService
 
 	private async Task<Publication?> GetPublicationById(long id)
 	{
-		GetPublicationQueryResponse publicationResponse = await _mediator.Send(new GetPublicationQuery() { PublicationId = id });
-		return publicationResponse.Publication;
+		GetPublicationQueryResponse publicationResponse = await _mediator.Send(new GetPublicationQuery() { Id = id });
+		return publicationResponse.Data;
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Application.Institutions.Queries.InstitutionNames;
 
-public class GetInstitutionNamesQuery : IRequest<GetInstitutionNamesQueryResponse>
+public class GetInstitutionInstitutionNamesQuery : IRequest<GetInstitutionInstitutionNamesQueryResponse>
 {
 	public long InstitutionId { get; set; }
 }

@@ -3,6 +3,6 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 
-public class GetInstitutionExternDatabaseIdsQueryResponse : ResponseWithDataBase<ICollection<InstitutionExternDatabaseId>>
+public class GetInstitutionInstitutionExternDatabaseIdsQueryResponse : ResponseWithDataBase<ICollection<InstitutionExternDatabaseId>>
 {
 }

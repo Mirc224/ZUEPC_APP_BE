@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using ZUEPC.EvidencePublication.Base.Queries;
 
 namespace ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 
-public class GetPublicationExternDatabaseIdQuery : IRequest<GetPublicationExternDatabaseIdQueryResponse>
+public class GetPublicationExternDatabaseIdQuery : 
+	EPCSimpleQueryBase,
+	IRequest<GetPublicationExternDatabaseIdQueryResponse>
 {
-	public long PublicationExternDatabaseIdId { get; set; }
 }

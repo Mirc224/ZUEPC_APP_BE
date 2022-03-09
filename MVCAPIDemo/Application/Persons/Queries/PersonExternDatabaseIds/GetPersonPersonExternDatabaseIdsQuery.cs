@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 
-public class GetPersonExternDatabaseIdsQuery : IRequest<GetPersonExternDatabaseIdsQueryResponse>
+public class GetPersonPersonExternDatabaseIdsQuery : IRequest<GetPersonPersonExternDatabaseIdsQueryResponse>
 {
 	public long PersonId { get; set; }
 }

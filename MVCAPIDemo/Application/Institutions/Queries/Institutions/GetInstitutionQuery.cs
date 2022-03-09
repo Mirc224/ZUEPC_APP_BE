@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using ZUEPC.EvidencePublication.Base.Queries;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions;
 
-public class GetInstitutionQuery : IRequest<GetInstitutionQueryResponse>
+public class GetInstitutionQuery : 
+	EPCSimpleQueryBase,
+	IRequest<GetInstitutionQueryResponse>
 {
-	public long InstitutionId { get; set; }
 }

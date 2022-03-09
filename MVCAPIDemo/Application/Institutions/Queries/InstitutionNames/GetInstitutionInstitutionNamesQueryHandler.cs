@@ -6,18 +6,18 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Queries.InstitutionNames;
 
-public class GetInstitutionNamesQueryHandler : IRequestHandler<GetInstitutionNamesQuery, GetInstitutionNamesQueryResponse>
+public class GetInstitutionInstitutionNamesQueryHandler : IRequestHandler<GetInstitutionInstitutionNamesQuery, GetInstitutionInstitutionNamesQueryResponse>
 {
 	private readonly IMapper _mapper;
 	private readonly IInstitutionNameData _repository;
 
-	public GetInstitutionNamesQueryHandler(IMapper mapper, IInstitutionNameData repository)
+	public GetInstitutionInstitutionNamesQueryHandler(IMapper mapper, IInstitutionNameData repository)
 	{
 		_mapper = mapper;
 		_repository = repository;
 	}
 
-	public async Task<GetInstitutionNamesQueryResponse> Handle(GetInstitutionNamesQuery request, CancellationToken cancellationToken)
+	public async Task<GetInstitutionInstitutionNamesQueryResponse> Handle(GetInstitutionInstitutionNamesQuery request, CancellationToken cancellationToken)
 	{
 		IEnumerable<InstitutionNameModel> queryResult = await _repository.GetInstitutionNamesByInstitutionIdAsync(request.InstitutionId);
 		List<InstitutionName> mappedResult = _mapper.Map<List<InstitutionName>>(queryResult);

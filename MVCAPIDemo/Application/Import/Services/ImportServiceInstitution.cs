@@ -117,7 +117,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		GetInstitutionNamesQuery request = new() { InstitutionId = currentInstitution.Id };
+		GetInstitutionInstitutionNamesQuery request = new() { InstitutionId = currentInstitution.Id };
 		IEnumerable<InstitutionName> institutionCurrentNames = (await _mediator.Send(request)).Data;
 		IEnumerable<ImportInstitutionName> namesToInsert = from institutionImpName in importInstitutionNames
 														   where !(from institutionCurrName in institutionCurrentNames
@@ -194,7 +194,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		GetInstitutionExternDatabaseIdsQuery request = new() { InstitutionId = currentInstitution.Id };
+		GetInstitutionInstitutionExternDatabaseIdsQuery request = new() { InstitutionId = currentInstitution.Id };
 		IEnumerable<InstitutionExternDatabaseId> institutionCurrentExternIds = (await _mediator.Send(request))
 			.Data;
 
@@ -306,7 +306,7 @@ public partial class ImportService
 		GetInstitutionQueryResponse? response = await _mediator.Send(
 			new GetInstitutionQuery()
 			{
-				InstitutionId = institutionId
+				Id = institutionId
 			});
 		return response.Data;
 	}

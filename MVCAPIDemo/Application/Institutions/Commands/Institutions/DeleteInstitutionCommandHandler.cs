@@ -21,7 +21,7 @@ public class DeleteInstitutionCommandHandler : IRequestHandler<DeleteInstitution
 	{ 
 		long institutionId = request.InstitutionId;
 
-		GetInstitutionQueryResponse model = await _mediator.Send(new GetInstitutionQuery() { InstitutionId = institutionId });
+		GetInstitutionQueryResponse model = await _mediator.Send(new GetInstitutionQuery() { Id = institutionId });
 
 		if (!model.Success)
 		{

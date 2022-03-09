@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.PublicationAuthor;
 namespace ZUEPC.Application.PublicationAuthors.Commands;
 
 public class DeletePublicationAuthorCommandHandler :
-	EPCDeleteSimpleBaseCommandHandler<PublicationAuthorModel>,
+	EPCDeleteSimpleModelBaseCommandHandler<PublicationAuthorModel>,
 	IRequestHandler<DeletePublicationAuthorCommand, DeletePublicationAuthorCommandResponse>
 {
 	public DeletePublicationAuthorCommandHandler(IPublicationAuthorData repository)

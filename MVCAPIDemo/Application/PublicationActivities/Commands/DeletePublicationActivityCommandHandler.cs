@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.PublicationActivity;
 namespace ZUEPC.Application.PublicationActivities.Commands;
 
 public class DeletePublicationActivityCommandHandler :
-	EPCDeleteSimpleBaseCommandHandler<PublicationActivityModel>,
+	EPCDeleteSimpleModelBaseCommandHandler<PublicationActivityModel>,
 	IRequestHandler<DeletePublicationActivityCommand, DeletePublicationActivityCommandResponse>
 {
 

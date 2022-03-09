@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using ZUEPC.EvidencePublication.Base.Queries;
 
 namespace ZUEPC.Application.RelatedPublications.Queries;
 
-public class GetRelatedPublicationQuery : IRequest<GetRelatedPublicationQueryResponse>
+public class GetRelatedPublicationQuery : 
+	EPCSimpleQueryBase,
+	IRequest<GetRelatedPublicationQueryResponse>
 {
-	public long RelatedPublicationRecordId { get; set; }
 }

@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Application.Persons.Queries.PersonNames;
 
-public class GetPersonNamesQuery : IRequest<GetPersonNamesQueryResponse>
+public class GetPersonPersonNamesQuery : IRequest<GetPersonPersonNamesQueryResponse>
 {
 	public long PersonId { get; set; }
 }

@@ -6,17 +6,17 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 
-public class GetPersonExternDatabaseIdsQueryHandler : IRequestHandler<GetPersonExternDatabaseIdsQuery, GetPersonExternDatabaseIdsQueryResponse>
+public class GetPersonPersonExternDatabaseIdsQueryHandler : IRequestHandler<GetPersonPersonExternDatabaseIdsQuery, GetPersonPersonExternDatabaseIdsQueryResponse>
 {
 	private readonly IMapper _mapper;
 	private readonly IPersonExternDatabaseIdData _repository;
 
-	public GetPersonExternDatabaseIdsQueryHandler(IMapper mapper, IPersonExternDatabaseIdData repository)
+	public GetPersonPersonExternDatabaseIdsQueryHandler(IMapper mapper, IPersonExternDatabaseIdData repository)
 	{
 		_mapper = mapper;
 		_repository = repository;
 	}
-	public async Task<GetPersonExternDatabaseIdsQueryResponse> Handle(GetPersonExternDatabaseIdsQuery request, CancellationToken cancellationToken)
+	public async Task<GetPersonPersonExternDatabaseIdsQueryResponse> Handle(GetPersonPersonExternDatabaseIdsQuery request, CancellationToken cancellationToken)
 	{
 		IEnumerable<PersonExternDatabaseIdModel> queryResult = await _repository.GetPersonExternDatabaseIdsByPersonIdAsync(request.PersonId);
 		if (queryResult is null)

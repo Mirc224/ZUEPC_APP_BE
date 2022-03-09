@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 
-public class GetInstitutionExternDatabaseIdsQuery : IRequest<GetInstitutionExternDatabaseIdsQueryResponse>
+public class GetInstitutionInstitutionExternDatabaseIdsQuery : IRequest<GetInstitutionInstitutionExternDatabaseIdsQueryResponse>
 {
 	public long InstitutionId { get; set; }
 }

@@ -6,17 +6,17 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.PersonNames;
 
-public class GetPersonNamesQueryHandler : IRequestHandler<GetPersonNamesQuery, GetPersonNamesQueryResponse>
+public class GetPersonPersonNamesQueryHandler : IRequestHandler<GetPersonPersonNamesQuery, GetPersonPersonNamesQueryResponse>
 {
 	private readonly IMapper _mapper;
 	private readonly IPersonNameData _repository;
 
-	public GetPersonNamesQueryHandler(IMapper mapper, IPersonNameData repository)
+	public GetPersonPersonNamesQueryHandler(IMapper mapper, IPersonNameData repository)
 	{
 		_mapper = mapper;
 		_repository = repository;
 	}
-	public async Task<GetPersonNamesQueryResponse> Handle(GetPersonNamesQuery request, CancellationToken cancellationToken)
+	public async Task<GetPersonPersonNamesQueryResponse> Handle(GetPersonPersonNamesQuery request, CancellationToken cancellationToken)
 	{
 		IEnumerable<PersonNameModel> queryResult = await _repository.GetPersonNamesByPersonIdAsync(request.PersonId);
 		List<PersonName> mappedResult = _mapper.Map<List<PersonName>>(queryResult);

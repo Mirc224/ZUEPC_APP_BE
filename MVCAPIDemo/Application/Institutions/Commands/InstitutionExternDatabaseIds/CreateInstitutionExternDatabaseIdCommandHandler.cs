@@ -14,8 +14,6 @@ public class CreateInstitutionExternDatabaseIdCommandHandler :
 		CreateInstitutionExternDatabaseIdCommand,
 		CreateInstitutionExternDatabaseIdCommandResponse>
 {
-	protected IInstitutionExternDatabaseIdData _repository;
-
 	public CreateInstitutionExternDatabaseIdCommandHandler(IMapper mapper, IInstitutionExternDatabaseIdData repository)
 	: base(mapper, repository) { }
 

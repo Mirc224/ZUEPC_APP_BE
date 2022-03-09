@@ -27,8 +27,8 @@ public class GetPublicationDetailsQueryHandler : IRequestHandler<GetPublicationD
 		long publicationId = request.PublicationId;
 		Publication? publication = (await _mediator.Send(new GetPublicationQuery()
 		{
-			PublicationId = publicationId
-		})).Publication;
+			Id = publicationId
+		})).Data;
 
 		if (publication is null)
 		{

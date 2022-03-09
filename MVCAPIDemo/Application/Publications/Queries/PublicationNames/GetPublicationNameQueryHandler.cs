@@ -1,30 +1,21 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Common.CQRS.Queries;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Models.Publication;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.PublicationNames;
 
-public class GetPublicationNameQueryHandler : IRequestHandler<GetPublicationNameQuery, GetPublicationNameQueryResponse>
+public class GetPublicationNameQueryHandler :
+	EPCSimpleModelQueryHandlerBase<PublicationName, PublicationNameModel>,
+	IRequestHandler<GetPublicationNameQuery, GetPublicationNameQueryResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IPublicationNameData _repository;
-
 	public GetPublicationNameQueryHandler(IMapper mapper, IPublicationNameData repository)
-	{
-		_mapper = mapper;
-		_repository = repository;
-	}
+	: base(mapper, repository) { }
 	
 	public async Task<GetPublicationNameQueryResponse> Handle(GetPublicationNameQuery request, CancellationToken cancellationToken)
 	{
-		PublicationNameModel? result = await _repository.GetModelByIdAsync(request.PublicatioNameRecordId);
-		if (result is null)
-		{
-			return new() { Success = false };
-		}
-		PublicationName mappedResult = _mapper.Map<PublicationName>(result);
-		return new() { Success = true, Data = mappedResult };
+		return await ProcessQueryAsync<GetPublicationNameQuery, GetPublicationNameQueryResponse>(request);
 	}
 }
