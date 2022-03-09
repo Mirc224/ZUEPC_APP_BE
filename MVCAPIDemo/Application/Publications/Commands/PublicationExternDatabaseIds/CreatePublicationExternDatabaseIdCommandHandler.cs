@@ -8,25 +8,14 @@ using ZUEPC.EvidencePublication.Base.Domain.Publications;
 namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 
 public class CreatePublicationExternDatabaseIdCommandHandler : 
-	CreateBaseHandler,
+	EPCCreateSimpleModelCommandHandlerBase<PublicationExternDatabaseId, PublicationExternDatabaseIdModel>,
 	IRequestHandler<CreatePublicationExternDatabaseIdCommand, CreatePublicationExternDatabaseIdCommandResponse>
 {
-	private readonly IPublicationExternDatabaseIdData _repository;
-
 	public CreatePublicationExternDatabaseIdCommandHandler(IMapper mapper, IPublicationExternDatabaseIdData repository)
-	{
-		_mapper = mapper;
-		_repository = repository;
-	}
+		: base(mapper, repository) {}
 
 	public async Task<CreatePublicationExternDatabaseIdCommandResponse> Handle(CreatePublicationExternDatabaseIdCommand request, CancellationToken cancellationToken)
 	{
-		PublicationExternDatabaseIdModel insertModel = CreateInsertModelFromRequest
-			<PublicationExternDatabaseIdModel, CreatePublicationExternDatabaseIdCommand>(request);
-		long insertedId = await _repository.InsertModelAsync(insertModel);
-		return CreateSuccessResponseWithDataFromInsertModel
-			<CreatePublicationExternDatabaseIdCommandResponse,
-			PublicationExternDatabaseId,
-			PublicationExternDatabaseIdModel>(insertModel, insertedId);
+		return await ProcessInsertCommandAsync<CreatePublicationExternDatabaseIdCommand, CreatePublicationExternDatabaseIdCommandResponse>(request);
 	}
 }

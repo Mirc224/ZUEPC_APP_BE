@@ -8,25 +8,14 @@ using ZUEPC.EvidencePublication.Base.PublicationAuthors;
 namespace ZUEPC.Application.PublicationAuthors.Commands;
 
 public class CreatePublicationAuthorCommandHandler : 
-	CreateBaseHandler,
+	EPCCreateSimpleModelCommandHandlerBase<PublicationAuthor, PublicationAuthorModel>,
 	IRequestHandler<CreatePublicationAuthorCommand, CreatePublicationAuthorCommandResponse>
 {
-	private readonly IPublicationAuthorData _repository;
-
 	public CreatePublicationAuthorCommandHandler(IMapper mapper, IPublicationAuthorData repository)
-	{
-		_mapper = mapper;
-		_repository = repository;
-	}
+	: base(mapper, repository) { }
+
 	public async Task<CreatePublicationAuthorCommandResponse> Handle(CreatePublicationAuthorCommand request, CancellationToken cancellationToken)
 	{
-		PublicationAuthorModel insertModel = CreateInsertModelFromRequest
-			<PublicationAuthorModel, CreatePublicationAuthorCommand>(request);
-		long insertedId = await _repository.InsertModelAsync(insertModel);
-		
-		return CreateSuccessResponseWithDataFromInsertModel
-			<CreatePublicationAuthorCommandResponse,
-			PublicationAuthor,
-			PublicationAuthorModel>(insertModel, insertedId);
+		return await ProcessInsertCommandAsync<CreatePublicationAuthorCommand, CreatePublicationAuthorCommandResponse>(request);
 	}
 }
