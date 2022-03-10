@@ -14,7 +14,7 @@ using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.Publications.Queries.Publications.Previews;
 using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Application.RelatedPublications.Queries;
-using ZUEPC.Common.Responses;
+using ZUEPC.Responses;
 using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
@@ -23,18 +23,13 @@ using ZUEPC.EvidencePublication.Base.PublicationAuthors;
 using ZUEPC.EvidencePublication.Base.Queries;
 using ZUEPC.Localization;
 
-namespace ZUEPC.Common.Services;
+namespace ZUEPC.Common.Services.ItemChecks;
 
-public class PublicationItemCheckService
+public class PublicationItemCheckService : EPCDomainItemsCheckServiceBase
 {
-	private readonly IMediator _mediator;
-	private readonly IStringLocalizer<DataAnnotations> _localizer;
 
 	public PublicationItemCheckService(IMediator mediator, IStringLocalizer<DataAnnotations> localizer)
-	{
-		_mediator = mediator;
-		_localizer = localizer;
-	}
+		: base(mediator, localizer) { }
 
 	public async Task<PublicationPreview?> CheckAndGetPreviewIfPublicationExistsAsync(
 		long publicationId, 
@@ -45,7 +40,7 @@ public class PublicationItemCheckService
 			GetPublicationPreviewQuery,
 			GetPublicationPreviewQueryResponse>(
 			publicationId, 
-			"PublicationWithIdNotExist",
+			DataAnnotationsKeyConstants.PUBLICATION_NOT_EXIST,
 			response);
 	}
 
@@ -56,7 +51,9 @@ public class PublicationItemCheckService
 		return await CheckAndGetIfSimpleObjectExistsAsync
 			<Publication,
 			GetPublicationQuery,
-			GetPublicationQueryResponse>(recordId, "PublicationWithIdNotExist", response);
+			GetPublicationQueryResponse>(recordId,
+			DataAnnotationsKeyConstants.PUBLICATION_NOT_EXIST,
+			response);
 	}
 
 	public async Task<PersonPreview?> CheckAndGetPreviewIfPersonExistsAsync(
@@ -68,7 +65,7 @@ public class PublicationItemCheckService
 			GetPersonPreviewQuery,
 			GetPersonPreviewQueryResponse>(
 			personId,
-			"PersonWithIdNotExist",
+			DataAnnotationsKeyConstants.PERSON_NOT_EXIST,
 			response);
 	}
 
@@ -81,7 +78,7 @@ public class PublicationItemCheckService
 			GetInstitutionPreviewQuery,
 			GetInstitutionPreviewQueryResponse>(
 			institutionId, 
-			"InstitutionWithIdNotExist",
+			DataAnnotationsKeyConstants.INSTITUTION_NOT_EXIST,
 			response);
 	}
 
@@ -96,7 +93,7 @@ public class PublicationItemCheckService
 			GetPublicationActivityQueryResponse>(
 			recordId,
 			publicationId,
-			"PublicationActivityNotMatchPublicationId",
+			DataAnnotationsKeyConstants.PUBLICATION_ACTIVITY_NOT_MATCH_PUBLICATION_ID,
 			CheckAndGetIfPublicationActivityExistsAsync,
 			response);
 	}
@@ -108,7 +105,10 @@ public class PublicationItemCheckService
 		return await CheckAndGetIfSimpleObjectExistsAsync
 			<PublicationActivity,
 			GetPublicationActivityQuery,
-			GetPublicationActivityQueryResponse>(recordId, "PublicationActivityRecordNotExist", response);
+			GetPublicationActivityQueryResponse>(
+			recordId, 
+			DataAnnotationsKeyConstants.PUBLICATION_ACTIVITY_NOT_EXIST, 
+			response);
 	}
 
 	public async Task<PublicationIdentifier?> CheckAndGetIfPublicationIdentifierExistsAndRelatedToPublicationAsync(
@@ -122,7 +122,7 @@ public class PublicationItemCheckService
 			GetPublicationIdentifierQueryResponse>(
 			recordId,
 			publicationId,
-			"PublicationIdentifierNotMatchPublicationId",
+			DataAnnotationsKeyConstants.PUBLICATION_IDENTIFIER_NOT_MATCH_PUBLICATION_ID,
 			CheckAndGetIfPublicationIdentifierExistsAsync,
 			response);
 	}
@@ -134,7 +134,10 @@ public class PublicationItemCheckService
 		return await CheckAndGetIfSimpleObjectExistsAsync
 			<PublicationIdentifier,
 			GetPublicationIdentifierQuery,
-			GetPublicationIdentifierQueryResponse>(recordId, "PublicationIdentifierRecordNotExist", response);
+			GetPublicationIdentifierQueryResponse>(
+			recordId, 
+			DataAnnotationsKeyConstants.PUBLICATION_IDENTIFIER_NOT_EXIST, 
+			response);
 	}
 
 	public async Task<PublicationName?> CheckAndGetIfPublicationNameExistsAndRelatedToPublicationAsync(
@@ -148,7 +151,7 @@ public class PublicationItemCheckService
 			GetPublicationNameQueryResponse>(
 			recordId,
 			publicationId,
-			"PublicationNameNotMatchPublicationId",
+			DataAnnotationsKeyConstants.PUBLICATION_NAME_NOT_MATCH_PUBLICATION_ID,
 			CheckAndGetIfPublicationNameExistsAsync,
 			response);
 	}
@@ -160,7 +163,10 @@ public class PublicationItemCheckService
 		return await CheckAndGetIfSimpleObjectExistsAsync
 			<PublicationName,
 			GetPublicationNameQuery,
-			GetPublicationNameQueryResponse>(recordId, "PublicationNameRecordNotExist", response);
+			GetPublicationNameQueryResponse>(
+			recordId, 
+			DataAnnotationsKeyConstants.PUBLICATION_NAME_NOT_EXIST, 
+			response);
 	}
 
 	public async Task<RelatedPublication?> CheckAndGetIfRelatedPublicationExistsAndRelatedToPublicationAsync(
@@ -174,7 +180,7 @@ public class PublicationItemCheckService
 			GetRelatedPublicationQueryResponse>(
 			recordId,
 			publicationId,
-			"RelatedPublicationNotMatchPublicationId",
+			DataAnnotationsKeyConstants.RELATED_PUBLICATION_NOT_MATCH_PUBLICATION_ID,
 			CheckAndGetIfRelatedPublicationExistsAsync,
 			response);
 	}
@@ -186,7 +192,10 @@ public class PublicationItemCheckService
 		return await CheckAndGetIfSimpleObjectExistsAsync
 			<RelatedPublication,
 			GetRelatedPublicationQuery,
-			GetRelatedPublicationQueryResponse>(recordId, "RelatedPublicationRecordWithIdNotExist", response);
+			GetRelatedPublicationQueryResponse>(
+			recordId, 
+			DataAnnotationsKeyConstants.RELATED_PUBLICATION_NOT_EXIST,
+			response);
 	}
 
 	public async Task<PublicationAuthor?> CheckAndGetIfPublicationAuthorExistsAndRelatedToPublicationAsync(
@@ -200,7 +209,7 @@ public class PublicationItemCheckService
 			GetPublicationAuthorQueryResponse>(
 			recordId,
 			publicationId,
-			"PublicationAuthorNotMatchPublicationId",
+			DataAnnotationsKeyConstants.PUBLICATION_AUTHOR_NOT_MATCH_PUBLICATION_ID,
 			CheckAndGetIfPublicationAuthorExistsAsync,
 			response);
 	}
@@ -212,7 +221,10 @@ public class PublicationItemCheckService
 		return await CheckAndGetIfSimpleObjectExistsAsync
 			<PublicationAuthor,
 			GetPublicationAuthorQuery,
-			GetPublicationAuthorQueryResponse>(recordId, "PublicationAuthorRecordNotExist", response);
+			GetPublicationAuthorQueryResponse>(
+			recordId, 
+			DataAnnotationsKeyConstants.PUBLICATION_AUTHOR_NOT_EXIST, 
+			response);
 	}
 
 	public async Task<PublicationExternDatabaseId?> CheckAndGetIfPublicationExternDatabaseIdExistsAndRelatedToPublicationAsync(
@@ -225,7 +237,7 @@ public class PublicationItemCheckService
 			GetPublicationExternDatabaseIdQueryResponse>(
 			recordId,
 			publicationId,
-			"PublicationExternDatabaseIdNotMatchPublicationId",
+			DataAnnotationsKeyConstants.PUBLICATION_EXTERN_DATABASE_ID_NOT_MATCH_PUBLICATION_ID,
 			CheckAndGetIfPublicationExternDatabaseIdExistsAsync,
 			response);
 	}
@@ -237,7 +249,10 @@ public class PublicationItemCheckService
 		return await CheckAndGetIfSimpleObjectExistsAsync
 			<PublicationExternDatabaseId,
 			GetPublicationExternDatabaseIdQuery,
-			GetPublicationExternDatabaseIdQueryResponse>(recordId, "PublicationExternDatabaseIdNotExist", response);
+			GetPublicationExternDatabaseIdQueryResponse>(
+			recordId, 
+			DataAnnotationsKeyConstants.PUBLICATION_EXTERN_DATABASE_ID_NOT_EXIST,
+			response);
 	}
 
 	protected async Task<TDomain?> CheckAndGetIfObjectExistsAndRelatedToPublicationAsync<TDomain, TQuery, TResponse>(
@@ -262,50 +277,5 @@ public class PublicationItemCheckService
 			ProcessErrorMessages(response, new string[] { errorMessage });
 		}
 		return result;
-	}
-
-	protected async Task<TDomain?> CheckAndGetIfSimpleObjectExistsAsync<TDomain, TQuery, TResponse>(
-		long recordId,
-		string annotationKey,
-		ResponseBase? response = null)
-		where TQuery : EPCSimpleQueryBase, new()
-		where TResponse : ResponseWithDataBase<TDomain>
-	{
-		TQuery simpleQuery = new TQuery() { Id = recordId };
-		return await CheckAndGetIfObjectExistsAsync<TDomain, TQuery, TResponse>(
-			simpleQuery, 
-			recordId, 
-			annotationKey, 
-			response);
-	}
-
-	protected async Task<TDomain?> CheckAndGetIfObjectExistsAsync<TDomain, TQuery, TResponse>(
-		TQuery query,
-		long recordId,
-		string annotationKey,
-		ResponseBase? response = null)
-		where TQuery : new()
-		where TResponse : ResponseWithDataBase<TDomain>
-	{
-		TResponse queryResponse = (TResponse)await _mediator.Send(query);
-		TDomain? result = queryResponse.Data;
-		if (!queryResponse.Success && response != null)
-		{
-			string errorMessage = string.Format(_localizer[annotationKey].Value, recordId);
-			ProcessErrorMessages(response, new string[] { errorMessage });
-		}
-		return result;
-	}
-
-
-	protected void ProcessErrorMessages(ResponseBase response, IEnumerable<string> errorMessages)
-	{
-		if (errorMessages.Any())
-		{
-			response.ErrorMessages = response.ErrorMessages is null ? new List<string>() : response.ErrorMessages;
-			List<string> responseMessages = response.ErrorMessages.ToList();
-			responseMessages.AddRange(errorMessages);
-			response.ErrorMessages = responseMessages;
-		}
 	}
 }

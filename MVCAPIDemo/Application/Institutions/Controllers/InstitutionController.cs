@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ZUEPC.Application.Institutions.Commands.Institutions;
+using ZUEPC.Application.Institutions.Queries.Institutions;
 using ZUEPC.Application.Institutions.Queries.Institutions.Details;
-using ZUEPC.Application.Persons.Commands.Persons;
+using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Base.Enums.Common;
+using ZUEPC.Common.Services.URIServices;
+using ZUEPC.DataAccess.Filters;
 
 namespace ZUEPC.Application.Institutions.Controllers;
 
@@ -12,10 +15,38 @@ namespace ZUEPC.Application.Institutions.Controllers;
 public class InstitutionController : ControllerBase
 {
 	private readonly IMediator _mediator;
+	private readonly IUriService _uriService;
 
-	public InstitutionController(IMediator mediator)
+	public InstitutionController(IMediator mediator, IUriService uriService)
 	{
 		_mediator = mediator;
+		_uriService = uriService;
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> GetAll([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllInstitutionsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllInstitutionsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
+	}
+
+	[HttpGet("preview")]
+	public async Task<IActionResult> GetAllPreview([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllInstitutionPreviewsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllInstitutionPreviewsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
 	}
 
 	[HttpGet("{id}")]
@@ -49,6 +80,11 @@ public class InstitutionController : ControllerBase
 		request.OriginSourceType = OriginSourceType.ZUEPC;
 		request.VersionDate = DateTime.Now;
 		UpdateInstitutionWithDetailsCommandResponse response = await _mediator.Send(request);
+		if (response.ErrorMessages != null && response.ErrorMessages.Any())
+		{
+			return BadRequest(new { errors = response.ErrorMessages });
+		}
+
 		if (!response.Success)
 		{
 			return NotFound();

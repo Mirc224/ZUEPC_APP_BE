@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Application.Institutions.Entities.Details;
-using ZUEPC.Common.Responses;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Details;
 

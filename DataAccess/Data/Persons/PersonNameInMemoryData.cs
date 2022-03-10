@@ -1,4 +1,5 @@
 ﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.Person;
 
 namespace ZUEPC.DataAccess.Data.Persons;
@@ -46,5 +47,15 @@ public class PersonNameInMemoryData : InMemoryBaseRepository<PersonNameModel>, I
 	{
 		var deletedObjects = _repository.Where(x => x.Id == id).ToList();
 		return await DeleteRecordsAsync(deletedObjects);
+	}
+
+	public async Task<IEnumerable<PersonNameModel>> GetAllAsync()
+	{
+		return _repository.ToList();
+	}
+
+	public async Task<IEnumerable<PersonNameModel>> GetAllAsync(PaginationFilter filter)
+	{
+		return _repository.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
 	}
 }

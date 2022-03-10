@@ -5,5 +5,4 @@ namespace ZUEPC.DataAccess.Data.Persons;
 
 public interface IPersonData : IRepositoryBase<PersonModel>
 {
-	Task<IEnumerable<PersonModel>> GetAllPersonsAsync();
 }

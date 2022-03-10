@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using ZUEPC.Common.CQRS.Queries;
+using ZUEPC.Common.CQRS.QueryHandlers;
 using ZUEPC.DataAccess.Data.PublicationActivities;
 using ZUEPC.DataAccess.Models.PublicationActivity;
 using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;

@@ -1,4 +1,4 @@
-﻿using DataAccess.Enums;
+﻿using ZUEPC.DataAccess.Enums;
 using ZUEPC.DataAccess.Models.Users;
 
 namespace DataAccess.Data.User;

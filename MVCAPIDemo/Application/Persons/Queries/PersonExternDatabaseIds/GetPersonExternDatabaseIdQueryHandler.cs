@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.Application.Publications.Queries.PublicationNames;
-using ZUEPC.Common.CQRS.Queries;
+using ZUEPC.Common.CQRS.QueryHandlers;
 using ZUEPC.DataAccess.Data.Persons;
 using ZUEPC.DataAccess.Models.Person;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;

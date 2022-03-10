@@ -3,11 +3,11 @@ using ZUEPC.DataAccess.Models.Common;
 
 namespace ZUEPC.Common.CQRS;
 
-public abstract class EPCSimpleModelHandlerBase<TModel>
+public abstract class EPCDomainModelHandlerBase<TModel>
 	where TModel : EPCBaseModel
 {
 	protected readonly IRepositoryBase<TModel> _repository;
-	public EPCSimpleModelHandlerBase(IRepositoryBase<TModel> repository)
+	public EPCDomainModelHandlerBase(IRepositoryBase<TModel> repository)
 	{
 		_repository = repository;
 	}

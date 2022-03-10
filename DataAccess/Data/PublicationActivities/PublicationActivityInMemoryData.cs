@@ -1,4 +1,5 @@
 ﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.PublicationActivity;
 
 namespace ZUEPC.DataAccess.Data.PublicationActivities;
@@ -15,6 +16,16 @@ public class PublicationActivityInMemoryData : InMemoryBaseRepository<Publicatio
 	{
 		var deletedObject = _repository.Where(x => x.PublicationId == publicationId);
 		return await DeleteRecordsAsync(deletedObject);
+	}
+
+	public async Task<IEnumerable<PublicationActivityModel>> GetAllAsync()
+	{
+		return _repository.ToList();
+	}
+
+	public async Task<IEnumerable<PublicationActivityModel>> GetAllAsync(PaginationFilter filter)
+	{
+		return _repository.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
 	}
 
 	public async Task<PublicationActivityModel?> GetModelByIdAsync(long id)

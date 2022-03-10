@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.Common.Responses;
+﻿namespace ZUEPC.Responses;
 
 public class ResponseWithDataBase<T> : ResponseBase
 {

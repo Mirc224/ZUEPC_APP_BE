@@ -1,4 +1,4 @@
-﻿using DataAccess.Enums;
+﻿using ZUEPC.DataAccess.Enums;
 
 namespace Users.Base.Application.Domain;
 

@@ -120,6 +120,18 @@
   <data name="EmailAlreadyUsed" xml:space="preserve">
     <value>Email sa už používa.</value>
   </data>
+  <data name="InstitutionExternDatabaseIdNotMatchInstitutionId" xml:space="preserve">
+    <value>Externý identifikátor inštitúcie s ID {0} nesúvisí s inštitúciou s ID {1}.</value>
+  </data>
+  <data name="InstitutionExternDatabaseIdRecordNotExist" xml:space="preserve">
+    <value>Externý identifikátor inštitúcie s ID {0} neexistuje.</value>
+  </data>
+  <data name="InstitutionNameNotMatchInstitutionId" xml:space="preserve">
+    <value>Meno inštitúcie s ID {0} nesúvisí s inštitúciou s ID {1}.</value>
+  </data>
+  <data name="InstitutionNameRecordNotExist" xml:space="preserve">
+    <value>Meno inštitúcie s ID {0} neexistuje.</value>
+  </data>
   <data name="InstitutionWithIdNotExist" xml:space="preserve">
     <value>Inštitúcia s ID {0} neexistuje.</value>
   </data>
@@ -131,6 +143,18 @@
   </data>
   <data name="NotValidToken" xml:space="preserve">
     <value>Token nie je validny.</value>
+  </data>
+  <data name="PersonExternDatabaseIdNotMatchPersonId" xml:space="preserve">
+    <value>Externý identifikátor osoby s ID {0} nesúvisí s osobou s ID {1}.</value>
+  </data>
+  <data name="PersonExternDatabaseIdRecordNotExist" xml:space="preserve">
+    <value>Externý identifikátor osoby s ID {0} neexistuje.</value>
+  </data>
+  <data name="PersonNameNotMatchPersonId" xml:space="preserve">
+    <value>Meno osoby s ID {0} nesúvisí s osobou s ID {1}.</value>
+  </data>
+  <data name="PersonNameRecordNotExist" xml:space="preserve">
+    <value>Meno osoby s ID {0} neexistuje.</value>
   </data>
   <data name="PersonWithIdNotExist" xml:space="preserve">
     <value>Osoba s ID {0} neexistuje.</value>
@@ -147,11 +171,11 @@
   <data name="PublicationAuthorRecordNotExist" xml:space="preserve">
     <value>Záznam autora s ID {0} neexistuje.</value>
   </data>
-  <data name="PublicationExternDatabaseIdNotExist" xml:space="preserve">
-    <value>Externý identifikátor publikácie s ID {0} neexistuje.</value>
-  </data>
   <data name="PublicationExternDatabaseIdNotMatchPublicationId" xml:space="preserve">
     <value>Externý identifikátor publikácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>
+  </data>
+  <data name="PublicationExternDatabaseIdRecordNotExist" xml:space="preserve">
+    <value>Externý identifikátor publikácie s ID {0} neexistuje.</value>
   </data>
   <data name="PublicationIdentifierNotMatchPublicationId" xml:space="preserve">
     <value>Identifikátor publikácie s ID {0} nesúvisí s publikáciou s ID {1}.</value>

@@ -37,4 +37,9 @@ public abstract class InMemoryBaseRepository<T>
 		_repository.Add(model);
 		return model.Id;
 	}
+
+	public async Task<int> CountAsync()
+	{
+		return _repository.Count();
+	}
 }

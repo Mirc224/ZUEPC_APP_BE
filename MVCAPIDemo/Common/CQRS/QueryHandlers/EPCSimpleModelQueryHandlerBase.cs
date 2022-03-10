@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using ZUEPC.Common.Responses;
+using ZUEPC.Responses;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.EvidencePublication.Base.Domain.Common;
 using ZUEPC.EvidencePublication.Base.Queries;
 
-namespace ZUEPC.Common.CQRS.Queries;
+namespace ZUEPC.Common.CQRS.QueryHandlers;
 
 public abstract class EPCSimpleModelQueryHandlerBase<TDomain, TModel>:
-	EPCSimpleModelHandlerBase<TModel>
+	EPCDomainModelHandlerBase<TModel>
 	where TDomain : EPCBase
 	where TModel : EPCBaseModel
 {

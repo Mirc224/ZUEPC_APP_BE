@@ -35,7 +35,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
 		{
 			return new()
 			{
-				ErrorMessages = new string[] { _localizer["InvalidEmailOrPassword"].Value },
+				ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.INVALID_EMAIL_OR_PASSWORD].Value },
 				Success = false
 			};
 		}
@@ -47,7 +47,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
         {
             return new() 
 			{ 
-				ErrorMessages = new string[] { _localizer["InvalidEmailOrPassword"].Value },
+				ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.INVALID_EMAIL_OR_PASSWORD].Value },
 				Success = false
 			};
         };

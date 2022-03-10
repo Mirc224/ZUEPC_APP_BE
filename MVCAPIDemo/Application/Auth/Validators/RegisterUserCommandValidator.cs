@@ -18,7 +18,7 @@ public class RegisterUserCommandValidator: AbstractValidator<RegisterUserCommand
         RuleFor(x => x.Email)
             .EmailAddress()
             .Must(email => !AlreadyExists(repository, email))
-            .WithMessage(localizer["EmailAlreadyUsed"]);
+            .WithMessage(localizer[DataAnnotationsKeyConstants.EMAIL_ALREADY_USED]);
     }
 
     private bool AlreadyExists(IUserData repository, string email)

@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using ZUEPC.Common.Responses;
+using ZUEPC.Responses;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.EvidencePublication.Base.Commands;
 
-namespace ZUEPC.Common.CQRS.Commands;
+namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class EPCUpdateSimpleModelCommandHandlerBase<TModel> : 
-	EPCSimpleModelHandlerBase<TModel>
+	EPCDomainModelHandlerBase<TModel>
 	where TModel : EPCBaseModel
 {
 	protected readonly IMapper _mapper;

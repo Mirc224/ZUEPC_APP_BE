@@ -8,8 +8,8 @@ using ZUEPC.Application.Publications.Entities.Inputs.Common;
 using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Common.Extensions;
-using ZUEPC.Common.Responses;
-using ZUEPC.Common.Services;
+using ZUEPC.Responses;
+using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Application.Publications.Commands.Publications.Common;
@@ -29,7 +29,7 @@ public abstract class ActionPublicationWithDetailsCommandBaseHandler
 		_itemCheckService = itemCheckService;
 	}
 
-	protected async Task<ICollection<Tuple<TActionDto, PublicationPreview>>> GetRelatedPublicationsTuplesOrFillWithErrors<TActionDto>(
+	protected async Task<ICollection<Tuple<TActionDto, PublicationPreview>>> GetRelatedPublicationsTuplesToInsertOrFillWithErrors<TActionDto>(
 		IEnumerable<TActionDto>? relatedPublications,
 		ResponseBase response)
 		where TActionDto : RelatedPublicationBaseDto
@@ -56,7 +56,7 @@ public abstract class ActionPublicationWithDetailsCommandBaseHandler
 		return result;
 	}
 
-	protected async Task<ICollection<Tuple<TActionDto, PersonPreview, InstitutionPreview>>> GetAuthorsTuplesOrFillWithErrors<TActionDto>(
+	protected async Task<ICollection<Tuple<TActionDto, PersonPreview, InstitutionPreview>>> GetAuthorsTuplesToInsertOrFillWithErrors<TActionDto>(
 		IEnumerable<TActionDto>? authors,
 		ResponseBase response)
 		where TActionDto : PublicationAuthorBaseDto

@@ -1,12 +1,12 @@
-﻿using ZUEPC.Common.Responses;
+﻿using ZUEPC.Responses;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.EvidencePublication.Base.Commands;
 
-namespace ZUEPC.Common.CQRS.Commands;
+namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class EPCDeleteSimpleModelBaseCommandHandler<TModel>
-	: EPCSimpleModelHandlerBase<TModel>
+	: EPCDomainModelHandlerBase<TModel>
 	where TModel : EPCBaseModel
 {
 	public EPCDeleteSimpleModelBaseCommandHandler(IRepositoryBase<TModel> repository)

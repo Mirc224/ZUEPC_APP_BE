@@ -120,6 +120,18 @@
   <data name="EmailAlreadyUsed" xml:space="preserve">
     <value>Email already in use.</value>
   </data>
+  <data name="InstitutionExternDatabaseIdNotMatchInstitutionId" xml:space="preserve">
+    <value>Institution extern database id with ID {0} is not related to institution with ID {1}.</value>
+  </data>
+  <data name="InstitutionExternDatabaseIdRecordNotExist" xml:space="preserve">
+    <value>Institution extern database id with ID {0} does not exist.</value>
+  </data>
+  <data name="InstitutionNameNotMatchInstitutionId" xml:space="preserve">
+    <value>Institution name with ID {0} is not related to institution with ID {1}.</value>
+  </data>
+  <data name="InstitutionNameRecordNotExist" xml:space="preserve">
+    <value>Institution name with ID {0} does not exist.</value>
+  </data>
   <data name="InstitutionWithIdNotExist" xml:space="preserve">
     <value>Institution with ID {0} does not exist.</value>
   </data>
@@ -131,6 +143,18 @@
   </data>
   <data name="NotValidToken" xml:space="preserve">
     <value>Token is not valid.</value>
+  </data>
+  <data name="PersonExternDatabaseIdNotMatchPersonId" xml:space="preserve">
+    <value>Person extern database id with ID {0} is not related to person with ID {1}.</value>
+  </data>
+  <data name="PersonExternDatabaseIdRecordNotExist" xml:space="preserve">
+    <value>Person extern database id with ID {0} does not exist.</value>
+  </data>
+  <data name="PersonNameNotMatchPersonId" xml:space="preserve">
+    <value>Person name with ID {0} is not related to person with ID {1}.</value>
+  </data>
+  <data name="PersonNameRecordNotExist" xml:space="preserve">
+    <value>Person name with ID {0} does not exist.</value>
   </data>
   <data name="PersonWithIdNotExist" xml:space="preserve">
     <value>Person with ID {0} does not exist.</value>
@@ -147,11 +171,11 @@
   <data name="PublicationAuthorRecordNotExist" xml:space="preserve">
     <value>Publication author record with ID {0} does not exist.</value>
   </data>
-  <data name="PublicationExternDatabaseIdNotExist" xml:space="preserve">
-    <value>Publication extern database id with ID {0} does not exist.</value>
-  </data>
   <data name="PublicationExternDatabaseIdNotMatchPublicationId" xml:space="preserve">
     <value>Publication extern database id with ID {0} is not related to publication with ID {1}.</value>
+  </data>
+  <data name="PublicationExternDatabaseIdRecordNotExist" xml:space="preserve">
+    <value>Publication extern database id with ID {0} does not exist.</value>
   </data>
   <data name="PublicationIdentifierNotMatchPublicationId" xml:space="preserve">
     <value>Publication identifier with ID {0} is not related to publication with ID {1}.</value>

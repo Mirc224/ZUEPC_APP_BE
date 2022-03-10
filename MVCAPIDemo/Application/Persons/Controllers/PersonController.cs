@@ -1,8 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ZUEPC.Application.Persons.Commands.Persons;
+using ZUEPC.Application.Persons.Queries.Persons;
 using ZUEPC.Application.Persons.Queries.Persons.Details;
+using ZUEPC.Application.Persons.Queries.Persons.Previews;
 using ZUEPC.Base.Enums.Common;
+using ZUEPC.Common.Services.URIServices;
+using ZUEPC.DataAccess.Filters;
 
 namespace ZUEPC.Application.Persons.Controllers;
 
@@ -11,10 +15,39 @@ namespace ZUEPC.Application.Persons.Controllers;
 public class PersonController : ControllerBase
 {
 	private readonly IMediator _mediator;
+	private readonly IUriService _uriService;
 
-	public PersonController(IMediator mediator)
+	public PersonController(IMediator mediator, IUriService uriService)
 	{
 		_mediator = mediator;
+		_uriService = uriService;
+	}
+
+
+	[HttpGet]
+	public async Task<IActionResult> GetAll([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllPersonsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route};
+		GetAllPersonsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
+	}
+
+	[HttpGet("preview")]
+	public async Task<IActionResult> GetAllPreview([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllPersonPreviewsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPersonPreviewsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
 	}
 
 	[HttpGet("{id}")]
@@ -48,6 +81,11 @@ public class PersonController : ControllerBase
 		request.OriginSourceType = OriginSourceType.ZUEPC;
 		request.VersionDate = DateTime.Now;
 		UpdatePersonWithDetailsCommandResponse response = await _mediator.Send(request);
+		if (response.ErrorMessages != null && response.ErrorMessages.Any())
+		{
+			return BadRequest(new { errors = response.ErrorMessages });
+		}
+
 		if (!response.Success)
 		{
 			return NotFound();

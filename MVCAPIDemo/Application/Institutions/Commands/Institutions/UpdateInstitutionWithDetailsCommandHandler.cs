@@ -6,6 +6,9 @@ using ZUEPC.Application.Institutions.Entities.Inputs.Common;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
 using ZUEPC.Common.Extensions;
+using ZUEPC.Responses;
+using ZUEPC.Common.Services.ItemChecks;
+using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 
@@ -14,15 +17,30 @@ public class UpdateInstitutionWithDetailsCommandHandler :
 {
 	private readonly IMapper _mapper;
 	private readonly IMediator _mediator;
+	private readonly InstitutionItemCheckService _itemCheckService;
 
-	public UpdateInstitutionWithDetailsCommandHandler(IMapper mapper, IMediator mediator)
+	public UpdateInstitutionWithDetailsCommandHandler(IMapper mapper, IMediator mediator, InstitutionItemCheckService itemCheckService)
 	{
 		_mapper = mapper;
 		_mediator = mediator;
+		_itemCheckService = itemCheckService;
 	}
 
 	public async Task<UpdateInstitutionWithDetailsCommandResponse> Handle(UpdateInstitutionWithDetailsCommand request, CancellationToken cancellationToken)
 	{
+		UpdateInstitutionWithDetailsCommandResponse response = new() { Success = true };
+
+		await CheckIfInstitutionNamesAreValid(request.Id, request.NamesToUpdate?.Select(x => x.Id), response);
+		await CheckIfInstitutionNamesAreValid(request.Id, request.NamesToDelete, response);
+
+		await CheckIfInstitutionExternDatabaseIdsAreValid(request.Id, request.ExternDatabaseIdsToUpdate?.Select(x => x.Id), response);
+		await CheckIfInstitutionExternDatabaseIdsAreValid(request.Id, request.ExternDatabaseIdsToDelete, response);
+
+		if (!response.Success)
+		{
+			return response;
+		}
+
 		UpdateInstitutionCommand updateInstitutionCommand = _mapper.Map<UpdateInstitutionCommand>(request);
 		bool updated = (await _mediator.Send(updateInstitutionCommand)).Success;
 		if (!updated)
@@ -34,6 +52,30 @@ public class UpdateInstitutionWithDetailsCommandHandler :
 		await ProcessInstitutionExternDatabaseIdsAsync(request);
 
 		return new() { Success = true };
+	}
+
+	private async Task CheckIfInstitutionExternDatabaseIdsAreValid(
+		long institutionId, 
+		IEnumerable<long>? idsToCheck, 
+		UpdateInstitutionWithDetailsCommandResponse response)
+	{
+		await CheckIfInstitutionRelatedObjectsAreValid(
+			institutionId,
+			idsToCheck,
+			_itemCheckService.CheckAndGetIfInstitutionExternDatabaseIdExistsAndRelatedToInstitutionAsync,
+			response);
+	}
+
+	private async Task CheckIfInstitutionNamesAreValid(
+		long institutionId,
+		IEnumerable<long>? idsToCheck, 
+		UpdateInstitutionWithDetailsCommandResponse response)
+	{
+		await CheckIfInstitutionRelatedObjectsAreValid(
+			institutionId,
+			idsToCheck,
+			_itemCheckService.CheckAndGetIfInstitutionNameExistsAndRelatedToInstitutionAsync,
+			response);
 	}
 
 	private async Task ProcessInstitutionExternDatabaseIdsAsync(UpdateInstitutionWithDetailsCommand request)
@@ -90,6 +132,25 @@ public class UpdateInstitutionWithDetailsCommandHandler :
 			propertyObject.VersionDate = request.VersionDate;
 			TCommand actionCommand = _mapper.Map<TCommand>(propertyObject);
 			await _mediator.Send(actionCommand);
+		}
+	}
+
+	private async Task CheckIfInstitutionRelatedObjectsAreValid<TDomain>(
+		long personId,
+		IEnumerable<long>? idsToCheck,
+		Func<long, long, ResponseBase?, Task<TDomain?>> checkFunction,
+		ResponseBase response)
+		where TDomain : class, IInstitutionRelated
+	{
+		foreach (long recordId in idsToCheck.OrEmptyIfNull())
+		{
+			TDomain? publicationActivity =
+				await checkFunction(recordId, personId, response);
+
+			if (publicationActivity is null)
+			{
+				response.Success = false;
+			}
 		}
 	}
 }

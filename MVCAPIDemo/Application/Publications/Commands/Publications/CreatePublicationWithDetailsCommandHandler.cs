@@ -21,7 +21,7 @@ using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Common.Extensions;
-using ZUEPC.Common.Services;
+using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 using ZUEPC.Localization;
@@ -45,9 +45,9 @@ public class CreatePublicationWithDetailsCommandHandler :
 	{
 		CreatePublicationWithDetailsCommandResponse response = new() { Success = true };
 		ICollection<Tuple<PublicationAuthorCreateDto, PersonPreview, InstitutionPreview>> authorsTuples = 
-			await GetAuthorsTuplesOrFillWithErrors(request.Authors, response);
+			await GetAuthorsTuplesToInsertOrFillWithErrors(request.Authors, response);
 		ICollection<Tuple<RelatedPublicationCreateDto, PublicationPreview>> relatedPublicationsTuples = 
-			await GetRelatedPublicationsTuplesOrFillWithErrors(request.RelatedPublications, response);
+			await GetRelatedPublicationsTuplesToInsertOrFillWithErrors(request.RelatedPublications, response);
 
 		if (!response.Success)
 		{

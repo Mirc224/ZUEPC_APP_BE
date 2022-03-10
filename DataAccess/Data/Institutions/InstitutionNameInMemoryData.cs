@@ -1,4 +1,5 @@
 ﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.Institution;
 
 namespace ZUEPC.DataAccess.Data.Institutions;
@@ -15,6 +16,16 @@ public class InstitutionNameInMemoryData : InMemoryBaseRepository<InstitutionNam
 	{
 		var deletedObject = _repository.Where(x => x.Id == id);
 		return await DeleteRecordsAsync(deletedObject);
+	}
+
+	public async Task<IEnumerable<InstitutionNameModel>> GetAllAsync()
+	{
+		return _repository.ToList();
+	}
+
+	public async Task<IEnumerable<InstitutionNameModel>> GetAllAsync(PaginationFilter filter)
+	{
+		return _repository.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
 	}
 
 	public async Task<IEnumerable<InstitutionNameModel>> GetInstitutionNamesByInstitutionIdAsync(long institutionId)

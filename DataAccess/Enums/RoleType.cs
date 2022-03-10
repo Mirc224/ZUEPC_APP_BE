@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Enums;
+﻿namespace ZUEPC.DataAccess.Enums;
 
 
 public enum RoleType

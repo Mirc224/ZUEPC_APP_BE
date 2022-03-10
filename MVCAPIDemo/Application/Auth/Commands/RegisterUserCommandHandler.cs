@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DataAccess.Data.User;
-using DataAccess.Enums;
+using ZUEPC.DataAccess.Enums;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System.Security.Cryptography;
@@ -49,7 +49,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         {
             return new() 
 			{ 
-				ErrorMessages = new string[] { _localizer["UnknownError"] },
+				ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.UNKNOWN_ERROR] },
 				Success = false 
 			};
         }

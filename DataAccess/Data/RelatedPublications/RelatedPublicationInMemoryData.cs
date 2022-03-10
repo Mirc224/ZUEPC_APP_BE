@@ -1,9 +1,11 @@
 ﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.RelatedPublication;
 
 namespace ZUEPC.DataAccess.Data.RelatedPublications;
 
-public class RelatedPublicationInMemoryData : InMemoryBaseRepository<RelatedPublicationModel>, IRelatedPublicationData
+public class RelatedPublicationInMemoryData : InMemoryBaseRepository<RelatedPublicationModel>, 
+	IRelatedPublicationData
 {
 	public async Task<int> DeleteModelByIdAsync(long id)
 	{
@@ -21,6 +23,16 @@ public class RelatedPublicationInMemoryData : InMemoryBaseRepository<RelatedPubl
 	{
 		var deletedObject = _repository.Where(x => x.RelatedPublicationId == relatedPublicationId);
 		return await DeleteRecordsAsync(deletedObject);
+	}
+
+	public async Task<IEnumerable<RelatedPublicationModel>> GetAllAsync()
+	{
+		return _repository.ToList();
+	}
+
+	public async Task<IEnumerable<RelatedPublicationModel>> GetAllAsync(PaginationFilter filter)
+	{
+		return _repository.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
 	}
 
 	public async Task<RelatedPublicationModel?> GetModelByIdAsync(long id)

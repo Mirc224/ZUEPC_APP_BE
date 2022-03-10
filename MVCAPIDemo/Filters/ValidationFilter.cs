@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ZUEPC.Common.Responses;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Application.Filters;
 

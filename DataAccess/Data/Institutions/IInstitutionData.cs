@@ -6,5 +6,5 @@ namespace ZUEPC.DataAccess.Data.Institutions;
 public interface IInstitutionData : 
 	IRepositoryBase<InstitutionModel>
 {
-	Task<IEnumerable<InstitutionModel>> GetAllInstitutionsAsync();
+	Task<IEnumerable<InstitutionModel>> GetAllAsync();
 }

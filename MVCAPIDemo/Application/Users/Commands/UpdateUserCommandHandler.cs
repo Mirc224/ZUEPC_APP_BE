@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DataAccess.Data.User;
-using DataAccess.Enums;
+using ZUEPC.DataAccess.Enums;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json.Linq;
@@ -29,58 +29,58 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Updat
 	public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
 	{
 
-		var userModel = await _repository.GetUserByIdAsync(request.UserId);
+		UserModel? userModel = await _repository.GetUserByIdAsync(request.UserId);
 		if (userModel is null)
 		{
 			return new()
 			{
-				ErrorMessages = new string[] { _localizer["UserNotFound"].Value },
+				ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.USER_NOT_EXIST].Value },
 				Success = false
 			};
 		}
-		
-		var user = _mapper.Map<User>(userModel);
-		var origUserJSON = JObject.FromObject(user);
+
+		User user = _mapper.Map<User>(userModel);
+		JObject origUserJSON = JObject.FromObject(user);
 		user.Roles = (await _repository.GetUserRolesAsync(userModel.Id)).Select(x => x.Id).ToList();
-		
-		var actualRoles = user.Roles.ToHashSet();
+
+		HashSet<RoleType> actualRoles = user.Roles.ToHashSet();
 		request.AppliedPatch.ApplyTo(user);
 
-		var modifUserJSON = JObject.FromObject(user);
+		JObject modifUserJSON = JObject.FromObject(user);
 
-		var changedProperties = new List<string>();
-		foreach(var x in origUserJSON)
+		List<string> changedProperties = new();
+		foreach (KeyValuePair<string, JToken> x in origUserJSON)
 		{
-			if(!JToken.DeepEquals(x.Value, modifUserJSON[x.Key]))
+			if (!JToken.DeepEquals(x.Value, modifUserJSON[x.Key]))
 			{
 				changedProperties.Add(x.Key);
 			}
 		}
 
 
-		if(changedProperties.Contains("Roles"))
+		if (changedProperties.Contains("Roles"))
 		{
 			changedProperties.Remove("Roles");
-			var newUserRoles = user.Roles.ToHashSet();
+			HashSet<RoleType> newUserRoles = user.Roles.ToHashSet();
 			newUserRoles.Add(RoleType.USER);
 
-			var addedRoles = newUserRoles.Except(actualRoles);
-			var removedRoles = actualRoles.Except(newUserRoles);
+			IEnumerable<RoleType> addedRoles = newUserRoles.Except(actualRoles);
+			IEnumerable<RoleType> removedRoles = actualRoles.Except(newUserRoles);
 
-			foreach (var role in addedRoles)
+			foreach (RoleType role in addedRoles)
 			{
 				await _repository.InsertUserRoleAsync(user.Id, role);
 			}
 
-			foreach (var role in removedRoles)
+			foreach (RoleType role in removedRoles)
 			{
 				await _repository.DeleteUserRoleAsync(user.Id, role);
 			}
 		}
 
-		if(changedProperties.Count > 0)
+		if (changedProperties.Count > 0)
 		{
-			var moddifiedUserModel = _mapper.Map<UserModel>(user);
+			UserModel moddifiedUserModel = _mapper.Map<UserModel>(user);
 			await _repository.UpdateUserAsync(moddifiedUserModel);
 		}
 

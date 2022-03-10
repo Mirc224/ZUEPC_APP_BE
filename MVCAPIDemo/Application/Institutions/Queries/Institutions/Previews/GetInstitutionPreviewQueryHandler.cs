@@ -1,22 +1,18 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.Application.Institutions.Entities.Previews;
-using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
-using ZUEPC.Application.Institutions.Queries.InstitutionNames;
+using ZUEPC.Application.Institutions.Queries.Institutions.Previews.BaseHandlers;
 using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 
-public class GetInstitutionPreviewQueryHandler : IRequestHandler<GetInstitutionPreviewQuery, GetInstitutionPreviewQueryResponse>
+public class GetInstitutionPreviewQueryHandler :
+	EPCInstitutionPreviewHandlerBase,
+	IRequestHandler<GetInstitutionPreviewQuery, GetInstitutionPreviewQueryResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IMediator _mediator;
-
 	public GetInstitutionPreviewQueryHandler(IMapper mapper, IMediator mediator)
-	{
-		_mapper = mapper;
-		_mediator = mediator;
-	}
+		: base(mapper, mediator) { }
+	
 	public async Task<GetInstitutionPreviewQueryResponse> Handle(GetInstitutionPreviewQuery request, CancellationToken cancellationToken)
 	{
 		long institutionId = request.Id;
@@ -25,10 +21,7 @@ public class GetInstitutionPreviewQueryHandler : IRequestHandler<GetInstitutionP
 		{
 			return new() { Success = false };
 		}
-		InstitutionPreview previewResult = _mapper.Map<InstitutionPreview>(institutionDomain);
-		previewResult.Names = (await _mediator.Send(new GetInstitutionInstitutionNamesQuery() { InstitutionId = institutionId })).Data;
-		previewResult.ExternDatabaseIds = (await _mediator.Send(new GetInstitutionInstitutionExternDatabaseIdsQuery() 
-		{ InstitutionId = institutionId })).Data;
+		InstitutionPreview previewResult = await ProcessInstitutionPreview(institutionDomain);
 		return new() { Success = true, Data = previewResult };
 	}
 }

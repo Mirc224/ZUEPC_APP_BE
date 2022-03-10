@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ZUEPC.Common.CQRS.Commands;
+using ZUEPC.Common.CQRS.CommandHandlers;
 using ZUEPC.DataAccess.Data.PublicationActivities;
 using ZUEPC.DataAccess.Models.PublicationActivity;
 
