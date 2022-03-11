@@ -7,7 +7,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 
 public class GetInstitutionPreviewQueryHandler :
-	EPCInstitutionPreviewHandlerBase,
+	EPCInstitutionPreviewQueryHandlerBase,
 	IRequestHandler<GetInstitutionPreviewQuery, GetInstitutionPreviewQueryResponse>
 {
 	public GetInstitutionPreviewQueryHandler(IMapper mapper, IMediator mediator)

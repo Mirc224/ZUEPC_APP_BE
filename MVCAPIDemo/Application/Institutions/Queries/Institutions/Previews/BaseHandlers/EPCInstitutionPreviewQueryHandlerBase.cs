@@ -7,21 +7,21 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Previews.BaseHandlers;
 
-public abstract class EPCInstitutionPreviewHandlerBase
+public abstract class EPCInstitutionPreviewQueryHandlerBase
 {
 	protected readonly IMapper _mapper;
 	protected readonly IMediator _mediator;
 
-	public EPCInstitutionPreviewHandlerBase(IMapper mapper, IMediator mediator)
+	public EPCInstitutionPreviewQueryHandlerBase(IMapper mapper, IMediator mediator)
 	{
 		_mapper = mapper;
 		_mediator = mediator;
 	}
 
-	protected async Task<InstitutionPreview> ProcessInstitutionPreview(Institution intitutionDomain)
+	protected async Task<InstitutionPreview> ProcessInstitutionPreview(Institution institutionDomain)
 	{
-		long institutionId = intitutionDomain.Id;
-		InstitutionPreview resultPreview = _mapper.Map<InstitutionPreview>(intitutionDomain);
+		long institutionId = institutionDomain.Id;
+		InstitutionPreview resultPreview = _mapper.Map<InstitutionPreview>(institutionDomain);
 		resultPreview.Names = (await _mediator.Send(new GetInstitutionInstitutionNamesQuery()
 		{
 			InstitutionId = institutionId

@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "e28690ae-ea70-4146-bac0-1e442e2acb46",
-		"name": "Import",
+		"_postman_id": "ec47de67-2575-4ab6-8faf-22eae6fa3822",
+		"name": "Import Copy 2",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -2513,14 +2513,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Import.CREPC.CurrentPublicationId}}",
+									"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Import.CREPC.CurrentPublicationId}}/detail",
 									"host": [
 										"{{ApiBaseUrl}}"
 									],
 									"path": [
 										"api",
 										"publication",
-										"{{Temp.Import.CREPC.CurrentPublicationId}}"
+										"{{Temp.Import.CREPC.CurrentPublicationId}}",
+										"detail"
 									]
 								}
 							},
@@ -3178,14 +3179,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Import.CREPC.CurrentPublicationId}}",
+									"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Import.CREPC.CurrentPublicationId}}/detail",
 									"host": [
 										"{{ApiBaseUrl}}"
 									],
 									"path": [
 										"api",
 										"publication",
-										"{{Temp.Import.CREPC.CurrentPublicationId}}"
+										"{{Temp.Import.CREPC.CurrentPublicationId}}",
+										"detail"
 									]
 								}
 							},
@@ -3694,14 +3696,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Import.CREPC.CurrentPublicationId}}",
+									"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Import.CREPC.CurrentPublicationId}}/detail",
 									"host": [
 										"{{ApiBaseUrl}}"
 									],
 									"path": [
 										"api",
 										"publication",
-										"{{Temp.Import.CREPC.CurrentPublicationId}}"
+										"{{Temp.Import.CREPC.CurrentPublicationId}}",
+										"detail"
 									]
 								}
 							},
@@ -6810,14 +6813,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Import.CREPC.CurrentPublicationId}}",
+									"raw": "{{ApiBaseUrl}}/api/publication/{{Temp.Import.CREPC.CurrentPublicationId}}/detail",
 									"host": [
 										"{{ApiBaseUrl}}"
 									],
 									"path": [
 										"api",
 										"publication",
-										"{{Temp.Import.CREPC.CurrentPublicationId}}"
+										"{{Temp.Import.CREPC.CurrentPublicationId}}",
+										"detail"
 									]
 								}
 							},

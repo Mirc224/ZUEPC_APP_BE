@@ -272,6 +272,8 @@ public class MappingProfile : Profile
 	private void CreateDomainToPreviewMapping()
 	{
 		CreateMap<Publication, PublicationPreview>()
+			.ForMember(dest => dest.PublishYear, opts => opts.MapFrom(src => src.PublishYear))
+			.ForMember(dest => dest.DocumentType, opts => opts.MapFrom(src => src.DocumentType))
 			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id));
 		
 		CreateMap<Person, PersonPreview>()

@@ -1,30 +1,21 @@
 ﻿using AutoMapper;
 using MediatR;
-using ZUEPC.Application.PublicationActivities.Queries;
-using ZUEPC.Application.PublicationAuthors.Queries.Details;
 using ZUEPC.Application.Publications.Entities.Details;
-using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
-using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
-using ZUEPC.Application.Publications.Queries.PublicationNames;
+using ZUEPC.Application.Publications.Queries.Publications.Details.BaseHandlers;
 using ZUEPC.Application.Publications.Queries.Publictions;
-using ZUEPC.Application.RelatedPublications.Queries.Details;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.Publications.Details;
 
-public class GetPublicationDetailsQueryHandler : IRequestHandler<GetPublicationDetailsQuery, GetPublicationDetailsQueryResponse>
+public class GetPublicationDetailsQueryHandler :
+	EPCPublicationDetailsQueryHandlerBase,
+	IRequestHandler<GetPublicationDetailsQuery, GetPublicationDetailsQueryResponse>
 {
-	private readonly IMapper _mapper;
-	private readonly IMediator _mediator;
-
 	public GetPublicationDetailsQueryHandler(IMapper mapper, IMediator mediator)
-	{
-		_mapper = mapper;
-		_mediator = mediator;
-	}
+	: base(mapper, mediator) {}
 	public async Task<GetPublicationDetailsQueryResponse> Handle(GetPublicationDetailsQuery request, CancellationToken cancellationToken)
 	{
-		long publicationId = request.PublicationId;
+		long publicationId = request.Id;
 		Publication? publication = (await _mediator.Send(new GetPublicationQuery()
 		{
 			Id = publicationId
@@ -34,36 +25,7 @@ public class GetPublicationDetailsQueryHandler : IRequestHandler<GetPublicationD
 		{
 			return new() { Success = false };
 		}
-		PublicationDetails result = _mapper.Map<PublicationDetails>(publication);
-		result.Names = (await _mediator.Send(new GetPublicationPublicationNamesQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		result.Identifiers = (await _mediator.Send(new GetPublicationPublicationIdentifiersQuery() 
-		{ 
-			PublicationId = publicationId 
-		})).Data;
-
-		result.ExternDatabaseIds = (await _mediator.Send(new GetPublicationPublicationExternDatabaseIdsQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		result.Authors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		result.RelatedPublications = (await _mediator.Send(new GetPublicationRelatedPublicationsDetailsQuery()
-		{
-			SourcePublicationId = publicationId
-		})).RelatedPublications;
-
-		result.PublicationActivities = (await _mediator.Send(new GetPublicationPublicationActivitiesQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
+		PublicationDetails result = await ProcessPublicationDetails(publication);
 
 		return new() { Success = true, Data = result };
 	}

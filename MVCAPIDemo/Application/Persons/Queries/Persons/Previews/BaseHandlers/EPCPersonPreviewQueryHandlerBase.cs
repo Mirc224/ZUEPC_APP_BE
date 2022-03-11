@@ -7,12 +7,12 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews.BaseHandlers;
 
-public abstract class EPCPersonPreviewHandlerBase
+public abstract class EPCPersonPreviewQueryHandlerBase
 {
 	protected readonly IMapper _mapper;
 	protected readonly IMediator _mediator;
 
-	public EPCPersonPreviewHandlerBase(IMapper mapper, IMediator mediator)
+	public EPCPersonPreviewQueryHandlerBase(IMapper mapper, IMediator mediator)
 	{
 		_mapper = mapper;
 		_mediator = mediator;

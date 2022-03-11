@@ -1,8 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ZUEPC.Application.Publications.Commands.Publications;
+using ZUEPC.Application.Publications.Queries.Publications;
 using ZUEPC.Application.Publications.Queries.Publications.Details;
+using ZUEPC.Application.Publications.Queries.Publications.Previews;
+using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Base.Enums.Common;
+using ZUEPC.Common.Services.URIServices;
+using ZUEPC.DataAccess.Filters;
 
 namespace ZUEPC.Application.Publications.Controllers;
 
@@ -11,17 +16,82 @@ namespace ZUEPC.Application.Publications.Controllers;
 public class PublicationController : ControllerBase
 {
 	private readonly IMediator _mediator;
+	private readonly IUriService _uriService;
 
-	public PublicationController(IMediator mediator)
+	public PublicationController(IMediator mediator, IUriService uriService)
 	{
 		_mediator = mediator;
+		_uriService = uriService;
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> GetAll([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllPublicationsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPublicationsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
+	}
+
+	[HttpGet("preview")]
+	public async Task<IActionResult> GetAllPreviews([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllPublicationPreviewsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPublicationPreviewsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
+	}
+
+	[HttpGet("detail")]
+	public async Task<IActionResult> GetAllDetails([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllPublicationDetailsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPublicationDetailsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
+	}
+
+	[HttpGet("{id}/preview")]
+	public async Task<IActionResult> GetPublicationPreview(long id)
+	{
+		GetPublicationPreviewQuery request = new() { Id = id };
+		GetPublicationPreviewQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response.Data);
+	}
+
+	[HttpGet("{id}/detail")]
+	public async Task<IActionResult> GetPublicationDetails(long id)
+	{
+		GetPublicationDetailsQuery request = new() { Id = id };
+		GetPublicationDetailsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response.Data);
 	}
 
 	[HttpGet("{id}")]
-	public async Task<IActionResult> GetPublicationDetails(long id)
+	public async Task<IActionResult> GetPublication(long id)
 	{
-		GetPublicationDetailsQuery request = new() { PublicationId = id };
-		GetPublicationDetailsQueryResponse response = await _mediator.Send(request);
+		GetPublicationQuery request = new() { Id = id };
+		GetPublicationQueryResponse response = await _mediator.Send(request);
 		if(!response.Success)
 		{
 			return NotFound();

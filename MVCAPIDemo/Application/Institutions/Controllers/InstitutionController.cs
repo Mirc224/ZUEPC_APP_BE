@@ -49,11 +49,48 @@ public class InstitutionController : ControllerBase
 		return Ok(response);
 	}
 
-	[HttpGet("{id}")]
+	[HttpGet("detail")]
+	public async Task<IActionResult> GetAllDetails([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllInstitutionDetailsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllInstitutionDetailsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
+	}
+
+	[HttpGet("{id}/preview")]
+	public async Task<IActionResult> GetInstitutionPreview(long id)
+	{
+		GetInstitutionPreviewQuery request = new() { Id = id };
+		GetInstitutionPreviewQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response.Data);
+	}
+
+	[HttpGet("{id}/detail")]
 	public async Task<IActionResult> GetInstitutionDetails(long id)
 	{
-		GetInstitutionDetailsQuery request = new() { InstitutionId = id };
+		GetInstitutionDetailsQuery request = new() { Id = id };
 		GetInstitutionDetailsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response.Data);
+	}
+
+	[HttpGet("{id}")]
+	public async Task<IActionResult> GetInstitution(long id)
+	{
+		GetInstitutionQuery request = new() { Id = id };
+		GetInstitutionQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
 			return NotFound();

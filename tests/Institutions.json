@@ -175,14 +175,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}",
+							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}/detail",
 							"host": [
 								"{{ApiBaseUrl}}"
 							],
 							"path": [
 								"api",
 								"institution",
-								"{{Temp.Institution.Created.Id}}"
+								"{{Temp.Institution.Created.Id}}",
+								"detail"
 							]
 						}
 					},
@@ -336,14 +337,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}",
+							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}/detail",
 							"host": [
 								"{{ApiBaseUrl}}"
 							],
 							"path": [
 								"api",
 								"institution",
-								"{{Temp.Institution.Created.Id}}"
+								"{{Temp.Institution.Created.Id}}",
+								"detail"
 							]
 						}
 					},
@@ -400,20 +402,39 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}",
+							"raw": "{{ApiBaseUrl}}/api/institution/{{Temp.Institution.Created.Id}}/detail",
 							"host": [
 								"{{ApiBaseUrl}}"
 							],
 							"path": [
 								"api",
 								"institution",
-								"{{Temp.Institution.Created.Id}}"
+								"{{Temp.Institution.Created.Id}}",
+								"detail"
 							]
 						}
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "GetAllInstitutions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/institution",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"institution"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

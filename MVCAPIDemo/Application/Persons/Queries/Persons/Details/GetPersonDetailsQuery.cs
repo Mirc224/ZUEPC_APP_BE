@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using ZUEPC.EvidencePublication.Base.Queries;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Details;
 
-public class GetPersonDetailsQuery : IRequest<GetPersonDetailsQueryResponse>
+public class GetPersonDetailsQuery :
+	EPCSimpleQueryBase,
+	IRequest<GetPersonDetailsQueryResponse>
 {
-	public long PersonId { get; set; }
 }

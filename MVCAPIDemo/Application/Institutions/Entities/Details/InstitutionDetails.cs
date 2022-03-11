@@ -7,6 +7,6 @@ public class InstitutionDetails : DetailsBase
 {
 	public int? Level { get; set; }
 	public string? InstitutionType { get; set; }
-	public ICollection<InstitutionName> Names { get; set; }
-	public ICollection<InstitutionExternDatabaseId> ExternDatabaseIds { get; set; }
+	public ICollection<InstitutionName>? Names { get; set; }
+	public ICollection<InstitutionExternDatabaseId>? ExternDatabaseIds { get; set; }
 }

@@ -50,11 +50,48 @@ public class PersonController : ControllerBase
 		return Ok(response);
 	}
 
-	[HttpGet("{id}")]
+	[HttpGet("detail")]
+	public async Task<IActionResult> GetAllDetails([FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllPersonDetailsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPersonDetailsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
+	}
+
+	[HttpGet("{id}/preview")]
+	public async Task<IActionResult> GetPersonPreview(long id)
+	{
+		GetPersonPreviewQuery request = new() { Id = id };
+		GetPersonPreviewQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response.Data);
+	}
+
+	[HttpGet("{id}/detail")]
 	public async Task<IActionResult> GetPersonDetails(long id)
 	{
-		GetPersonDetailsQuery request = new() { PersonId = id };
+		GetPersonDetailsQuery request = new() { Id = id };
 		GetPersonDetailsQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response.Data);
+	}
+
+	[HttpGet("{id}")]
+	public async Task<IActionResult> GetPerson(long id)
+	{
+		GetPersonQuery request = new() { Id = id };
+		GetPersonQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
 			return NotFound();

@@ -7,7 +7,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews;
 
 public class GetPersonPreviewQueryHandler :
-	EPCPersonPreviewHandlerBase,
+	EPCPersonPreviewQueryHandlerBase,
 	IRequestHandler<GetPersonPreviewQuery, GetPersonPreviewQueryResponse>
 {
 

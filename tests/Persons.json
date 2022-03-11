@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "6849eec1-88c5-4c53-a4d4-2426a9d50a40",
-		"name": "Person",
+		"_postman_id": "4560d4b9-e2eb-41e9-86ea-03a308ec12f1",
+		"name": "Person Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -181,14 +181,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}",
+							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}/detail",
 							"host": [
 								"{{ApiBaseUrl}}"
 							],
 							"path": [
 								"api",
 								"person",
-								"{{Temp.Person.Created.Id}}"
+								"{{Temp.Person.Created.Id}}",
+								"detail"
 							]
 						}
 					},
@@ -349,14 +350,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}",
+							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}/detail",
 							"host": [
 								"{{ApiBaseUrl}}"
 							],
 							"path": [
 								"api",
 								"person",
-								"{{Temp.Person.Created.Id}}"
+								"{{Temp.Person.Created.Id}}",
+								"detail"
 							]
 						}
 					},
@@ -413,20 +415,40 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}",
+							"raw": "{{ApiBaseUrl}}/api/person/{{Temp.Person.Created.Id}}/detail",
 							"host": [
 								"{{ApiBaseUrl}}"
 							],
 							"path": [
 								"api",
 								"person",
-								"{{Temp.Person.Created.Id}}"
+								"{{Temp.Person.Created.Id}}",
+								"detail"
 							]
 						}
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "GetAllPersons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/person/detail",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"person",
+						"detail"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
