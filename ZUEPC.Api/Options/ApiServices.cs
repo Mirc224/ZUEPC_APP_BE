@@ -18,6 +18,7 @@ using ZUEPC.DataAccess.Data.PublicationActivities;
 using ZUEPC.DataAccess.Data.PublicationAuthors;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Data.RelatedPublications;
+using ZUEPC.DataAccess.Data.Users;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Options;
@@ -29,7 +30,10 @@ public static class ApiServices
 		// Add services to the container.
 		// User
 		builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-		builder.Services.AddSingleton<IUserData, UserData>();
+		builder.Services.AddSingleton<IUserData, UserInMemoryData>();
+		builder.Services.AddSingleton<IUserRoleData, UserRoleInMemoryData>();
+		builder.Services.AddSingleton<IRefreshTokenData, RefreshTokenInMemoryData>();
+		builder.Services.AddSingleton<IRoleData, RoleInMemoryData>();
 		// Publication
 		builder.Services.AddSingleton<IPublicationData, PublicationInMemoryData>();
 		builder.Services.AddSingleton<IPublicationNameData, PublicationNameInMemoryData>();

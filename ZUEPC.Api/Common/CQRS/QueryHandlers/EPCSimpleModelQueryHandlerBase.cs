@@ -9,7 +9,7 @@ namespace ZUEPC.Common.CQRS.QueryHandlers;
 
 public abstract class EPCSimpleModelQueryHandlerBase<TDomain, TModel>:
 	EPCDomainModelHandlerBase<TModel>
-	where TDomain : EPCBase
+	where TDomain : EPCDomainBase
 	where TModel : EPCBaseModel
 {
 	protected readonly IMapper _mapper;

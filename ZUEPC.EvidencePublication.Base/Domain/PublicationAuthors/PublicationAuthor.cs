@@ -4,7 +4,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 namespace ZUEPC.EvidencePublication.Base.PublicationAuthors;
 
 public class PublicationAuthor : 
-	EPCBase,
+	EPCDomainBase,
 	IPublicationRelated
 {
 	public long PublicationId { get; set; }

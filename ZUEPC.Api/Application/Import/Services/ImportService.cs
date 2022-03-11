@@ -96,7 +96,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 		where TCommand : EPCUpdateCommandBase, new()
-		where TDomain : EPCBase
+		where TDomain : EPCDomainBase
 	{
 		foreach (TDomain recordForUpdate in recordsToUpdate)
 		{
@@ -109,7 +109,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 		where TCommand : EPCUpdateCommandBase, new()
-		where TDomain : EPCBase
+		where TDomain : EPCDomainBase
 	{
 		TCommand updateRequest = _mapper.Map<TCommand>(objectForUpdate);
 		updateRequest.VersionDate = versionDate;

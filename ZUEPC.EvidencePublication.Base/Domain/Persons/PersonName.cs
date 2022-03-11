@@ -3,7 +3,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 
 namespace ZUEPC.EvidencePublication.Base.Domain.Persons;
 
-public class PersonName : EPCBase, IPersonRelated
+public class PersonName : EPCDomainBase, IPersonRelated
 {
 	public long PersonId { get; set; }
 	public string? FirstName { get; set; }

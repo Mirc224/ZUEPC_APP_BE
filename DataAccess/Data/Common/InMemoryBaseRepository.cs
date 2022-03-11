@@ -1,9 +1,10 @@
-﻿using ZUEPC.DataAccess.Models.Common;
+﻿using ZUEPC.DataAccess.Filters;
+using ZUEPC.DataAccess.Models.Common;
 
 namespace ZUEPC.DataAccess.Data.Common;
 
 public abstract class InMemoryBaseRepository<T>
-	where T : EPCBaseModel
+	where T : ModelBase
 {
 	protected readonly List<T> _repository = new();
 	protected long _idCounter = 1;
@@ -41,5 +42,36 @@ public abstract class InMemoryBaseRepository<T>
 	public async Task<int> CountAsync()
 	{
 		return _repository.Count();
+	}
+
+	public async Task<IEnumerable<T>> GetAllAsync()
+	{
+		return _repository.ToList();
+	}
+
+	public async Task<IEnumerable<T>> GetAllAsync(PaginationFilter filter)
+	{
+		return _repository.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+	}
+
+	public async Task<T?> GetModelByIdAsync(long id)
+	{
+		return _repository.Find(x => x.Id == id);
+	}
+
+	public async Task<long> InsertModelAsync(T model)
+	{
+		return await InsertRecordAsync(model);
+	}
+
+	public async Task<int> UpdateModelAsync(T model)
+	{
+		return await UpdateRecordAsync(model);
+	}
+
+	public async Task<int> DeleteModelByIdAsync(long id)
+	{
+		var deletedObjects = _repository.Where(x => x.Id == id);
+		return await DeleteRecordsAsync(deletedObjects);
 	}
 }

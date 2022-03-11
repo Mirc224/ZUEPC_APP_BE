@@ -3,7 +3,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 
 namespace ZUEPC.EvidencePublication.Base.Domain.Publications;
 
-public class PublicationIdentifier : EPCBase, IPublicationRelated
+public class PublicationIdentifier : EPCDomainBase, IPublicationRelated
 {
 	public long PublicationId { get; set; }
 	public string? IdentifierValue { get; set; }

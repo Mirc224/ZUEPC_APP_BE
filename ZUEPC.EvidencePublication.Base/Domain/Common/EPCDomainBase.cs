@@ -2,10 +2,8 @@
 
 namespace ZUEPC.EvidencePublication.Base.Domain.Common;
 
-public class EPCBase
+public class EPCDomainBase : DomainBase
 {
-	public long Id { get; set; }
 	public OriginSourceType OriginSourceType { get; set; }
-	public DateTime CreatedAt { get; set; }
 	public DateTime VersionDate { get; set; }
 }

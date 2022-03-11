@@ -1,15 +1,10 @@
-﻿using ZUEPC.DataAccess.Enums;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using ZUEPC.EvidencePublication.Base.Domain.Common;
 
 namespace Users.Base.Domain;
 
-public class User
+public class User : DomainBase
 {
-	public int Id { get; set; } = 0;
 	public string FirstName { get; set; } = string.Empty;
 	public string LastName { get; set; } = string.Empty;
 	public string Email { get; set; } = string.Empty;
-	[JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
-	public List<RoleType> Roles { get; set; } = new List<RoleType>(0);
 }

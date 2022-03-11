@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ZUEPC.Auth.Domain;
+using ZUEPC.DataAccess.Data.Users;
 using ZUEPC.DataAccess.Models.Users;
 using ZUEPC.Localization;
 using ZUEPC.Options;
@@ -18,6 +19,7 @@ public class AuthenticationService
 	private readonly JwtSettings _jwtSettings;
 	private readonly TokenValidationParameters _tokenValidationParams;
 	private readonly IUserData _userRepository;
+	private readonly IRefreshTokenData _refreshTokenRepository;
 	private readonly IStringLocalizer<DataAnnotations> _localizer;
 	private readonly string _usedSecuritySignatureAlgorithm = SecurityAlgorithms.HmacSha512Signature;
 	private readonly string _usedSecurityAlgorithm = SecurityAlgorithms.HmacSha512;
@@ -26,10 +28,12 @@ public class AuthenticationService
 		IOptions<JwtSettings> jwtSettings,
 		TokenValidationParameters tokenValidationParams,
 		IUserData userRepository,
+		IRefreshTokenData refreshTokenRepository,
 		IStringLocalizer<DataAnnotations> localizer)
 	{
 		_jwtSettings = jwtSettings.Value;
 		_userRepository = userRepository;
+		_refreshTokenRepository = refreshTokenRepository;
 		_localizer = localizer;
 		_tokenValidationParams = tokenValidationParams.Clone();
 		_tokenValidationParams.ValidateLifetime = false;
@@ -56,7 +60,7 @@ public class AuthenticationService
 				return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_EXIST] } };
 			}
 
-			RefreshTokenModel? storedToken = await _userRepository.GetRefreshTokenByTokenAsync(refreshToken);
+			RefreshTokenModel? storedToken = await _refreshTokenRepository.GetRefreshTokenByTokenAsync(refreshToken);
 
 			if (storedToken is null)
 			{
@@ -93,14 +97,14 @@ public class AuthenticationService
 			}
 
 			storedToken.IsUsed = true;
-			int rowsUpadted = await _userRepository.UpdateRefreshTokenAsync(storedToken);
+			int rowsUpadted = await _refreshTokenRepository.UpdateModelAsync(storedToken);
 
 			if (rowsUpadted != 1)
 			{
 				return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.UNKNOWN_DB_ERROR] } };
 			}
 
-			UserModel? userModel = await _userRepository.GetUserByIdAsync(storedToken.UserId);
+			UserModel? userModel = await _userRepository.GetModelByIdAsync(storedToken.UserId);
 
 			if (userModel is null)
 			{
@@ -122,7 +126,7 @@ public class AuthenticationService
 			return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_EXIST] } };
 		}
 
-		RefreshTokenModel? storedToken = await _userRepository.GetRefreshTokenByTokenAsync(refreshToken);
+		RefreshTokenModel? storedToken = await _refreshTokenRepository.GetRefreshTokenByTokenAsync(refreshToken);
 
 		if (storedToken is null)
 		{
@@ -135,7 +139,7 @@ public class AuthenticationService
 		}
 
 		storedToken.IsRevoked = true;
-		int rowsUpadted = await _userRepository.UpdateRefreshTokenAsync(storedToken);
+		int rowsUpadted = await _refreshTokenRepository.UpdateModelAsync(storedToken);
 
 		if (rowsUpadted != 1)
 		{
@@ -147,7 +151,7 @@ public class AuthenticationService
 
 	public async Task<RevokeResult> RevokeUserTokenAsync(int userId, string jwtId)
 	{
-		RefreshTokenModel? storedToken = await _userRepository.GetUserRefreshByJwtIdAsync(jwtId);
+		RefreshTokenModel? storedToken = await _refreshTokenRepository.GetUserRefreshByJwtIdAsync(jwtId);
 
 		if (storedToken is null)
 		{
@@ -165,7 +169,7 @@ public class AuthenticationService
 		}
 
 		storedToken.IsRevoked = true;
-		int rowsUpadted = await _userRepository.UpdateRefreshTokenAsync(storedToken);
+		int rowsUpadted = await _refreshTokenRepository.UpdateModelAsync(storedToken);
 
 		if (rowsUpadted != 1)
 		{
@@ -229,10 +233,10 @@ public class AuthenticationService
 			UserId = userModel.Id,
 			CreatedAt = DateTime.UtcNow,
 			ExpiryDate = DateTime.UtcNow.AddMonths(6),
-			Token = Guid.NewGuid()
+			Token = Guid.NewGuid().ToString()
 		};
 
-		await _userRepository.InsertRefreshTokenAsync(refreshToken);
+		await _refreshTokenRepository.InsertModelAsync(refreshToken);
 
 		return new() { Token = jwtToken, Success = true, RefreshToken = refreshToken.Token };
 	}
@@ -246,8 +250,8 @@ public class AuthenticationService
 				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 		};
 
-		IEnumerable<RoleModel> userRoles = await _userRepository.GetUserRolesAsync(userModel.Id);
-		claims.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x.Id.ToString())).ToList());
+		//IEnumerable<RoleModel> userRoles = await _userRepository.GetUserRolesAsync(userModel.Id);
+		//claims.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x.Id.ToString())).ToList());
 		return claims;
 	}
 }

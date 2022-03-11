@@ -9,7 +9,7 @@ public class UserValidator : AbstractValidator<User>
 	{
 		RuleFor(x => x.Email)
 			.NotNull();
-		RuleForEach(x => x.Roles)
-			.IsInEnum();
+		//RuleForEach(x => x.Roles)
+		//	.IsInEnum();
 	}
 }

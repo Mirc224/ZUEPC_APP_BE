@@ -17,15 +17,16 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, GetAllU
 
     public async Task<GetAllUsersQueryResponse> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-		var usersModels = await _repository.GetUsersAsync();
+		//var usersModels = await _repository.GetUsersAsync();
 
-		var users = _mapper.Map<List<User>>(usersModels);
-		foreach(var user in users)
-		{
-			var roles = await _repository.GetUserRolesAsync(user.Id);
-			user.Roles = roles.Select(x => x.Id).ToList();
-		}
-		var response = new GetAllUsersQueryResponse() { Success = true, Users = users};
-        return response;
-    }
+		//var users = _mapper.Map<List<User>>(usersModels);
+		//foreach(var user in users)
+		//{
+		//	var roles = await _repository.GetUserRolesAsync(user.Id);
+		//	user.Roles = roles.Select(x => x.Id).ToList();
+		//}
+		//var response = new GetAllUsersQueryResponse() { Success = true, Users = users};
+		//return response;
+		return new();
+	}
 }

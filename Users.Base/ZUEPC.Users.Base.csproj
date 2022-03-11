@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\ZUEPC.DataAccess.csproj" />
+    <ProjectReference Include="..\ZUEPC.EvidencePublication.Base\ZUEPC.EvidencePublication.Base.csproj" />
   </ItemGroup>
 
 </Project>

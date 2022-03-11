@@ -2,41 +2,43 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Users.Base.Domain;
+using ZUEPC.Api.Application.Users.Queries.Users.Details;
 using ZUEPC.Application.Users.Commands;
 using ZUEPC.Application.Users.Queries;
 using ZUEPC.Application.Users.Validators;
-using Users.Base.Domain;
 
 namespace ZUEPC.Application.Users.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	public class UsersController : ControllerBase
+	public class UserController : ControllerBase
 	{
 
 		private readonly IMediator _mediator;
 
-		public UsersController(IMediator mediator)
+		public UserController(IMediator mediator)
 		{
 			_mediator = mediator;
 		}
 
 		[HttpGet]
-		[Authorize(Roles = "ADMIN")]
+		//[Authorize(Roles = "ADMIN")]
 		public async Task<IActionResult> GetUsers()
 		{
-			var claimsPrincipal = User;
-			var response = await _mediator.Send(new GetAllUsersQuery());
+			ClaimsPrincipal claimsPrincipal = User;
+			GetAllUsersQueryResponse response = await _mediator.Send(new GetAllUsersQuery());
 			if (!response.Success)
 				return StatusCode(500);
 			return Ok(response.Users);
 		}
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> GetUser(int id)
+		[HttpGet("{id}/details")]
+		public async Task<IActionResult> GetUserDetails(long id)
 		{
-			var query = new GetUserQuery() { Id = id };
-			var response = await _mediator.Send(query);
+			GetUserDetailsQuery? query = new() { Id = id };
+			GetUserDetailsQueryResponse? response = await _mediator.Send(query);
 			if (!response.Success)
 			{
 				return NotFound(
@@ -46,40 +48,40 @@ namespace ZUEPC.Application.Users.Controllers
 					});
 			}
 
-			return Ok(response.User);
+			return Ok(response.Data);
 		}
 
 		[HttpPost("roles")]
 		public async Task<IActionResult> GetRoles()
 		{
-			var response = await _mediator.Send(new GetAllRolesQuery());
+			GetAllRolesQueryResponse response = await _mediator.Send(new GetAllRolesQuery());
 			if (!response.Success)
 				return StatusCode(500);
 			return Ok(response.Roles);
 		}
 
 		[HttpPatch("{id}")]
-		public async Task<IActionResult> UpdateUserPatch([FromBody] JsonPatchDocument<User> patchEntity, int id)
+		public async Task<IActionResult> PatchUser([FromBody] JsonPatchDocument<User> patchEntity, int id)
 		{
-			var user = new User();
+			User user = new();
 			patchEntity.ApplyTo(user);
 
-			var validationResult = new UserValidator().Validate(user);
+			FluentValidation.Results.ValidationResult? validationResult = new UserValidator().Validate(user);
 			if (!validationResult.IsValid)
 			{
-				foreach (var error in validationResult.Errors)
+				foreach (FluentValidation.Results.ValidationFailure? error in validationResult.Errors)
 				{
 					ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
 				}
 				return UnprocessableEntity(ModelState);
 			}
-			var request = new UpdateUserCommand
+			PatchUserCommand? request = new PatchUserCommand
 			{
 				AppliedPatch = patchEntity,
 				UserId = id
 			};
 
-			var response = await _mediator.Send(request);
+			PatchUserCommandResponse? response = await _mediator.Send(request);
 			if (!response.Success)
 				return BadRequest();
 			return NoContent();

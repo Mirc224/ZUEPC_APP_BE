@@ -1,7 +1,7 @@
 ﻿namespace ZUEPC.DataAccess.Enums;
 
 
-public enum RoleType
+public enum RoleType : long
 {
 	ADMIN = 1,
 	EDITOR = 2,

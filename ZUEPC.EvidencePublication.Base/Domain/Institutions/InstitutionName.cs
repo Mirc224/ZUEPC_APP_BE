@@ -3,7 +3,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
 
 namespace ZUEPC.EvidencePublication.Base.Domain.Institutions;
 
-public class InstitutionName : EPCBase, IInstitutionRelated
+public class InstitutionName : EPCDomainBase, IInstitutionRelated
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 	public long InstitutionId { get; set; }

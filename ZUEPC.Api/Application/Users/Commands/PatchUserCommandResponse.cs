@@ -2,6 +2,6 @@
 
 namespace ZUEPC.Application.Users.Commands;
 
-public class UpdateUserCommandResponse: ResponseBase
+public class PatchUserCommandResponse: ResponseBase
 {
 }

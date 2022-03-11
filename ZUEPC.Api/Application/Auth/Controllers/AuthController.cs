@@ -2,8 +2,8 @@ using Constants.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ZUEPC.Application.Auth.Commands;
 using System.IdentityModel.Tokens.Jwt;
+using ZUEPC.Application.Auth.Commands;
 
 namespace ZUEPC.Application.Auth.Controllers
 {
@@ -22,7 +22,7 @@ namespace ZUEPC.Application.Auth.Controllers
 		[HttpPost("register")]
 		public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand request)
 		{
-			var response = await _mediator.Send(request);
+			RegisterUserCommandResponse response = await _mediator.Send(request);
 
 			if (!response.Success)
 			{
@@ -33,13 +33,13 @@ namespace ZUEPC.Application.Auth.Controllers
 					});
 			}
 
-			return StatusCode(201, response.CreatedUser);
+			return StatusCode(201, response.Data);
 		}
 
 		[HttpPost("login")]
 		public async Task<IActionResult> LoginUser([FromBody] LoginUserCommand request)
 		{
-			var response = await _mediator.Send(request);
+			LoginUserCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 			{
 				return Unauthorized(
@@ -55,20 +55,20 @@ namespace ZUEPC.Application.Auth.Controllers
 		[Authorize]
 		public async Task<IActionResult> LogoutUser()
 		{
-			var jwtId = User?.Claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
+			string jwtId = User?.Claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
 			if (jwtId is null)
 			{
 				return Unauthorized();
 			}
-			var userIdClaim = User?.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserId);
+			System.Security.Claims.Claim? userIdClaim = User?.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserId);
 			if (userIdClaim is null)
 			{
 				return Unauthorized();
 			}
-			var userId = int.Parse(userIdClaim.Value);
+			int userId = int.Parse(userIdClaim.Value);
 
-			var request = new LogoutUserCommand() { JwtId = jwtId, UserId = userId};
-			var response = await _mediator.Send(request);
+			LogoutUserCommand?request = new() { JwtId = jwtId, UserId = userId };
+			LogoutUserCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 			{
 				return Unauthorized(
@@ -83,7 +83,7 @@ namespace ZUEPC.Application.Auth.Controllers
 		[HttpPost("refreshToken")]
 		public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand request)
 		{
-			var response = await _mediator.Send(request);
+			RefreshTokenCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 			{
 				return BadRequest(
@@ -98,7 +98,7 @@ namespace ZUEPC.Application.Auth.Controllers
 		[HttpPost("revokeToken")]
 		public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenCommand request)
 		{
-			var response = await _mediator.Send(request);
+			RevokeTokenCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 			{
 				return BadRequest(

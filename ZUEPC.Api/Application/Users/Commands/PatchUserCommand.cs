@@ -5,7 +5,7 @@ using Users.Base.Domain;
 
 namespace ZUEPC.Application.Users.Commands;
 
-public class UpdateUserCommand : IRequest<UpdateUserCommandResponse>
+public class PatchUserCommand : IRequest<PatchUserCommandResponse>
 {
 	public int UserId { get; set; }
 	public JsonPatchDocument<User>? AppliedPatch { get; set; }

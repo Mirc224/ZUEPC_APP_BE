@@ -95,7 +95,7 @@ public partial class ImportService
 
 	private async Task DeleteRecordsAsync<TDomain, TCommand>(IEnumerable<TDomain> recordsToDelete)
 		where TCommand : EPCDeleteCommandBase, new()
-		where TDomain : EPCBase
+		where TDomain : EPCDomainBase
 	{
 		foreach (TDomain record in recordsToDelete)
 		{
@@ -109,7 +109,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 		where TCommand : EPCCreateCommandBase, new()
-		where TDomain : EPCBase
+		where TDomain : EPCDomainBase
 	{
 		foreach (TDomain record in recordsToInsert)
 		{
@@ -122,7 +122,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 		where TCommand : EPCCreateCommandBase, new()
-		where TDomain : EPCBase
+		where TDomain : EPCDomainBase
 	{
 		TCommand insertRequest = _mapper.Map<TCommand>(recordToInsert);
 		insertRequest.VersionDate = versionDate;

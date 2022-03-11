@@ -3,7 +3,6 @@ using Users.Base.Domain;
 
 namespace ZUEPC.Application.Auth.Commands;
 
-public class RegisterUserCommandResponse : ResponseBase
+public class RegisterUserCommandResponse : ResponseWithDataBase<User>
 {
-	public User? CreatedUser { get; set; }
 }

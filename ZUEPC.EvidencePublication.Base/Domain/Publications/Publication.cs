@@ -2,7 +2,7 @@
 
 namespace ZUEPC.EvidencePublication.Base.Domain.Publications;
 
-public class Publication : EPCBase
+public class Publication : EPCDomainBase
 {
 	public string? DocumentType { get; set; }
 	public int? PublishYear { get; set; }

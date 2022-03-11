@@ -3,7 +3,6 @@ using Users.Base.Domain;
 
 namespace ZUEPC.Application.Users.Queries;
 
-public class GetUserQueryResponse : ResponseBase
+public class GetUserQueryResponse : ResponseWithDataBase<User>
 {
-	public User? User { get; set; }
 }
