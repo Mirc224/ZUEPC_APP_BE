@@ -30,6 +30,12 @@ public class PublicationAuthorInMemoryData : InMemoryBaseRepository<PublicationA
 		return await DeleteRecordsAsync(deletedObject);
 	}
 
+	public async Task<int> DeletePublicationAuthorsByPublicationIdAsync(long publicationId)
+	{
+		var deletedObject = _repository.Where(x => x.PublicationId == publicationId);
+		return await DeleteRecordsAsync(deletedObject);
+	}
+
 	public async Task<IEnumerable<PublicationAuthorModel>> GetAllAsync()
 	{
 		return _repository.ToList();
