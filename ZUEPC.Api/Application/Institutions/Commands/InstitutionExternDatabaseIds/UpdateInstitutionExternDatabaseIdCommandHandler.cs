@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Institution;
 namespace ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 
 public class UpdateInstitutionExternDatabaseIdCommandHandler :
-	EPCUpdateSimpleModelCommandHandlerBase<InstitutionExternDatabaseIdModel>,
+	UpdateSimpleModelCommandHandlerBase<InstitutionExternDatabaseIdModel>,
 	IRequestHandler<
 		UpdateInstitutionExternDatabaseIdCommand,
 		UpdateInstitutionExternDatabaseIdCommandResponse>

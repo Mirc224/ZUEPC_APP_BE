@@ -2,7 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.Person;
 
-public class PersonModel : EPCBaseModel
+public class PersonModel : EPCModelBase
 {
 	public int? BirthYear { get; set; }
 	public int? DeathYear { get; set; }

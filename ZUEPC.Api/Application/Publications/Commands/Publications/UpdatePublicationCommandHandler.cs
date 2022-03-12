@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Publication;
 namespace ZUEPC.Application.Publications.Commands.Publications;
 
 public class UpdatePublicationCommandHandler :
-	EPCUpdateSimpleModelCommandHandlerBase<PublicationModel>,
+	UpdateSimpleModelCommandHandlerBase<PublicationModel>,
 	IRequestHandler<UpdatePublicationCommand, UpdatePublicationCommandResponse>
 {
 

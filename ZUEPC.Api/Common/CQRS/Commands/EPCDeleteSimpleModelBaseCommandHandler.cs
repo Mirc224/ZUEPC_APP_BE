@@ -6,8 +6,8 @@ using ZUEPC.EvidencePublication.Base.Commands;
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class EPCDeleteSimpleModelBaseCommandHandler<TModel>
-	: EPCDomainModelHandlerBase<TModel>
-	where TModel : EPCBaseModel
+	: DomainModelHandlerBase<TModel>
+	where TModel : EPCModelBase
 {
 	public EPCDeleteSimpleModelBaseCommandHandler(IRepositoryBase<TModel> repository)
 	: base(repository) {}

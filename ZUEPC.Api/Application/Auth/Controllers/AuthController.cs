@@ -3,7 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
-using ZUEPC.Application.Auth.Commands;
+using ZUEPC.Application.Auth.Commands.RefreshTokens;
+using ZUEPC.Application.Auth.Commands.Users;
 
 namespace ZUEPC.Application.Auth.Controllers
 {
@@ -96,9 +97,9 @@ namespace ZUEPC.Application.Auth.Controllers
 		}
 
 		[HttpPost("revokeToken")]
-		public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenCommand request)
+		public async Task<IActionResult> RevokeToken([FromBody] RevokeRefreshTokenCommand request)
 		{
-			RevokeTokenCommandResponse response = await _mediator.Send(request);
+			RevokeRefreshTokenCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 			{
 				return BadRequest(

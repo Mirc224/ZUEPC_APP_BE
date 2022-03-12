@@ -2,7 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.RelatedPublication;
 
-public class RelatedPublicationModel : EPCBaseModel
+public class RelatedPublicationModel : EPCModelBase
 {
 	public long PublicationId { get; set; }
 	public long RelatedPublicationId { get; set; }

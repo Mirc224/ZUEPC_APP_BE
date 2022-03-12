@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Person;
 namespace ZUEPC.Application.Persons.Commands.PersonNames;
 
 public class UpdatePersonNameCommandHandler :
-	EPCUpdateSimpleModelCommandHandlerBase<PersonNameModel>,
+	UpdateSimpleModelCommandHandlerBase<PersonNameModel>,
 	IRequestHandler<UpdatePersonNameCommand, UpdatePersonNameCommandResponse>
 {
 	public UpdatePersonNameCommandHandler(IMapper mapper, IPersonNameData repository)

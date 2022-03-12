@@ -14,7 +14,7 @@ public static class PaginationHelper
 		IUriService? uriService,
 		int totalRecords,
 		string? route)
-		where TQuery : EPCPaginationQueryWithUriBase
+		where TQuery : PaginationQueryWithUriBase
 		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
 	{
 		if (paginationFilter is null)

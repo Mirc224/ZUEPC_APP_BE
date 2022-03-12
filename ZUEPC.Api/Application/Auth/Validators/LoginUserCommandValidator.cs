@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
-using ZUEPC.Application.Auth.Commands;
+using ZUEPC.Application.Auth.Commands.Users;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Application.Auth.Validators;

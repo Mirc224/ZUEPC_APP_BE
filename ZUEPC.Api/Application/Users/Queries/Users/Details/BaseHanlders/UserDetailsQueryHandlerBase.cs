@@ -17,7 +17,7 @@ public class UserDetailsQueryHandlerBase
 		_mediator = mediator;
 	}
 
-	protected async Task<UserDetails> ProcessPublicationDetails(User userDomain)
+	protected async Task<UserDetails> ProcessUserDetails(User userDomain)
 	{
 		long userId = userDomain.Id;
 		UserDetails result = _mapper.Map<UserDetails>(userDomain);

@@ -2,7 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.PublicationActivity;
 
-public class PublicationActivityModel : EPCBaseModel
+public class PublicationActivityModel : EPCModelBase
 {
 	public long PublicationId { get; set; }
 	public string? Category { get; set; }

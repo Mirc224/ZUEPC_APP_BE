@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Users.Base.Application.Domain;
 using Users.Base.Domain;
+using ZUEPC.Api.Application.Auth.Commands.RefreshTokens;
 using ZUEPC.Api.Application.Users.Commands.UserRoles;
 using ZUEPC.Api.Application.Users.Commands.Users;
 using ZUEPC.Api.Application.Users.Entities.Details;
-using ZUEPC.Application.Auth.Commands;
+using ZUEPC.Application.Auth.Commands.RefreshTokens;
+using ZUEPC.Application.Auth.Commands.Users;
 using ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Commands.InstitutionNames;
 using ZUEPC.Application.Institutions.Commands.Institutions;
@@ -345,7 +347,7 @@ public class MappingProfile : Profile
 		CreateMap<RoleModel, Role>();
 		CreateMap<AuthResult, LoginUserCommandResponse>();
 		CreateMap<AuthResult, RefreshTokenCommandResponse>();
-		CreateMap<RevokeResult, RevokeTokenCommandResponse>();
+		CreateMap<RevokeResult, RevokeRefreshTokenCommandResponse>();
 		CreateMap<RevokeResult, LogoutUserCommandResponse>();
 	}
 
@@ -409,14 +411,14 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.CreatedAt, opts => opts.MapFrom(src => src.CreatedAt))
 			.ReverseMap();
 
-		CreateMap<EPCBaseModel, EPCDomainBase>()
+		CreateMap<EPCModelBase, EPCDomainBase>()
 			.IncludeBase<ModelBase, DomainBase>()
 			.ForMember(dest => dest.VersionDate, opts => opts.MapFrom(src => src.VersionDate))
 			.ForMember(dest => dest.OriginSourceType, opts => opts.MapFrom(src => src.OriginSourceType))
 			.ReverseMap();
 
 		CreateMap<EPCExternDatabaseIdBaseModel, EPCExternDatabaseIdBase>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue))
 			.ReverseMap();
 
@@ -425,11 +427,11 @@ public class MappingProfile : Profile
 			.ReverseMap();
 
 		// Base command to model mapping
-		CreateMap<EPCCreateCommandBase, EPCBaseModel>()
+		CreateMap<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.VersionDate, opts => opts.MapFrom(src => src.VersionDate))
 			.ForMember(dest => dest.OriginSourceType, opts => opts.MapFrom(src => src.OriginSourceType))
 			.ReverseMap();
-		CreateMap<EPCUpdateCommandBase, EPCBaseModel>()
+		CreateMap<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
 			.ForMember(dest => dest.OriginSourceType, opts => opts.MapFrom(src => src.OriginSourceType))
 			.ForMember(dest => dest.VersionDate, opts => opts.MapFrom(src => src.VersionDate))
@@ -438,6 +440,17 @@ public class MappingProfile : Profile
 
 	private void CreateModelToDomainMapping()
 	{
+		CreateMap<RefreshTokenModel, RefreshToken>()
+			.IncludeBase<ModelBase, DomainBase>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
+			.ForMember(dest => dest.JwtId, opts => opts.MapFrom(src => src.JwtId))
+			.ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token))
+			.ForMember(dest => dest.IsRevoked, opts => opts.MapFrom(src => src.IsRevoked))
+			.ForMember(dest => dest.IsUsed, opts => opts.MapFrom(src => src.IsUsed))
+			.ForMember(dest => dest.ExpiryDate, opts => opts.MapFrom(src => src.ExpiryDate))
+			.ForMember(dest => dest.CreatedAt, opts => opts.MapFrom(src => src.CreatedAt));
+
 		// User
 		CreateMap<UserModel, User>()
 			.IncludeBase<ModelBase, DomainBase>()
@@ -456,13 +469,13 @@ public class MappingProfile : Profile
 
 		// Publications
 		CreateMap<PublicationModel, Publication>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.PublishYear, opts => opts.MapFrom(src => src.PublishYear))
 			.ForMember(dest => dest.DocumentType, opts => opts.MapFrom(src => src.DocumentType))
 			.ReverseMap();
 		// PublicationIdentifiers
 		CreateMap<PublicationIdentifierModel, PublicationIdentifier>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.IdentifierValue, opts => opts.MapFrom(src => src.IdentifierValue))
 			.ForMember(dest => dest.IdentifierName, opts => opts.MapFrom(src => src.IdentifierName))
@@ -475,7 +488,7 @@ public class MappingProfile : Profile
 			 .ReverseMap();
 		// PublicationName
 		CreateMap<PublicationNameModel, PublicationName>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType))
@@ -483,7 +496,7 @@ public class MappingProfile : Profile
 
 		// Institutions
 		CreateMap<InstitutionModel, Institution>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
 			.ForMember(dest => dest.InstitutionType, opts => opts.MapFrom(src => src.InstitutionType))
 			.ReverseMap();
@@ -494,7 +507,7 @@ public class MappingProfile : Profile
 			.ReverseMap();
 		// InstitutionNames
 		CreateMap<InstitutionNameModel, InstitutionName>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType))
@@ -502,7 +515,7 @@ public class MappingProfile : Profile
 
 		// Persons
 		CreateMap<PersonModel, Person>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.BirthYear, opts => opts.MapFrom(src => src.BirthYear))
 			.ForMember(dest => dest.DeathYear, opts => opts.MapFrom(src => src.DeathYear))
 			.ReverseMap();
@@ -513,7 +526,7 @@ public class MappingProfile : Profile
 			.ReverseMap();
 		// PersonNames
 		CreateMap<PersonNameModel, PersonName>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
 			.ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
@@ -522,7 +535,7 @@ public class MappingProfile : Profile
 
 		// PublicationActivities
 		CreateMap<PublicationActivityModel, PublicationActivity>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.Category, opts => opts.MapFrom(src => src.Category))
 			.ForMember(dest => dest.GovernmentGrant, opts => opts.MapFrom(src => src.GovernmentGrant))
@@ -531,7 +544,7 @@ public class MappingProfile : Profile
 
 		// PublicationAuthors
 		CreateMap<PublicationAuthorModel, PublicationAuthor>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
@@ -541,7 +554,7 @@ public class MappingProfile : Profile
 
 		// RelatedPublications
 		CreateMap<RelatedPublicationModel, RelatedPublication>()
-			.IncludeBase<EPCBaseModel, EPCDomainBase>()
+			.IncludeBase<EPCModelBase, EPCDomainBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.RelatedPublicationId, opts => opts.MapFrom(src => src.RelatedPublicationId))
 			.ForMember(dest => dest.RelationType, opts => opts.MapFrom(src => src.RelationType))
@@ -581,6 +594,25 @@ public class MappingProfile : Profile
 
 	private void CreateDomainToCommandMapping()
 	{
+		// RefreshToken
+		CreateMap<RefreshToken, UpdateRefreshTokenCommand>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
+			.ForMember(dest => dest.JwtId, opts => opts.MapFrom(src => src.JwtId))
+			.ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token))
+			.ForMember(dest => dest.IsRevoked, opts => opts.MapFrom(src => src.IsRevoked))
+			.ForMember(dest => dest.IsUsed, opts => opts.MapFrom(src => src.IsUsed))
+			.ForMember(dest => dest.ExpiryDate, opts => opts.MapFrom(src => src.ExpiryDate));
+
+		// RefreshToken
+		CreateMap<RefreshToken, CreateRefreshTokenCommand>()
+			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
+			.ForMember(dest => dest.JwtId, opts => opts.MapFrom(src => src.JwtId))
+			.ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token))
+			.ForMember(dest => dest.IsRevoked, opts => opts.MapFrom(src => src.IsRevoked))
+			.ForMember(dest => dest.IsUsed, opts => opts.MapFrom(src => src.IsUsed))
+			.ForMember(dest => dest.ExpiryDate, opts => opts.MapFrom(src => src.ExpiryDate));
+
 		// Publication
 		CreateMap<Publication, UpdatePublicationCommand>()
 			.IncludeBase<EPCDomainBase, EPCUpdateCommandBase>()
@@ -728,6 +760,24 @@ public class MappingProfile : Profile
 
 	private void CreateCommandToModelMapping()
 	{
+		// RefreshToken
+		CreateMap<UpdateRefreshTokenCommand, RefreshTokenModel>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
+			.ForMember(dest => dest.JwtId, opts => opts.MapFrom(src => src.JwtId))
+			.ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token))
+			.ForMember(dest => dest.IsRevoked, opts => opts.MapFrom(src => src.IsRevoked))
+			.ForMember(dest => dest.IsUsed, opts => opts.MapFrom(src => src.IsUsed))
+			.ForMember(dest => dest.ExpiryDate, opts => opts.MapFrom(src => src.ExpiryDate));
+
+		CreateMap<CreateRefreshTokenCommand, RefreshTokenModel>()
+			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
+			.ForMember(dest => dest.JwtId, opts => opts.MapFrom(src => src.JwtId))
+			.ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token))
+			.ForMember(dest => dest.IsRevoked, opts => opts.MapFrom(src => src.IsRevoked))
+			.ForMember(dest => dest.IsUsed, opts => opts.MapFrom(src => src.IsUsed))
+			.ForMember(dest => dest.ExpiryDate, opts => opts.MapFrom(src => src.ExpiryDate));
+
 		// User
 		CreateMap<CreateUserCommand, UserModel>()
 			.ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
@@ -741,22 +791,22 @@ public class MappingProfile : Profile
 
 		// Publication 
 		CreateMap<CreatePublicationCommand, PublicationModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublishYear, opts => opts.MapFrom(src => src.PublishYear))
 			.ForMember(dest => dest.DocumentType, opts => opts.MapFrom(src => src.DocumentType));
 		CreateMap<UpdatePublicationCommand, PublicationModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublishYear, opts => opts.MapFrom(src => src.PublishYear))
 			.ForMember(dest => dest.DocumentType, opts => opts.MapFrom(src => src.DocumentType));
 		// PublicationIdentifier
 		CreateMap<CreatePublicationIdentifierCommand, PublicationIdentifierModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.IdentifierValue, opts => opts.MapFrom(src => src.IdentifierValue))
 			.ForMember(dest => dest.ISForm, opts => opts.MapFrom(src => src.ISForm))
 			.ForMember(dest => dest.IdentifierName, opts => opts.MapFrom(src => src.IdentifierName));
 		CreateMap<UpdatePublicationIdentifierCommand, PublicationIdentifierModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.IdentifierValue, opts => opts.MapFrom(src => src.IdentifierValue))
 			.ForMember(dest => dest.ISForm, opts => opts.MapFrom(src => src.ISForm))
@@ -764,55 +814,55 @@ public class MappingProfile : Profile
 
 		// PublicationExternIdentifier
 		CreateMap<CreatePublicationExternDatabaseIdCommand, PublicationExternDatabaseIdModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 		CreateMap<UpdatePublicationExternDatabaseIdCommand, PublicationExternDatabaseIdModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 
 		// PublicationName
 		CreateMap<CreatePublicationNameCommand, PublicationNameModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType));
 		CreateMap<UpdatePublicationNameCommand, PublicationNameModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType));
 
 		// Person
 		CreateMap<CreatePersonCommand, PersonModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.BirthYear, opts => opts.MapFrom(src => src.BirthYear))
 			.ForMember(dest => dest.DeathYear, opts => opts.MapFrom(src => src.DeathYear));
 		CreateMap<UpdatePersonCommand, PersonModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.BirthYear, opts => opts.MapFrom(src => src.BirthYear))
 			.ForMember(dest => dest.DeathYear, opts => opts.MapFrom(src => src.DeathYear));
 
 		// PersonExternDatabaseId
 		CreateMap<CreatePersonExternDatabaseIdCommand, PersonExternDatabaseIdModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 		CreateMap<UpdatePersonExternDatabaseIdCommand, PersonExternDatabaseIdModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 
 		// PersonName
 		CreateMap<CreatePersonNameCommand, PersonNameModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
 			.ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType));
 		CreateMap<UpdatePersonNameCommand, PersonNameModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
 			.ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
@@ -820,46 +870,46 @@ public class MappingProfile : Profile
 
 		// Institution
 		CreateMap<CreateInstitutionCommand, InstitutionModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
 			.ForMember(dest => dest.InstitutionType, opts => opts.MapFrom(src => src.InstititutionType));
 		CreateMap<UpdateInstitutionCommand, InstitutionModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
 			.ForMember(dest => dest.InstitutionType, opts => opts.MapFrom(src => src.InstititutionType));
 
 		// InstitutionExternDatabaseId
 		CreateMap<CreateInstitutionExternDatabaseIdCommand, InstitutionExternDatabaseIdModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 		CreateMap<UpdateInstitutionExternDatabaseIdCommand, InstitutionExternDatabaseIdModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 
 		// InstitutionName
 		CreateMap<CreateInstitutionNameCommand, InstitutionNameModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType));
 		CreateMap<UpdateInstitutionNameCommand, InstitutionNameModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType));
 
 		// PublicationAuthor
 		CreateMap<CreatePublicationAuthorCommand, PublicationAuthorModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.ContributionRatio, opts => opts.MapFrom(src => src.ContributionRatio))
 			.ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role));
 		CreateMap<UpdatePublicationAuthorCommand, PublicationAuthorModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
@@ -868,13 +918,13 @@ public class MappingProfile : Profile
 
 		// RelatedPublication
 		CreateMap<CreateRelatedPublicationCommand, RelatedPublicationModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.RelatedPublicationId, opts => opts.MapFrom(src => src.RelatedPublicationId))
 			.ForMember(dest => dest.RelationType, opts => opts.MapFrom(src => src.RelationType))
 			.ForMember(dest => dest.CitationCategory, opts => opts.MapFrom(src => src.CitationCategory));
 		CreateMap<UpdateRelatedPublicationCommand, RelatedPublicationModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.RelatedPublicationId, opts => opts.MapFrom(src => src.RelatedPublicationId))
 			.ForMember(dest => dest.RelationType, opts => opts.MapFrom(src => src.RelationType))
@@ -882,13 +932,13 @@ public class MappingProfile : Profile
 
 		// PublicationActivity
 		CreateMap<CreatePublicationActivityCommand, PublicationActivityModel>()
-			.IncludeBase<EPCCreateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCCreateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.Category, opts => opts.MapFrom(src => src.Category))
 			.ForMember(dest => dest.ActivityYear, opts => opts.MapFrom(src => src.ActivityYear))
 			.ForMember(dest => dest.GovernmentGrant, opts => opts.MapFrom(src => src.GovernmentGrant));
 		CreateMap<UpdatePublicationActivityCommand, PublicationActivityModel>()
-			.IncludeBase<EPCUpdateCommandBase, EPCBaseModel>()
+			.IncludeBase<EPCUpdateCommandBase, EPCModelBase>()
 			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.Category, opts => opts.MapFrom(src => src.Category))
 			.ForMember(dest => dest.ActivityYear, opts => opts.MapFrom(src => src.ActivityYear))

@@ -2,7 +2,7 @@
 using MediatR;
 using ZUEPC.Api.Application.Users.Entities.Details;
 using ZUEPC.Api.Application.Users.Queries.Users.Details.BaseHanlders;
-using ZUEPC.Application.Users.Queries;
+using ZUEPC.Application.Users.Queries.Users;
 
 namespace ZUEPC.Api.Application.Users.Queries.Users.Details;
 
@@ -20,7 +20,7 @@ public class GetUserDetailsQueryHandler :
 		{
 			return new() { Success = false };
 		}
-		UserDetails userDetails = await ProcessPublicationDetails(response.Data);
+		UserDetails userDetails = await ProcessUserDetails(response.Data);
 		return new() { Success = true, Data = userDetails };
 	}
 }

@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Institution;
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 
 public class UpdateInstitutionCommandHandler :
-	EPCUpdateSimpleModelCommandHandlerBase<InstitutionModel>,
+	UpdateSimpleModelCommandHandlerBase<InstitutionModel>,
 	IRequestHandler<UpdateInstitutionCommand, UpdateInstitutionCommandResponse>
 {
 	public UpdateInstitutionCommandHandler(IMapper mapper, IInstitutionData repository)

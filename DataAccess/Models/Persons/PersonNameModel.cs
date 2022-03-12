@@ -2,7 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.Person;
 
-public class PersonNameModel : EPCBaseModel
+public class PersonNameModel : EPCModelBase
 {
 	public long PersonId { get; set; }
 	public string? FirstName { get; set; }

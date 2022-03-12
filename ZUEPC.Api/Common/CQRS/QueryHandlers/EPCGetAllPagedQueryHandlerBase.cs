@@ -7,8 +7,8 @@ using ZUEPC.Responses;
 namespace ZUEPC.Common.CQRS.QueryHandlers;
 
 public class EPCGetAllPagedQueryHandlerBase<TModel, TDomain>:
-	EPCDomainModelHandlerBase<TModel>
-	where TModel : EPCBaseModel
+	DomainModelHandlerBase<TModel>
+	where TModel : EPCModelBase
 {
 	public EPCGetAllPagedQueryHandlerBase(IRepositoryBase<TModel> repository)
 	: base(repository) {}

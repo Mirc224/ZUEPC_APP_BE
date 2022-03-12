@@ -8,9 +8,9 @@ using ZUEPC.EvidencePublication.Base.Domain.Common;
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class EPCCreateSimpleModelCommandHandlerBase<TDomain, TModel> 
-	: EPCDomainModelHandlerBase<TModel>
+	: DomainModelHandlerBase<TModel>
 	where TDomain : EPCDomainBase
-	where TModel : EPCBaseModel
+	where TModel : EPCModelBase
 {
 	protected readonly IMapper _mapper;
 	public EPCCreateSimpleModelCommandHandlerBase(IMapper mapper, IRepositoryBase<TModel> repository)

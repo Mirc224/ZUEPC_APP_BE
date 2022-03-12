@@ -2,7 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.Institution;
 
-public class InstitutionNameModel : EPCBaseModel
+public class InstitutionNameModel : EPCModelBase
 {
 	public long InstitutionId { get; set; }
 	public string? NameType { get; set; }

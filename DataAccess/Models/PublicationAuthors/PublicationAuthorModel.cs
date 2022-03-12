@@ -2,7 +2,7 @@
 
 namespace ZUEPC.DataAccess.Models.PublicationAuthor;
 
-public class PublicationAuthorModel : EPCBaseModel
+public class PublicationAuthorModel : EPCModelBase
 {
 	public long PublicationId { get; set; }
 	public long PersonId { get; set; }
