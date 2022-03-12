@@ -1,7 +1,10 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Users.Base.Domain;
+using ZUEPC.Api.Application.Users.Commands.UserRoles;
+using ZUEPC.Api.Application.Users.Commands.Users;
 using ZUEPC.Api.Application.Users.Queries.Users;
 using ZUEPC.Api.Application.Users.Queries.Users.Details;
 using ZUEPC.Application.Users.Commands;
@@ -67,14 +70,34 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response.Data);
 		}
 
+		[HttpPut("{id}/role")]
+		public async Task<IActionResult> UpdateUserRoles([FromBody]UpdateUserRolesCommand request, [FromRoute]long id)
+		{
+			request.UserId = id;
+			UpdateUserRolesCommandResponse response = await _mediator.Send(request);
+			if (!response.Success)
+				return StatusCode(500);
+			return Ok();
+		}
+
 		[HttpPost("roles")]
 		public async Task<IActionResult> GetRoles()
 		{
-
 			GetAllRolesQueryResponse response = await _mediator.Send(new GetAllRolesQuery());
 			if (!response.Success)
 				return StatusCode(500);
 			return Ok(response.Roles);
+		}
+
+
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateUser([FromBody]UpdateUserCommand request, [FromRoute]long id)
+		{
+			request.Id = id;
+			UpdateUserCommandResponse response = await _mediator.Send(request);
+			if (!response.Success)
+				return NotFound();
+			return NoContent();
 		}
 
 		[HttpPatch("{id}")]

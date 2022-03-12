@@ -784,10 +784,15 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
 			.ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email));
 
+		CreateMap<UpdateUserCommand, UserModel>()
+			.ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
+			.ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
+			.ReverseMap();
+
 		// UserRole
 		CreateMap<CreateUserRoleCommand, UserRoleModel>()
 			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
-			.ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleId));
+			.ForMember(dest => dest.RoleId, opts => opts.MapFrom(src => src.RoleType));
 
 		// Publication 
 		CreateMap<CreatePublicationCommand, PublicationModel>()

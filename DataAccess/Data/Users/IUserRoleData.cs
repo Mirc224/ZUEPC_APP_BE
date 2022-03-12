@@ -7,6 +7,6 @@ namespace ZUEPC.DataAccess.Data.Users;
 public interface IUserRoleData : IRepositoryBase<UserRoleModel>
 {
 	Task<IEnumerable<UserRoleModel>> GetUserRolesByUserIdAsync(long userId);
-	Task<UserRoleModel?> GetUserRoleAsync(long userId, long roleId);
+	Task<UserRoleModel?> GetUserRoleByUserIdAndRoleIdAsync(long userId, long roleId);
 	Task<int> DeleteUserRoleByUserIdAsync(long userId);
 }

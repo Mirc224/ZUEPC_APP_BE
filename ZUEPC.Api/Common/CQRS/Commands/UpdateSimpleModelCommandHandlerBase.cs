@@ -27,7 +27,8 @@ public abstract class UpdateSimpleModelCommandHandlerBase<TModel> :
 		{
 			return new() { Success = false };
 		}
-		TModel updatedModel = _mapper.Map<TModel>(request);
+		TModel updatedModel = currentModel;
+		_mapper.Map(request, updatedModel);
 		int rowsUpdated = await _repository.UpdateModelAsync(updatedModel);
 		return new() { Success = rowsUpdated == 1 };
 	}

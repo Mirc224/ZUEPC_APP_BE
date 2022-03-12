@@ -1,5 +1,4 @@
-﻿using ZUEPC.DataAccess.Enums;
-using ZUEPC.DataAccess.Models.Common;
+﻿using ZUEPC.DataAccess.Models.Common;
 
 namespace ZUEPC.DataAccess.Models.Users;
 

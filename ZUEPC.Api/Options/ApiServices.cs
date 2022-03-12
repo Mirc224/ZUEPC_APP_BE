@@ -122,7 +122,8 @@ public static class ApiServices
 			ValidateIssuer = false,
 			ValidateAudience = false,
 			RequireExpirationTime = false,
-			ValidateLifetime = true
+			ValidateLifetime = true,
+			ClockSkew = TimeSpan.Zero
 		};
 		builder.Services.AddSingleton(tokenValidationParameters);
 		builder.Services

@@ -1,7 +1,7 @@
-﻿using ZUEPC.DataAccess.Enums;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Users.Base.Domain;
+using ZUEPC.Base.Enums.Users;
 
 namespace ZUEPC.Application.Users.Commands;
 

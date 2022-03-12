@@ -10,9 +10,11 @@ using System.Text;
 using Users.Base.Domain;
 using ZUEPC.Api.Application.Auth.Commands.RefreshTokens;
 using ZUEPC.Api.Application.Auth.Queries.RefreshTokens;
+using ZUEPC.Api.Application.Users.Queries.UserRoles;
 using ZUEPC.Application.Users.Queries.Users;
 using ZUEPC.Auth.Domain;
-using ZUEPC.DataAccess.Models.Users;
+using ZUEPC.Base.Enums.Users;
+using ZUEPC.Common.Extensions;
 using ZUEPC.Localization;
 using ZUEPC.Options;
 using ZUEPC.Users.Base.Domain;
@@ -270,8 +272,15 @@ public class AuthenticationService
 			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 		};
 
-		//IEnumerable<RoleModel> userRoles = await _userRepository.GetUserRolesAsync(userModel.Id);
-		//claims.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x.Id.ToString())).ToList());
+		GetUserRolesByUserIdQueryResponse userRolesResponse = (await _mediator.Send(new GetUserRolesByUserIdQuery() { UserId = user.Id}));
+		if(userRolesResponse.Success)
+		{
+			IEnumerable<UserRole> userRoles = userRolesResponse.Data;
+			foreach(UserRole userRole in userRoles.OrEmptyIfNull())
+			{
+				claims.Add(new Claim(ClaimTypes.Role, ((RoleType)userRole.RoleId).ToString()));
+			}
+		}
 		return claims;
 	}
 }

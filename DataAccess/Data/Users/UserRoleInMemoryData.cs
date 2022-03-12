@@ -5,13 +5,14 @@ namespace ZUEPC.DataAccess.Data.Users;
 
 public class UserRoleInMemoryData : InMemoryBaseRepository<UserRoleModel>, IUserRoleData
 {
+
 	public async Task<int> DeleteUserRoleByUserIdAsync(long userId)
 	{
 		var deletedObjects = _repository.Where(x => x.UserId == userId).ToList();
 		return await DeleteRecordsAsync(deletedObjects);
 	}
 
-	public async Task<UserRoleModel?> GetUserRoleAsync(long userId, long roleId)
+	public async Task<UserRoleModel?> GetUserRoleByUserIdAndRoleIdAsync(long userId, long roleId)
 	{
 		return _repository.Find(x => x.UserId == userId && x.RoleId == roleId);
 	}

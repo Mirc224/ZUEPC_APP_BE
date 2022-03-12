@@ -3,8 +3,7 @@ using MediatR;
 using Users.Base.Domain;
 using ZUEPC.Api.Application.Users.Commands.UserRoles;
 using ZUEPC.Api.Application.Users.Commands.Users;
-using ZUEPC.DataAccess.Enums;
-using ZUEPC.DataAccess.Models.Users;
+using ZUEPC.Base.Enums.Users;
 
 namespace ZUEPC.Application.Auth.Commands.Users;
 
@@ -37,7 +36,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
 
 		foreach (RoleType role in defaultUserRoles)
 		{
-			CreateUserRoleCommand createUserRoleCommand = new() { UserId = newUser.Id, RoleId = (long)role };
+			CreateUserRoleCommand createUserRoleCommand = new() { UserId = newUser.Id, RoleType = role };
 			await _mediator.Send(createUserRoleCommand);
 		}
 
