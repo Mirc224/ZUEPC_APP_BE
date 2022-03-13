@@ -89,6 +89,14 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response.Roles);
 		}
 
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteUser(long id)
+		{
+			DeleteUserCommandResponse response = await _mediator.Send(new DeleteUserCommand() { Id = id});
+			if (!response.Success)
+				return NotFound();
+			return NoContent();
+		}
 
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateUser([FromBody]UpdateUserCommand request, [FromRoute]long id)

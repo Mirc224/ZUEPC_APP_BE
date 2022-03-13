@@ -61,6 +61,17 @@ public static class ApiServices
 
 		builder.Services.AddMediatR(typeof(Program));
 		builder.Services.AddAutoMapper(typeof(Program));
+		builder.Services.AddCors(option =>
+		{
+			option.AddDefaultPolicy(builder =>
+			{
+				builder
+				.AllowAnyOrigin()
+				.AllowAnyHeader()
+				.AllowAnyHeader();
+			});
+		});
+
 		builder.Services.AddSingleton<DataAnnotations>();
 		ConfigureAuthentication(builder);
 

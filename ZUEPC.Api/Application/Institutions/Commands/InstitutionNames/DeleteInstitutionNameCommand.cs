@@ -3,6 +3,6 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Institutions.Commands.InstitutionNames;
 
-public class DeleteInstitutionNameCommand : EPCDeleteCommandBase, IRequest<DeleteInstitutionNameCommandResponse>
+public class DeleteInstitutionNameCommand : DeleteModelCommandBase, IRequest<DeleteInstitutionNameCommandResponse>
 {
 }

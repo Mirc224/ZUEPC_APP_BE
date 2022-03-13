@@ -1,5 +1,6 @@
-﻿using ZUEPC.Common.Entities;
-using ZUEPC.Users.Base.Domain;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using ZUEPC.Base.Enums.Users;
 
 namespace ZUEPC.Api.Application.Users.Entities.Details;
 
@@ -10,6 +11,7 @@ public class UserDetails
 	public string? LastName { get; set; }
 	public string? Email { get; set; }
 	public DateTime CreatedAt { get; set; }
-	public IEnumerable<UserRole>? UserRoles { get; set; }
+	[JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
+	public IEnumerable<RoleType>? UserRoles { get; set; }
 
 }

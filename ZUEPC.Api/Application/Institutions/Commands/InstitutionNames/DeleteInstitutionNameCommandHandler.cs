@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.Institution;
 namespace ZUEPC.Application.Institutions.Commands.InstitutionNames;
 
 public class DeleteInstitutionNameCommandHandler :
-	EPCDeleteSimpleModelBaseCommandHandler<InstitutionNameModel>,
+	DeleteSimpleModelBaseCommandHandler<InstitutionNameModel>,
 	IRequestHandler<
 		DeleteInstitutionNameCommand,
 		DeleteInstitutionNameCommandResponse>

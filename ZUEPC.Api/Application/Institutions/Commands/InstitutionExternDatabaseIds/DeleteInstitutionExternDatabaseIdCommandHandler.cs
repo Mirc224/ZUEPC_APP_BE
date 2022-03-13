@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.Institution;
 namespace ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 
 public class DeleteInstitutionExternDatabaseIdCommandHandler :
-	EPCDeleteSimpleModelBaseCommandHandler<InstitutionExternDatabaseIdModel>,
+	DeleteSimpleModelBaseCommandHandler<InstitutionExternDatabaseIdModel>,
 	IRequestHandler<
 		DeleteInstitutionExternDatabaseIdCommand, 
 		DeleteInstitutionExternDatabaseIdCommandResponse>

@@ -5,15 +5,15 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
-public abstract class EPCDeleteSimpleModelBaseCommandHandler<TModel>
+public abstract class DeleteSimpleModelBaseCommandHandler<TModel>
 	: DomainModelHandlerBase<TModel>
-	where TModel : EPCModelBase
+	where TModel : ModelBase
 {
-	public EPCDeleteSimpleModelBaseCommandHandler(IRepositoryBase<TModel> repository)
+	public DeleteSimpleModelBaseCommandHandler(IRepositoryBase<TModel> repository)
 	: base(repository) {}
 
 	protected async Task<TResponse> ProcessDeleteCommandAsync<TDeleteCommand, TResponse>(TDeleteCommand request)
-	where TDeleteCommand : EPCDeleteCommandBase
+	where TDeleteCommand : DeleteModelCommandBase
 	where TResponse : ResponseBase, new()
 	{
 		TModel? currentModel = await _repository.GetModelByIdAsync(request.Id);

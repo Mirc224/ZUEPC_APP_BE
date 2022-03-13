@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Publication;
 namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 
 public class DeletePublicationExternDatabaseIdCommandHandler :
-	EPCDeleteSimpleModelBaseCommandHandler<PublicationExternDatabaseIdModel>,
+	DeleteSimpleModelBaseCommandHandler<PublicationExternDatabaseIdModel>,
 	IRequestHandler<DeletePublicationExternDatabaseIdCommand, DeletePublicationExternDatabaseIdCommandResponse>
 {
 	public DeletePublicationExternDatabaseIdCommandHandler(IMapper mapper, IPublicationExternDatabaseIdData repository)

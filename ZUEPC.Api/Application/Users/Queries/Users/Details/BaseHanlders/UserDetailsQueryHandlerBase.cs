@@ -3,6 +3,7 @@ using MediatR;
 using Users.Base.Domain;
 using ZUEPC.Api.Application.Users.Entities.Details;
 using ZUEPC.Api.Application.Users.Queries.UserRoles;
+using ZUEPC.Users.Base.Domain;
 
 namespace ZUEPC.Api.Application.Users.Queries.Users.Details.BaseHanlders;
 
@@ -21,7 +22,8 @@ public class UserDetailsQueryHandlerBase
 	{
 		long userId = userDomain.Id;
 		UserDetails result = _mapper.Map<UserDetails>(userDomain);
-		result.UserRoles = (await _mediator.Send(new GetUserRolesByUserIdQuery() { UserId = userId })).Data;
+		IEnumerable<UserRole>? userRoles = (await _mediator.Send(new GetUserRolesByUserIdQuery() { UserId = userId })).Data;
+		result.UserRoles = userRoles?.Select(x => x.RoleId);
 		return result;
 	}
 }

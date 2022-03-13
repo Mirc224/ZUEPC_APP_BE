@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.RelatedPublication;
 namespace ZUEPC.Application.RelatedPublications.Commands;
 
 public class DeleteRelatedPublicationCommandHandler :
-	EPCDeleteSimpleModelBaseCommandHandler<RelatedPublicationModel>,
+	DeleteSimpleModelBaseCommandHandler<RelatedPublicationModel>,
 	IRequestHandler<DeleteRelatedPublicationCommand, DeleteRelatedPublicationCommandResponse>
 {
 	public DeleteRelatedPublicationCommandHandler(IRelatedPublicationData repository)

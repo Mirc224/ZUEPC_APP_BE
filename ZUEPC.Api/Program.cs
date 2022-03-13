@@ -18,6 +18,8 @@ app.UseHttpsRedirection();
 
 app.UseRequestLocalization(ApiLocalizationSettings.GetLocalizationOptions(builder));
 
+app.UseCors();
+
 app.UseAuthentication();
 
 app.UseAuthorization();

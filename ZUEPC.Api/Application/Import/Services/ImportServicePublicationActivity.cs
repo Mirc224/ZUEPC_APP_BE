@@ -94,7 +94,7 @@ public partial class ImportService
 	}
 
 	private async Task DeleteRecordsAsync<TDomain, TCommand>(IEnumerable<TDomain> recordsToDelete)
-		where TCommand : EPCDeleteCommandBase, new()
+		where TCommand : DeleteModelCommandBase, new()
 		where TDomain : EPCDomainBase
 	{
 		foreach (TDomain record in recordsToDelete)
