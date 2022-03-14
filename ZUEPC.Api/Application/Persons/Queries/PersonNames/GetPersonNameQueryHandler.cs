@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 namespace ZUEPC.Application.Persons.Queries.PersonNames;
 
 public class GetPersonNameQueryHandler :
-	EPCSimpleModelQueryHandlerBase<PersonName, PersonNameModel>,
+	GetSimpleModelQueryHandlerBase<PersonName, PersonNameModel>,
 	IRequestHandler<GetPersonNameQuery, GetPersonNameQueryResponse>
 {
 	public GetPersonNameQueryHandler(IMapper mapper, IPersonNameData repository)

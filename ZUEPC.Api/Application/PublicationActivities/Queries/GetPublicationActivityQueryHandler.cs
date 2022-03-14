@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 namespace ZUEPC.Application.PublicationActivities.Queries;
 
 public class GetPublicationActivityQueryHandler :
-	EPCSimpleModelQueryHandlerBase<PublicationActivity, PublicationActivityModel>,
+	GetSimpleModelQueryHandlerBase<PublicationActivity, PublicationActivityModel>,
 	IRequestHandler<GetPublicationActivityQuery, GetPublicationActivityQueryResponse>
 {
 	public GetPublicationActivityQueryHandler(IMapper mapper, IPublicationActivityData repository)

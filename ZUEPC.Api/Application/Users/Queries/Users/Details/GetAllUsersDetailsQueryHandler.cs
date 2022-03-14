@@ -5,6 +5,7 @@ using ZUEPC.Api.Application.Users.Entities.Details;
 using ZUEPC.Api.Application.Users.Queries.Users.Details.BaseHanlders;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Helpers;
+using ZUEPC.DataAccess.Filters;
 
 namespace ZUEPC.Api.Application.Users.Queries.Users.Details;
 
@@ -17,7 +18,12 @@ public class GetAllUsersDetailsQueryHandler :
 
 	public async Task<GetAllUsersDetailsQueryResponse> Handle(GetAllUsersDetailsQuery request, CancellationToken cancellationToken)
 	{
-		GetAllUsersQueryResponse response = await _mediator.Send(new GetAllUsersQuery() { PaginationFilter = request.PaginationFilter });
+		GetAllUsersQueryResponse response = await _mediator.Send(new GetAllUsersQuery() { 
+			PaginationFilter = request.PaginationFilter,
+			UriService = request.UriService,
+			Route = request.Route,
+			QueryFilter = request.QueryFilter
+		});
 
 		if (!response.Success || response.Data is null)
 		{
@@ -35,11 +41,12 @@ public class GetAllUsersDetailsQueryHandler :
 			}
 		}
 		int totalRecords = response.TotalRecords;
-		return PaginationHelper.ProcessResponse<GetAllUsersDetailsQueryResponse, GetAllUsersDetailsQuery, UserDetails>(
+		return PaginationHelper.ProcessResponse<GetAllUsersDetailsQueryResponse, UserDetails, UserFilter>(
 			result,
 			request.PaginationFilter,
 			request.UriService,
 			totalRecords,
-			request.Route);
+			request.Route,
+			request.QueryFilter);
 	}
 }

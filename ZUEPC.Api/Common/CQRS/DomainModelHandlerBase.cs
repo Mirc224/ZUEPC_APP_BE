@@ -3,11 +3,12 @@ using ZUEPC.DataAccess.Models.Common;
 
 namespace ZUEPC.Common.CQRS;
 
-public abstract class DomainModelHandlerBase<TModel>
+public abstract class DomainModelHandlerBase<TRepository, TModel>
 	where TModel : ModelBase
+	where TRepository : IRepositoryBase<TModel> 
 {
-	protected readonly IRepositoryBase<TModel> _repository;
-	public DomainModelHandlerBase(IRepositoryBase<TModel> repository)
+	protected readonly TRepository _repository;
+	public DomainModelHandlerBase(TRepository repository)
 	{
 		_repository = repository;
 	}

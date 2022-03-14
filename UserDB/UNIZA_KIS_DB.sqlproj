@@ -72,12 +72,12 @@
     <Build Include="dbo\Tables\RefreshTokens.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Script.PostDeployment.sql" />
+    <RefactorLog Include="UNIZA_KIS_DB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
     <None Include="UNIZA_KIS_DB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="UNIZA_KIS_DB.refactorlog" />
+    <PostDeploy Include="Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

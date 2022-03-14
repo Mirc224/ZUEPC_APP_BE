@@ -1,7 +1,12 @@
-﻿namespace ZUEPC.DataAccess.Models.Common;
+﻿using ZUEPC.DataAccess.Attributes.ModelAttributes;
 
-public class ModelBase
+namespace ZUEPC.DataAccess.Models.Common;
+
+public abstract class ModelBase
 {
+	[ExcludeFromUpdate]
+	[ExcludeFromInsert]
 	public long Id { get; set; }
+	[ExcludeFromUpdate]
 	public DateTime CreatedAt { get; set; }
 }

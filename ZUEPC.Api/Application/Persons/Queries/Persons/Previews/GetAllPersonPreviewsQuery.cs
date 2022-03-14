@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using ZUEPC.Common.CQRS.Query;
+using ZUEPC.Common.CQRS.Queries;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews;
 
-public class GetAllPersonPreviewsQuery : PaginationQueryWithUriBase, IRequest<GetAllPersonPreviewsQueryResponse>
+public class GetAllPersonPreviewsQuery : PaginationWithUriQueryBase, IRequest<GetAllPersonPreviewsQueryResponse>
 {
 }

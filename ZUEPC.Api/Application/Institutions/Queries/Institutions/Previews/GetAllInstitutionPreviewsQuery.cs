@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using ZUEPC.Common.CQRS.Query;
+using ZUEPC.Common.CQRS.Queries;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 
 public class GetAllInstitutionPreviewsQuery
-	: PaginationQueryWithUriBase, IRequest<GetAllInstitutionPreviewsQueryResponse>
+	: PaginationWithUriQueryBase, IRequest<GetAllInstitutionPreviewsQueryResponse>
 {
 }

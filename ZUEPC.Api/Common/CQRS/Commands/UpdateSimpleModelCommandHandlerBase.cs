@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
-using ZUEPC.Responses;
+using ZUEPC.Base.Commands;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.DataAccess.Models.Common;
-using ZUEPC.EvidencePublication.Base.Commands;
-using ZUEPC.Base.Commands;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class UpdateSimpleModelCommandHandlerBase<TModel> : 
-	DomainModelHandlerBase<TModel>
+	DomainModelHandlerBase<IRepositoryBase<TModel>, TModel>
 	where TModel : ModelBase
 {
 	protected readonly IMapper _mapper;

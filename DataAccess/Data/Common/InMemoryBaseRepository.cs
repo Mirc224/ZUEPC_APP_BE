@@ -1,4 +1,6 @@
-﻿using ZUEPC.DataAccess.Filters;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.Common;
 
 namespace ZUEPC.DataAccess.Data.Common;
@@ -12,7 +14,7 @@ public abstract class InMemoryBaseRepository<T>
 	protected async Task<int> DeleteRecordsAsync(IEnumerable<T> deletedObjects)
 	{
 		deletedObjects = deletedObjects.ToList();
-		foreach (var deletedObject in deletedObjects)
+		foreach (T? deletedObject in deletedObjects)
 		{
 			_repository.Remove(deletedObject);
 		}
@@ -21,12 +23,12 @@ public abstract class InMemoryBaseRepository<T>
 
 	protected async Task<int> UpdateRecordAsync(T model)
 	{
-		var updatedRecord = _repository.FirstOrDefault(x=> x.Id == model.Id);
+		T? updatedRecord = _repository.FirstOrDefault(x => x.Id == model.Id);
 		if (updatedRecord is null)
 		{
 			return 0;
 		}
-		
+
 		_repository.Remove(updatedRecord);
 		_repository.Add(model);
 		return 1;
@@ -71,7 +73,39 @@ public abstract class InMemoryBaseRepository<T>
 
 	public async Task<int> DeleteModelByIdAsync(long id)
 	{
-		var deletedObjects = _repository.Where(x => x.Id == id);
+		IEnumerable<T>? deletedObjects = _repository.Where(x => x.Id == id);
 		return await DeleteRecordsAsync(deletedObjects);
+	}
+
+	public Expression? GetFilterExpression<TDomainFilter>(TDomainFilter filter)
+	{
+		Expression body = null;
+		ParameterExpression param = Expression.Parameter(typeof(T));
+
+		Type filterType = filter.GetType();
+		IList<PropertyInfo> props = new List<PropertyInfo>(filterType.GetProperties());
+		foreach (PropertyInfo prop in props)
+		{
+			object? propValue = prop.GetValue(filter, null);
+			if (propValue is null)
+			{
+				continue;
+			}
+			if (body is null)
+			{
+				body =
+				Expression.Equal(
+					Expression.Property(param, prop.Name),
+					Expression.Constant(prop.GetValue(filter), prop.PropertyType));
+				continue;
+			}
+			Expression andExpression =
+				Expression.Equal(
+					Expression.Property(param, prop.Name),
+					Expression.Constant(prop.GetValue(filter), 
+					prop.PropertyType));
+			body = Expression.AndAlso(body, andExpression);
+		}
+		return body;
 	}
 }

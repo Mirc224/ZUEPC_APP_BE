@@ -6,7 +6,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class DeleteSimpleModelBaseCommandHandler<TModel>
-	: DomainModelHandlerBase<TModel>
+	: DomainModelHandlerBase<IRepositoryBase<TModel>, TModel>
 	where TModel : ModelBase
 {
 	public DeleteSimpleModelBaseCommandHandler(IRepositoryBase<TModel> repository)

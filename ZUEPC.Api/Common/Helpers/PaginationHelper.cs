@@ -1,5 +1,4 @@
-﻿using ZUEPC.Common.CQRS.Query;
-using ZUEPC.Common.Services.URIServices;
+﻿using ZUEPC.Common.Services.URIServices;
 using ZUEPC.DataAccess.Filters;
 using ZUEPC.Responses;
 
@@ -8,88 +7,96 @@ namespace ZUEPC.Common.Helpers;
 public static class PaginationHelper
 {
 
-	public static TResponse ProcessResponse<TResponse, TQuery, TDomain>(
-		IEnumerable<TDomain> mappedResult,
-		PaginationFilter? paginationFilter,
-		IUriService? uriService,
+	public static TResponse ProcessResponse<TResponse, TDomain, TModelFilter>(
+		IEnumerable<TDomain> pagedData,
+		PaginationFilter paginationFilter,
+		IUriService uriService,
 		int totalRecords,
-		string? route)
-		where TQuery : PaginationQueryWithUriBase
+		string route,
+		TModelFilter domainFilter)
 		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
+		where TModelFilter: IQueryFilter
 	{
-		if (paginationFilter is null)
-		{
-			return new()
-			{
-				Success = true,
-				Data = mappedResult,
-				PageNumber = 1,
-				PageSize = mappedResult.Count(),
-				TotalRecords = totalRecords
-			};
-		}
-		if (uriService is null)
-		{
-			return new()
-			{
-				Success = true,
-				Data = mappedResult,
-				PageNumber = 1,
-				PageSize = mappedResult.Count(),
-				TotalRecords = totalRecords
-			};
-		}
-
-		return CreatePagedReponse<TResponse, TDomain>(
-			mappedResult,
-			paginationFilter,
-			totalRecords,
-			uriService,
-			route ?? "");
+		Uri pageUri = uriService.GetPageUri(route);
+		pageUri = uriService.AddDomainFilterToUri<TModelFilter>(pageUri, domainFilter);
+		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, totalRecords, uriService);
 	}
 
-	public static TResponse CreatePagedReponse<TResponse, T>(IEnumerable<T> pagedData, PaginationFilter validFilter, int totalRecords, IUriService uriService, string route)
-		where TResponse : PagedResponseBase<IEnumerable<T>>, new()
+	public static TResponse ProcessResponse<TResponse, TDomain>(
+		IEnumerable<TDomain> pagedData,
+		PaginationFilter paginationFilter,
+		IUriService uriService,
+		int totalRecords,
+		string route)
+		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
 	{
-		TResponse respose = new()
+		Uri pageUri = uriService.GetPageUri(route);
+		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, totalRecords, uriService);
+	}
+
+	public static TResponse CreatePagedReponse<TResponse, TDomain>(
+		Uri pageUri,
+		IEnumerable<TDomain> pagedData, 
+		PaginationFilter paginationFilter, 
+		int totalRecords, 
+		IUriService uriService)
+		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
+	{
+		TResponse response = new()
 		{
 			Data = pagedData,
 			TotalRecords = totalRecords,
-			PageNumber = validFilter.PageNumber,
-			PageSize = validFilter.PageSize,
+			PageNumber = paginationFilter.PageNumber,
+			PageSize = paginationFilter.PageSize,
 			Success = true
 		};
-		double totalPages = ((double)totalRecords / (double)validFilter.PageSize);
+		response = AddPaginationToUri<TResponse, TDomain>(pageUri, response, paginationFilter, totalRecords, uriService);
+		return response;
+	}
+
+	public static TResponse AddPaginationToUri<TResponse, TDomain>(
+		Uri pageUri, 
+		TResponse response,
+		PaginationFilter paginationFilter,
+		int totalRecords,
+		IUriService uriService)
+		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
+	{
+		double totalPages = ((double)totalRecords / (double)paginationFilter.PageSize);
 		int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
-		respose.NextPage =
-			validFilter.PageNumber >= 1 && validFilter.PageNumber < roundedTotalPages
-			? uriService.GetPageUri(new PaginationFilter() 
-			{ 
-				PageNumber = validFilter.PageNumber + 1, 
-				PageSize = validFilter.PageSize 
-			}, route)
+		response.NextPage =
+			paginationFilter.PageNumber >= 1 && paginationFilter.PageNumber < roundedTotalPages
+			? uriService.AddPaginationToUri(pageUri,
+			new PaginationFilter()
+			{
+				PageNumber = paginationFilter.PageNumber + 1,
+				PageSize = paginationFilter.PageSize
+			})
 			: null;
 
-		respose.PreviousPage =
-			validFilter.PageNumber - 1 >= 1 && validFilter.PageNumber <= roundedTotalPages
-			? uriService.GetPageUri(new PaginationFilter()
+		response.PreviousPage =
+			paginationFilter.PageNumber - 1 >= 1 && paginationFilter.PageNumber <= roundedTotalPages
+			? uriService.AddPaginationToUri(pageUri,
+			new PaginationFilter()
 			{
-				PageNumber = validFilter.PageNumber - 1,
-				PageSize = validFilter.PageSize
-			}, route)
+				PageNumber = paginationFilter.PageNumber - 1,
+				PageSize = paginationFilter.PageSize
+			})
 			: null;
-		respose.FirstPage = uriService.GetPageUri(new PaginationFilter()
+		response.FirstPage = uriService.AddPaginationToUri(pageUri,
+		new PaginationFilter()
 		{
-			PageNumber = 1, 
-			PageSize = validFilter.PageSize
-		}, route);
-		respose.LastPage = uriService.GetPageUri(new PaginationFilter()
+			PageNumber = 1,
+			PageSize = paginationFilter.PageSize
+		});
+		response.LastPage = uriService.AddPaginationToUri(pageUri,
+		new PaginationFilter()
 		{
-			PageNumber = roundedTotalPages, 
-			PageSize = validFilter.PageSize
-		}, route);
-		respose.TotalPages = roundedTotalPages;
-		respose.TotalRecords = totalRecords;
-		return respose;
+			PageNumber = roundedTotalPages,
+			PageSize = paginationFilter.PageSize
+		});
+		response.TotalPages = roundedTotalPages;
+		response.TotalRecords = totalRecords;
+		return response;
 	}
 }

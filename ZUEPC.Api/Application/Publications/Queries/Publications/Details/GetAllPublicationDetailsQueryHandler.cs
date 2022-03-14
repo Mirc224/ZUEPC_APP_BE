@@ -17,7 +17,12 @@ public class GetAllPublicationDetailsQueryHandler :
 
 	public async Task<GetAllPublicationDetailsQueryResponse> Handle(GetAllPublicationDetailsQuery request, CancellationToken cancellationToken)
 	{
-		GetAllPublicationsQueryResponse response = await _mediator.Send(new GetAllPublicationsQuery() { PaginationFilter = request.PaginationFilter });
+		GetAllPublicationsQueryResponse response = await _mediator.Send(new GetAllPublicationsQuery() 
+		{ 
+			PaginationFilter = request.PaginationFilter,
+			UriService = request.UriService,
+			Route = request.Route
+		});
 
 		if (!response.Success || response.Data is null)
 		{
@@ -35,7 +40,7 @@ public class GetAllPublicationDetailsQueryHandler :
 			}
 		}
 		int totalRecords = response.TotalRecords;
-		return PaginationHelper.ProcessResponse<GetAllPublicationDetailsQueryResponse, GetAllPublicationDetailsQuery, PublicationDetails>(
+		return PaginationHelper.ProcessResponse<GetAllPublicationDetailsQueryResponse, PublicationDetails>(
 			result,
 			request.PaginationFilter,
 			request.UriService,

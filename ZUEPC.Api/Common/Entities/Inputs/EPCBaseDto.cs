@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Common.Entities.Inputs;
 
-public class EPCBaseDto
+public abstract class EPCBaseDto
 {
 	public OriginSourceType OriginSourceType { get; set; }
 	public DateTime? VersionDate { get; set; }

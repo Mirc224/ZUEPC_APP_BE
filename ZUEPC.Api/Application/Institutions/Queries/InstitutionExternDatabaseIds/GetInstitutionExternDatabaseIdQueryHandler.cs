@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 namespace ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 
 public class GetInstitutionExternDatabaseIdQueryHandler:
-	EPCSimpleModelQueryHandlerBase<InstitutionExternDatabaseId, InstitutionExternDatabaseIdModel>,
+	GetSimpleModelQueryHandlerBase<InstitutionExternDatabaseId, InstitutionExternDatabaseIdModel>,
 	IRequestHandler<GetInstitutionExternDatabaseIdQuery, GetInstitutionExternDatabaseIdQueryResponse>
 {
 	public GetInstitutionExternDatabaseIdQueryHandler(IMapper mapper, IInstitutionExternDatabaseIdData repository)

@@ -14,7 +14,7 @@ public class SqlDataAccess : ISqlDataAccess
         _config = config;
     }
 
-    public async Task<IEnumerable<T>> LoadData<T, U>(
+    public async Task<IEnumerable<T>> LoadDataAsync<T, U>(
         string storedProcedure,
         U parameters,
         string connectionId = "Default")
@@ -46,13 +46,12 @@ public class SqlDataAccess : ISqlDataAccess
         string connectionId = "Default")
     {
         using IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionId));
-
         return await connection.QueryAsync<T>(sql,
                                               parameters,
                                               commandType: CommandType.Text);
     }
 
-    public async Task SaveData<T>(
+    public async Task SaveDataAsync<T>(
         string storedProcedure,
         T parameters,
         string connectionId = "Default")
@@ -60,7 +59,7 @@ public class SqlDataAccess : ISqlDataAccess
         await ExecuteNonQueryProcedure(storedProcedure, parameters, connectionId);
     }
 
-    public async Task UpdateData<T>(
+    public async Task UpdateDataAsync<T>(
         string storedProcedure,
         T parameters,
         string connectionId = "Default")
@@ -68,7 +67,7 @@ public class SqlDataAccess : ISqlDataAccess
         await ExecuteNonQueryProcedure(storedProcedure, parameters, connectionId);
     }
 
-    public async Task DeleteData<T>(string storedProcedure, T parameters, string connectionId = "Default")
+    public async Task DeleteDataAsync<T>(string storedProcedure, T parameters, string connectionId = "Default")
     {
         await ExecuteNonQueryProcedure(storedProcedure, parameters, connectionId);
     }

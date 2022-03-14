@@ -7,13 +7,13 @@ using ZUEPC.EvidencePublication.Base.Queries;
 
 namespace ZUEPC.Common.CQRS.QueryHandlers;
 
-public abstract class EPCSimpleModelQueryHandlerBase<TDomain, TModel>:
-	DomainModelHandlerBase<TModel>
+public abstract class GetSimpleModelQueryHandlerBase<TDomain, TModel>:
+	DomainModelHandlerBase<IRepositoryBase<TModel>, TModel>
 	where TDomain : EPCDomainBase
 	where TModel : EPCModelBase
 {
 	protected readonly IMapper _mapper;
-	public EPCSimpleModelQueryHandlerBase(IMapper mapper, IRepositoryBase<TModel> repository)
+	public GetSimpleModelQueryHandlerBase(IMapper mapper, IRepositoryBase<TModel> repository)
 		: base(repository)
 	{
 		_mapper = mapper;

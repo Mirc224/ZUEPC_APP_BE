@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 namespace ZUEPC.Application.Institutions.Queries.Institutions;
 
 public class GetAllInstitutionsQueryHandler :
-	GetAllPagedSimpleModelQueryHandlerBase<Institution, InstitutionModel>,
+	GetModelsPagedQueryHandlerBase<IInstitutionData, Institution, InstitutionModel>,
 	IRequestHandler<GetAllInstitutionsQuery, GetAllInstitutionsQueryResponse>
 {
 	public GetAllInstitutionsQueryHandler(IMapper mapper, IInstitutionData repository)

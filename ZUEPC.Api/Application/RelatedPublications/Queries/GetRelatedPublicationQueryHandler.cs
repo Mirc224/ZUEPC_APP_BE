@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 namespace ZUEPC.Application.RelatedPublications.Queries;
 
 public class GetRelatedPublicationQueryHandler : 
-	EPCSimpleModelQueryHandlerBase<RelatedPublication, RelatedPublicationModel>,
+	GetSimpleModelQueryHandlerBase<RelatedPublication, RelatedPublicationModel>,
 	IRequestHandler<GetRelatedPublicationQuery, GetRelatedPublicationQueryResponse>
 {
 

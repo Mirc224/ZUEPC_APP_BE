@@ -31,10 +31,16 @@ namespace ZUEPC.Application.Users.Controllers
 
 		[HttpGet("details")]
 		//[Authorize(Roles = "ADMIN")]
-		public async Task<IActionResult> GetUsersDetails([FromQuery] PaginationFilter filter)
+		public async Task<IActionResult> GetUsersDetails([FromQuery] UserFilter userFilter, [FromQuery] PaginationFilter paginationFilter)
 		{
 			string? route = Request.Path.Value;
-			GetAllUsersDetailsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+			GetAllUsersDetailsQuery request = new() 
+			{ 
+				QueryFilter = userFilter,
+				PaginationFilter = paginationFilter, 
+				UriService = _uriService, 
+				Route = route 
+			};
 			GetAllUsersDetailsQueryResponse response = await _mediator.Send(request);
 			if (!response.Success)
 				return StatusCode(500);

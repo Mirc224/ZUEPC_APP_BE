@@ -7,8 +7,8 @@ using ZUEPC.EvidencePublication.Base.Domain.Common;
 
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
-public abstract class EPCCreateSimpleModelCommandHandlerBase<TDomain, TModel> 
-	: DomainModelHandlerBase<TModel>
+public abstract class EPCCreateSimpleModelCommandHandlerBase<TDomain, TModel> : 
+	DomainModelHandlerBase<IRepositoryBase<TModel>, TModel>
 	where TDomain : EPCDomainBase
 	where TModel : EPCModelBase
 {

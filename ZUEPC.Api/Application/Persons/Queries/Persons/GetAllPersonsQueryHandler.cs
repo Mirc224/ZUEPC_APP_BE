@@ -9,7 +9,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 namespace ZUEPC.Application.Persons.Queries.Persons;
 
 public class GetAllPersonsQueryHandler :
-	GetAllPagedSimpleModelQueryHandlerBase<Person, PersonModel>,
+	GetModelsPagedQueryHandlerBase<IPersonData, Person, PersonModel>,
 	IRequestHandler<GetAllPersonsQuery, GetAllPersonsQueryResponse>
 {
 	public GetAllPersonsQueryHandler(IMapper mapper, IPersonData repository)

@@ -1,10 +1,9 @@
 ﻿using ZUEPC.Common.Services.URIServices;
 using ZUEPC.EvidencePublication.Base.Queries;
 
-namespace ZUEPC.Common.CQRS.Query;
+namespace ZUEPC.Common.CQRS.Queries;
 
-public class PaginationQueryWithUriBase 
-	: PaginationQueryBase
+public abstract class PaginationWithUriQueryBase : PaginationQueryBase
 {
 	public string? Route { get; set; }
 	public IUriService? UriService { get; set; }

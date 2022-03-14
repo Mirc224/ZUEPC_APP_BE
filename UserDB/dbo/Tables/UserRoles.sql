@@ -1,8 +1,9 @@
 ﻿CREATE TABLE [dbo].[UserRoles]
 (
-	[UserId] INT NOT NULL , 
-    [RoleId] SMALLINT NOT NULL, 
-    PRIMARY KEY ([RoleId], [UserId]),
+    [Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
+	[UserId] BIGINT NOT NULL , 
+    [RoleId] BIGINT NOT NULL, 
+    [CreatedAt] DATETIME NOT NULL DEFAULT SYSUTCDATETIME(), 
     CONSTRAINT FK_UserRoles_Users  FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] (Id),
     CONSTRAINT FK_UserRoles_Roles  FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Roles] (Id)
 )
