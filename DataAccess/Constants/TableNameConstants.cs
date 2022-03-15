@@ -10,4 +10,8 @@ public static class TableNameConstants
 	public const string PERSONS_TABLE = "[dbo].[Persons]";
 	public const string PERSON_NAMES_TABLE = "[dbo].[PersonNames]";
 	public const string PERSON_EXTERN_DATABASE_ID_TABLE = "[dbo].[PersonExternDatabaseIds]";
+
+	public const string INSTITUTION_TABLE = "[dbo].[Institutions]";
+	public const string INSTITUTION_NAMES_TABLE = "[dbo].[InstitutionNames]";
+	public const string INSTITUTION_EXTERN_DATABASE_ID_TABLE = "[dbo].[InstitutionExternDatabaseIds]";
 }

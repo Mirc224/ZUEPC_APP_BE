@@ -30,6 +30,6 @@ public class SQLPersonNameData :
 		ExpandoObject parameters = new();
 		builder.Select(baseSelect);
 		AddToWhereExpression(nameof(PersonNameModel.PersonId), personId, builder, parameters);
-		return (await GetModelsAsync(new { PersonId = personId}, builder));
+		return (await GetModelsAsync(parameters, builder));
 	}
 }

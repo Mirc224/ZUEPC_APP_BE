@@ -13,6 +13,7 @@ using ZUEPC.Auth.Services;
 using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.Common.Services.URIServices;
 using ZUEPC.DataAccess.Data.Institutions;
+using ZUEPC.DataAccess.Data.Institutions.InDatabase;
 using ZUEPC.DataAccess.Data.Persons;
 using ZUEPC.DataAccess.Data.Persons.InDatabase;
 using ZUEPC.DataAccess.Data.PublicationActivities;
@@ -53,9 +54,12 @@ public static class ApiServices
 		//builder.Services.AddSingleton<IPersonExternDatabaseIdData, PersonExternDatabaseIdInMemoryData>();
 		builder.Services.AddSingleton<IPersonExternDatabaseIdData, SQLPersonExternDatabaseIdData>();
 		// Institution
-		builder.Services.AddSingleton<IInstitutionData, InstitutionInMemoryData>();
-		builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, InstitutionExternDatabaseIdInMemoryData>();
-		builder.Services.AddSingleton<IInstitutionNameData, InstitutionNameInMemoryData>();
+		//builder.Services.AddSingleton<IInstitutionData, InstitutionInMemoryData>();
+		builder.Services.AddSingleton<IInstitutionData, SQLInstitutionData>();
+		//builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, InstitutionExternDatabaseIdInMemoryData>();
+		builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, SQLInstitutionExternDatabaseIdData>();
+		//builder.Services.AddSingleton<IInstitutionNameData, InstitutionNameInMemoryData>();
+		builder.Services.AddSingleton<IInstitutionNameData, SQLInstitutionNameData>();
 		// Publication activity
 		builder.Services.AddSingleton<IPublicationActivityData, PublicationActivityInMemoryData>();
 		// Publication author

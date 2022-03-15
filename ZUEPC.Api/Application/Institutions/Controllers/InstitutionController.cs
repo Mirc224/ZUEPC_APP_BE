@@ -24,10 +24,16 @@ public class InstitutionController : ControllerBase
 	}
 
 	[HttpGet]
-	public async Task<IActionResult> GetAll([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAll([FromQuery]InstitutionFilter? institutionFilter, [FromQuery] PaginationFilter? filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllInstitutionsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllInstitutionsQuery request = new() 
+		{ 
+			PaginationFilter = filter, 
+			UriService = _uriService, 
+			Route = route, 
+			QueryFilter = institutionFilter 
+		};
 		GetAllInstitutionsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
@@ -37,10 +43,16 @@ public class InstitutionController : ControllerBase
 	}
 
 	[HttpGet("preview")]
-	public async Task<IActionResult> GetAllPreview([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAllPreview([FromQuery]InstitutionFilter? institutionFilter, [FromQuery] PaginationFilter? filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllInstitutionPreviewsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllInstitutionPreviewsQuery request = new() 
+		{ 
+			PaginationFilter = filter, 
+			UriService = _uriService, 
+			Route = route ,
+			QueryFilter = institutionFilter
+		};
 		GetAllInstitutionPreviewsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
@@ -50,10 +62,16 @@ public class InstitutionController : ControllerBase
 	}
 
 	[HttpGet("detail")]
-	public async Task<IActionResult> GetAllDetails([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAllDetails([FromQuery] InstitutionFilter? institutionFilter, [FromQuery] PaginationFilter? filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllInstitutionDetailsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllInstitutionDetailsQuery request = new() 
+		{ 
+			PaginationFilter = filter, 
+			UriService = _uriService, 
+			Route = route,
+			QueryFilter = institutionFilter
+		};
 		GetAllInstitutionDetailsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{

@@ -32,8 +32,14 @@ public class SQLUserData :
 	{
 		if(queryFilter.UserRole != null)
 		{
-			builder.LeftJoin($@"{TableNameConstants.USER_ROLES_TABLE} as {TableAliasConstants.USER_ROLES_TABLE_ALIAS} ON 
-								 {baseTableAlias}.{nameof(UserModel.Id)} = {TableAliasConstants.USER_ROLES_TABLE_ALIAS}.{nameof(UserRoleModel.UserId)}");
+			AddToLeftJoinExpression(
+				builder,
+				baseTableName,
+				baseTableAlias,
+				nameof(UserModel.Id),
+				TableNameConstants.USER_ROLES_TABLE,
+				TableAliasConstants.USER_ROLES_TABLE_ALIAS,
+				nameof(UserRoleModel.UserId));
 		}
 		return parameters;
 	}

@@ -13,12 +13,12 @@ public static class PaginationHelper
 		IUriService uriService,
 		int totalRecords,
 		string route,
-		TModelFilter domainFilter)
+		TModelFilter modelFilter)
 		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
 		where TModelFilter: IQueryFilter
 	{
 		Uri pageUri = uriService.GetPageUri(route);
-		pageUri = uriService.AddDomainFilterToUri<TModelFilter>(pageUri, domainFilter);
+		pageUri = uriService.AddDomainFilterToUri<TModelFilter>(pageUri, modelFilter);
 		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, totalRecords, uriService);
 	}
 

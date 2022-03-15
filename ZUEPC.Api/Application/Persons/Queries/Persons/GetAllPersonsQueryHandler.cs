@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using ZUEPC.Api.Application.Users.Queries.Users;
 using ZUEPC.Api.Common.CQRS.QueryHandlers;
-using ZUEPC.Common.CQRS.QueryHandlers;
 using ZUEPC.DataAccess.Data.Persons;
 using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.Person;

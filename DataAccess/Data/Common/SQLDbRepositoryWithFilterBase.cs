@@ -49,4 +49,17 @@ public abstract class SQLDbRepositoryWithFilterBase<TRepository, TModel, TFilter
 		builder.GroupBy(baseSelect);
 		return parameters;
 	}
+
+	protected void AddToLeftJoinExpression(
+		SqlBuilder builder, 
+		string firstTableName, 
+		string firstTableAlias, 
+		string firstTableColumn, 
+		string secondTableName, 
+		string secondTableAlias, 
+		string secondTableColumn)
+	{
+		builder.LeftJoin($@"{secondTableName} as {secondTableAlias} ON 
+							{firstTableAlias}.{firstTableColumn} = {secondTableAlias}.{secondTableColumn}");
+	}
 }

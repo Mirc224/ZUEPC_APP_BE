@@ -6,6 +6,11 @@ namespace ZUEPC.DataAccess.Data.Institutions;
 
 public class InstitutionInMemoryData : InMemoryBaseRepository<InstitutionModel>, IInstitutionData
 {
+	public Task<int> CountAsync(InstitutionFilter queryFilter)
+	{
+		throw new NotImplementedException();
+	}
+
 	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		var deletedObjects = _repository.Where(x => x.Id == id);
@@ -20,6 +25,11 @@ public class InstitutionInMemoryData : InMemoryBaseRepository<InstitutionModel>,
 	public async Task<IEnumerable<InstitutionModel>> GetAllAsync(PaginationFilter filter)
 	{
 		return _repository.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+	}
+
+	public Task<IEnumerable<InstitutionModel>> GetAllAsync(InstitutionFilter queryFilter, PaginationFilter paginationFilter)
+	{
+		throw new NotImplementedException();
 	}
 
 	public async Task<InstitutionModel?> GetModelByIdAsync(long id)

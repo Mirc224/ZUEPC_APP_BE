@@ -24,16 +24,26 @@ public class SQLPersonData :
 			queryFilter.FirstName != null ||
 			queryFilter.LastName != null )
 		{
-			string alias = TableAliasConstants.PERSON_NAME_TABLE_ALIAS;
-			builder.LeftJoin($@"{TableNameConstants.PERSON_NAMES_TABLE} as {alias} ON 
-								 {baseTableAlias}.{nameof(PersonModel.Id)} = {alias}.{nameof(PersonNameModel.PersonId)}");
+			AddToLeftJoinExpression(
+				builder,
+				baseTableName,
+				baseTableAlias,
+				nameof(PersonModel.Id),
+				TableNameConstants.PERSON_NAMES_TABLE,
+				TableAliasConstants.PERSON_NAME_TABLE_ALIAS,
+				nameof(PersonNameModel.PersonId));
 		}
 
 		if (queryFilter.ExternIdentifierValue != null)
 		{
-			string alias = TableAliasConstants.PERSON_EXTERN_DATABASE_ID_TABLE_ALIAS;
-			builder.LeftJoin($@"{TableNameConstants.PERSON_EXTERN_DATABASE_ID_TABLE} as {alias} ON 
-								 {baseTableAlias}.{nameof(PersonModel.Id)} = {alias}.{nameof(PersonExternDatabaseIdModel.PersonId)}");
+			AddToLeftJoinExpression(
+				builder, 
+				baseTableName, 
+				baseTableAlias, 
+				nameof(PersonModel.Id),
+				TableNameConstants.PERSON_EXTERN_DATABASE_ID_TABLE, 
+				TableAliasConstants.PERSON_EXTERN_DATABASE_ID_TABLE_ALIAS, 
+				nameof(PersonExternDatabaseIdModel.PersonId));
 		}
 		return parameters;
 	}
