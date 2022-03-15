@@ -25,10 +25,15 @@ public class PublicationController : ControllerBase
 	}
 
 	[HttpGet]
-	public async Task<IActionResult> GetAll([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAll([FromQuery]PublicationFilter publicationFilter, [FromQuery] PaginationFilter? filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllPublicationsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPublicationsQuery request = new() { 
+			PaginationFilter = filter, 
+			UriService = _uriService, 
+			Route = route,
+			QueryFilter = publicationFilter
+		};
 		GetAllPublicationsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
@@ -38,10 +43,15 @@ public class PublicationController : ControllerBase
 	}
 
 	[HttpGet("preview")]
-	public async Task<IActionResult> GetAllPreviews([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAllPreviews([FromQuery] PublicationFilter publicationFilter, [FromQuery] PaginationFilter? filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllPublicationPreviewsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPublicationPreviewsQuery request = new() { 
+			PaginationFilter = filter, 
+			UriService = _uriService,
+			Route = route,
+			QueryFilter = publicationFilter
+		};
 		GetAllPublicationPreviewsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
@@ -51,10 +61,15 @@ public class PublicationController : ControllerBase
 	}
 
 	[HttpGet("detail")]
-	public async Task<IActionResult> GetAllDetails([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAllDetails([FromQuery] PublicationFilter publicationFilter, [FromQuery] PaginationFilter? filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllPublicationDetailsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPublicationDetailsQuery request = new() { 
+			PaginationFilter = filter, 
+			UriService = _uriService, 
+			Route = route,
+			QueryFilter = publicationFilter
+		};
 		GetAllPublicationDetailsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{

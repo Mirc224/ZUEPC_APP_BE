@@ -24,19 +24,19 @@ public class SQLPersonData :
 			queryFilter.FirstName != null ||
 			queryFilter.LastName != null )
 		{
-			AddToLeftJoinExpression(
+			AddToInnerJoinExpression(
 				builder,
 				baseTableName,
 				baseTableAlias,
 				nameof(PersonModel.Id),
 				TableNameConstants.PERSON_NAMES_TABLE,
-				TableAliasConstants.PERSON_NAME_TABLE_ALIAS,
+				TableAliasConstants.PERSON_NAMES_TABLE_ALIAS,
 				nameof(PersonNameModel.PersonId));
 		}
 
 		if (queryFilter.ExternIdentifierValue != null)
 		{
-			AddToLeftJoinExpression(
+			AddToInnerJoinExpression(
 				builder, 
 				baseTableName, 
 				baseTableAlias, 
@@ -64,15 +64,15 @@ public class SQLPersonData :
 		}
 		if (queryFilter.FirstName != null)
 		{
-			builder.WhereInArray(nameof(PersonNameModel.FirstName), queryFilter.FirstName, TableAliasConstants.PERSON_NAME_TABLE_ALIAS, parameters);
+			builder.WhereInArray(nameof(PersonNameModel.FirstName), queryFilter.FirstName, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
 		}
 		if (queryFilter.LastName != null)
 		{
-			builder.WhereInArray(nameof(PersonNameModel.LastName), queryFilter.LastName, TableAliasConstants.PERSON_NAME_TABLE_ALIAS, parameters);
+			builder.WhereInArray(nameof(PersonNameModel.LastName), queryFilter.LastName, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
 		}
 		if (queryFilter.NameType != null)
 		{
-			builder.WhereInArray(nameof(PersonNameModel.NameType), queryFilter.NameType, TableAliasConstants.PERSON_NAME_TABLE_ALIAS, parameters);
+			builder.WhereInArray(nameof(PersonNameModel.NameType), queryFilter.NameType, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
 		}
 		if (queryFilter.ExternIdentifierValue != null)
 		{

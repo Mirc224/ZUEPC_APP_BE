@@ -6,10 +6,5 @@ public class Publication : EPCDomainBase
 {
 	public string? DocumentType { get; set; }
 	public int? PublishYear { get; set; }
-
-	public static implicit operator Publication?(PublicationName? v)
-	{
-		throw new NotImplementedException();
-	}
 }
 

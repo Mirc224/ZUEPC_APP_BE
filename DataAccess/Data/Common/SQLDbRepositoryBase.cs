@@ -67,7 +67,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 
 	public async Task<TModel?> GetModelByIdAsync(long id)
 	{
-		return (await GetModelsWithColumnValue(nameof(ModelBase.Id), id)).FirstOrDefault();
+		return (await GetModelsWithColumnValueAsync(nameof(ModelBase.Id), id)).FirstOrDefault();
 	}
 
 	public async Task<IEnumerable<TModel>> GetAllAsync(PaginationFilter filter)
@@ -164,7 +164,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		builder.Where($"{columnName} {op} @{columnName}");
 	}
 
-	protected async Task<int> DeleteModelsWithColumnValue<T>(string columnName, T value)
+	protected async Task<int> DeleteModelsWithColumnValueAsync<T>(string columnName, T value)
 	{
 		SqlBuilder builder = new();
 		ExpandoObject parameters = new();
@@ -172,7 +172,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		return await DeleteModelsAsync(parameters, builder);
 	}
 
-	protected async Task<IEnumerable<TModel>> GetModelsWithColumnValue<T>(string columnName, T value)
+	protected async Task<IEnumerable<TModel>> GetModelsWithColumnValueAsync<T>(string columnName, T value)
 	{
 		SqlBuilder builder = new();
 		ExpandoObject parameters = new();
@@ -181,7 +181,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		return await GetModelsAsync(parameters, builder);
 	}
 
-	protected async Task<IEnumerable<TModel>> GetModelsWithColumnValueInSet<T>(string columnName, IEnumerable<T> values)
+	protected async Task<IEnumerable<TModel>> GetModelsWithColumnValueInSetAsync<T>(string columnName, IEnumerable<T> values)
 	{
 		SqlBuilder builder = new();
 		builder.Select(baseSelect);

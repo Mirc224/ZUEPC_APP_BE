@@ -23,7 +23,7 @@ public class SQLInstitutionData :
 		if (queryFilter.NameType != null ||
 		    queryFilter.Name != null)
 		{
-			AddToLeftJoinExpression(
+			AddToInnerJoinExpression(
 				builder,
 				baseTableName,
 				baseTableAlias,
@@ -34,7 +34,7 @@ public class SQLInstitutionData :
 		}
 		if (queryFilter.ExternIdentifierValue != null)
 		{
-			AddToLeftJoinExpression(
+			AddToInnerJoinExpression(
 				builder,
 				baseTableName,
 				baseTableAlias,

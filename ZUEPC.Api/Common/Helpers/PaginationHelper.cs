@@ -9,16 +9,19 @@ public static class PaginationHelper
 
 	public static TResponse ProcessResponse<TResponse, TDomain, TModelFilter>(
 		IEnumerable<TDomain> pagedData,
-		PaginationFilter paginationFilter,
+		PaginationFilter? paginationFilter,
 		IUriService uriService,
 		int totalRecords,
 		string route,
-		TModelFilter modelFilter)
+		TModelFilter? modelFilter)
 		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
 		where TModelFilter: IQueryFilter
 	{
 		Uri pageUri = uriService.GetPageUri(route);
-		pageUri = uriService.AddDomainFilterToUri<TModelFilter>(pageUri, modelFilter);
+		if(modelFilter != null)
+		{
+			pageUri = uriService.AddDomainFilterToUri<TModelFilter>(pageUri, modelFilter);
+		}
 		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, totalRecords, uriService);
 	}
 

@@ -4,6 +4,7 @@ using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.Publications.Queries.Publications.Previews.BaseHandlers;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Helpers;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.Publications.Previews;
@@ -20,7 +21,8 @@ public class GetAllPublicationPreviewsQueryHandler :
 		GetAllPublicationsQueryResponse response = await _mediator.Send(new GetAllPublicationsQuery() { 
 			PaginationFilter = request.PaginationFilter,
 			UriService = request.UriService,
-			Route = request.Route
+			Route = request.Route,
+			QueryFilter = request.QueryFilter
 		});
 
 		if (!response.Success || response.Data is null)
@@ -39,11 +41,12 @@ public class GetAllPublicationPreviewsQueryHandler :
 			}
 		}
 		int totalRecords = response.TotalRecords;
-		return PaginationHelper.ProcessResponse<GetAllPublicationPreviewsQueryResponse, PublicationPreview>(
+		return PaginationHelper.ProcessResponse<GetAllPublicationPreviewsQueryResponse, PublicationPreview, PublicationFilter>(
 			result,
 			request.PaginationFilter,
 			request.UriService,
 			totalRecords,
-			request.Route);
+			request.Route,
+			request.QueryFilter);
 	}
 }

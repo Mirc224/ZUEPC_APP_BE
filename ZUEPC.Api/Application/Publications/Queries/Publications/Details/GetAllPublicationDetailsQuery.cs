@@ -1,10 +1,11 @@
 ﻿using MediatR;
-using ZUEPC.Common.CQRS.Queries;
+using ZUEPC.Api.Common.CQRS.Queries;
+using ZUEPC.DataAccess.Filters;
 
 namespace ZUEPC.Application.Publications.Queries.Publications.Details;
 
 public class GetAllPublicationDetailsQuery :
-	PaginationWithUriQueryBase,
+	PaginationWithFilterQueryBase<PublicationFilter>,
 	IRequest<GetAllPublicationDetailsQueryResponse>
 {
 }

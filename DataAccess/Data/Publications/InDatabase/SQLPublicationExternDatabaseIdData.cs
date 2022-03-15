@@ -16,16 +16,16 @@ public class SQLPublicationExternDatabaseIdData :
 
 	public async Task<int> DeletePublicationExternDbIdsByPublicationIdAsync(long publicationId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(PublicationExternDatabaseIdModel.PublicationId), publicationId);
+		return await DeleteModelsWithColumnValueAsync(nameof(PublicationExternDatabaseIdModel.PublicationId), publicationId);
 	}
 
 	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
-		return await GetModelsWithColumnValueInSet(nameof(PublicationExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
+		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
 	}
 
 	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetPublicationExternDbIdsByPublicationIdAsync(long publicationId)
 	{
-		return await GetModelsWithColumnValue(nameof(PublicationExternDatabaseIdModel.PublicationId), publicationId);
+		return await GetModelsWithColumnValueAsync(nameof(PublicationExternDatabaseIdModel.PublicationId), publicationId);
 	}
 }

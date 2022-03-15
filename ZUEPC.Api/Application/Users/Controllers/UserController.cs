@@ -29,7 +29,7 @@ namespace ZUEPC.Application.Users.Controllers
 			_uriService = uriService;
 		}
 
-		[HttpGet("details")]
+		[HttpGet("detail")]
 		//[Authorize(Roles = "ADMIN")]
 		public async Task<IActionResult> GetUsersDetails([FromQuery] UserFilter userFilter, [FromQuery] PaginationFilter paginationFilter)
 		{

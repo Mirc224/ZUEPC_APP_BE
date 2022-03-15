@@ -19,16 +19,16 @@ public class SQLPersonExternDatabaseIdData :
 
 	public async Task<int> DeletePersonExternDatabaseIdsByPersonIdAsync(long personId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(PersonExternDatabaseIdModel.PersonId), personId);
+		return await DeleteModelsWithColumnValueAsync(nameof(PersonExternDatabaseIdModel.PersonId), personId);
 	}
 
 	public async Task<IEnumerable<PersonExternDatabaseIdModel>> GetAllPersonExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
-		return await GetModelsWithColumnValueInSet(nameof(PersonExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
+		return await GetModelsWithColumnValueInSetAsync(nameof(PersonExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
 	}
 
 	public async Task<IEnumerable<PersonExternDatabaseIdModel>> GetPersonExternDatabaseIdsByPersonIdAsync(long personId)
 	{
-		return await GetModelsWithColumnValue(nameof(PersonExternDatabaseIdModel.PersonId), personId);
+		return await GetModelsWithColumnValueAsync(nameof(PersonExternDatabaseIdModel.PersonId), personId);
 	}
 }

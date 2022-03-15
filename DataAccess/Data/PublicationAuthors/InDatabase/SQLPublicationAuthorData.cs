@@ -16,31 +16,31 @@ public class SQLPublicationAuthorData :
 
 	public async Task<int> DeletePublicationAuthorsByInstitutionIdAsync(long institutionId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(PublicationAuthorModel.InstitutionId), institutionId);
+		return await DeleteModelsWithColumnValueAsync(nameof(PublicationAuthorModel.InstitutionId), institutionId);
 	}
 
 	public async Task<int> DeletePublicationAuthorsByPersonIdAsync(long personId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(PublicationAuthorModel.PersonId), personId);
+		return await DeleteModelsWithColumnValueAsync(nameof(PublicationAuthorModel.PersonId), personId);
 	}
 
 	public async Task<int> DeletePublicationAuthorsByPublicationIdAsync(long publicationId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(PublicationAuthorModel.PublicationId), publicationId);
+		return await DeleteModelsWithColumnValueAsync(nameof(PublicationAuthorModel.PublicationId), publicationId);
 	}
 
 	public async Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByInstitutionIdAsync(long institutionId)
 	{
-		return await GetModelsWithColumnValue(nameof(PublicationAuthorModel.InstitutionId), institutionId);
+		return await GetModelsWithColumnValueAsync(nameof(PublicationAuthorModel.InstitutionId), institutionId);
 	}
 
 	public async Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByPersonIdAsync(long personId)
 	{
-		return await GetModelsWithColumnValue(nameof(PublicationAuthorModel.PersonId), personId);
+		return await GetModelsWithColumnValueAsync(nameof(PublicationAuthorModel.PersonId), personId);
 	}
 
 	public async Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByPublicationIdAsync(long publicationId)
 	{
-		return await GetModelsWithColumnValue(nameof(PublicationAuthorModel.PublicationId), publicationId);
+		return await GetModelsWithColumnValueAsync(nameof(PublicationAuthorModel.PublicationId), publicationId);
 	}
 }

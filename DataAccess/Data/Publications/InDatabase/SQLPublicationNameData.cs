@@ -18,11 +18,11 @@ public class SQLPublicationNameData :
 
 	public async Task<int> DeletePublicationNamesByPublicationIdAsync(long publicationId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(PublicationNameModel.PublicationId), publicationId);
+		return await DeleteModelsWithColumnValueAsync(nameof(PublicationNameModel.PublicationId), publicationId);
 	}
 
 	public async Task<IEnumerable<PublicationNameModel>> GetPublicationNamesByPublicationIdAsync(long publicationId)
 	{
-		return await GetModelsWithColumnValue(nameof(PublicationNameModel.PublicationId), publicationId);
+		return await GetModelsWithColumnValueAsync(nameof(PublicationNameModel.PublicationId), publicationId);
 	}
 }

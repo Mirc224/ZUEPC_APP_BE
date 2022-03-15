@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using MediatR;
-using ZUEPC.Common.CQRS.QueryHandlers;
+using ZUEPC.Api.Common.CQRS.QueryHandlers;
 using ZUEPC.DataAccess.Data.Publications;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.Publication;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.Publications;
 
 public class GetAllPublicationsQueryHandler:
-	GetModelsPagedQueryHandlerBase<IPublicationData, Publication, PublicationModel>,
+	GetModelsWithFiltersPagedQueryHandlerBase<IPublicationData, Publication, PublicationModel, PublicationFilter>,
 	IRequestHandler<GetAllPublicationsQuery, GetAllPublicationsQueryResponse>
 {
 	public GetAllPublicationsQueryHandler(IMapper mapper, IPublicationData repository)
@@ -16,6 +17,10 @@ public class GetAllPublicationsQueryHandler:
 
 	public async Task<GetAllPublicationsQueryResponse> Handle(GetAllPublicationsQuery request, CancellationToken cancellationToken)
 	{
-		return await ProcessQueryAsync<GetAllPublicationsQuery, GetAllPublicationsQueryResponse>(request);
+		if (request.QueryFilter is null)
+		{
+			return await ProcessQueryAsync<GetAllPublicationsQuery, GetAllPublicationsQueryResponse>(request);
+		}
+		return await ProcessQueryWithFilterAsync<GetAllPublicationsQuery, GetAllPublicationsQueryResponse>(request);
 	}
 }

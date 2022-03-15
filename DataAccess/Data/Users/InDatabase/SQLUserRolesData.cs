@@ -17,7 +17,7 @@ public class SQLUserRolesData :
 
 	public async Task<int> DeleteUserRoleByUserIdAsync(long userId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(UserRoleModel.UserId), userId);
+		return await DeleteModelsWithColumnValueAsync(nameof(UserRoleModel.UserId), userId);
 	}
 
 	public async Task<UserRoleModel?> GetUserRoleByUserIdAndRoleIdAsync(long userId, long roleId)
@@ -32,6 +32,6 @@ public class SQLUserRolesData :
 
 	public async Task<IEnumerable<UserRoleModel>> GetUserRolesByUserIdAsync(long userId)
 	{
-		return await GetModelsWithColumnValue(nameof(UserRoleModel.UserId), userId);
+		return await GetModelsWithColumnValueAsync(nameof(UserRoleModel.UserId), userId);
 	}
 }

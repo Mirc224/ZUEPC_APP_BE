@@ -16,11 +16,11 @@ public class SQLPublicationActivityData :
 
 	public async Task<int> DeletePublicationActivityByPublicationIdAsync(long publicationId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(PublicationActivityModel.PublicationId), publicationId);
+		return await DeleteModelsWithColumnValueAsync(nameof(PublicationActivityModel.PublicationId), publicationId);
 	}
 
 	public async Task<IEnumerable<PublicationActivityModel>> GetPublicationActivitiesByPublicationIdAsync(long publicationId)
 	{
-		return await GetModelsWithColumnValue(nameof(PublicationActivityModel.PublicationId), publicationId);
+		return await GetModelsWithColumnValueAsync(nameof(PublicationActivityModel.PublicationId), publicationId);
 	}
 }

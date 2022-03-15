@@ -19,16 +19,16 @@ public class SQLInstitutionExternDatabaseIdData :
 
 	public async Task<int> DeleteInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId)
 	{
-		return await DeleteModelsWithColumnValue(nameof(InstitutionExternDatabaseIdModel.InstitutionId), institutionId);
+		return await DeleteModelsWithColumnValueAsync(nameof(InstitutionExternDatabaseIdModel.InstitutionId), institutionId);
 	}
 
 	public async Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetAllInstitutionExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
-		return await GetModelsWithColumnValueInSet(nameof(InstitutionExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
+		return await GetModelsWithColumnValueInSetAsync(nameof(InstitutionExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
 	}
 
 	public async Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId)
 	{
-		return await GetModelsWithColumnValue(nameof(InstitutionExternDatabaseIdModel.InstitutionId), institutionId);
+		return await GetModelsWithColumnValueAsync(nameof(InstitutionExternDatabaseIdModel.InstitutionId), institutionId);
 	}
 }

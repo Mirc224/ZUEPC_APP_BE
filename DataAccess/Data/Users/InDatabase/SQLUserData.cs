@@ -21,14 +21,14 @@ public class SQLUserData :
 
 	public async Task<UserModel?> GetUserByEmailAsync(string email)
 	{
-		return (await GetModelsWithColumnValue(nameof(UserModel.Email), email)).FirstOrDefault();
+		return (await GetModelsWithColumnValueAsync(nameof(UserModel.Email), email)).FirstOrDefault();
 	}
 
 	protected override dynamic BuildJoinWithFilterExpression(UserFilter queryFilter, SqlBuilder builder, ExpandoObject parameters = null)
 	{
 		if(queryFilter.UserRole != null)
 		{
-			AddToLeftJoinExpression(
+			AddToInnerJoinExpression(
 				builder,
 				baseTableName,
 				baseTableAlias,

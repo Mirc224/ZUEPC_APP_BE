@@ -18,12 +18,12 @@ public class SQLRefreshTokenData :
 
 	public async Task<RefreshTokenModel?> GetRefreshTokenByTokenAsync(string refreshToken)
 	{
-		return (await GetModelsWithColumnValue(nameof(RefreshTokenModel.Token), refreshToken)).FirstOrDefault();
+		return (await GetModelsWithColumnValueAsync(nameof(RefreshTokenModel.Token), refreshToken)).FirstOrDefault();
 	}
 
 	public async Task<RefreshTokenModel?> GetUserRefreshByJwtIdAsync(string jwtId)
 	{
-		return (await GetModelsWithColumnValue(nameof(RefreshTokenModel.JwtId), jwtId)).FirstOrDefault();
+		return (await GetModelsWithColumnValueAsync(nameof(RefreshTokenModel.JwtId), jwtId)).FirstOrDefault();
 	}
 
 }

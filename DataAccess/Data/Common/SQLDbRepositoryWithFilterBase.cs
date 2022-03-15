@@ -50,7 +50,7 @@ public abstract class SQLDbRepositoryWithFilterBase<TRepository, TModel, TFilter
 		return parameters;
 	}
 
-	protected void AddToLeftJoinExpression(
+	protected void AddToInnerJoinExpression(
 		SqlBuilder builder, 
 		string firstTableName, 
 		string firstTableAlias, 
@@ -59,7 +59,7 @@ public abstract class SQLDbRepositoryWithFilterBase<TRepository, TModel, TFilter
 		string secondTableAlias, 
 		string secondTableColumn)
 	{
-		builder.LeftJoin($@"{secondTableName} as {secondTableAlias} ON 
+		builder.InnerJoin($@"{secondTableName} as {secondTableAlias} ON 
 							{firstTableAlias}.{firstTableColumn} = {secondTableAlias}.{secondTableColumn}");
 	}
 }
