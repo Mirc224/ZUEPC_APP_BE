@@ -18,18 +18,11 @@ public class SQLInstitutionNameData :
 
 	public async Task<int> DeleteInstitutionNamesByInstitutionIdAsync(long institutionId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		AddToWhereExpression(nameof(InstitutionNameModel.InstitutionId), institutionId, builder, parameters);
-		return await DeleteModelAsync(parameters, builder);
+		return await DeleteModelsWithColumnValue(nameof(InstitutionNameModel.InstitutionId), institutionId);
 	}
 
 	public async Task<IEnumerable<InstitutionNameModel>> GetInstitutionNamesByInstitutionIdAsync(long institutionId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(InstitutionNameModel.InstitutionId), institutionId, builder, parameters);
-		return (await GetModelsAsync(parameters, builder));
+		return await GetModelsWithColumnValue(nameof(InstitutionNameModel.InstitutionId), institutionId);
 	}
 }

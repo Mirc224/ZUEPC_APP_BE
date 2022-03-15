@@ -17,10 +17,7 @@ public class SQLUserRolesData :
 
 	public async Task<int> DeleteUserRoleByUserIdAsync(long userId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		AddToWhereExpression(nameof(UserRoleModel.UserId), userId, builder, parameters);
-		return await DeleteModelAsync(parameters, builder);
+		return await DeleteModelsWithColumnValue(nameof(UserRoleModel.UserId), userId);
 	}
 
 	public async Task<UserRoleModel?> GetUserRoleByUserIdAndRoleIdAsync(long userId, long roleId)
@@ -35,10 +32,6 @@ public class SQLUserRolesData :
 
 	public async Task<IEnumerable<UserRoleModel>> GetUserRolesByUserIdAsync(long userId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(UserRoleModel.UserId), userId, builder, parameters);
-		return (await GetModelsAsync(new { UserId = userId}, builder));
+		return await GetModelsWithColumnValue(nameof(UserRoleModel.UserId), userId);
 	}
 }

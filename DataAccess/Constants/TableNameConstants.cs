@@ -14,4 +14,12 @@ public static class TableNameConstants
 	public const string INSTITUTION_TABLE = "[dbo].[Institutions]";
 	public const string INSTITUTION_NAMES_TABLE = "[dbo].[InstitutionNames]";
 	public const string INSTITUTION_EXTERN_DATABASE_ID_TABLE = "[dbo].[InstitutionExternDatabaseIds]";
+
+	public const string PUBLICATION_TABLE = "[dbo].[Publications]";
+	public const string PUBLICATION_NAMES_TABLE = "[dbo].[PublicationNames]";
+	public const string PUBLICATION_EXTERN_DATABASE_ID_TABLE = "[dbo].[PublicationExternDatabaseIds]";
+	public const string PUBLICATION_IDENTIFIERS_TABLE = "[dbo].[PublicationIdentifiers]";
+	public const string PUBLICATION_ACTIVITIES_TABLE = "[dbo].[PublicationActivities]";
+	public const string PUBLICATION_AUTHORS_TABLE = "[dbo].[PublicationAuthors]";
+	public const string RELATED_PUBLICATIONS_TABLE = "[dbo].[RelatedPublications]";
 }

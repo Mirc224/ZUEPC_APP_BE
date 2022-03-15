@@ -11,5 +11,4 @@ public interface IPublicationAuthorData : IRepositoryBase<PublicationAuthorModel
 	Task<int> DeletePublicationAuthorsByPersonIdAsync(long personId);
 	Task<int> DeletePublicationAuthorsByPublicationIdAsync(long publicationId);
 	Task<int> DeletePublicationAuthorsByInstitutionIdAsync(long institutionId);
-	Task<int> DeletePublicationAuthorsByPersonIdAndInstitutionIdAsync(long personId, long institutionId);
 }

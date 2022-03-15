@@ -1,6 +1,4 @@
-﻿using Dapper;
-using DataAccess.DbAccess;
-using System.Dynamic;
+﻿using DataAccess.DbAccess;
 using ZUEPC.DataAccess.Constants;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.DataAccess.Models.Person;
@@ -18,18 +16,11 @@ public class SQLPersonNameData :
 
 	public async Task<int> DeletePersonNameByPersonIdAsync(long personId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		AddToWhereExpression(nameof(PersonNameModel.PersonId), personId, builder, parameters);
-		return await DeleteModelAsync(parameters, builder);
+		return await DeleteModelsWithColumnValue(nameof(PersonNameModel.PersonId), personId);
 	}
 
 	public async Task<IEnumerable<PersonNameModel>> GetPersonNamesByPersonIdAsync(long personId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(PersonNameModel.PersonId), personId, builder, parameters);
-		return (await GetModelsAsync(parameters, builder));
+		return await GetModelsWithColumnValue(nameof(PersonNameModel.PersonId), personId);
 	}
 }

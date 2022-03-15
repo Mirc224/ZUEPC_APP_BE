@@ -1,0 +1,28 @@
+﻿using Dapper;
+using DataAccess.DbAccess;
+using System.Dynamic;
+using ZUEPC.DataAccess.Constants;
+using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Models.Publication;
+
+namespace ZUEPC.DataAccess.Data.Publications.InDatabase;
+
+public class SQLPublicationNameData :
+	SQLDbRepositoryBase<PublicationNameModel>,
+	IPublicationNameData
+{
+	public SQLPublicationNameData(ISqlDataAccess db) : 
+		base(db, TableNameConstants.PUBLICATION_NAMES_TABLE, TableAliasConstants.PUBLICATION_NAMES_TABLE_ALIAS)
+	{
+	}
+
+	public async Task<int> DeletePublicationNamesByPublicationIdAsync(long publicationId)
+	{
+		return await DeleteModelsWithColumnValue(nameof(PublicationNameModel.PublicationId), publicationId);
+	}
+
+	public async Task<IEnumerable<PublicationNameModel>> GetPublicationNamesByPublicationIdAsync(long publicationId)
+	{
+		return await GetModelsWithColumnValue(nameof(PublicationNameModel.PublicationId), publicationId);
+	}
+}

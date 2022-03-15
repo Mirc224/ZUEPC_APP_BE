@@ -17,9 +17,13 @@ using ZUEPC.DataAccess.Data.Institutions.InDatabase;
 using ZUEPC.DataAccess.Data.Persons;
 using ZUEPC.DataAccess.Data.Persons.InDatabase;
 using ZUEPC.DataAccess.Data.PublicationActivities;
+using ZUEPC.DataAccess.Data.PublicationActivities.InDatabase;
 using ZUEPC.DataAccess.Data.PublicationAuthors;
+using ZUEPC.DataAccess.Data.PublicationAuthors.InDatabase;
 using ZUEPC.DataAccess.Data.Publications;
+using ZUEPC.DataAccess.Data.Publications.InDatabase;
 using ZUEPC.DataAccess.Data.RelatedPublications;
+using ZUEPC.DataAccess.Data.RelatedPublications.InDatabase;
 using ZUEPC.DataAccess.Data.Users;
 using ZUEPC.DataAccess.Data.Users.InDatabase;
 using ZUEPC.Localization;
@@ -31,41 +35,7 @@ public static class ApiServices
 	public static void ConfigureServices(this WebApplicationBuilder builder)
 	{
 		// Add services to the container.
-		// User
-		builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-		//builder.Services.AddSingleton<IUserData, UserInMemoryData>();
-		builder.Services.AddSingleton<IUserData, SQLUserData>();
-		//builder.Services.AddSingleton<IUserRoleData, UserRoleInMemoryData>();
-		builder.Services.AddSingleton<IUserRoleData, SQLUserRolesData>();
-		//builder.Services.AddSingleton<IRefreshTokenData, RefreshTokenInMemoryData>();
-		builder.Services.AddSingleton<IRefreshTokenData, SQLRefreshTokenData>();
-		//builder.Services.AddSingleton<IRoleData, RoleInMemoryData>();
-		builder.Services.AddSingleton<IRoleData, SQLRoleData>();
-		// Publication
-		builder.Services.AddSingleton<IPublicationData, PublicationInMemoryData>();
-		builder.Services.AddSingleton<IPublicationNameData, PublicationNameInMemoryData>();
-		builder.Services.AddSingleton<IPublicationExternDatabaseIdData, PublicationExternDatabaseIdInMemoryData>();
-		builder.Services.AddSingleton<IPublicationIdentifierData, PublicationIdentifierInMemoryData>();
-		// Person
-		//builder.Services.AddSingleton<IPersonData, PersonInMemoryData>();
-		builder.Services.AddSingleton<IPersonData, SQLPersonData>();
-		//builder.Services.AddSingleton<IPersonNameData, PersonNameInMemoryData>();
-		builder.Services.AddSingleton<IPersonNameData, SQLPersonNameData>();
-		//builder.Services.AddSingleton<IPersonExternDatabaseIdData, PersonExternDatabaseIdInMemoryData>();
-		builder.Services.AddSingleton<IPersonExternDatabaseIdData, SQLPersonExternDatabaseIdData>();
-		// Institution
-		//builder.Services.AddSingleton<IInstitutionData, InstitutionInMemoryData>();
-		builder.Services.AddSingleton<IInstitutionData, SQLInstitutionData>();
-		//builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, InstitutionExternDatabaseIdInMemoryData>();
-		builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, SQLInstitutionExternDatabaseIdData>();
-		//builder.Services.AddSingleton<IInstitutionNameData, InstitutionNameInMemoryData>();
-		builder.Services.AddSingleton<IInstitutionNameData, SQLInstitutionNameData>();
-		// Publication activity
-		builder.Services.AddSingleton<IPublicationActivityData, PublicationActivityInMemoryData>();
-		// Publication author
-		builder.Services.AddSingleton<IPublicationAuthorData, PublicationAuthorInMemoryData>();
-		// Related publication
-		builder.Services.AddSingleton<IRelatedPublicationData, RelatedPublicationInMemoryData>();
+		builder.ConfigureRepositories();
 
 		// CheckServices
 		builder.Services.AddSingleton<PublicationItemCheckService>();
@@ -111,7 +81,7 @@ public static class ApiServices
 		builder.Services.AddLocalization();
 		builder.Services
 			.AddControllers();
-		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(x =>
 		{
@@ -128,6 +98,52 @@ public static class ApiServices
 
 			x.OperationFilter<SecurityRequirementsOperationFilter>();
 		});
+	}
+
+	public static void ConfigureRepositories(this WebApplicationBuilder builder)
+	{
+		// User
+		builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
+		//builder.Services.AddSingleton<IUserData, UserInMemoryData>();
+		builder.Services.AddSingleton<IUserData, SQLUserData>();
+		//builder.Services.AddSingleton<IUserRoleData, UserRoleInMemoryData>();
+		builder.Services.AddSingleton<IUserRoleData, SQLUserRolesData>();
+		//builder.Services.AddSingleton<IRefreshTokenData, RefreshTokenInMemoryData>();
+		builder.Services.AddSingleton<IRefreshTokenData, SQLRefreshTokenData>();
+		//builder.Services.AddSingleton<IRoleData, RoleInMemoryData>();
+		builder.Services.AddSingleton<IRoleData, SQLRoleData>();
+		// Publication
+		//builder.Services.AddSingleton<IPublicationData, PublicationInMemoryData>();
+		builder.Services.AddSingleton<IPublicationData, SQLPublicationData>();
+		//builder.Services.AddSingleton<IPublicationNameData, PublicationNameInMemoryData>();
+		builder.Services.AddSingleton<IPublicationNameData, SQLPublicationNameData>();
+		//builder.Services.AddSingleton<IPublicationExternDatabaseIdData, PublicationExternDatabaseIdInMemoryData>();
+		builder.Services.AddSingleton<IPublicationExternDatabaseIdData, SQLPublicationExternDatabaseIdData>();
+		//builder.Services.AddSingleton<IPublicationIdentifierData, PublicationIdentifierInMemoryData>();
+		builder.Services.AddSingleton<IPublicationIdentifierData, SQLPublicationIdentifierData>();
+		// Person
+		//builder.Services.AddSingleton<IPersonData, PersonInMemoryData>();
+		builder.Services.AddSingleton<IPersonData, SQLPersonData>();
+		//builder.Services.AddSingleton<IPersonNameData, PersonNameInMemoryData>();
+		builder.Services.AddSingleton<IPersonNameData, SQLPersonNameData>();
+		//builder.Services.AddSingleton<IPersonExternDatabaseIdData, PersonExternDatabaseIdInMemoryData>();
+		builder.Services.AddSingleton<IPersonExternDatabaseIdData, SQLPersonExternDatabaseIdData>();
+		// Institution
+		//builder.Services.AddSingleton<IInstitutionData, InstitutionInMemoryData>();
+		builder.Services.AddSingleton<IInstitutionData, SQLInstitutionData>();
+		//builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, InstitutionExternDatabaseIdInMemoryData>();
+		builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, SQLInstitutionExternDatabaseIdData>();
+		//builder.Services.AddSingleton<IInstitutionNameData, InstitutionNameInMemoryData>();
+		builder.Services.AddSingleton<IInstitutionNameData, SQLInstitutionNameData>();
+		// Publication activity
+		//builder.Services.AddSingleton<IPublicationActivityData, PublicationActivityInMemoryData>();
+		builder.Services.AddSingleton<IPublicationActivityData, SQLPublicationActivityData>();
+		// Publication author
+		//builder.Services.AddSingleton<IPublicationAuthorData, PublicationAuthorInMemoryData>();
+		builder.Services.AddSingleton<IPublicationAuthorData, SQLPublicationAuthorData>();
+		// Related publication
+		//builder.Services.AddSingleton<IRelatedPublicationData, RelatedPublicationInMemoryData>();
+		builder.Services.AddSingleton<IRelatedPublicationData, SQLRelatedPublicationData>();
 	}
 
 	public static void ConfigureAuthentication(WebApplicationBuilder builder)

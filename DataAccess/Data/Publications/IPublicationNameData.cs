@@ -5,8 +5,6 @@ namespace ZUEPC.DataAccess.Data.Publications;
 
 public interface IPublicationNameData : IRepositoryBase<PublicationNameModel>
 {
-	Task<IEnumerable<PublicationNameModel>> GetPublicationNamesByNameAsync(string name);
-	Task<IEnumerable<PublicationNameModel>> GetPublicationNamesByNameTypeAsync(string type);
 	Task<IEnumerable<PublicationNameModel>> GetPublicationNamesByPublicationIdAsync(long publicationId);
 	Task<int> DeletePublicationNamesByPublicationIdAsync(long publicationId);
 }

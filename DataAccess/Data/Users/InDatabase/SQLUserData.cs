@@ -21,11 +21,7 @@ public class SQLUserData :
 
 	public async Task<UserModel?> GetUserByEmailAsync(string email)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(UserModel.Email), email, builder, parameters);
-		return (await GetModelsAsync(parameters, builder)).FirstOrDefault();
+		return (await GetModelsWithColumnValue(nameof(UserModel.Email), email)).FirstOrDefault();
 	}
 
 	protected override dynamic BuildJoinWithFilterExpression(UserFilter queryFilter, SqlBuilder builder, ExpandoObject parameters = null)

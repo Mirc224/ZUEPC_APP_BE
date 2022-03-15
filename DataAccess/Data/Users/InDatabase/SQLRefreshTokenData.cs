@@ -18,20 +18,12 @@ public class SQLRefreshTokenData :
 
 	public async Task<RefreshTokenModel?> GetRefreshTokenByTokenAsync(string refreshToken)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(RefreshTokenModel.Token), refreshToken, builder, parameters);
-		return (await GetModelsAsync(parameters, builder)).FirstOrDefault();
+		return (await GetModelsWithColumnValue(nameof(RefreshTokenModel.Token), refreshToken)).FirstOrDefault();
 	}
 
 	public async Task<RefreshTokenModel?> GetUserRefreshByJwtIdAsync(string jwtId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(RefreshTokenModel.JwtId), jwtId, builder, parameters);
-		return (await GetModelsAsync(parameters, builder)).FirstOrDefault();
+		return (await GetModelsWithColumnValue(nameof(RefreshTokenModel.JwtId), jwtId)).FirstOrDefault();
 	}
 
 }

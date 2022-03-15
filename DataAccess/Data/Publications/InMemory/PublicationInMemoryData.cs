@@ -4,8 +4,14 @@ using ZUEPC.DataAccess.Models.Publication;
 
 namespace ZUEPC.DataAccess.Data.Publications;
 
-public class PublicationInMemoryData : InMemoryBaseRepository<PublicationModel>,  IPublicationData
+public class PublicationInMemoryData : InMemoryBaseRepository<PublicationModel>,  
+	IPublicationData
 {
+	public Task<int> CountAsync(PublicationFilter queryFilter)
+	{
+		throw new NotImplementedException();
+	}
+
 	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		var deletedObjects = _repository.Where(x => x.Id == id);
@@ -20,6 +26,11 @@ public class PublicationInMemoryData : InMemoryBaseRepository<PublicationModel>,
 	public async Task<IEnumerable<PublicationModel>> GetAllAsync(PaginationFilter filter)
 	{
 		return _repository.Skip((filter.PageNumber - 1) * filter.PageSize).Take(filter.PageSize).ToList();
+	}
+
+	public Task<IEnumerable<PublicationModel>> GetAllAsync(PublicationFilter queryFilter, PaginationFilter paginationFilter)
+	{
+		throw new NotImplementedException();
 	}
 
 	public async Task<IEnumerable<PublicationModel>> GetAllPublicationsAsync()

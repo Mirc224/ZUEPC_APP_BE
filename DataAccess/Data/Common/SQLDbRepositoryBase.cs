@@ -3,6 +3,7 @@ using DataAccess.DbAccess;
 using System.Dynamic;
 using System.Reflection;
 using ZUEPC.DataAccess.Attributes.ModelAttributes;
+using ZUEPC.DataAccess.Extensions;
 using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.Common;
 using static Dapper.SqlBuilder;
@@ -39,7 +40,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		SqlBuilder builder = new();
 		ExpandoObject parameters = new();
 		AddToWhereExpression(nameof(ModelBase.Id), id, builder, parameters);
-		return await DeleteModelAsync(parameters, builder);
+		return await DeleteModelsAsync(parameters, builder);
 	}
 
 	protected async Task<IEnumerable<TModel>> GetModelsAsync(dynamic parameters, SqlBuilder builder)
@@ -51,7 +52,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		return await db.QueryAsync<TModel, dynamic>(builderTemplate.RawSql, parameters);
 	}
 
-	protected async Task<int> DeleteModelAsync(dynamic parameters, SqlBuilder builder)
+	protected async Task<int> DeleteModelsAsync(dynamic parameters, SqlBuilder builder)
 	{
 		Template builderTemplate = builder.AddTemplate($"DELETE FROM {baseTableName} /**where**/");
 		return await db.ExecuteAsync(builderTemplate.RawSql, parameters);
@@ -66,11 +67,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 
 	public async Task<TModel?> GetModelByIdAsync(long id)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(ModelBase.Id), id, builder, parameters);
-		return (await GetModelsAsync(parameters, builder)).FirstOrDefault();
+		return (await GetModelsWithColumnValue(nameof(ModelBase.Id), id)).FirstOrDefault();
 	}
 
 	public async Task<IEnumerable<TModel>> GetAllAsync(PaginationFilter filter)
@@ -165,5 +162,33 @@ public abstract class SQLDbRepositoryBase<TModel>
 	public void AddToWhereExpression(string columnName, SqlBuilder builder, string op = "=")
 	{
 		builder.Where($"{columnName} {op} @{columnName}");
+	}
+
+	protected async Task<int> DeleteModelsWithColumnValue<T>(string columnName, T value)
+	{
+		SqlBuilder builder = new();
+		ExpandoObject parameters = new();
+		AddToWhereExpression(columnName, value, builder, parameters);
+		return await DeleteModelsAsync(parameters, builder);
+	}
+
+	protected async Task<IEnumerable<TModel>> GetModelsWithColumnValue<T>(string columnName, T value)
+	{
+		SqlBuilder builder = new();
+		ExpandoObject parameters = new();
+		builder.Select(baseSelect);
+		AddToWhereExpression(columnName, value, builder, parameters);
+		return await GetModelsAsync(parameters, builder);
+	}
+
+	protected async Task<IEnumerable<TModel>> GetModelsWithColumnValueInSet<T>(string columnName, IEnumerable<T> values)
+	{
+		SqlBuilder builder = new();
+		builder.Select(baseSelect);
+		ExpandoObject parameters = builder.WhereInArray(
+			columnName,
+			values,
+			baseTableAlias);
+		return await GetModelsAsync(parameters, builder);
 	}
 }

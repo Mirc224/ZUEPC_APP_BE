@@ -19,30 +19,16 @@ public class SQLInstitutionExternDatabaseIdData :
 
 	public async Task<int> DeleteInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(InstitutionExternDatabaseIdModel.InstitutionId), institutionId, builder, parameters);
-		return await DeleteModelAsync(parameters, builder);
+		return await DeleteModelsWithColumnValue(nameof(InstitutionExternDatabaseIdModel.InstitutionId), institutionId);
 	}
 
 	public async Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetAllInstitutionExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
-		SqlBuilder builder = new();
-		builder.Select(baseSelect);
-		ExpandoObject parameters = builder.WhereInArray(
-			nameof(InstitutionExternDatabaseIdModel.ExternIdentifierValue),
-			identifierValues,
-			baseTableAlias);
-		return await GetModelsAsync(parameters, builder);
+		return await GetModelsWithColumnValueInSet(nameof(InstitutionExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
 	}
 
 	public async Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId)
 	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		builder.Select(baseSelect);
-		AddToWhereExpression(nameof(InstitutionExternDatabaseIdModel.InstitutionId), institutionId, builder, parameters);
-		return await GetModelsAsync(parameters, builder);
+		return await GetModelsWithColumnValue(nameof(InstitutionExternDatabaseIdModel.InstitutionId), institutionId);
 	}
 }

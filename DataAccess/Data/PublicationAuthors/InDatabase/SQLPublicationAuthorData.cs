@@ -1,0 +1,46 @@
+﻿using DataAccess.DbAccess;
+using ZUEPC.DataAccess.Constants;
+using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Models.PublicationAuthor;
+
+namespace ZUEPC.DataAccess.Data.PublicationAuthors.InDatabase;
+
+public class SQLPublicationAuthorData :
+	SQLDbRepositoryBase<PublicationAuthorModel>,
+	IPublicationAuthorData
+{
+	public SQLPublicationAuthorData(ISqlDataAccess db) :
+		base(db, TableNameConstants.PUBLICATION_AUTHORS_TABLE, TableAliasConstants.PUBLICATION_AUTHORS_TABLE_ALIAS)
+	{
+	}
+
+	public async Task<int> DeletePublicationAuthorsByInstitutionIdAsync(long institutionId)
+	{
+		return await DeleteModelsWithColumnValue(nameof(PublicationAuthorModel.InstitutionId), institutionId);
+	}
+
+	public async Task<int> DeletePublicationAuthorsByPersonIdAsync(long personId)
+	{
+		return await DeleteModelsWithColumnValue(nameof(PublicationAuthorModel.PersonId), personId);
+	}
+
+	public async Task<int> DeletePublicationAuthorsByPublicationIdAsync(long publicationId)
+	{
+		return await DeleteModelsWithColumnValue(nameof(PublicationAuthorModel.PublicationId), publicationId);
+	}
+
+	public async Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByInstitutionIdAsync(long institutionId)
+	{
+		return await GetModelsWithColumnValue(nameof(PublicationAuthorModel.InstitutionId), institutionId);
+	}
+
+	public async Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByPersonIdAsync(long personId)
+	{
+		return await GetModelsWithColumnValue(nameof(PublicationAuthorModel.PersonId), personId);
+	}
+
+	public async Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByPublicationIdAsync(long publicationId)
+	{
+		return await GetModelsWithColumnValue(nameof(PublicationAuthorModel.PublicationId), publicationId);
+	}
+}
