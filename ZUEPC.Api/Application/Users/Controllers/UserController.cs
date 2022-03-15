@@ -86,7 +86,7 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok();
 		}
 
-		[HttpPost("roles")]
+		[HttpGet("role")]
 		public async Task<IActionResult> GetRoles()
 		{
 			GetAllRolesQueryResponse response = await _mediator.Send(new GetAllRolesQuery());

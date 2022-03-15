@@ -6,6 +6,11 @@ namespace ZUEPC.DataAccess.Data.Persons;
 
 public class PersonInMemoryData : InMemoryBaseRepository<PersonModel>, IPersonData
 {
+	public Task<int> CountAsync(PersonFilter queryFilter)
+	{
+		throw new NotImplementedException();
+	}
+
 	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		var deletedObjects = _repository.Where(x => x.Id == id).ToList();
@@ -20,6 +25,11 @@ public class PersonInMemoryData : InMemoryBaseRepository<PersonModel>, IPersonDa
 	public async Task<IEnumerable<PersonModel>> GetAllAsync()
 	{
 		return _repository.ToList();
+	}
+
+	public Task<IEnumerable<PersonModel>> GetAllAsync(PersonFilter queryFilter, PaginationFilter paginationFilter)
+	{
+		throw new NotImplementedException();
 	}
 
 	public async Task<IEnumerable<PersonModel>> GetAllPersonsAsync(PaginationFilter validFilter)

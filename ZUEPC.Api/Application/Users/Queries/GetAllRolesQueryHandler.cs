@@ -1,25 +1,25 @@
 ﻿using AutoMapper;
-using DataAccess.Data.User;
 using MediatR;
 using Users.Base.Application.Domain;
+using ZUEPC.DataAccess.Data.Users;
+using ZUEPC.DataAccess.Models.Users;
 
 namespace ZUEPC.Application.Users.Queries;
 
 public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, GetAllRolesQueryResponse>
 {
-    private readonly IUserData _repository;
-    private readonly IMapper _mapper;
-    public GetAllRolesQueryHandler(IMapper mapper, IUserData repository)
-    {
-        _repository = repository;
-        _mapper = mapper;
-    }
+	private readonly IRoleData _repository;
+	private readonly IMapper _mapper;
+	public GetAllRolesQueryHandler(IMapper mapper, IRoleData repository)
+	{
+		_repository = repository;
+		_mapper = mapper;
+	}
 
 	public async Task<GetAllRolesQueryResponse> Handle(GetAllRolesQuery request, CancellationToken cancellationToken)
 	{
-		//var roles = await _repository.GetRolesAsync();
-		//var response = new GetAllRolesQueryResponse() { Success = true, Roles = _mapper.Map<List<Role>>(roles) };
-		var response = new GetAllRolesQueryResponse() { Success = true, Roles = null };
-        return response;
-    }
+		IEnumerable<RoleModel> roles = await _repository.GetAllAsync();
+		IEnumerable<Role> mappedResponse = _mapper.Map<List<Role>>(roles);
+		return new() { Success = true, Roles = mappedResponse};
+	}
 }

@@ -25,10 +25,10 @@ public class PersonController : ControllerBase
 
 
 	[HttpGet]
-	public async Task<IActionResult> GetAll([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAll([FromQuery] PersonFilter personFilter, [FromQuery] PaginationFilter filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllPersonsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route};
+		GetAllPersonsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route, QueryFilter = personFilter};
 		GetAllPersonsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
@@ -38,10 +38,10 @@ public class PersonController : ControllerBase
 	}
 
 	[HttpGet("preview")]
-	public async Task<IActionResult> GetAllPreview([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAllPreview([FromQuery] PersonFilter personFilter, [FromQuery] PaginationFilter filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllPersonPreviewsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPersonPreviewsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route, QueryFilter = personFilter};
 		GetAllPersonPreviewsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
@@ -51,10 +51,10 @@ public class PersonController : ControllerBase
 	}
 
 	[HttpGet("detail")]
-	public async Task<IActionResult> GetAllDetails([FromQuery] PaginationFilter? filter)
+	public async Task<IActionResult> GetAllDetails([FromQuery]PersonFilter personFilter, [FromQuery] PaginationFilter filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllPersonDetailsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route };
+		GetAllPersonDetailsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route, QueryFilter = personFilter };
 		GetAllPersonDetailsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{

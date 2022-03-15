@@ -7,10 +7,11 @@ using static Dapper.SqlBuilder;
 
 namespace ZUEPC.DataAccess.Data.Common;
 
-public abstract class SQLDbRepositoryWithFilterBase<TModel, TFilter> :
+public abstract class SQLDbRepositoryWithFilterBase<TRepository, TModel, TFilter> :
 	SQLDbRepositoryBase<TModel>
 	where TModel : ModelBase
 	where TFilter : IQueryFilter
+	where TRepository: IRepositoryWithFilter<TModel, TFilter>
 {
 	protected SQLDbRepositoryWithFilterBase(ISqlDataAccess db, string baseTableName, string baseTableAlias)
 		: base(db, baseTableName, baseTableAlias)
@@ -20,12 +21,13 @@ public abstract class SQLDbRepositoryWithFilterBase<TModel, TFilter> :
 	public async Task<int> CountAsync(TFilter queryFilter)
 	{
 		SqlBuilder builder = new();
-		dynamic parameters = BuildJoinExpression(builder);
-		parameters = BuildWhereExpressionAndGetParameters(queryFilter, builder, parameters);
-		parameters = BuildGroupByExpression(builder, parameters);
+		dynamic parameters = BuildJoinWithFilterExpression(queryFilter, builder);
+		parameters = BuildWhereWithFilterExpression(queryFilter, builder, parameters);
+		parameters = BuildGroupByWithFilterExpression(builder, parameters);
 		Template builderTemplate = builder.AddTemplate($@"SELECT COUNT(*) FROM 
 														(SELECT {baseTableAlias}.Id FROM {baseTableName} as {baseTableAlias}
 														/**innerjoin**/
+														/**leftjoin**/
 														/**where**/ /**groupby**/) tmp");
 		return await db.ExecuteScalarAsync<int, dynamic>(builderTemplate.RawSql, parameters);
 	}
@@ -34,35 +36,17 @@ public abstract class SQLDbRepositoryWithFilterBase<TModel, TFilter> :
 	{
 		SqlBuilder builder = new();
 		builder.Select(baseSelect);
-		ExpandoObject parameters = BuildJoinExpression(builder);
-		parameters = BuildWhereExpressionAndGetParameters(queryFilter, builder, parameters);
-		parameters = BuildGroupByExpression(builder, parameters);
+		ExpandoObject parameters = BuildJoinWithFilterExpression(queryFilter, builder);
+		parameters = BuildWhereWithFilterExpression(queryFilter, builder, parameters);
+		parameters = BuildGroupByWithFilterExpression(builder, parameters);
 		return (await GetAllWithPaginationAsync(parameters, paginationFilter, builder));
 	}
 
-	protected virtual dynamic BuildWhereExpressionAndGetParameters(TFilter queryFilter, SqlBuilder builder, ExpandoObject parameters = null)
+	protected abstract dynamic BuildWhereWithFilterExpression(TFilter queryFilter, SqlBuilder builder, ExpandoObject parameters = null);
+	protected abstract dynamic BuildJoinWithFilterExpression(TFilter queryFilter, SqlBuilder builder, ExpandoObject parameters = null);
+	protected virtual dynamic BuildGroupByWithFilterExpression(SqlBuilder builder, ExpandoObject parameters = null) 
 	{
-		if (parameters is null)
-		{
-			parameters = new();
-		}
-		return parameters;
-	}
-	protected virtual dynamic BuildJoinExpression(SqlBuilder builder, ExpandoObject parameters = null)
-	{
-		if (parameters is null)
-		{
-			parameters = new ();
-		}
-		return parameters;
-	}
-
-	protected virtual dynamic BuildGroupByExpression(SqlBuilder builder, ExpandoObject parameters = null)
-	{
-		if (parameters is null)
-		{
-			parameters = new();
-		}
+		builder.GroupBy(baseSelect);
 		return parameters;
 	}
 }

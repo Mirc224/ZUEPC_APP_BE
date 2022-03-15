@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
+using System.Dynamic;
 using System.Reflection;
 using ZUEPC.DataAccess.Attributes.ModelAttributes;
 using ZUEPC.DataAccess.Filters;
@@ -36,8 +37,9 @@ public abstract class SQLDbRepositoryBase<TModel>
 	public async Task<int> DeleteModelByIdAsync(long id)
 	{
 		SqlBuilder builder = new();
-		builder.Where("Id = @Id");
-		return await DeleteModelAsync(new { Id = id }, builder);
+		ExpandoObject parameters = new();
+		AddToWhereExpression(nameof(ModelBase.Id), id, builder, parameters);
+		return await DeleteModelAsync(parameters, builder);
 	}
 
 	protected async Task<IEnumerable<TModel>> GetModelsAsync(dynamic parameters, SqlBuilder builder)
@@ -65,9 +67,10 @@ public abstract class SQLDbRepositoryBase<TModel>
 	public async Task<TModel?> GetModelByIdAsync(long id)
 	{
 		SqlBuilder builder = new();
+		ExpandoObject parameters = new();
 		builder.Select(baseSelect);
-		builder.Where("Id = @Id");
-		return (await GetModelsAsync(new { Id = id }, builder)).FirstOrDefault();
+		AddToWhereExpression(nameof(ModelBase.Id), id, builder, parameters);
+		return (await GetModelsAsync(parameters, builder)).FirstOrDefault();
 	}
 
 	public async Task<IEnumerable<TModel>> GetAllAsync(PaginationFilter filter)
@@ -86,6 +89,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		Template builderTemplate = builder.AddTemplate(@$"
 				SELECT /**select**/ FROM {baseTableName} AS {baseTableAlias}
 				/**innerjoin**/
+				/**leftjoin**/
 				/**where**/ 
 				/**groupby**/
 				ORDER BY [CreatedAt]
@@ -147,7 +151,19 @@ public abstract class SQLDbRepositoryBase<TModel>
 
 	public async Task<int> UpdateModelAsync(TModel model)
 	{
-		string updateSql = $@"{baseUpdateRawSql} WHERE Id=@Id";
+		SqlBuilder builder = new();
+		AddToWhereExpression(nameof(ModelBase.Id), builder);
+		string updateSql = builder.AddTemplate($"{baseUpdateRawSql} /**where**/").RawSql;
 		return await db.ExecuteAsync(updateSql, model);
+	}
+
+	public void AddToWhereExpression<T>(string columnName, T value, SqlBuilder builder, ExpandoObject parameters, string op = "=")
+	{
+		builder.Where($"{columnName} {op} @{columnName}");
+		parameters.TryAdd(columnName, value);
+	}
+	public void AddToWhereExpression(string columnName, SqlBuilder builder, string op = "=")
+	{
+		builder.Where($"{columnName} {op} @{columnName}");
 	}
 }

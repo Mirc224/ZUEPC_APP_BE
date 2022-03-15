@@ -5,30 +5,11 @@ namespace ZUEPC.DataAccess.Extensions;
 
 public static class SqlBuilderExt
 {
-	public static void WhereInArray<T>(this SqlBuilder builder, string keyName, IEnumerable<T> values, string? alias)
+	public static ExpandoObject WhereInArray<T>(this SqlBuilder builder, string keyName, IEnumerable<T> values, string? alias)
 	{
-		if(alias != null)
-		{
-			alias = alias.Trim();
-		}
-		if (string.IsNullOrEmpty(alias))
-		{
-			alias = "";
-		}
-		int counter = 1;
-		List<string> innerValues = new();
-		foreach (T item in values)
-		{
-			string paramName = $"{alias}{keyName}{counter++}";
-			innerValues.Add("@"+paramName);
-		}
-		string resultInner = string.Join(',', innerValues);
-		string columnAlias = alias;
-		if (!string.IsNullOrEmpty(columnAlias))
-		{
-			columnAlias = columnAlias + ".";
-		}
-		builder.Where($"{columnAlias}{keyName} IN ({resultInner})");
+		ExpandoObject parameters = new();
+		builder.WhereInArray(keyName, values, alias, parameters);
+		return parameters;
 	}
 
 	public static void WhereInArray<T>(this SqlBuilder builder, string keyName, IEnumerable<T> values, string? alias, ExpandoObject parameters)

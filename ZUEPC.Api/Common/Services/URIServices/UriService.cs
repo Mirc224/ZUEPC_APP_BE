@@ -13,9 +13,13 @@ public class UriService : IUriService
 		_baseUri = baseUri;
 	}
 
-	public Uri AddDomainFilterToUri<TDomainFilter>(Uri pageUri, IQueryFilter domainFilter)
+	public Uri AddDomainFilterToUri<TDomainFilter>(Uri pageUri, IQueryFilter? domainFilter)
 		where TDomainFilter : IQueryFilter
 	{
+		if(domainFilter is null)
+		{
+			return pageUri;
+		}
 		string modifiedUri = pageUri.ToString();
 		Type filterType = domainFilter.GetType();
 		IList<PropertyInfo> props = new List<PropertyInfo>(filterType.GetProperties());

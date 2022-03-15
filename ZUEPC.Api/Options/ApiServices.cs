@@ -14,6 +14,7 @@ using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.Common.Services.URIServices;
 using ZUEPC.DataAccess.Data.Institutions;
 using ZUEPC.DataAccess.Data.Persons;
+using ZUEPC.DataAccess.Data.Persons.InDatabase;
 using ZUEPC.DataAccess.Data.PublicationActivities;
 using ZUEPC.DataAccess.Data.PublicationAuthors;
 using ZUEPC.DataAccess.Data.Publications;
@@ -35,17 +36,22 @@ public static class ApiServices
 		builder.Services.AddSingleton<IUserData, SQLUserData>();
 		//builder.Services.AddSingleton<IUserRoleData, UserRoleInMemoryData>();
 		builder.Services.AddSingleton<IUserRoleData, SQLUserRolesData>();
-		builder.Services.AddSingleton<IRefreshTokenData, RefreshTokenInMemoryData>();
-		builder.Services.AddSingleton<IRoleData, RoleInMemoryData>();
+		//builder.Services.AddSingleton<IRefreshTokenData, RefreshTokenInMemoryData>();
+		builder.Services.AddSingleton<IRefreshTokenData, SQLRefreshTokenData>();
+		//builder.Services.AddSingleton<IRoleData, RoleInMemoryData>();
+		builder.Services.AddSingleton<IRoleData, SQLRoleData>();
 		// Publication
 		builder.Services.AddSingleton<IPublicationData, PublicationInMemoryData>();
 		builder.Services.AddSingleton<IPublicationNameData, PublicationNameInMemoryData>();
 		builder.Services.AddSingleton<IPublicationExternDatabaseIdData, PublicationExternDatabaseIdInMemoryData>();
 		builder.Services.AddSingleton<IPublicationIdentifierData, PublicationIdentifierInMemoryData>();
 		// Person
-		builder.Services.AddSingleton<IPersonData, PersonInMemoryData>();
-		builder.Services.AddSingleton<IPersonNameData, PersonNameInMemoryData>();
-		builder.Services.AddSingleton<IPersonExternDatabaseIdData, PersonExternDatabaseIdInMemoryData>();
+		//builder.Services.AddSingleton<IPersonData, PersonInMemoryData>();
+		builder.Services.AddSingleton<IPersonData, SQLPersonData>();
+		//builder.Services.AddSingleton<IPersonNameData, PersonNameInMemoryData>();
+		builder.Services.AddSingleton<IPersonNameData, SQLPersonNameData>();
+		//builder.Services.AddSingleton<IPersonExternDatabaseIdData, PersonExternDatabaseIdInMemoryData>();
+		builder.Services.AddSingleton<IPersonExternDatabaseIdData, SQLPersonExternDatabaseIdData>();
 		// Institution
 		builder.Services.AddSingleton<IInstitutionData, InstitutionInMemoryData>();
 		builder.Services.AddSingleton<IInstitutionExternDatabaseIdData, InstitutionExternDatabaseIdInMemoryData>();

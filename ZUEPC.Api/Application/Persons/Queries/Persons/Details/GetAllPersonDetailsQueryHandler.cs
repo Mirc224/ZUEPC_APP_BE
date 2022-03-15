@@ -4,6 +4,7 @@ using ZUEPC.Application.Persons.Entities.Details;
 using ZUEPC.Application.Persons.Queries.Persons.Details.BaseHandler;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Helpers;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Details;
@@ -20,7 +21,8 @@ public class GetAllPersonDetailsQueryHandler :
 		GetAllPersonsQueryResponse response = await _mediator.Send(new GetAllPersonsQuery() { 
 			PaginationFilter = request.PaginationFilter,
 			UriService = request.UriService,
-			Route = request.Route
+			Route = request.Route,
+			QueryFilter = request.QueryFilter
 		});
 
 		if (!response.Success || response.Data is null)
@@ -39,11 +41,12 @@ public class GetAllPersonDetailsQueryHandler :
 			}
 		}
 		int totalRecords = response.TotalRecords;
-		return PaginationHelper.ProcessResponse<GetAllPersonDetailsQueryResponse, PersonDetails>(
+		return PaginationHelper.ProcessResponse<GetAllPersonDetailsQueryResponse, PersonDetails, PersonFilter>(
 			result,
 			request.PaginationFilter,
 			request.UriService,
 			totalRecords,
-			request.Route);
+			request.Route,
+			request.QueryFilter);
 	}
 }

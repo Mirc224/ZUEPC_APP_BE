@@ -16,7 +16,7 @@ public class GetUserDetailsQueryHandler :
 	public async Task<GetUserDetailsQueryResponse> Handle(GetUserDetailsQuery request, CancellationToken cancellationToken)
 	{
 		GetUserQueryResponse response = await _mediator.Send(new GetUserQuery() { Id = request.Id });
-		if(!response.Success)
+		if(!response.Success )
 		{
 			return new() { Success = false };
 		}
