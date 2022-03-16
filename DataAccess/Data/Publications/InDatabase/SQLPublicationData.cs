@@ -131,7 +131,7 @@ public class SQLPublicationData :
 		}
 		if (queryFilter.Name != null)
 		{
-			builder.WhereInArray(
+			builder.WhereLikeInArray(
 				nameof(PublicationNameModel.Name),
 				queryFilter.Name, 
 				TableAliasConstants.PUBLICATION_NAMES_TABLE_ALIAS, 
@@ -147,7 +147,7 @@ public class SQLPublicationData :
 		}
 		if (queryFilter.IdentifierValue != null)
 		{
-			builder.WhereInArray(
+			builder.WhereLikeInArray(
 				nameof(PublicationIdentifierModel.IdentifierValue), 
 				queryFilter.IdentifierValue, 
 				TableAliasConstants.PUBLICATION_IDENTIFIERS_TABLE_ALIAS, 
@@ -179,7 +179,7 @@ public class SQLPublicationData :
 		}
 		if (queryFilter.InstitutionName != null)
 		{
-			builder.WhereInArray(
+			builder.WhereLikeInArray(
 				nameof(InstitutionNameModel.Name),
 				queryFilter.InstitutionName,
 				TableAliasConstants.INSTITUTION_NAMES_TABLE_ALIAS,
@@ -187,7 +187,7 @@ public class SQLPublicationData :
 		}
 		if (queryFilter.AuthorFirstName != null)
 		{
-			builder.WhereInArray(
+			builder.WhereLikeInArray(
 				nameof(PersonNameModel.FirstName),
 				queryFilter.AuthorFirstName,
 				TableAliasConstants.PERSON_NAMES_TABLE_ALIAS,
@@ -195,7 +195,7 @@ public class SQLPublicationData :
 		}
 		if (queryFilter.AuthorLastName != null)
 		{
-			builder.WhereInArray(
+			builder.WhereLikeInArray(
 				nameof(PersonNameModel.LastName),
 				queryFilter.AuthorLastName,
 				TableAliasConstants.PERSON_NAMES_TABLE_ALIAS,

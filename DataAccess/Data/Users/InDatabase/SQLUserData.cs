@@ -48,15 +48,15 @@ public class SQLUserData :
 		}
 		if (queryFilter.Email != null)
 		{
-			builder.WhereInArray(nameof(UserModel.Email), queryFilter.Email, baseTableAlias, parameters);
+			builder.WhereLikeInArray(nameof(UserModel.Email), queryFilter.Email, baseTableAlias, parameters);
 		}
 		if (queryFilter.FirstName != null)
 		{
-			builder.WhereInArray(nameof(UserModel.FirstName), queryFilter.FirstName, baseTableAlias, parameters);
+			builder.WhereLikeInArray(nameof(UserModel.FirstName), queryFilter.FirstName, baseTableAlias, parameters);
 		}
 		if (queryFilter.LastName != null)
 		{
-			builder.WhereInArray(nameof(UserModel.LastName), queryFilter.LastName, baseTableAlias, parameters);
+			builder.WhereLikeInArray(nameof(UserModel.LastName), queryFilter.LastName, baseTableAlias, parameters);
 		}
 		if (queryFilter.UserRole != null)
 		{

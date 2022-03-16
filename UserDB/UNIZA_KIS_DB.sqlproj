@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{d5a64b51-2dd4-4f8d-9228-8dc692eddc5d}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -89,7 +89,7 @@
     <RefactorLog Include="UNIZA_KIS_DB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="UNIZA_KIS_DB.publish.xml" />
+    <None Include="ZUEPC_DB.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

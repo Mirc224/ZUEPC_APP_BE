@@ -64,11 +64,11 @@ public class SQLPersonData :
 		}
 		if (queryFilter.FirstName != null)
 		{
-			builder.WhereInArray(nameof(PersonNameModel.FirstName), queryFilter.FirstName, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
+			builder.WhereLikeInArray(nameof(PersonNameModel.FirstName), queryFilter.FirstName, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
 		}
 		if (queryFilter.LastName != null)
 		{
-			builder.WhereInArray(nameof(PersonNameModel.LastName), queryFilter.LastName, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
+			builder.WhereLikeInArray(nameof(PersonNameModel.LastName), queryFilter.LastName, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
 		}
 		if (queryFilter.NameType != null)
 		{

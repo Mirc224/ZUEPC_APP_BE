@@ -66,7 +66,7 @@ public class SQLInstitutionData :
 		}
 		if (queryFilter.Name != null)
 		{
-			builder.WhereInArray(nameof(InstitutionNameModel.Name), queryFilter.Name, TableAliasConstants.INSTITUTION_NAMES_TABLE_ALIAS, parameters);
+			builder.WhereLikeInArray(nameof(InstitutionNameModel.Name), queryFilter.Name, TableAliasConstants.INSTITUTION_NAMES_TABLE_ALIAS, parameters);
 		}
 		if (queryFilter.ExternIdentifierValue != null)
 		{
