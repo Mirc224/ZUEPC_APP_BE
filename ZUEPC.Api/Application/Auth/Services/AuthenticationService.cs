@@ -278,7 +278,7 @@ public class AuthenticationService
 			IEnumerable<UserRole> userRoles = userRolesResponse.Data;
 			foreach(UserRole userRole in userRoles.OrEmptyIfNull())
 			{
-				claims.Add(new Claim(ClaimTypes.Role, ((RoleType)userRole.RoleId).ToString()));
+				claims.Add(new Claim(ClaimTypes.Role, (userRole.RoleId).ToString()));
 			}
 		}
 		return claims;

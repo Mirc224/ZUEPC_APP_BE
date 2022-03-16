@@ -7,6 +7,7 @@ using ZUEPC.Api.Application.Users.Commands.UserRoles;
 using ZUEPC.Api.Application.Users.Commands.Users;
 using ZUEPC.Api.Application.Users.Queries.Users;
 using ZUEPC.Api.Application.Users.Queries.Users.Details;
+using ZUEPC.Api.Common.Authorization;
 using ZUEPC.Application.Users.Commands;
 using ZUEPC.Application.Users.Queries;
 using ZUEPC.Application.Users.Validators;
@@ -59,10 +60,10 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response);
 		}
 
-		[HttpGet("{id}/details")]
-		public async Task<IActionResult> GetUserDetails(long id)
+		[HttpGet("{userId}/detail")]
+		public async Task<IActionResult> GetUserDetails(long userId)
 		{
-			GetUserDetailsQuery? query = new() { Id = id };
+			GetUserDetailsQuery? query = new() { Id = userId };
 			GetUserDetailsQueryResponse? response = await _mediator.Send(query);
 			if (!response.Success)
 			{
@@ -76,10 +77,10 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response.Data);
 		}
 
-		[HttpPut("{id}/role")]
-		public async Task<IActionResult> UpdateUserRoles([FromBody]UpdateUserRolesCommand request, [FromRoute]long id)
+		[HttpPut("{userId}/role")]
+		public async Task<IActionResult> UpdateUserRoles([FromBody]UpdateUserRolesCommand request, [FromRoute]long userId)
 		{
-			request.UserId = id;
+			request.UserId = userId;
 			UpdateUserRolesCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 				return StatusCode(500);
@@ -95,27 +96,27 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response.Roles);
 		}
 
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteUser(long id)
+		[HttpDelete("{userId}")]
+		public async Task<IActionResult> DeleteUser(long userId)
 		{
-			DeleteUserCommandResponse response = await _mediator.Send(new DeleteUserCommand() { Id = id});
+			DeleteUserCommandResponse response = await _mediator.Send(new DeleteUserCommand() { Id = userId});
 			if (!response.Success)
 				return NotFound();
 			return NoContent();
 		}
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateUser([FromBody]UpdateUserCommand request, [FromRoute]long id)
+		[HttpPut("{userId}")]
+		public async Task<IActionResult> UpdateUser([FromBody]UpdateUserCommand request, [FromRoute]long userId)
 		{
-			request.Id = id;
+			request.Id = userId;
 			UpdateUserCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 				return NotFound();
 			return NoContent();
 		}
 
-		[HttpPatch("{id}")]
-		public async Task<IActionResult> PatchUser([FromBody] JsonPatchDocument<User> patchEntity, int id)
+		[HttpPatch("{userId}")]
+		public async Task<IActionResult> PatchUser([FromBody] JsonPatchDocument<User> patchEntity, int userId)
 		{
 			User user = new();
 			patchEntity.ApplyTo(user);
@@ -132,7 +133,7 @@ namespace ZUEPC.Application.Users.Controllers
 			PatchUserCommand? request = new PatchUserCommand
 			{
 				AppliedPatch = patchEntity,
-				UserId = id
+				UserId = userId
 			};
 
 			PatchUserCommandResponse? response = await _mediator.Send(request);
