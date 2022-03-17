@@ -30,6 +30,10 @@ public static class SqlBuilderExt
 			innerValues.Add("@" + paramName);
 			parameters.TryAdd(paramName, item);
 		}
+		if (!innerValues.Any())
+		{
+			return;
+		}
 		string resultInner = string.Join(',', innerValues);
 		string columnAlias = alias;
 		if(!string.IsNullOrEmpty(columnAlias))
@@ -70,6 +74,10 @@ public static class SqlBuilderExt
 			innerValues.Add($"{columnAlias}{keyName} LIKE @{paramName}");
 			string term = $"%{item}%";
 			parameters.TryAdd(paramName, term);
+		}
+		if(!innerValues.Any())
+		{
+			return;
 		}
 		string resultInner = string.Join(" OR ", innerValues);
 

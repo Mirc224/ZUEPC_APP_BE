@@ -46,6 +46,7 @@ public static class DataAnnotationsKeyConstants
 	
 	public const string EMAIL_ALREADY_USED = "EmailAlreadyUsed";
 
+	public const string UNSUPPORTED_IMPORT_SYSTEM = "UnsupportedImportSystem";
 	
 	public const string UNKNOWN_ERROR = "UnknownError";
 	public const string UNKNOWN_DB_ERROR = "UnknownDbError";

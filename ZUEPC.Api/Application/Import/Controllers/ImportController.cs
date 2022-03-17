@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using System.Text;
 using System.Xml.Linq;
+using ZUEPC.Api.Common.Extensions;
 using ZUEPC.Application.Import.Commands;
+using ZUEPC.Application.Import.Commands.Common;
 using ZUEPC.Application.Import.Validators;
 using ZUEPC.Localization;
 
@@ -22,28 +23,39 @@ namespace ZUEPC.Application.Import.Controllers
 			_localizer = localizer;
 		}
 
-		[HttpPost("crepc")]
-		[Consumes("application/xml")]
-		public async Task<IActionResult> ImportCREPC([FromBody] XElement input)
+		[HttpPost("upload/{importSystem}")]
+		public async Task<IActionResult> UploadFile([FromRoute] string importSystem, IFormFile file)
 		{
-			ImportCREPCXmlCommand request = new() { XEelementBody = input };
+			importSystem = importSystem.ToLower();
+			if (string.IsNullOrEmpty(importSystem) || 
+				(importSystem != "dawinci" && importSystem != "crepc"))
+			{
+				string errorMessag = string.Format(_localizer[DataAnnotationsKeyConstants.UNSUPPORTED_IMPORT_SYSTEM], "dawinci, crepc");
+				return BadRequest(new { errors = new string[] { errorMessag} });
+			}
+			string fileContent = await file.ReadAsStringAsync();
+			ImportXmlBaseCommand? command = null;
+			if (importSystem == "crepc")
+			{
+				command = new ImportCREPCXmlCommand() { RawContent = fileContent };
+			}
+			if (importSystem == "dawinci")
+			{
+				command = new ImportDaWinciXmlCommand() { RawContent = fileContent };
+			}
+			IActionResult? validationResult = ValidateImportXmlCommand(command);
+			if (validationResult is null)
+			{
+				command.XEelementBody = XElement.Parse(fileContent);
+				ImportBaseResponse? response = (ImportBaseResponse)await _mediator.Send(command);
+				if (response == null || !response.Success)
+				{
+					return StatusCode(500);
+				}
+				return Ok(response.PublicationsIds);
+			}
 
-			ImportCREPCXmlCommandResponse? response = await _mediator.Send(request);
-			if (!response.Success)
-				return StatusCode(500);
-			return Ok(response.PublicationsIds);
-		}
-
-		[HttpPost("dawinci")]
-		[Consumes("application/xml")]
-		public async Task<IActionResult> ImportDaWinci([FromBody] XElement input)
-		{
-			ImportDaWinciXmlCommand request = new() { XEelementBody = input};
-
-			ImportDaWinciXmlCommandResponse response = await _mediator.Send(request);
-			if (!response.Success)
-				return StatusCode(500);
-			return Ok(response.PublicationsIds);
+			return validationResult;
 		}
 
 		private IActionResult? ValidateImportXmlCommand(ImportXmlBaseCommand command)

@@ -222,6 +222,9 @@
   <data name="UnknownError" xml:space="preserve">
     <value>An unknown error occurred.</value>
   </data>
+  <data name="UnsupportedImportSystem" xml:space="preserve">
+    <value>Unsupported import system. Supported system: {0}.</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>User not found.</value>
   </data>

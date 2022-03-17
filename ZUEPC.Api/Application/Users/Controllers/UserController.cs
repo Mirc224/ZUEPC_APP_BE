@@ -105,6 +105,8 @@ namespace ZUEPC.Application.Users.Controllers
 			return NoContent();
 		}
 
+		[Authorize]
+		[UserAuthorization]
 		[HttpPut("{userId}")]
 		public async Task<IActionResult> UpdateUser([FromBody]UpdateUserCommand request, [FromRoute]long userId)
 		{

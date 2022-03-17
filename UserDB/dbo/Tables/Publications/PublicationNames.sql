@@ -2,7 +2,7 @@
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
     [PublicationId] BIGINT NOT NULL, 
-    [Name] VARCHAR(150) NULL, 
+    [Name] VARCHAR(1000) NULL, 
     [NameType] VARCHAR(50) NULL, 
     [OriginSourceType] SMALLINT NOT NULL, 
     [VersionDate] DATETIME NOT NULL, 

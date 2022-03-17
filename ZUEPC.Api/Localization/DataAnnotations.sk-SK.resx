@@ -222,6 +222,9 @@
   <data name="UnknownError" xml:space="preserve">
     <value>Nastala neznáma chyba.</value>
   </data>
+  <data name="UnsupportedImportSystem" xml:space="preserve">
+    <value>Nepodporovaný systém importu. Dostupné systémy: {0}.</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Používateľ sa nenašiel.</value>
   </data>
