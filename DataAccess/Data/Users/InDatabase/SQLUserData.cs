@@ -50,13 +50,15 @@ public class SQLUserData :
 		{
 			builder.WhereLikeInArray(nameof(UserModel.Email), queryFilter.Email, baseTableAlias, parameters);
 		}
-		if (queryFilter.FirstName != null)
+		if (queryFilter.Name != null)
 		{
-			builder.WhereLikeInArray(nameof(UserModel.FirstName), queryFilter.FirstName, baseTableAlias, parameters);
-		}
-		if (queryFilter.LastName != null)
-		{
-			builder.WhereLikeInArray(nameof(UserModel.LastName), queryFilter.LastName, baseTableAlias, parameters);
+			string concatString = builder.GetConcatFunctionString(nameof(UserModel.FirstName), nameof(UserModel.LastName), baseTableAlias, parameters);
+			string concatStringReverse = builder.GetConcatFunctionString(nameof(UserModel.LastName), nameof(UserModel.FirstName), baseTableAlias, parameters);
+			
+			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, queryFilter.Name, "", parameters);
+			string bindedSqlReverse = builder.WhereLikeInArrayBindedString(concatStringReverse, queryFilter.Name, "", parameters);
+
+			builder.Where($"({bindedSql} OR {bindedSqlReverse})");
 		}
 		if (queryFilter.UserRole != null)
 		{

@@ -43,25 +43,33 @@ public static class SqlBuilderExt
 		builder.Where($"{columnAlias}{keyName} IN ({resultInner})");
 	}
 
-	public static ExpandoObject WhereLikeInArray(this SqlBuilder builder, string keyName, IEnumerable<string> values, string? alias)
+
+	public static ExpandoObject WhereLikeInArray(this SqlBuilder builder, string keyName, IEnumerable<string> values, string? keyAlias)
 	{
 		ExpandoObject parameters = new();
-		builder.WhereLikeInArray(keyName, values, alias, parameters);
+		builder.WhereLikeInArray(keyName, values, keyAlias, parameters);
 		return parameters;
 	}
 
-	public static void WhereLikeInArray(this SqlBuilder builder, string keyName, IEnumerable<string> values, string? alias, ExpandoObject parameters)
+	public static string WhereLikeInArray(this SqlBuilder builder, string keyName, IEnumerable<string> values, string? keyAlias, ExpandoObject parameters)
 	{
-		if (alias != null)
+		string result = builder.WhereLikeInArrayBindedString(keyName, values, keyAlias, parameters);
+		builder.Where($"({result})");
+		return result;
+	}
+
+	public static string WhereLikeInArrayBindedString(this SqlBuilder builder, string keyName, IEnumerable<string> values, string? keyAlias, ExpandoObject parameters)
+	{
+		if (keyAlias != null)
 		{
-			alias = alias.Trim();
+			keyAlias = keyAlias.Trim();
 		}
-		if (string.IsNullOrEmpty(alias))
+		if (string.IsNullOrEmpty(keyAlias))
 		{
-			alias = "";
+			keyAlias = "";
 		}
-		int counter = 1;
-		string columnAlias = alias;
+
+		string columnAlias = keyAlias;
 		if (!string.IsNullOrEmpty(columnAlias))
 		{
 			columnAlias = columnAlias + ".";
@@ -69,18 +77,59 @@ public static class SqlBuilderExt
 		List<string> innerValues = new();
 		foreach (string item in values)
 		{
-			string paramName = $"{alias}{keyName}{counter++}";
+			string paramName = Guid.NewGuid().ToString("N"); ;
 
 			innerValues.Add($"{columnAlias}{keyName} LIKE @{paramName}");
 			string term = $"%{item}%";
 			parameters.TryAdd(paramName, term);
 		}
-		if(!innerValues.Any())
+		if (!innerValues.Any())
 		{
-			return;
+			return "";
 		}
 		string resultInner = string.Join(" OR ", innerValues);
+		return $"{resultInner}";
+	}
 
-		builder.Where($"({resultInner})");
+	public static string GetConcatFunctionString(
+		this SqlBuilder builder,
+		string firstKeyName,
+		string secondKeyName,
+		string? firstKeyAlias,
+		string? secondKeyAlias,
+		ExpandoObject parameters,
+		string delimeter = " ")
+	{
+		if(firstKeyAlias != null)
+		{
+			firstKeyAlias +=".";
+		}
+		if (secondKeyAlias != null)
+		{
+			secondKeyAlias += ".";
+		}
+		if (firstKeyAlias is null)
+		{
+			firstKeyAlias = "";
+		}
+		if (secondKeyAlias is null)
+		{
+			secondKeyAlias = "";
+		}
+		string delimeterAlias = "@" + Guid.NewGuid().ToString("N");
+		parameters.TryAdd(delimeterAlias, delimeter);
+		return $"CONCAT({firstKeyAlias}{firstKeyName},{delimeterAlias},{secondKeyAlias}{secondKeyName})";
+	}
+
+	public static string GetConcatFunctionString(
+		this SqlBuilder builder,
+		string firstKeyName,
+		string secondKeyName,
+		string? alias,
+		ExpandoObject parameters,
+		string delimeter = " ")
+	{
+		
+		return builder.GetConcatFunctionString(firstKeyName, secondKeyName, alias, alias, parameters, delimeter);
 	}
 }
