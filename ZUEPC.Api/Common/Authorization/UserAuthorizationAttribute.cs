@@ -23,7 +23,7 @@ public class UserAuthorizationAttribute : AuthorizeAttribute, IAuthorizationFilt
 
 		if(!isUserAuthorized)
 		{
-			context.Result = new UnauthorizedResult();
+			context.Result = new ForbidResult();
 		}
 	}
 }

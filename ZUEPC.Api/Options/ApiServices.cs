@@ -49,8 +49,8 @@ public static class ApiServices
 			option.AddDefaultPolicy(builder =>
 			{
 				builder
-				.AllowAnyMethod()
 				.AllowAnyOrigin()
+				.AllowAnyMethod()
 				.AllowAnyHeader();
 			});
 		});

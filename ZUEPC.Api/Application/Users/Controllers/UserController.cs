@@ -17,6 +17,7 @@ using ZUEPC.DataAccess.Filters;
 namespace ZUEPC.Application.Users.Controllers
 {
 	[ApiController]
+	[Authorize]
 	[Route("api/[controller]")]
 	public class UserController : ControllerBase
 	{
@@ -31,7 +32,7 @@ namespace ZUEPC.Application.Users.Controllers
 		}
 
 		[HttpGet("detail")]
-		//[Authorize(Roles = "ADMIN")]
+		[Authorize(Roles = "ADMIN")]
 		public async Task<IActionResult> GetUsersDetails([FromQuery] UserFilter userFilter, [FromQuery] PaginationFilter paginationFilter)
 		{
 			string? route = Request.Path.Value;
@@ -49,7 +50,7 @@ namespace ZUEPC.Application.Users.Controllers
 		}
 
 		[HttpGet]
-		//[Authorize(Roles = "ADMIN")]
+		[Authorize(Roles = "ADMIN")]
 		public async Task<IActionResult> GetUsers([FromQuery] PaginationFilter filter)
 		{
 			string? route = Request.Path.Value;
@@ -60,6 +61,7 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response);
 		}
 
+		[UserAuthorization]
 		[HttpGet("{userId}/detail")]
 		public async Task<IActionResult> GetUserDetails(long userId)
 		{
@@ -77,6 +79,7 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response.Data);
 		}
 
+		[Authorize(Roles = "ADMIN")]
 		[HttpPut("{userId}/role")]
 		public async Task<IActionResult> UpdateUserRoles([FromBody]UpdateUserRolesCommand request, [FromRoute]long userId)
 		{
@@ -87,6 +90,7 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok();
 		}
 
+		[Authorize(Roles = "ADMIN")]
 		[HttpGet("role")]
 		public async Task<IActionResult> GetRoles()
 		{
@@ -96,6 +100,7 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response.Roles);
 		}
 
+		[Authorize(Roles = "ADMIN")]
 		[HttpDelete("{userId}")]
 		public async Task<IActionResult> DeleteUser(long userId)
 		{
@@ -105,7 +110,6 @@ namespace ZUEPC.Application.Users.Controllers
 			return NoContent();
 		}
 
-		[Authorize]
 		[UserAuthorization]
 		[HttpPut("{userId}")]
 		public async Task<IActionResult> UpdateUser([FromBody]UpdateUserCommand request, [FromRoute]long userId)

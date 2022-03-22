@@ -1,12 +1,8 @@
 using Constants.Infrastructure;
-using Dapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-using System.Data.SqlClient;
 using System.IdentityModel.Tokens.Jwt;
-using Users.Base.Domain;
 using ZUEPC.Application.Auth.Commands.RefreshTokens;
 using ZUEPC.Application.Auth.Commands.Users;
 
@@ -58,29 +54,9 @@ namespace ZUEPC.Application.Auth.Controllers
 			return Ok(new { response.Token, response.RefreshToken });
 		}
 
-		[HttpGet("testsss")]
-		public async Task<IActionResult> Test()
-		{
-			using(IDbConnection connection = new SqlConnection(config.GetConnectionString("default")))
-			{
-				try
-				{
-					connection.Open();
-					return Ok();
-				}
-				catch(SqlException ex)
-				{
-					return BadRequest(new { message = ex.Message, code = ex.ErrorCode, erros = ex.Errors, conn = config.GetConnectionString("default") });
-				}
-			}
-			
-			//return Ok(await connection.QueryAsync<User>("Select * from Users", commandType: CommandType.Text))
 
-			//return Ok(new { Conn = config.GetConnectionString("default")});
-		}
-
-		[HttpPost("logout")]
 		[Authorize]
+		[HttpPost("logout")]
 		public async Task<IActionResult> LogoutUser()
 		{
 			string jwtId = User?.Claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;

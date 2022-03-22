@@ -74,7 +74,7 @@ public class AuthenticationService
 				return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_EXIST] } };
 			}
 
-			if (storedToken.ExpiryDate.ToUniversalTime() < DateTime.UtcNow)
+			if (storedToken.ExpiryDate < DateTime.UtcNow)
 			{
 				return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.REFRESH_TOKEN_EXPRIRED] } };
 			}
@@ -247,7 +247,7 @@ public class AuthenticationService
 			IsRevoked = false,
 			UserId = user.Id,
 			CreatedAt = DateTime.UtcNow,
-			ExpiryDate = DateTime.UtcNow.AddMonths(6),
+			ExpiryDate = DateTime.UtcNow.Add(_jwtSettings.RefreshTokenLifetime),
 			Token = Guid.NewGuid().ToString()
 		};
 
