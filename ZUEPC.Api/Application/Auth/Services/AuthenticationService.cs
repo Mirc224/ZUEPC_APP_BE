@@ -57,10 +57,10 @@ public class AuthenticationService
 				return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_VALID] } };
 			}
 
-			if (!IsExpired(tokenInVerification))
-			{
-				return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_EXPIRED] } };
-			}
+			//if (!IsExpired(tokenInVerification))
+			//{
+			//	return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_EXPIRED] } };
+			//}
 
 			if (refreshToken is null)
 			{
