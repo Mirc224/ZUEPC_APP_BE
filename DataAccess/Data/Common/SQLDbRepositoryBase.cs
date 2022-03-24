@@ -82,6 +82,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		PaginationFilter filter, 
 		SqlBuilder builder)
 	{
+		BuildOrderByExpression(builder, filter);
 		int offset = (filter.PageNumber - 1) * filter.PageSize;
 		Template builderTemplate = builder.AddTemplate(@$"
 				SELECT /**select**/ FROM {baseTableName} AS {baseTableAlias}
@@ -89,7 +90,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 				/**leftjoin**/
 				/**where**/ 
 				/**groupby**/
-				ORDER BY [CreatedAt]
+				/**orderby**/ {filter.Order}
 				OFFSET {offset} ROWS FETCH NEXT {filter.PageSize} ROWS ONLY");
 		return await db.QueryAsync<TModel, dynamic>(builderTemplate.RawSql, parameters);
 	}
@@ -190,5 +191,10 @@ public abstract class SQLDbRepositoryBase<TModel>
 			values,
 			baseTableAlias);
 		return await GetModelsAsync(parameters, builder);
+	}
+
+	protected void BuildOrderByExpression(SqlBuilder builder, PaginationFilter filter)
+	{
+		builder.OrderBy(filter.OrderBy);
 	}
 }

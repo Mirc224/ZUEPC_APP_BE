@@ -87,7 +87,7 @@ namespace ZUEPC.Application.Users.Controllers
 			UpdateUserRolesCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 				return StatusCode(500);
-			return Ok();
+			return NoContent();
 		}
 
 		[Authorize(Roles = "ADMIN")]

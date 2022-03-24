@@ -11,7 +11,6 @@ public class UserDetails
 	public string? LastName { get; set; }
 	public string? Email { get; set; }
 	public DateTime CreatedAt { get; set; }
-	[JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
 	public IEnumerable<RoleType>? UserRoles { get; set; }
 
 }
