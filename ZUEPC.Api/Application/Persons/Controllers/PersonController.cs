@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZUEPC.Application.Persons.Commands.Persons;
 using ZUEPC.Application.Persons.Queries.Persons;
@@ -11,6 +12,7 @@ using ZUEPC.DataAccess.Filters;
 namespace ZUEPC.Application.Persons.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class PersonController : ControllerBase
 {
@@ -99,6 +101,7 @@ public class PersonController : ControllerBase
 		return Ok(response.Data);
 	}
 
+	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpDelete("{id}")]
 	public async Task<IActionResult> DeletePerson(long id)
 	{
@@ -111,6 +114,7 @@ public class PersonController : ControllerBase
 		return NoContent();
 	}
 
+	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpPut("{id}")]
 	public async Task<IActionResult> UpdatePerson([FromBody]UpdatePersonWithDetailsCommand request, [FromRoute] long id)
 	{
@@ -130,6 +134,7 @@ public class PersonController : ControllerBase
 		return Ok();
 	}
 
+	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpPost]
 	public async Task<IActionResult> CreatePerson(CreatePersonWithDetailsCommand request)
 	{

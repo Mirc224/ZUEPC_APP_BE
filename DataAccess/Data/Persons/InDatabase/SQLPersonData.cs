@@ -21,8 +21,7 @@ public class SQLPersonData :
 	protected override dynamic BuildJoinWithFilterExpression(PersonFilter queryFilter, SqlBuilder builder, ExpandoObject parameters = null)
 	{
 		if (queryFilter.NameType != null ||
-			queryFilter.FirstName != null ||
-			queryFilter.LastName != null )
+			queryFilter.Name != null)
 		{
 			AddToInnerJoinExpression(
 				builder,
@@ -62,13 +61,15 @@ public class SQLPersonData :
 		{
 			builder.WhereInArray(nameof(PersonModel.DeathYear), queryFilter.DeathYear, baseTableAlias, parameters);
 		}
-		if (queryFilter.FirstName != null)
+		if (queryFilter.Name != null)
 		{
-			builder.WhereLikeInArray(nameof(PersonNameModel.FirstName), queryFilter.FirstName, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
-		}
-		if (queryFilter.LastName != null)
-		{
-			builder.WhereLikeInArray(nameof(PersonNameModel.LastName), queryFilter.LastName, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
+			string concatString = builder.GetConcatFunctionString(nameof(PersonNameModel.FirstName), nameof(PersonNameModel.LastName), TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
+			string concatStringReverse = builder.GetConcatFunctionString(nameof(PersonNameModel.LastName), nameof(PersonNameModel.FirstName), TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
+
+			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, queryFilter.Name, "", parameters);
+			string bindedSqlReverse = builder.WhereLikeInArrayBindedString(concatStringReverse, queryFilter.Name, "", parameters);
+
+			builder.Where($"({bindedSql} OR {bindedSqlReverse})");
 		}
 		if (queryFilter.NameType != null)
 		{
@@ -76,7 +77,7 @@ public class SQLPersonData :
 		}
 		if (queryFilter.ExternIdentifierValue != null)
 		{
-			builder.WhereInArray(
+			builder.WhereLikeInArray(
 				nameof(PersonExternDatabaseIdModel.ExternIdentifierValue),
 				queryFilter.ExternIdentifierValue, 
 				TableAliasConstants.PERSON_EXTERN_DATABASE_ID_TABLE_ALIAS, 

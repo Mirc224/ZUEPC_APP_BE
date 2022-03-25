@@ -31,8 +31,8 @@ namespace ZUEPC.Application.Users.Controllers
 			_uriService = uriService;
 		}
 
-		[HttpGet("detail")]
 		[Authorize(Roles = "ADMIN")]
+		[HttpGet("detail")]
 		public async Task<IActionResult> GetUsersDetails([FromQuery] UserFilter userFilter, [FromQuery] PaginationFilter paginationFilter)
 		{
 			string? route = Request.Path.Value;
@@ -49,8 +49,8 @@ namespace ZUEPC.Application.Users.Controllers
 			return Ok(response);
 		}
 
-		[HttpGet]
 		[Authorize(Roles = "ADMIN")]
+		[HttpGet]
 		public async Task<IActionResult> GetUsers([FromQuery] PaginationFilter filter)
 		{
 			string? route = Request.Path.Value;
@@ -121,6 +121,7 @@ namespace ZUEPC.Application.Users.Controllers
 			return NoContent();
 		}
 
+		[Authorize(Roles = "ADMIN")]
 		[HttpPatch("{userId}")]
 		public async Task<IActionResult> PatchUser([FromBody] JsonPatchDocument<User> patchEntity, int userId)
 		{
