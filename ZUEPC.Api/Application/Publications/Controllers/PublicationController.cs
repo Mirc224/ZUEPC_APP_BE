@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZUEPC.Application.Publications.Commands.Publications;
 using ZUEPC.Application.Publications.Queries.Publications;
@@ -12,6 +13,7 @@ using ZUEPC.DataAccess.Filters;
 namespace ZUEPC.Application.Publications.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class PublicationController : ControllerBase
 {
@@ -114,8 +116,9 @@ public class PublicationController : ControllerBase
 		return Ok(response.Data);
 	}
 
+	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpPost]
-	public async Task<IActionResult> CreateInstitution(CreatePublicationWithDetailsCommand request)
+	public async Task<IActionResult> CreatePublication(CreatePublicationWithDetailsCommand request)
 	{
 		request.OriginSourceType = OriginSourceType.ZUEPC;
 		request.VersionDate = DateTime.Now;
@@ -129,9 +132,10 @@ public class PublicationController : ControllerBase
 		{
 			return StatusCode(500);
 		}
-		return StatusCode(201, response.Data);
+		return Ok(response.Data);
 	}
 
+	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpPut("{id}")]
 	public async Task<IActionResult> UpdatePublication([FromBody] UpdatePublicationWithDetailsCommand request, [FromRoute] long id)
 	{
@@ -148,6 +152,19 @@ public class PublicationController : ControllerBase
 		{
 			return NotFound();
 		}
-		return Ok();
+		return NoContent();
+	}
+
+	[Authorize(Roles = "EDITOR,ADMIN")]
+	[HttpDelete("{id}")]
+	public async Task<IActionResult> DeletePublication(long id)
+	{
+		DeletePublicationCommand request = new() { PublicationId = id };
+		DeletePublicationCommandResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return BadRequest();
+		}
+		return NoContent();
 	}
 }

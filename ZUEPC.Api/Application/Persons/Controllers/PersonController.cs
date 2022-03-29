@@ -131,7 +131,7 @@ public class PersonController : ControllerBase
 		{
 			return NotFound();
 		}
-		return Ok();
+		return NoContent();
 	}
 
 	[Authorize(Roles = "EDITOR,ADMIN")]

@@ -1,5 +1,4 @@
 ﻿using ZUEPC.Application.Persons.Entities.Inputs.Common;
-using ZUEPC.Common.Entities.Inputs;
 
 namespace ZUEPC.Application.Persons.Entities.Inputs.PersonNames;
 

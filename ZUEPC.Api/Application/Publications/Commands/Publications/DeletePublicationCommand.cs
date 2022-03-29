@@ -3,6 +3,7 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Publications.Commands.Publications;
 
-public class DeletePublicationCommand : DeleteModelCommandBase, IRequest<DeletePublicationCommandResponse>
+public class DeletePublicationCommand : IRequest<DeletePublicationCommandResponse>
 {
+	public long PublicationId { get; set; }
 }

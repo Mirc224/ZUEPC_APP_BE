@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ZUEPC.Application.Institutions.Commands.Institutions;
 using ZUEPC.Application.Institutions.Queries.Institutions;
@@ -11,6 +12,7 @@ using ZUEPC.DataAccess.Filters;
 namespace ZUEPC.Application.Institutions.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class InstitutionController : ControllerBase
 {
@@ -116,6 +118,7 @@ public class InstitutionController : ControllerBase
 		return Ok(response.Data);
 	}
 
+	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpDelete("{id}")]
 	public async Task<IActionResult> DeleteInstitution(long id)
 	{
@@ -128,6 +131,7 @@ public class InstitutionController : ControllerBase
 		return NoContent();
 	}
 
+	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpPut("{id}")]
 	public async Task<IActionResult> UpdatePerson([FromBody] UpdateInstitutionWithDetailsCommand request, [FromRoute] long id)
 	{
@@ -144,9 +148,10 @@ public class InstitutionController : ControllerBase
 		{
 			return NotFound();
 		}
-		return Ok();
+		return NoContent();
 	}
 
+	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpPost]
 	public async Task<IActionResult> CreateInstitution(CreateInstitutionWithDetailsCommand request)
 	{

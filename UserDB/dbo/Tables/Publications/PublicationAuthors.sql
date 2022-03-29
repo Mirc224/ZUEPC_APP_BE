@@ -5,7 +5,7 @@
     [PersonId] BIGINT NOT NULL, 
     [InstitutionId] BIGINT NOT NULL, 
     [ContributionRatio] FLOAT NULL, 
-    [Role] VARCHAR(50) NULL, 
+    [Role] NVARCHAR(100) NULL, 
     [OriginSourceType] SMALLINT NOT NULL, 
     [VersionDate] DATETIME NOT NULL, 
     [CreatedAt] DATETIME NOT NULL, 
