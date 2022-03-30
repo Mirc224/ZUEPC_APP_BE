@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ZUEPC.Api.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Application.Institutions.Commands.Institutions;
 using ZUEPC.Application.Institutions.Queries.Institutions;
 using ZUEPC.Application.Institutions.Queries.Institutions.Details;
@@ -116,6 +117,25 @@ public class InstitutionController : ControllerBase
 			return NotFound();
 		}
 		return Ok(response.Data);
+	}
+
+	[HttpGet("name")]
+	public async Task<IActionResult> GetAllInstitutionNames([FromQuery] InstitutionNameFilter? institutionNameFilter, [FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllInstitutionNamesQuery request = new()
+		{
+			PaginationFilter = filter,
+			UriService = _uriService,
+			Route = route,
+			QueryFilter = institutionNameFilter
+		};
+		GetAllInstitutionNamesQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
 	}
 
 	[Authorize(Roles = "EDITOR,ADMIN")]

@@ -91,13 +91,17 @@ public partial class ImportService
 														.InstitutionExternDatabaseIds
 														.Select(x => x.ExternIdentifierValue)
 														.ToList();
-		GetAllInstitutionExternDbIdsInSetQueryResponse foundInstitutionExternIdentifiers = await _mediator.Send(
+		GetAllInstitutionExternDbIdsInSetQueryResponse foundInstitutionExternIdentifiers = null;
+		if(institutionExternDatabaseIds.Any())
+		{
+			foundInstitutionExternIdentifiers = await _mediator.Send(
 			new GetAllInstitutionExternDbIdsInSetQuery()
 			{
 				SearchedExternIdentifiers = institutionExternDatabaseIds
 			});
+		}
 
-		if (foundInstitutionExternIdentifiers.Data != null &&
+		if (foundInstitutionExternIdentifiers?.Data != null &&
 			foundInstitutionExternIdentifiers.Data.Any())
 		{
 			institutionId = foundInstitutionExternIdentifiers.Data.First().InstitutionId;

@@ -11,8 +11,7 @@ public class PublicationFilter : IQueryFilter
 	public string[]? ISForm { get; set; }
 	public string[]? ExternIdentifierValue { get; set; }
 	public string[]? InstitutionName { get; set; }
-	public string[]? AuthorFirstName { get; set; }
-	public string[]? AuthorLastName { get; set; }
+	public string[]? AuthorName { get; set; }
 	public int[]? ActivityYear { get; set; }
 	public string[]? ActivityCategory { get; set; }
 	public string[]? GovernmentGrant { get; set; }

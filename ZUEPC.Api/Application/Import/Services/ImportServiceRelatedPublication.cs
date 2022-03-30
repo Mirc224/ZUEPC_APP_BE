@@ -23,11 +23,6 @@ public partial class ImportService
 		List<Tuple<ImportRelatedPublication, Publication, Publication>> relatedPublicationTuples = new();
 		foreach (ImportRelatedPublication relatedPublication in importRelatedPublications)
 		{
-			//Tuple<ImportRelatedPublication, RelatedPublication>? filledRelatedPublicationTuple = await ProcessRelatedPublicationImportPublicationAsync(
-			//														updatedPublication,
-			//														relatedPublication,
-			//														versionDate,
-			//														source);
 			Tuple<ImportRelatedPublication, Publication, Publication>? filledRelatedPublicationTuple = await ProcessRelatedPublicationImportPublicationAsync(
 														updatedPublication,
 														relatedPublication,

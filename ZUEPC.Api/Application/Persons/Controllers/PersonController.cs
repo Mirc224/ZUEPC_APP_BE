@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ZUEPC.Api.Application.Persons.Queries.PersonNames;
 using ZUEPC.Application.Persons.Commands.Persons;
 using ZUEPC.Application.Persons.Queries.Persons;
 using ZUEPC.Application.Persons.Queries.Persons.Details;
@@ -30,7 +31,13 @@ public class PersonController : ControllerBase
 	public async Task<IActionResult> GetAll([FromQuery] PersonFilter personFilter, [FromQuery] PaginationFilter filter)
 	{
 		string? route = Request.Path.Value;
-		GetAllPersonsQuery request = new() { PaginationFilter = filter, UriService = _uriService, Route = route, QueryFilter = personFilter};
+		GetAllPersonsQuery request = new() 
+		{ 
+			PaginationFilter = filter, 
+			UriService = _uriService, 
+			Route = route, 
+			QueryFilter = personFilter
+		};
 		GetAllPersonsQueryResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
@@ -99,6 +106,25 @@ public class PersonController : ControllerBase
 			return NotFound();
 		}
 		return Ok(response.Data);
+	}
+
+	[HttpGet("name")]
+	public async Task<IActionResult> GetAllPersonNames([FromQuery] PersonNameFilter personNameFilter, [FromQuery] PaginationFilter filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllPersonNamesQuery request = new()
+		{
+			PaginationFilter = filter,
+			UriService = _uriService,
+			Route = route,
+			QueryFilter = personNameFilter
+		};
+		GetAllPersonNamesQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
 	}
 
 	[Authorize(Roles = "EDITOR,ADMIN")]

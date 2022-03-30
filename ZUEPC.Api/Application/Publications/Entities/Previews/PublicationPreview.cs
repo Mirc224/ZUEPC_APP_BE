@@ -10,5 +10,6 @@ public class PublicationPreview
 	public string? DocumentType { get; set; }
 	public ICollection<PublicationName>? Names { get; set; }
 	public ICollection<PublicationIdentifier>? Identifiers { get; set; }
+	public ICollection<PublicationExternDatabaseId>? ExternDatabaseIds { get; set; }
 	public ICollection<PublicationAuthorDetails>? Authors { get; set; }
 }

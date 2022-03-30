@@ -3,12 +3,14 @@ using DataAccess.DbAccess;
 using System.Dynamic;
 using ZUEPC.DataAccess.Constants;
 using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Extensions;
+using ZUEPC.DataAccess.Filters;
 using ZUEPC.DataAccess.Models.Institution;
 
 namespace ZUEPC.DataAccess.Data.Institutions.InDatabase;
 
 public class SQLInstitutionNameData :
-	SQLDbRepositoryBase<InstitutionNameModel>,
+	SQLDbRepositoryWithFilterBase<IInstitutionNameData, InstitutionNameModel, InstitutionNameFilter>,
 	IInstitutionNameData
 {
 	public SQLInstitutionNameData(ISqlDataAccess db) : 
@@ -24,5 +26,24 @@ public class SQLInstitutionNameData :
 	public async Task<IEnumerable<InstitutionNameModel>> GetInstitutionNamesByInstitutionIdAsync(long institutionId)
 	{
 		return await GetModelsWithColumnValueAsync(nameof(InstitutionNameModel.InstitutionId), institutionId);
+	}
+
+	protected override dynamic BuildJoinWithFilterExpression(InstitutionNameFilter queryFilter, SqlBuilder builder, ExpandoObject parameters = null)
+	{
+		return parameters;
+	}
+
+	protected override dynamic BuildWhereWithFilterExpression(InstitutionNameFilter queryFilter, SqlBuilder builder, ExpandoObject parameters = null)
+	{
+		if (parameters is null)
+		{
+			parameters = new();
+		}
+		if (queryFilter.Name != null)
+		{
+			builder.WhereLikeInArray(nameof(InstitutionNameModel.Name), queryFilter.Name, baseTableAlias, parameters);
+		}
+		
+		return parameters;
 	}
 }

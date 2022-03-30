@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ZUEPC.Api.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.Publications.Commands.Publications;
 using ZUEPC.Application.Publications.Queries.Publications;
 using ZUEPC.Application.Publications.Queries.Publications.Details;
@@ -114,6 +115,25 @@ public class PublicationController : ControllerBase
 			return NotFound();
 		}
 		return Ok(response.Data);
+	}
+
+	[HttpGet("name")]
+	public async Task<IActionResult> GetAllPublicationNames([FromQuery] PublicationNameFilter publicationNameFilter, [FromQuery] PaginationFilter? filter)
+	{
+		string? route = Request.Path.Value;
+		GetAllPublicationNamesQuery request = new()
+		{
+			PaginationFilter = filter,
+			UriService = _uriService,
+			Route = route,
+			QueryFilter = publicationNameFilter
+		};
+		GetAllPublicationNamesQueryResponse response = await _mediator.Send(request);
+		if (!response.Success)
+		{
+			return NotFound();
+		}
+		return Ok(response);
 	}
 
 	[Authorize(Roles = "EDITOR,ADMIN")]

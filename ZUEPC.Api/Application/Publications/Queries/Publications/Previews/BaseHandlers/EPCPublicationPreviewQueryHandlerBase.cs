@@ -2,6 +2,7 @@
 using MediatR;
 using ZUEPC.Application.PublicationAuthors.Queries.Details;
 using ZUEPC.Application.Publications.Entities.Previews;
+using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
@@ -34,6 +35,11 @@ public abstract class EPCPublicationPreviewQueryHandlerBase
 		})).Data;
 
 		resultPreview.Authors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
+		{
+			PublicationId = publicationId
+		})).Data;
+
+		resultPreview.ExternDatabaseIds = (await _mediator.Send(new GetPublicationPublicationExternDatabaseIdsQuery()
 		{
 			PublicationId = publicationId
 		})).Data;

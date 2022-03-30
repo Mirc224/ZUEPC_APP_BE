@@ -74,8 +74,7 @@ public class SQLPublicationData :
 				nameof(PublicationActivityModel.PublicationId));
 		}
 
-		if (queryFilter.AuthorFirstName != null ||
-			queryFilter.AuthorLastName != null ||
+		if (queryFilter.AuthorName != null ||
 			queryFilter.InstitutionName != null)
 		{
 			AddToInnerJoinExpression(
@@ -88,8 +87,7 @@ public class SQLPublicationData :
 				nameof(PublicationAuthorModel.PublicationId));
 		}
 
-		if (queryFilter.AuthorFirstName != null ||
-			queryFilter.AuthorLastName != null)
+		if (queryFilter.AuthorName != null)
 		{
 			AddToInnerJoinExpression(
 				builder,
@@ -185,21 +183,15 @@ public class SQLPublicationData :
 				TableAliasConstants.INSTITUTION_NAMES_TABLE_ALIAS,
 				parameters);
 		}
-		if (queryFilter.AuthorFirstName != null)
+		if (queryFilter.AuthorName != null)
 		{
-			builder.WhereLikeInArray(
-				nameof(PersonNameModel.FirstName),
-				queryFilter.AuthorFirstName,
-				TableAliasConstants.PERSON_NAMES_TABLE_ALIAS,
-				parameters);
-		}
-		if (queryFilter.AuthorLastName != null)
-		{
-			builder.WhereLikeInArray(
-				nameof(PersonNameModel.LastName),
-				queryFilter.AuthorLastName,
-				TableAliasConstants.PERSON_NAMES_TABLE_ALIAS,
-				parameters);
+			string concatString = builder.GetConcatFunctionString(nameof(PersonNameModel.FirstName), nameof(PersonNameModel.LastName), TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
+			string concatStringReverse = builder.GetConcatFunctionString(nameof(PersonNameModel.LastName), nameof(PersonNameModel.FirstName), TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
+
+			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, queryFilter.AuthorName, "", parameters);
+			string bindedSqlReverse = builder.WhereLikeInArrayBindedString(concatStringReverse, queryFilter.AuthorName, "", parameters);
+
+			builder.Where($"({bindedSql} OR {bindedSqlReverse})");
 		}
 		if (queryFilter.ActivityYear != null)
 		{

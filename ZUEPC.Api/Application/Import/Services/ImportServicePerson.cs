@@ -235,12 +235,16 @@ public partial class ImportService
 		long personId = -1;
 
 		List<string> personExternDatabaseIds = importPerson.PersonExternDatabaseIds.Select(x => x.ExternIdentifierValue).ToList();
-		GetAllPersonsExternDbIdsInSetQueryResponse foundPersonExternIdentifiers = await _mediator.Send(new GetAllPersonsExternDbIdsInSetQuery()
+		GetAllPersonsExternDbIdsInSetQueryResponse foundPersonExternIdentifiers = null;
+		if(personExternDatabaseIds.Any())
 		{
-			SearchedExternIdentifiers = personExternDatabaseIds
-		});
+			foundPersonExternIdentifiers = await _mediator.Send(new GetAllPersonsExternDbIdsInSetQuery()
+			{
+				SearchedExternIdentifiers = personExternDatabaseIds
+			});
+		}
 
-		if (foundPersonExternIdentifiers.Data != null &&
+		if (foundPersonExternIdentifiers?.Data != null &&
 			foundPersonExternIdentifiers.Data.Any())
 		{
 			personId = foundPersonExternIdentifiers.Data.First().PersonId;

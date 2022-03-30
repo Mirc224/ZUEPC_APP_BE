@@ -67,12 +67,17 @@ public partial class ImportService
 		long publicationId = -1;
 
 		IEnumerable<string> imPublicationIdentifiers = publicationRecord.PublicationIdentifiers.Select(identifier => identifier.IdentifierValue);
-		GetAllPublicationIdentifiersInSetQueryResponse foundPublicationIdentifiers = await _mediator.Send(new GetAllPublicationIdentifiersInSetQuery()
-		{
-			SearchedIdentifiers = imPublicationIdentifiers
-		});
+		GetAllPublicationIdentifiersInSetQueryResponse foundPublicationIdentifiers = null;
 
-		if (foundPublicationIdentifiers.Data != null &&
+		if(imPublicationIdentifiers.Any())
+		{
+			foundPublicationIdentifiers = await _mediator.Send(new GetAllPublicationIdentifiersInSetQuery()
+			{
+				SearchedIdentifiers = imPublicationIdentifiers
+			});
+		}
+
+		if (foundPublicationIdentifiers?.Data != null &&
 			foundPublicationIdentifiers.Data.Any())
 		{
 			publicationId = foundPublicationIdentifiers.Data.First().PublicationId;
@@ -84,12 +89,16 @@ public partial class ImportService
 		}
 
 		IEnumerable<string> imPublicationExternIds = publicationRecord.PublicationExternDbIds.Select(identifier => identifier.ExternIdentifierValue);
-		GetAllPublicationExternDbIdsInSetQueryResponse foundPublicationExternIdentifiers = await _mediator.Send(new GetAllPublicationExternDbIdsInSetQuery()
+		GetAllPublicationExternDbIdsInSetQueryResponse foundPublicationExternIdentifiers = null;
+		if(imPublicationExternIds.Any())
 		{
-			SearchedExternIdentifiers = imPublicationExternIds
-		});
+			foundPublicationExternIdentifiers = await _mediator.Send(new GetAllPublicationExternDbIdsInSetQuery()
+			{
+				SearchedExternIdentifiers = imPublicationExternIds
+			});
+		}
 
-		if (foundPublicationExternIdentifiers.Data != null &&
+		if (foundPublicationExternIdentifiers?.Data != null &&
 			foundPublicationExternIdentifiers.Data.Any())
 		{
 			publicationId = foundPublicationExternIdentifiers.Data.First().PublicationId;
