@@ -116,10 +116,16 @@ partial class ImportParser
 		string? publicationName = publicationDetailsString[..startIndexOfPubMetaData];
 		publicationNames[0].Name = publicationName.Trim();
 		List<ImportPublicationIdentifier> publicationIdentifiers = new();
-
-		if(sourcePublication != null && sourceMetadataString != null)
+		
+		if (sourcePublication != null && sourceMetadataString != null)
 		{
-			string externIdentifier = Regex.Replace(sourceMetadataString, @"\s", "");
+			Tuple<int, string>? searchResult = GetFoundIdentifierWithStartIndex(sourceMetadataString, wantedIdentifiers);
+			if (searchResult == null)
+			{
+				return result;
+			}
+
+			string externIdentifier = Regex.Replace(sourceMetadataString.Substring(searchResult.Item1), @"\s", "");
 			ImportPublicationExternDatabaseId externId = new() { ExternIdentifierValue = externIdentifier };
 			result.PublicationExternDbIds.Add(externId);
 			return result;
@@ -139,21 +145,14 @@ partial class ImportParser
 	
 	private static ImportPublication? ParseDaWinciReferencePublicationSource(string sourceMetadataString, IEnumerable<string> wantedIdentifiers)
 	{
-		int startIndexOfIdentifier = -1;
-		string? foundIdentifier = null;
-		foreach (string identifierType in wantedIdentifiers)
-		{
-			startIndexOfIdentifier = sourceMetadataString.LastIndexOf(identifierType, StringComparison.OrdinalIgnoreCase);
-			if (startIndexOfIdentifier != -1)
-			{
-				foundIdentifier = identifierType;
-				break;
-			}
-		}
-		if (foundIdentifier is null)
+		Tuple<int, string>? searchResult = GetFoundIdentifierWithStartIndex(sourceMetadataString, wantedIdentifiers);
+		if (searchResult is null)
 		{
 			return default;
 		}
+
+		int startIndexOfIdentifier = searchResult.Item1;
+		string foundIdentifier = searchResult.Item2;
 
 		int indexOfNextComma = sourceMetadataString.IndexOf(',', startIndexOfIdentifier);
 		string? idValue = sourceMetadataString[(startIndexOfIdentifier + foundIdentifier.Length)..indexOfNextComma].Trim();
@@ -179,6 +178,26 @@ partial class ImportParser
 		int indexOfNextComma = publicationDetailsString.IndexOf(',', startIndexOfIdentifier);
 		string? idValue = publicationDetailsString[(startIndexOfIdentifier + wantedIdentifier.Length)..indexOfNextComma].Trim();
 		return PublicationIdCreator(wantedIdentifier, idValue);
+	}
+
+	private static Tuple<int, string>? GetFoundIdentifierWithStartIndex(string sourceMetadataString, IEnumerable<string> wantedIdentifiers)
+	{
+		int startIndexOfIdentifier = -1;
+		string? foundIdentifier = null;
+		foreach (string identifierType in wantedIdentifiers)
+		{
+			startIndexOfIdentifier = sourceMetadataString.LastIndexOf(identifierType, StringComparison.OrdinalIgnoreCase);
+			if (startIndexOfIdentifier != -1)
+			{
+				foundIdentifier = identifierType;
+				break;
+			}
+		}
+		if (foundIdentifier is null)
+		{
+			return default;
+		}
+		return new Tuple<int, string>(startIndexOfIdentifier, foundIdentifier);
 	}
 
 }

@@ -33,7 +33,6 @@ public class PaginationFilter
 				(value.ToLower() != "asc" && 
 				value.ToLower() != "desc"))
 			{
-				_order = "ASC";
 				return;
 			}
 			_order = value;
@@ -41,7 +40,7 @@ public class PaginationFilter
 	}
 
 	private string _orderBy = "CreatedAt";
-	private string _order = "ASC";
+	private string _order = "DESC";
 
 	private int _pageNumber = 1;
 	private int _pageSize = 10;
