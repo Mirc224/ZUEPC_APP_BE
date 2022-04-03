@@ -19,10 +19,10 @@ using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Common.Extensions;
-using ZUEPC.Responses;
 using ZUEPC.Common.Services.ItemChecks;
-using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
+using ZUEPC.DataAccess.Interfaces;
 using ZUEPC.Localization;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Application.Publications.Commands.Publications;
 

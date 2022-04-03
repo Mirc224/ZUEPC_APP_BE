@@ -6,6 +6,7 @@ namespace ZUEPC.DataAccess.Data.Publications;
 
 public interface IPublicationData :
 	IRepositoryBase<PublicationModel>,
+	IRepositoryWithSimpleIdBase<PublicationModel, long>,
 	IRepositoryWithFilter<PublicationModel, PublicationFilter>
 {
 }

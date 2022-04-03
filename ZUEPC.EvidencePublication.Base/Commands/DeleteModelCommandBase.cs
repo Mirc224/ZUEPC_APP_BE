@@ -1,6 +1,6 @@
 ﻿namespace ZUEPC.EvidencePublication.Base.Commands;
 
-public abstract class DeleteModelCommandBase
+public abstract class DeleteModelCommandBase<TId>
 {
-	public long Id { get; set; }
+	public TId Id { get; set; }
 }

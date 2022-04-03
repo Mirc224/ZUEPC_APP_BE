@@ -61,8 +61,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Create person should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Create person should return status code 200.\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    var personsIds = [response.id]\r",
 											"    pm.environment.set(\"Temp.Publication.Person.Ids\", personsIds);\r",
@@ -147,8 +147,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Create person should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Create person should return status code 200.\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    var personsIds = pm.environment.get(\"Temp.Publication.Person.Ids\");\r",
 											"    personsIds.push(response.id);\r",
@@ -235,8 +235,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Create person should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Create person should return status code 200.\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    \r",
 											"    var personsIds = pm.environment.get(\"Temp.Publication.Person.Ids\");\r",
@@ -321,8 +321,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Create institution should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Create institution should return status code 200.\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    //pm.environment.set(\"Temp.Publication.Institution1.Id\", response.id);\r",
 											"\r",
@@ -407,8 +407,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Create institution should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Create institution should return status code 200.\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    //pm.environment.set(\"Temp.Publication.Institution2.Id\", response.id);\r",
 											"    \r",
@@ -493,8 +493,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Create institution should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Create institution should return status code 200.\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    //pm.environment.set(\"Temp.Publication.Institution3.Id\", response.id);\r",
 											"    \r",
@@ -619,8 +619,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Create publication should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Create publication should return status code 200.\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    \r",
 											"    var publicationIds = [];\r",
@@ -750,8 +750,8 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Create publication should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"pm.test(\"Create publication should return status code 200.\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    \r",
 											"    var publicationIds = pm.environment.get(\"Temp.Publication.RelatedPublication.Ids\");\r",
@@ -882,7 +882,7 @@
 									"script": {
 										"exec": [
 											"pm.test(\"Create publication should return status code 201.\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
+											"    pm.response.to.have.status(200);\r",
 											"    var response = pm.response.json();\r",
 											"    \r",
 											"    var publicationIds = pm.environment.get(\"Temp.Publication.RelatedPublication.Ids\");\r",
@@ -1039,8 +1039,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Create publication should return status code 201.\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
+									"pm.test(\"Create publication should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
 									"    var response = pm.response.json();\r",
 									"    var expectedBody = JSON.parse(pm.environment.get(\"Temp.Create.Publication.ExpectedBody\"));\r",
 									"    pm.environment.set(\"Temp.Institution.Created.Id\", response.id);\r",
@@ -1532,8 +1532,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Update publication should return status code 200.\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"pm.test(\"Update publication should return status code 204.\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1799,15 +1799,45 @@
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		},
 		{
 			"name": "GetAllPublications",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Temp.Authenticate.AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{ApiBaseUrl}}/api/publication/detail?pageSize=2&pageNumber=1",
+					"raw": "{{ApiBaseUrl}}/api/publication/detail?authorName=Frivaldský Michal",
 					"host": [
 						"{{ApiBaseUrl}}"
 					],
@@ -1818,17 +1848,84 @@
 					],
 					"query": [
 						{
-							"key": "pageSize",
-							"value": "2"
+							"key": "activityCategory",
+							"value": "ee8B5oDMfd",
+							"disabled": true
 						},
 						{
-							"key": "pageNumber",
-							"value": "1"
+							"key": "authorName",
+							"value": "Frivaldský Michal"
 						}
 					]
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GetAllPublicationNames",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Temp.Authenticate.AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/publication/name",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"publication",
+						"name"
+					],
+					"query": [
+						{
+							"key": "activityCategory",
+							"value": "ee8B5oDMfd",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Temp.Authenticate.AccessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

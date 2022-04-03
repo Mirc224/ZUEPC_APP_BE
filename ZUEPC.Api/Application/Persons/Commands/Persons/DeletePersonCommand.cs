@@ -3,6 +3,8 @@ using ZUEPC.EvidencePublication.Base.Commands;
 
 namespace ZUEPC.Application.Persons.Commands.Persons;
 
-public class DeletePersonCommand : DeleteModelCommandBase, IRequest<DeletePersonCommandResponse>
+public class DeletePersonCommand : 
+	DeleteModelCommandBase<long>, 
+	IRequest<DeletePersonCommandResponse>
 {
 }

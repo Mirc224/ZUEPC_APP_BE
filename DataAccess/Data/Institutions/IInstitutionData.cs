@@ -6,6 +6,7 @@ namespace ZUEPC.DataAccess.Data.Institutions;
 
 public interface IInstitutionData : 
 	IRepositoryBase<InstitutionModel>,
+	IRepositoryWithSimpleIdBase<InstitutionModel, long>,
 	IRepositoryWithFilter<InstitutionModel, InstitutionFilter>
 
 {

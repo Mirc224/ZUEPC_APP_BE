@@ -8,7 +8,8 @@ using ZUEPC.DataAccess.Models.Users;
 namespace ZUEPC.DataAccess.Data.Users.InDatabase;
 
 public class SQLUserRolesData :
-	SQLDbRepositoryBase<UserRoleModel>, IUserRoleData
+	SQLDbRepositoryBase<UserRoleModel>, 
+	IUserRoleData
 {
 	public SQLUserRolesData(ISqlDataAccess db) 
 		: base(db, TableNameConstants.USER_ROLES_TABLE, TableAliasConstants.USER_ROLES_TABLE_ALIAS)
@@ -30,8 +31,26 @@ public class SQLUserRolesData :
 		return (await GetModelsAsync(parameters, builder)).FirstOrDefault();
 	}
 
+	public async Task<int> DeleteUserRoleByUserIdAndRoleIdAsync(long userId, long roleId)
+	{
+		SqlBuilder builder = new();
+		ExpandoObject parameters = new();
+		AddToWhereExpression(nameof(UserRoleModel.UserId), userId, builder, parameters);
+		AddToWhereExpression(nameof(UserRoleModel.RoleId), roleId, builder, parameters);
+		return await DeleteModelsAsync(parameters, builder);
+	}
+
 	public async Task<IEnumerable<UserRoleModel>> GetUserRolesByUserIdAsync(long userId)
 	{
 		return await GetModelsWithColumnValueAsync(nameof(UserRoleModel.UserId), userId);
+	}
+
+	public async Task<int> UpdateModelAsync(UserRoleModel model)
+	{
+		SqlBuilder builder = new();
+		AddToWhereExpression(nameof(UserRoleModel.UserId), builder);
+		AddToWhereExpression(nameof(UserRoleModel.RoleId), builder);
+		string updateSql = builder.AddTemplate($"{baseUpdateRawSql} /**where**/").RawSql;
+		return await db.ExecuteAsync(updateSql, model);
 	}
 }

@@ -1,5 +1,5 @@
-﻿using ZUEPC.EvidencePublication.Base.Domain.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
+﻿using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.EvidencePublication.Base.Domain.Common;
 
 namespace ZUEPC.EvidencePublication.Base.PublicationAuthors;
 

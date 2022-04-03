@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Publications;
 namespace ZUEPC.Application.Publications.Queries.Publictions;
 
 public class GetPublicationQueryHandler :
-	GetSimpleModelQueryHandlerBase<Publication, PublicationModel>,
+	GetSimpleModelQueryHandlerBase<IPublicationData, Publication, PublicationModel, long>,
 	IRequestHandler<GetPublicationQuery, GetPublicationQueryResponse>
 {
 	public GetPublicationQueryHandler(IMapper mapper, IPublicationData repository)

@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.PublicationAuthor;
 namespace ZUEPC.Application.PublicationAuthors.Commands;
 
 public class UpdatePublicationAuthorCommandHandler :
-	UpdateSimpleModelCommandHandlerBase<PublicationAuthorModel>,
+	UpdateSimpleModelCommandHandlerBase<IPublicationAuthorData, PublicationAuthorModel, long>,
 	IRequestHandler<
 		UpdatePublicationAuthorCommand, 
 		UpdatePublicationAuthorCommandResponse>

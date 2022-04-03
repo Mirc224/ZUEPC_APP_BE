@@ -3,7 +3,9 @@ using ZUEPC.DataAccess.Models.Publication;
 
 namespace ZUEPC.DataAccess.Data.Publications;
 
-public interface IPublicationExternDatabaseIdData : IRepositoryBase<PublicationExternDatabaseIdModel>
+public interface IPublicationExternDatabaseIdData : 
+	IRepositoryBase<PublicationExternDatabaseIdModel>,
+	IRepositoryWithSimpleIdBase<PublicationExternDatabaseIdModel, long>
 {
 	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetPublicationExternDbIdsByPublicationIdAsync(long publicationId);
 	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues);

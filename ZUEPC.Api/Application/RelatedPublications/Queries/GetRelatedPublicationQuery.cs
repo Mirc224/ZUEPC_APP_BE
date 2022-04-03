@@ -4,7 +4,7 @@ using ZUEPC.EvidencePublication.Base.Queries;
 namespace ZUEPC.Application.RelatedPublications.Queries;
 
 public class GetRelatedPublicationQuery : 
-	EPCSimpleQueryBase,
+	EPCSimpleQueryBase<long>,
 	IRequest<GetRelatedPublicationQueryResponse>
 {
 }

@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.PublicationAuthor;
 namespace ZUEPC.DataAccess.Data.PublicationAuthors.InDatabase;
 
 public class SQLPublicationAuthorData :
-	SQLDbRepositoryBase<PublicationAuthorModel>,
+	SQLDbEPCRepositoryBase<PublicationAuthorModel>,
 	IPublicationAuthorData
 {
 	public SQLPublicationAuthorData(ISqlDataAccess db) :

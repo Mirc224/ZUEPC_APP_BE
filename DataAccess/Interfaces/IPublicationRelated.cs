@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
+﻿namespace ZUEPC.DataAccess.Interfaces;
 
 public interface IPublicationRelated
 {

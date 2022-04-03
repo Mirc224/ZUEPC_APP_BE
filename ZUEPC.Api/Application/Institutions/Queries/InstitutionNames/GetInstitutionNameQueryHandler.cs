@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Institutions;
 namespace ZUEPC.Application.Institutions.Queries.InstitutionNames;
 
 public class GetInstitutionNameQueryHandler :
-	GetSimpleModelQueryHandlerBase<InstitutionName, InstitutionNameModel>,
+	GetSimpleModelQueryHandlerBase<IInstitutionNameData,InstitutionName, InstitutionNameModel, long>,
 	IRequestHandler<GetInstitutionNameQuery, GetInstitutionNameQueryResponse>
 {
 	public GetInstitutionNameQueryHandler(IMapper mapper, IInstitutionNameData repository)

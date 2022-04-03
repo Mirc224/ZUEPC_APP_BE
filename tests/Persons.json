@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "4560d4b9-e2eb-41e9-86ea-03a308ec12f1",
-		"name": "Person Copy",
+		"name": "Person",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -240,8 +240,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Update person should return status code 200.\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"pm.test(\"Update person should return status code 204.\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -449,6 +449,65 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GetAllPersonNames",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Temp.Authenticate.AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/person/name",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"person",
+						"name"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{Temp.Authenticate.AccessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

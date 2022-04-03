@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.PublicationActivity;
 namespace ZUEPC.DataAccess.Data.PublicationActivities.InDatabase;
 
 public class SQLPublicationActivityData :
-	SQLDbRepositoryBase<PublicationActivityModel>,
+	SQLDbEPCRepositoryBase<PublicationActivityModel>,
 	IPublicationActivityData
 {
 	public SQLPublicationActivityData(ISqlDataAccess db) : 

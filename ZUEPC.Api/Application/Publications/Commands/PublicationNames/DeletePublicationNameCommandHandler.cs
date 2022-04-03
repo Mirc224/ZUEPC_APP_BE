@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Publication;
 namespace ZUEPC.Application.Publications.Commands.PublicationNames;
 
 public class DeletePublicationNameCommandHandler :
-	DeleteSimpleModelBaseCommandHandler<PublicationNameModel>,
+	DeleteSimpleModelBaseCommandHandler<PublicationNameModel, long>,
 	IRequestHandler<DeletePublicationNameCommand, DeletePublicationNameCommandResponse>
 {
 	public DeletePublicationNameCommandHandler(IPublicationNameData repository)

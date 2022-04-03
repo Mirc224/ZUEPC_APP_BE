@@ -41,6 +41,7 @@ using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Auth.Domain;
 using ZUEPC.Common.Entities;
 using ZUEPC.Common.Entities.Inputs;
+using ZUEPC.DataAccess.Interfaces;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.DataAccess.Models.Institution;
 using ZUEPC.DataAccess.Models.Person;
@@ -363,7 +364,7 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.IdentifierName, opts => opts.MapFrom(src => src.IdentifierName))
 			.ForMember(dest => dest.ISForm, opts => opts.MapFrom(src => src.ISForm));
 		CreateMap<ImportPublicationExternDatabaseId, PublicationExternDatabaseId>()
-			.IncludeBase<EPCImportExternDatabaseIdBase, EPCExternDatabaseIdBase>();
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 		CreateMap<ImportPublicationName, PublicationName>();
 
 		// Person
@@ -371,7 +372,7 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.BirthYear, opts => opts.MapFrom(src => src.BirthYear))
 			.ForMember(dest => dest.DeathYear, opts => opts.MapFrom(src => src.DeathYear));
 		CreateMap<ImportPersonExternDatabaseId, PersonExternDatabaseId>()
-			.IncludeBase<EPCImportExternDatabaseIdBase, EPCExternDatabaseIdBase>();
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 		CreateMap<ImportPersonName, PersonName>()
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType))
 			.ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
@@ -382,7 +383,7 @@ public class MappingProfile : Profile
 			.ForMember(dest => dest.Level, opts => opts.MapFrom(src => src.Level))
 			.ForMember(dest => dest.InstitutionType, opts => opts.MapFrom(src => src.InstititutionType));
 		CreateMap<ImportInstitutionExternDatabaseId, InstitutionExternDatabaseId>()
-			.IncludeBase<EPCImportExternDatabaseIdBase, EPCExternDatabaseIdBase>();
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue));
 		CreateMap<ImportInstitutionName, InstitutionName>()
 			.ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
 			.ForMember(dest => dest.NameType, opts => opts.MapFrom(src => src.NameType));
@@ -407,22 +408,18 @@ public class MappingProfile : Profile
 	private void CreateBaseClassesMapping()
 	{
 		CreateMap<ModelBase, DomainBase>()
-			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
 			.ForMember(dest => dest.CreatedAt, opts => opts.MapFrom(src => src.CreatedAt))
 			.ReverseMap();
 
 		CreateMap<EPCModelBase, EPCDomainBase>()
 			.IncludeBase<ModelBase, DomainBase>()
+			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
 			.ForMember(dest => dest.VersionDate, opts => opts.MapFrom(src => src.VersionDate))
 			.ForMember(dest => dest.OriginSourceType, opts => opts.MapFrom(src => src.OriginSourceType))
 			.ReverseMap();
 
-		CreateMap<EPCExternDatabaseIdBaseModel, EPCExternDatabaseIdBase>()
-			.IncludeBase<EPCModelBase, EPCDomainBase>()
-			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue))
-			.ReverseMap();
 
-		CreateMap<EPCImportExternDatabaseIdBase, EPCExternDatabaseIdBase>()
+		CreateMap<EPCImportExternDatabaseIdBase, IEPCItemWithExternIdentifier>()
 			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue))
 			.ReverseMap();
 
@@ -442,7 +439,6 @@ public class MappingProfile : Profile
 	{
 		CreateMap<RefreshTokenModel, RefreshToken>()
 			.IncludeBase<ModelBase, DomainBase>()
-			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
 			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
 			.ForMember(dest => dest.JwtId, opts => opts.MapFrom(src => src.JwtId))
 			.ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token))
@@ -483,7 +479,7 @@ public class MappingProfile : Profile
 			.ReverseMap();
 		// PublicationExternDatabaseIdentifiers
 		CreateMap<PublicationExternDatabaseIdModel, PublicationExternDatabaseId>()
-			 .IncludeBase<EPCExternDatabaseIdBaseModel, EPCExternDatabaseIdBase>()
+			 .ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue))
 			 .ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			 .ReverseMap();
 		// PublicationName
@@ -502,7 +498,7 @@ public class MappingProfile : Profile
 			.ReverseMap();
 		// InstitutionExternDatabaseIdentifiers
 		CreateMap<InstitutionExternDatabaseIdModel, InstitutionExternDatabaseId>()
-			.IncludeBase<EPCExternDatabaseIdBaseModel, EPCExternDatabaseIdBase>()
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue))
 			.ForMember(dest => dest.InstitutionId, opts => opts.MapFrom(src => src.InstitutionId))
 			.ReverseMap();
 		// InstitutionNames
@@ -521,7 +517,7 @@ public class MappingProfile : Profile
 			.ReverseMap();
 		// PersonIdentifiers
 		CreateMap<PersonExternDatabaseIdModel, PersonExternDatabaseId>()
-			.IncludeBase<EPCExternDatabaseIdBaseModel, EPCExternDatabaseIdBase>()
+			.ForMember(dest => dest.ExternIdentifierValue, opts => opts.MapFrom(src => src.ExternIdentifierValue))
 			.ForMember(dest => dest.PersonId, opts => opts.MapFrom(src => src.PersonId))
 			.ReverseMap();
 		// PersonNames
@@ -596,7 +592,6 @@ public class MappingProfile : Profile
 	{
 		// RefreshToken
 		CreateMap<RefreshToken, UpdateRefreshTokenCommand>()
-			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
 			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
 			.ForMember(dest => dest.JwtId, opts => opts.MapFrom(src => src.JwtId))
 			.ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token))
@@ -762,7 +757,6 @@ public class MappingProfile : Profile
 	{
 		// RefreshToken
 		CreateMap<UpdateRefreshTokenCommand, RefreshTokenModel>()
-			.ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
 			.ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
 			.ForMember(dest => dest.JwtId, opts => opts.MapFrom(src => src.JwtId))
 			.ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token))

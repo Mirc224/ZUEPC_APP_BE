@@ -182,6 +182,6 @@ public class InstitutionController : ControllerBase
 		{
 			return BadRequest();
 		}
-		return StatusCode(201, response.CreatedInstitutionDetails);
+		return Ok(response.CreatedInstitutionDetails);
 	}
 }

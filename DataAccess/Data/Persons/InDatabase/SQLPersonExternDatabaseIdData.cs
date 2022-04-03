@@ -1,15 +1,12 @@
-﻿using Dapper;
-using DataAccess.DbAccess;
-using System.Dynamic;
+﻿using DataAccess.DbAccess;
 using ZUEPC.DataAccess.Constants;
 using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Extensions;
 using ZUEPC.DataAccess.Models.Person;
 
 namespace ZUEPC.DataAccess.Data.Persons.InDatabase;
 
 public class SQLPersonExternDatabaseIdData :
-	SQLDbRepositoryBase<PersonExternDatabaseIdModel>,
+	SQLDbEPCRepositoryBase<PersonExternDatabaseIdModel>,
 	IPersonExternDatabaseIdData
 {
 	public SQLPersonExternDatabaseIdData(ISqlDataAccess db) :

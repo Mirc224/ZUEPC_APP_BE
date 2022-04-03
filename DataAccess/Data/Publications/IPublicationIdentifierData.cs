@@ -3,7 +3,9 @@ using ZUEPC.DataAccess.Models.Publication;
 
 namespace ZUEPC.DataAccess.Data.Publications;
 
-public interface IPublicationIdentifierData : IRepositoryBase<PublicationIdentifierModel>
+public interface IPublicationIdentifierData : 
+	IRepositoryBase<PublicationIdentifierModel>,
+	IRepositoryWithSimpleIdBase<PublicationIdentifierModel, long>
 {
 	Task<IEnumerable<PublicationIdentifierModel>> GetPublicationIdentifiersByPublicationIdAsync(long publicationId);
 	Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByIdentifierValueSetAsync(IEnumerable<string> identifierValues);

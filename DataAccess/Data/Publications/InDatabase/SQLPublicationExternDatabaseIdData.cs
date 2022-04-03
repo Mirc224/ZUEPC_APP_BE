@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.Publication;
 namespace ZUEPC.DataAccess.Data.Publications.InDatabase;
 
 public class SQLPublicationExternDatabaseIdData :
-	SQLDbRepositoryBase<PublicationExternDatabaseIdModel>,
+	SQLDbEPCRepositoryBase<PublicationExternDatabaseIdModel>,
 	IPublicationExternDatabaseIdData
 {
 	public SQLPublicationExternDatabaseIdData(ISqlDataAccess db) : 

@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Localization;
-using ZUEPC.Responses;
 using ZUEPC.EvidencePublication.Base.Queries;
 using ZUEPC.Localization;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Common.Services.ItemChecks;
 
@@ -20,7 +20,7 @@ public class EPCDomainItemsCheckServiceBase
 		long recordId,
 		string annotationKey,
 		ResponseBase? response = null)
-		where TQuery : EPCSimpleQueryBase, new()
+		where TQuery : EPCSimpleQueryBase<long>, new()
 		where TResponse : ResponseWithDataBase<TDomain>
 	{
 		TQuery simpleQuery = new TQuery() { Id = recordId };

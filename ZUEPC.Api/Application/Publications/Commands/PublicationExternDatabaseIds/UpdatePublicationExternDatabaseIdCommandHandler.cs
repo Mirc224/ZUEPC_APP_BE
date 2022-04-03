@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Publication;
 namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 
 public class UpdatePublicationExternDatabaseIdCommandHandler :
-	UpdateSimpleModelCommandHandlerBase<PublicationExternDatabaseIdModel>,
+	UpdateSimpleModelCommandHandlerBase<IPublicationExternDatabaseIdData, PublicationExternDatabaseIdModel, long>,
 	IRequestHandler<UpdatePublicationExternDatabaseIdCommand, UpdatePublicationExternDatabaseIdCommandResponse>
 {
 

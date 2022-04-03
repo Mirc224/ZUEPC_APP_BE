@@ -1,6 +1,6 @@
 ﻿namespace ZUEPC.EvidencePublication.Base.Queries;
 
-public abstract class EPCSimpleQueryBase
+public abstract class EPCSimpleQueryBase<TId>
 {
-	public long Id { get; set; }
+	public TId Id { get; set; }
 }

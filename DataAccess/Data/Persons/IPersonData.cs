@@ -6,6 +6,7 @@ namespace ZUEPC.DataAccess.Data.Persons;
 
 public interface IPersonData : 
 	IRepositoryBase<PersonModel>,
+	IRepositoryWithSimpleIdBase<PersonModel, long>,
 	IRepositoryWithFilter<PersonModel, PersonFilter>
 {
 }

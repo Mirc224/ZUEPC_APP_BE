@@ -1,15 +1,12 @@
-﻿using Dapper;
-using DataAccess.DbAccess;
-using System.Dynamic;
+﻿using DataAccess.DbAccess;
 using ZUEPC.DataAccess.Constants;
 using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Extensions;
 using ZUEPC.DataAccess.Models.Publication;
 
 namespace ZUEPC.DataAccess.Data.Publications.InDatabase;
 
 public class SQLPublicationIdentifierData :
-	SQLDbRepositoryBase<PublicationIdentifierModel>,
+	SQLDbEPCRepositoryBase<PublicationIdentifierModel>,
 	IPublicationIdentifierData
 {
 	public SQLPublicationIdentifierData(ISqlDataAccess db) : 

@@ -1,6 +1,6 @@
 ﻿namespace ZUEPC.Base.Commands;
 
-public class UpdateCommandBase
+public abstract class UpdateCommandBase<TId>
 {
-	public long Id { get; set; }
+	public TId Id { get; set; }
 }

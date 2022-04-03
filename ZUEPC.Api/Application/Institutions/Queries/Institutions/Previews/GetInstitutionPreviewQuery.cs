@@ -4,7 +4,7 @@ using ZUEPC.EvidencePublication.Base.Queries;
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 
 public class GetInstitutionPreviewQuery : 
-	EPCSimpleQueryBase,
+	EPCSimpleQueryBase<long>,
 	IRequest<GetInstitutionPreviewQueryResponse>
 {
 }

@@ -7,10 +7,10 @@ using ZUEPC.DataAccess.Models.Publication;
 namespace ZUEPC.Application.Publications.Commands.PublicationExternDatabaseIds;
 
 public class DeletePublicationExternDatabaseIdCommandHandler :
-	DeleteSimpleModelBaseCommandHandler<PublicationExternDatabaseIdModel>,
+	DeleteSimpleModelBaseCommandHandler<PublicationExternDatabaseIdModel, long>,
 	IRequestHandler<DeletePublicationExternDatabaseIdCommand, DeletePublicationExternDatabaseIdCommandResponse>
 {
-	public DeletePublicationExternDatabaseIdCommandHandler(IMapper mapper, IPublicationExternDatabaseIdData repository)
+	public DeletePublicationExternDatabaseIdCommandHandler(IPublicationExternDatabaseIdData repository)
 	: base(repository) { }
 
 	public async Task<DeletePublicationExternDatabaseIdCommandResponse> Handle(DeletePublicationExternDatabaseIdCommand request, CancellationToken cancellationToken)

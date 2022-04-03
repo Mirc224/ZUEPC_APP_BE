@@ -4,7 +4,6 @@ using ZUEPC.Base.Commands;
 namespace ZUEPC.Api.Application.Auth.Commands.RefreshTokens;
 
 public class UpdateRefreshTokenCommand :
-	UpdateCommandBase,
 	IRequest<UpdateRefreshTokenCommandResponse>
 {
 	public long UserId { get; set; }

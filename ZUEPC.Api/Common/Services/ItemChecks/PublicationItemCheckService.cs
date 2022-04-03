@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Localization;
-using System;
 using ZUEPC.Application.Institutions.Entities.Previews;
 using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Application.Persons.Entities.Previews;
@@ -14,14 +13,14 @@ using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.Publications.Queries.Publications.Previews;
 using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Application.RelatedPublications.Queries;
-using ZUEPC.Responses;
-using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
+using ZUEPC.DataAccess.Interfaces;
 using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
 using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
 using ZUEPC.EvidencePublication.Base.PublicationAuthors;
 using ZUEPC.EvidencePublication.Base.Queries;
 using ZUEPC.Localization;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Common.Services.ItemChecks;
 
@@ -262,7 +261,7 @@ public class PublicationItemCheckService : EPCDomainItemsCheckServiceBase
 		Func<long, ResponseBase?, Task<TDomain?>> existenceCheckFunc,
 		ResponseBase? response = null)
 		where TDomain : class, IPublicationRelated
-		where TQuery : EPCSimpleQueryBase, new()
+		where TQuery : EPCSimpleQueryBase<long>, new()
 		where TResponse : ResponseWithDataBase<TDomain>
 	{
 		TDomain? result = await existenceCheckFunc(recordId, response);

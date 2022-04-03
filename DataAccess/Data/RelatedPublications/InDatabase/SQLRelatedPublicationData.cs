@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.RelatedPublication;
 namespace ZUEPC.DataAccess.Data.RelatedPublications.InDatabase;
 
 public class SQLRelatedPublicationData :
-	SQLDbRepositoryBase<RelatedPublicationModel>,
+	SQLDbEPCRepositoryBase<RelatedPublicationModel>,
 	IRelatedPublicationData
 {
 	public SQLRelatedPublicationData(ISqlDataAccess db) : 

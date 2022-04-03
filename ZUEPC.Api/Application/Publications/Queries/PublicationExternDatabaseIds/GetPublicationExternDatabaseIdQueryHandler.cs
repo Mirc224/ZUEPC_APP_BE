@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Publications;
 namespace ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 
 public class GetPublicationExternDatabaseIdQueryHandler :
-	GetSimpleModelQueryHandlerBase<PublicationExternDatabaseId, PublicationExternDatabaseIdModel>,
+	GetSimpleModelQueryHandlerBase<IPublicationExternDatabaseIdData, PublicationExternDatabaseId, PublicationExternDatabaseIdModel, long>,
 	IRequestHandler<GetPublicationExternDatabaseIdQuery, GetPublicationExternDatabaseIdQueryResponse>
 {
 

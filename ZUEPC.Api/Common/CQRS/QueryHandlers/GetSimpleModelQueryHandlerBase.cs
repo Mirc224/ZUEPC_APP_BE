@@ -1,26 +1,27 @@
 ﻿using AutoMapper;
-using ZUEPC.Responses;
 using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Models.Common;
+using ZUEPC.DataAccess.Interfaces;
 using ZUEPC.EvidencePublication.Base.Domain.Common;
 using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Common.CQRS.QueryHandlers;
 
-public abstract class GetSimpleModelQueryHandlerBase<TDomain, TModel>:
-	DomainModelHandlerBase<IRepositoryBase<TModel>, TModel>
+public abstract class GetSimpleModelQueryHandlerBase<TRepository, TDomain, TModel, TId>:
+	DomainModelHandlerBase<TRepository, TModel>
+	where TRepository : IRepositoryBase<TModel>, IRepositoryWithSimpleIdBase<TModel, TId>
 	where TDomain : EPCDomainBase
-	where TModel : EPCModelBase
+	where TModel : IItemWithID<TId>
 {
 	protected readonly IMapper _mapper;
-	public GetSimpleModelQueryHandlerBase(IMapper mapper, IRepositoryBase<TModel> repository)
+	public GetSimpleModelQueryHandlerBase(IMapper mapper, TRepository repository)
 		: base(repository)
 	{
 		_mapper = mapper;
 	}
 
 	protected async Task<TResponse> ProcessQueryAsync<TQuery, TResponse>(TQuery request)
-		where TQuery : EPCSimpleQueryBase
+		where TQuery : EPCSimpleQueryBase<TId>
 		where TResponse : ResponseWithDataBase<TDomain>, new()
 	{
 		TModel? result = await _repository.GetModelByIdAsync(request.Id);

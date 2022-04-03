@@ -9,7 +9,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Publications;
 namespace ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 
 public class GetPublicationIdentifierQueryHandler :
-	GetSimpleModelQueryHandlerBase<PublicationIdentifier, PublicationIdentifierModel>,
+	GetSimpleModelQueryHandlerBase<IPublicationIdentifierData, PublicationIdentifier, PublicationIdentifierModel, long>,
 	IRequestHandler<GetPublicationIdentifierQuery, GetPublicationIdentifierQueryResponse>
 {
 	public GetPublicationIdentifierQueryHandler(IMapper mapper, IPublicationIdentifierData repository)

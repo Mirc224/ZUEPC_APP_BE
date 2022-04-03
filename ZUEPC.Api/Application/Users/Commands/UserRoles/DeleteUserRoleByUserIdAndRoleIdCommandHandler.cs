@@ -21,7 +21,7 @@ public class DeleteUserRoleByUserIdAndRoleIdCommandHandler
 		{
 			return new() { Success = false };
 		}
-		int rowsDeleted = await _repository.DeleteModelByIdAsync(currentModel.Id);
+		int rowsDeleted = await _repository.DeleteUserRoleByUserIdAndRoleIdAsync(currentModel.UserId, currentModel.RoleId);
 		return new() { Success = true };
 	}
 }

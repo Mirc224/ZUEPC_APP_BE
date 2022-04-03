@@ -11,10 +11,8 @@ using ZUEPC.Responses;
 namespace ZUEPC.Api.Common.CQRS.QueryHandlers;
 
 public abstract class GetModelsWithFiltersPagedQueryHandlerBase<TRepository, TDomain, TModel, TFilter> :
-	GetModelsPagedQueryHandlerBase<TRepository,TDomain, TModel>
+	GetModelsPagedQueryHandlerBase<TRepository,TDomain, TModel, TFilter>
 	where TRepository: IRepositoryWithFilter<TModel, TFilter>, IRepositoryBase<TModel>
-	where TDomain : DomainBase
-	where TModel : ModelBase
 	where TFilter : IQueryFilter
 {
 	protected GetModelsWithFiltersPagedQueryHandlerBase(IMapper mapper, TRepository repository) 

@@ -4,7 +4,7 @@ using ZUEPC.EvidencePublication.Base.Queries;
 namespace ZUEPC.Application.Institutions.Queries.InstitutionNames;
 
 public class GetInstitutionNameQuery :
-	EPCSimpleQueryBase,
+	EPCSimpleQueryBase<long>,
 	IRequest<GetInstitutionNameQueryResponse>
 {
 }

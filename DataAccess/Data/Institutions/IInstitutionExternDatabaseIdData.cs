@@ -3,7 +3,9 @@ using ZUEPC.DataAccess.Models.Institution;
 
 namespace ZUEPC.DataAccess.Data.Institutions;
 
-public interface IInstitutionExternDatabaseIdData : IRepositoryBase<InstitutionExternDatabaseIdModel>
+public interface IInstitutionExternDatabaseIdData : 
+	IRepositoryBase<InstitutionExternDatabaseIdModel>,
+	IRepositoryWithSimpleIdBase<InstitutionExternDatabaseIdModel, long>
 {
 	Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetInstitutionExternDatabaseIdsByInstitutionIdAsync(long institutionId);
 	Task<IEnumerable<InstitutionExternDatabaseIdModel>> GetAllInstitutionExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues);

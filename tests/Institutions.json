@@ -55,8 +55,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Create institution should return status code 201.\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
+									"pm.test(\"Create institution should return status code 200.\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
 									"    var response = pm.response.json();\r",
 									"    pm.environment.set(\"Temp.Institution.Created.Id\", response.id);\r",
 									"\r",
@@ -231,8 +231,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Update institution should return status code 200.\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
+									"pm.test(\"Update institution should return status code 204.\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -416,11 +416,51 @@
 					},
 					"response": []
 				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{Temp.Authenticate.AccessToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		},
 		{
 			"name": "GetAllInstitutions",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Temp.Authenticate.AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -431,6 +471,41 @@
 					"path": [
 						"api",
 						"institution"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllInstitutionNames",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Temp.Authenticate.AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ApiBaseUrl}}/api/institution/name?name=kme",
+					"host": [
+						"{{ApiBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"institution",
+						"name"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "kme"
+						}
 					]
 				}
 			},

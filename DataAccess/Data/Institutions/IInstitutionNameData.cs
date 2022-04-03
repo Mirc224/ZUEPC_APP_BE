@@ -6,6 +6,7 @@ namespace ZUEPC.DataAccess.Data.Institutions;
 
 public interface IInstitutionNameData : 
 	IRepositoryBase<InstitutionNameModel>,
+	IRepositoryWithSimpleIdBase<InstitutionNameModel, long>,
 	IRepositoryWithFilter<InstitutionNameModel, InstitutionNameFilter>
 {
 	Task<IEnumerable<InstitutionNameModel>> GetInstitutionNamesByInstitutionIdAsync(long institutionId);

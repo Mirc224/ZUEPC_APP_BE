@@ -5,6 +5,7 @@ using ZUEPC.Application.Import.Commands;
 using ZUEPC.Base.Enums.Common;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Data.RelatedPublications;
+using ZUEPC.DataAccess.Interfaces;
 using ZUEPC.EvidencePublication.Base.Commands;
 using ZUEPC.EvidencePublication.Base.Domain.Common;
 using ZUEPC.EvidencePublication.Base.Domain.Publications;
@@ -124,7 +125,7 @@ public partial class ImportService
 		IEnumerable<TDomain> objectCurrentExternIds,
 		DateTime versionDate)
 		where TImport : EPCImportExternDatabaseIdBase
-		where TDomain : EPCExternDatabaseIdBase
+		where TDomain : EPCDomainBase, IEPCItemWithExternIdentifier, IEPCItemBase
 	{
 		IEnumerable<Tuple<TImport, TDomain>> identifiersTupleToUpdate =
 			from current in objectCurrentExternIds
@@ -139,7 +140,7 @@ public partial class ImportService
 		IEnumerable<TImport> importExternIdentifiers,
 		IEnumerable<TDomain> objectCurrentExternIds)
 		where TImport : EPCImportExternDatabaseIdBase
-		where TDomain : EPCExternDatabaseIdBase
+		where TDomain : EPCDomainBase, IEPCItemWithExternIdentifier
 	{
 		List<string> allCurrentExternIdsString = objectCurrentExternIds
 			.Select(identifier => identifier.ExternIdentifierValue)

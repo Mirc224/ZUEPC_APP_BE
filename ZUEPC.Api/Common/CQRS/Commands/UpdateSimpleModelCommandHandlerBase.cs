@@ -1,24 +1,25 @@
 ﻿using AutoMapper;
 using ZUEPC.Base.Commands;
 using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Models.Common;
+using ZUEPC.DataAccess.Interfaces;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
-public abstract class UpdateSimpleModelCommandHandlerBase<TModel> : 
-	DomainModelHandlerBase<IRepositoryBase<TModel>, TModel>
-	where TModel : ModelBase
+public abstract class UpdateSimpleModelCommandHandlerBase<TRepository, TModel, TId> : 
+	DomainModelHandlerBase<TRepository, TModel>
+	where TRepository : IRepositoryBase<TModel>, IRepositoryWithSimpleIdBase<TModel, TId> 
+	where TModel : IItemWithID<TId>
 {
 	protected readonly IMapper _mapper;
-	public UpdateSimpleModelCommandHandlerBase(IMapper mapper, IRepositoryBase<TModel> repository)
+	public UpdateSimpleModelCommandHandlerBase(IMapper mapper, TRepository repository)
 		: base(repository)
 	{
 		_mapper = mapper;
 	}
 
 	protected async Task<TResponse> ProcessUpdateCommandFromRequestAsync<TUpdateCommand, TResponse>(TUpdateCommand request)
-	where TUpdateCommand : UpdateCommandBase
+	where TUpdateCommand : UpdateCommandBase<TId>
 	where TResponse : ResponseBase, new()
 	{
 		TModel? currentModel = await _repository.GetModelByIdAsync(request.Id);

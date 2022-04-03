@@ -9,7 +9,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 namespace ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 
 public class GetPersonExternDatabaseIdQueryHandler :
-	GetSimpleModelQueryHandlerBase<PersonExternDatabaseId, PersonExternDatabaseIdModel>,
+	GetSimpleModelQueryHandlerBase<IPersonExternDatabaseIdData, PersonExternDatabaseId, PersonExternDatabaseIdModel, long>,
 	IRequestHandler<GetPersonExternDatabaseIdQuery, GetPersonExternDatabaseIdQueryResponse>
 {
 	public GetPersonExternDatabaseIdQueryHandler(IMapper mapper, IPersonExternDatabaseIdData repository)

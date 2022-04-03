@@ -4,14 +4,12 @@ using System.Dynamic;
 using System.Reflection;
 using ZUEPC.DataAccess.Attributes.ModelAttributes;
 using ZUEPC.DataAccess.Extensions;
-using ZUEPC.DataAccess.Filters;
-using ZUEPC.DataAccess.Models.Common;
+using ZUEPC.DataAccess.Interfaces;
 using static Dapper.SqlBuilder;
 
 namespace ZUEPC.DataAccess.Data.Common;
 
 public abstract class SQLDbRepositoryBase<TModel>
-	where TModel : ModelBase
 {
 	protected readonly ISqlDataAccess db;
 	protected readonly string baseTableName;
@@ -33,14 +31,6 @@ public abstract class SQLDbRepositoryBase<TModel>
 	public async Task<int> CountAsync()
 	{
 		return await db.ExecuteScalarAsync<int, dynamic>(@$"SELECT COUNT(1) FROM {baseTableName} AS {baseTableAlias}", null);
-	}
-
-	public async Task<int> DeleteModelByIdAsync(long id)
-	{
-		SqlBuilder builder = new();
-		ExpandoObject parameters = new();
-		AddToWhereExpression(nameof(ModelBase.Id), id, builder, parameters);
-		return await DeleteModelsAsync(parameters, builder);
 	}
 
 	protected async Task<IEnumerable<TModel>> GetModelsAsync(dynamic parameters, SqlBuilder builder)
@@ -65,36 +55,6 @@ public abstract class SQLDbRepositoryBase<TModel>
 		return await GetModelsAsync(null, builder);
 	}
 
-	public async Task<TModel?> GetModelByIdAsync(long id)
-	{
-		return (await GetModelsWithColumnValueAsync(nameof(ModelBase.Id), id)).FirstOrDefault();
-	}
-
-	public async Task<IEnumerable<TModel>> GetAllAsync(PaginationFilter filter)
-	{
-		SqlBuilder builder = new();
-		builder.Select(baseSelect);	
-		return await GetAllWithPaginationAsync(null, filter, builder);
-	}
-
-	public async Task<IEnumerable<TModel>> GetAllWithPaginationAsync(
-		dynamic parameters,
-		PaginationFilter filter, 
-		SqlBuilder builder)
-	{
-		BuildOrderByExpression(builder, filter);
-		int offset = (filter.PageNumber - 1) * filter.PageSize;
-		Template builderTemplate = builder.AddTemplate(@$"
-				SELECT /**select**/ FROM {baseTableName} AS {baseTableAlias}
-				/**innerjoin**/
-				/**leftjoin**/
-				/**where**/ 
-				/**groupby**/
-				/**orderby**/ {filter.Order}
-				OFFSET {offset} ROWS FETCH NEXT {filter.PageSize} ROWS ONLY");
-		return await db.QueryAsync<TModel, dynamic>(builderTemplate.RawSql, parameters);
-	}
-
 	protected void BuildBaseSelect()
 	{
 		IEnumerable<PropertyInfo> props = typeof(TModel)
@@ -107,7 +67,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		}
 		baseSelect = builder.AddTemplate("/**select**/").RawSql;
 	}
-	protected void BuildBaseInsert()
+	protected virtual void BuildBaseInsert()
 	{
 		IEnumerable<PropertyInfo> props = typeof(TModel)
 			.GetProperties()
@@ -123,8 +83,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		string insertColumns = insertBuilder.AddTemplate("/**select**/").RawSql;
 		string insertValues = valuesBuilder.AddTemplate("/**select**/").RawSql;
 		baseInsertRawSql = $@"INSERT INTO {baseTableName} ({insertColumns})
-						OUTPUT INSERTED.Id
-						VALUES ({insertValues})";
+							  VALUES ({insertValues})";
 	}
 
 	protected void BuildBaseUpdate()
@@ -145,14 +104,6 @@ public abstract class SQLDbRepositoryBase<TModel>
 	public async Task<long> InsertModelAsync(TModel model)
 	{
 		return await db.ExecuteScalarAsync<int, TModel>(baseInsertRawSql, model);
-	}
-
-	public async Task<int> UpdateModelAsync(TModel model)
-	{
-		SqlBuilder builder = new();
-		AddToWhereExpression(nameof(ModelBase.Id), builder);
-		string updateSql = builder.AddTemplate($"{baseUpdateRawSql} /**where**/").RawSql;
-		return await db.ExecuteAsync(updateSql, model);
 	}
 
 	public void AddToWhereExpression<T>(string columnName, T value, SqlBuilder builder, ExpandoObject parameters, string op = "=")
@@ -193,8 +144,19 @@ public abstract class SQLDbRepositoryBase<TModel>
 		return await GetModelsAsync(parameters, builder);
 	}
 
-	protected void BuildOrderByExpression(SqlBuilder builder, PaginationFilter filter)
+	protected Tuple<SqlBuilder, SqlBuilder> GetBaseInsertColumnInsertValuesSqlBuilderTuple()
 	{
-		builder.OrderBy(filter.OrderBy);
+		IEnumerable<PropertyInfo> props = typeof(TModel)
+			.GetProperties()
+			.Where(prop => !Attribute.IsDefined(prop, typeof(ExcludeFromInsertAttribute)));
+		SqlBuilder insertBuilder = new();
+		SqlBuilder valuesBuilder = new();
+		foreach (PropertyInfo prop in props)
+		{
+			insertBuilder.Select(prop.Name);
+			valuesBuilder.Select("@" + prop.Name);
+		}
+
+		return new Tuple<SqlBuilder, SqlBuilder>(insertBuilder, valuesBuilder);
 	}
 }

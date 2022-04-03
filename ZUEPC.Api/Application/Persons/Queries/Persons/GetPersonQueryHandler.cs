@@ -8,7 +8,7 @@ using ZUEPC.EvidencePublication.Base.Domain.Persons;
 namespace ZUEPC.Application.Persons.Queries.Persons;
 
 public class GetPersonQueryHandler :
-	GetSimpleModelQueryHandlerBase<Person, PersonModel>,
+	GetSimpleModelQueryHandlerBase<IPersonData, Person, PersonModel, long>,
 	IRequestHandler<GetPersonQuery, GetPersonQueryResponse>
 {
 	public GetPersonQueryHandler(IMapper mapper, IPersonData repository)

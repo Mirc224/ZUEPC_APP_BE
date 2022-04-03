@@ -22,7 +22,6 @@ public class CreateRefreshTokenCommandHandler :
 		RefreshTokenModel insertModel = _mapper.Map<RefreshTokenModel>(request);
 		insertModel.CreatedAt = DateTime.UtcNow;
 		long insertedId = await _repository.InsertModelAsync(insertModel);
-		insertModel.Id = insertedId;
 		RefreshToken domain = _mapper.Map<RefreshToken>(insertModel);
 		return new() { Success = true, Data = domain };
 	}

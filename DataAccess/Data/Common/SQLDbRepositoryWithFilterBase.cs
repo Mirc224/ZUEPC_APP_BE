@@ -2,14 +2,14 @@
 using DataAccess.DbAccess;
 using System.Dynamic;
 using ZUEPC.DataAccess.Filters;
-using ZUEPC.DataAccess.Models.Common;
+using ZUEPC.DataAccess.Interfaces;
 using static Dapper.SqlBuilder;
 
 namespace ZUEPC.DataAccess.Data.Common;
 
 public abstract class SQLDbRepositoryWithFilterBase<TRepository, TModel, TFilter> :
-	SQLDbRepositoryBase<TModel>
-	where TModel : ModelBase
+	SQLDbEPCWithPaginationRepositoryBase<TModel>
+	where TModel : IItemWithID<long>
 	where TFilter : IQueryFilter
 	where TRepository: IRepositoryWithFilter<TModel, TFilter>
 {

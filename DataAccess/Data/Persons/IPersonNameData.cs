@@ -6,6 +6,7 @@ namespace ZUEPC.DataAccess.Data.Persons;
 
 public interface IPersonNameData : 
 	IRepositoryBase<PersonNameModel>,
+	IRepositoryWithSimpleIdBase<PersonNameModel, long>,
 	IRepositoryWithFilter<PersonNameModel, PersonNameFilter>
 {
 	Task<IEnumerable<PersonNameModel>> GetPersonNamesByPersonIdAsync(long personId);

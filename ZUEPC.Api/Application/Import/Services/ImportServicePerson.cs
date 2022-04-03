@@ -62,8 +62,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		GetPersonPersonExternDatabaseIdsQuery request = new() { PersonId = currentPerson.Id };
-		IEnumerable<PersonExternDatabaseId> personCurrentExternIds = (await _mediator.Send(request))
-			.Data;
+		IEnumerable<PersonExternDatabaseId> personCurrentExternIds = (await _mediator.Send(request)).Data;
 
 		IEnumerable<ImportPersonExternDatabaseId> importExternIdToInsert = GetEPCObjectExternDatabaseIdsForInsertAsync(
 																					importExternIdentifiers,

@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Localization;
 using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Queries.PersonNames;
-using ZUEPC.Responses;
-using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
+using ZUEPC.DataAccess.Interfaces;
 using ZUEPC.EvidencePublication.Base.Domain.Persons;
 using ZUEPC.EvidencePublication.Base.Queries;
 using ZUEPC.Localization;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Common.Services.ItemChecks;
 
@@ -81,7 +81,7 @@ public class PersonItemCheckService :
 		Func<long, ResponseBase?, Task<TDomain?>> existenceCheckFunc,
 		ResponseBase? response = null)
 		where TDomain : class, IPersonRelated
-		where TQuery : EPCSimpleQueryBase, new()
+		where TQuery : EPCSimpleQueryBase<long>, new()
 		where TResponse : ResponseWithDataBase<TDomain>
 	{
 		TDomain? result = await existenceCheckFunc(recordId, response);

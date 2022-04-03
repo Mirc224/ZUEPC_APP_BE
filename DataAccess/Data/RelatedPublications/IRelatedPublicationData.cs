@@ -3,7 +3,9 @@ using ZUEPC.DataAccess.Models.RelatedPublication;
 
 namespace ZUEPC.DataAccess.Data.RelatedPublications;
 
-public interface IRelatedPublicationData : IRepositoryBase<RelatedPublicationModel>
+public interface IRelatedPublicationData : 
+	IRepositoryBase<RelatedPublicationModel>,
+	IRepositoryWithSimpleIdBase<RelatedPublicationModel, long>
 {
 	Task<IEnumerable<RelatedPublicationModel>> GetRelatedPublicationsByPublicationIdAsync(long publicationId);
 	Task<IEnumerable<RelatedPublicationModel>> GetRelatedPublicationsByRelatedPublicationIdAsync(long relatedPublicationId);

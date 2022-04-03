@@ -3,7 +3,9 @@ using ZUEPC.DataAccess.Models.PublicationAuthor;
 
 namespace ZUEPC.DataAccess.Data.PublicationAuthors;
 
-public interface IPublicationAuthorData : IRepositoryBase<PublicationAuthorModel>
+public interface IPublicationAuthorData : 
+	IRepositoryBase<PublicationAuthorModel>,
+	IRepositoryWithSimpleIdBase<PublicationAuthorModel, long>
 {
 	Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByPublicationIdAsync(long publicationId);
 	Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByPersonIdAsync(long personId);

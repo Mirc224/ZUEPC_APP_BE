@@ -1,19 +1,19 @@
-﻿using ZUEPC.Responses;
-using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Models.Common;
+﻿using ZUEPC.DataAccess.Data.Common;
+using ZUEPC.DataAccess.Interfaces;
 using ZUEPC.EvidencePublication.Base.Commands;
+using ZUEPC.Responses;
 
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
-public abstract class DeleteSimpleModelBaseCommandHandler<TModel>
-	: DomainModelHandlerBase<IRepositoryBase<TModel>, TModel>
-	where TModel : ModelBase
+public abstract class DeleteSimpleModelBaseCommandHandler<TModel, TId>
+	: DomainModelHandlerBase<IRepositoryWithSimpleIdBase<TModel, TId>, TModel>
+	where TModel : IItemWithID<TId>
 {
-	public DeleteSimpleModelBaseCommandHandler(IRepositoryBase<TModel> repository)
+	public DeleteSimpleModelBaseCommandHandler(IRepositoryWithSimpleIdBase<TModel, TId> repository)
 	: base(repository) {}
 
 	protected async Task<TResponse> ProcessDeleteCommandAsync<TDeleteCommand, TResponse>(TDeleteCommand request)
-	where TDeleteCommand : DeleteModelCommandBase
+	where TDeleteCommand : DeleteModelCommandBase<TId>
 	where TResponse : ResponseBase, new()
 	{
 		TModel? currentModel = await _repository.GetModelByIdAsync(request.Id);

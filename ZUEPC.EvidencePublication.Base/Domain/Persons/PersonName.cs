@@ -1,9 +1,11 @@
-﻿using ZUEPC.EvidencePublication.Base.Domain.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Common.Interfaces;
+﻿using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.EvidencePublication.Base.Domain.Common;
 
 namespace ZUEPC.EvidencePublication.Base.Domain.Persons;
 
-public class PersonName : EPCDomainBase, IPersonRelated
+public class PersonName : 
+	EPCDomainBase, 
+	IPersonRelated
 {
 	public long PersonId { get; set; }
 	public string? FirstName { get; set; }

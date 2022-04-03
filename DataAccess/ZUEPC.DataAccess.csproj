@@ -18,8 +18,4 @@
     <ProjectReference Include="..\ZUEPC.Base\ZUEPC.Base.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
-
 </Project>

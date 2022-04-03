@@ -4,7 +4,7 @@ using ZUEPC.EvidencePublication.Base.Queries;
 namespace ZUEPC.Api.Application.Users.Queries.Users.Details;
 
 public class GetUserDetailsQuery :
-	EPCSimpleQueryBase,
+	EPCSimpleQueryBase<long>,
 	IRequest<GetUserDetailsQueryResponse>
 {
 }

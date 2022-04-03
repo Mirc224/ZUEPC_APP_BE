@@ -22,7 +22,6 @@ public class CreateUserRoleCommandHandler : IRequestHandler<CreateUserRoleComman
 		insertModel.CreatedAt = DateTime.Now;
 		long insertedId = await _repository.InsertModelAsync(insertModel);
 		UserRole domain = _mapper.Map<UserRole>(insertModel);
-		domain.Id = insertedId;
 		return new() { Success = true, Data = domain };
 	}
 }
