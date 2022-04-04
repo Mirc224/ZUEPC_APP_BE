@@ -261,7 +261,7 @@ public class PublicationItemCheckService : EPCDomainItemsCheckServiceBase
 		Func<long, ResponseBase?, Task<TDomain?>> existenceCheckFunc,
 		ResponseBase? response = null)
 		where TDomain : class, IPublicationRelated
-		where TQuery : EPCSimpleQueryBase<long>, new()
+		where TQuery : EPCQueryWithIdBase<long>, new()
 		where TResponse : ResponseWithDataBase<TDomain>
 	{
 		TDomain? result = await existenceCheckFunc(recordId, response);

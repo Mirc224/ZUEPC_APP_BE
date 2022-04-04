@@ -4,7 +4,7 @@ using ZUEPC.Base.Queries;
 namespace ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 
 public class GetPublicationExternDatabaseIdQuery : 
-	EPCSimpleQueryBase<long>,
+	EPCQueryWithIdBase<long>,
 	IRequest<GetPublicationExternDatabaseIdQueryResponse>
 {
 }

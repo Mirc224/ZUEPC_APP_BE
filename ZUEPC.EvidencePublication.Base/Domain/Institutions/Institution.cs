@@ -1,4 +1,4 @@
-﻿using ZUEPC.EvidencePublication.Domain.Common;
+﻿using ZUEPC.Base.Domain;
 
 namespace ZUEPC.EvidencePublication.Domain.Institutions;
 

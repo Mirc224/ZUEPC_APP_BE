@@ -1,9 +1,9 @@
 ﻿using ZUEPC.Base.Enums.Common;
 using ZUEPC.Base.ItemInterfaces;
 
-namespace ZUEPC.EvidencePublication.Domain.Common;
+namespace ZUEPC.Base.Domain;
 
-public class EPCDomainBase : 
+public abstract class EPCDomainBase : 
 	DomainBase,
 	IEPCItemBase,
 	IItemWithID<long>

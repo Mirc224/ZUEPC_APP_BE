@@ -81,7 +81,7 @@ public class InstitutionItemCheckService :
 		Func<long, ResponseBase?, Task<TDomain?>> existenceCheckFunc,
 		ResponseBase? response = null)
 		where TDomain : class, IInstitutionRelated
-		where TQuery : EPCSimpleQueryBase<long>, new()
+		where TQuery : EPCQueryWithIdBase<long>, new()
 		where TResponse : ResponseWithDataBase<TDomain>
 	{
 		TDomain? result = await existenceCheckFunc(recordId, response);

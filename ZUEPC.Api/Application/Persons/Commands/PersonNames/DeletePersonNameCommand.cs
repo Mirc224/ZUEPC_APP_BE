@@ -4,7 +4,7 @@ using ZUEPC.Base.Commands;
 namespace ZUEPC.Application.Persons.Commands.PersonNames;
 
 public class DeletePersonNameCommand : 
-	DeleteModelCommandBase<long>,
+	EPCDeleteModelCommandBase<long>,
 	IRequest<DeletePersonNameCommandResponse>
 {
 }

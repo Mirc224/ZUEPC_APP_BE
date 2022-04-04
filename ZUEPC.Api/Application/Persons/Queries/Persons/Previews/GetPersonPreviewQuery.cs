@@ -4,7 +4,7 @@ using ZUEPC.Base.Queries;
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews;
 
 public class GetPersonPreviewQuery : 
-	EPCSimpleQueryBase<long>,
+	EPCQueryWithIdBase<long>,
 	IRequest<GetPersonPreviewQueryResponse>
 {
 }

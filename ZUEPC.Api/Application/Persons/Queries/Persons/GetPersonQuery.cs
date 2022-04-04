@@ -4,7 +4,7 @@ using ZUEPC.Base.Queries;
 namespace ZUEPC.Application.Persons.Queries.Persons;
 
 public class GetPersonQuery : 
-	EPCSimpleQueryBase<long>,
+	EPCQueryWithIdBase<long>,
 	IRequest<GetPersonQueryResponse>
 {
 }

@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Base.Commands;
 
-public class EPCCreateCommandBase
+public abstract class EPCCreateCommandBase
 {
 	public OriginSourceType OriginSourceType { get; set; }
 	public DateTime? VersionDate { get; set; }

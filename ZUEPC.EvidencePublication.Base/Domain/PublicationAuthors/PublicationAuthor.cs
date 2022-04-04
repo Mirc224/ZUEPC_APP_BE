@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Base.ItemInterfaces;
-using ZUEPC.EvidencePublication.Domain.Common;
+using ZUEPC.Base.Domain;
 
 namespace ZUEPC.EvidencePublication.PublicationAuthors;
 

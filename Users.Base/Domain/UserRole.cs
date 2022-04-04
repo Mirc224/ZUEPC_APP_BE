@@ -1,7 +1,7 @@
 ﻿using ZUEPC.Base.Enums.Users;
-using ZUEPC.EvidencePublication.Domain.Common;
+using ZUEPC.Base.Domain;
 
-namespace ZUEPC.Users.Base.Domain;
+namespace ZUEPC.Users.Domain;
 
 public class UserRole : DomainBase
 {

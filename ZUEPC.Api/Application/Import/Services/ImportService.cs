@@ -6,10 +6,10 @@ using ZUEPC.Base.Enums.Common;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Data.RelatedPublications;
 using ZUEPC.Base.ItemInterfaces;
-using ZUEPC.EvidencePublication.Domain.Common;
+using ZUEPC.Base.Domain;
 using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Import.Models;
-using ZUEPC.Import.Models.Commond;
+using ZUEPC.Import.Models.Common;
 using ZUEPC.Import.Parser;
 using ZUEPC.Base.Commands;
 

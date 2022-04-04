@@ -2,7 +2,7 @@
 using ZUEPC.Application.PublicationActivities.Queries;
 using ZUEPC.Base.Enums.Common;
 using ZUEPC.Base.Commands;
-using ZUEPC.EvidencePublication.Domain.Common;
+using ZUEPC.Base.Domain;
 using ZUEPC.EvidencePublication.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Import.Models;
@@ -94,7 +94,7 @@ public partial class ImportService
 	}
 
 	private async Task DeleteRecordsAsync<TDomain, TCommand>(IEnumerable<TDomain> recordsToDelete)
-		where TCommand : DeleteModelCommandBase<long>, new()
+		where TCommand : EPCDeleteModelCommandBase<long>, new()
 		where TDomain : EPCDomainBase
 	{
 		foreach (TDomain record in recordsToDelete)

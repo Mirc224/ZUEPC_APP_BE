@@ -2,7 +2,7 @@
 
 namespace ZUEPC.Base.Commands;
 
-public class EPCUpdateCommandBase : UpdateCommandBase<long>
+public abstract class EPCUpdateCommandBase : UpdateCommandWithIdBase<long>
 {
 	public OriginSourceType OriginSourceType { get; set; }
 	public DateTime? VersionDate { get; set; }

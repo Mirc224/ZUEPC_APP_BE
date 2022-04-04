@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.EvidencePublication.Domain.Common;
+﻿namespace ZUEPC.Base.Domain;
 
 public abstract class DomainBase 
 {

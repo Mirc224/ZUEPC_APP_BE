@@ -4,7 +4,7 @@ using ZUEPC.Base.Queries;
 namespace ZUEPC.Application.PublicationAuthors.Queries;
 
 public class GetPublicationAuthorQuery : 
-	EPCSimpleQueryBase<long>,
+	EPCQueryWithIdBase<long>,
 	IRequest<GetPublicationAuthorQueryResponse>
 {
 }

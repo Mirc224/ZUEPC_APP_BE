@@ -44,7 +44,7 @@ public abstract class GetModelsPagedQueryHandlerBase<TRepository,TDomain, TModel
 	}
 
 	protected async Task<ICollection<TDomain>> GetMappedDataAsync<TQuery>(TQuery request)
-	where TQuery : PaginationQueryBase
+	where TQuery : PaginatedBaseQuery
 	{
 		IEnumerable<TModel> result = await GetDataAsync(request.PaginationFilter);
 		return _mapper.Map<List<TDomain>>(result);

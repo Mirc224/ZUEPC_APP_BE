@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.Import.Models.Commond;
+﻿namespace ZUEPC.Import.Models.Common;
 
 public class EPCImportExternDatabaseIdBase
 {

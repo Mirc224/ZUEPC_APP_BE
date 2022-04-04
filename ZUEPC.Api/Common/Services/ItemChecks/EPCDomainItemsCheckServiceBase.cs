@@ -20,7 +20,7 @@ public class EPCDomainItemsCheckServiceBase
 		long recordId,
 		string annotationKey,
 		ResponseBase? response = null)
-		where TQuery : EPCSimpleQueryBase<long>, new()
+		where TQuery : EPCQueryWithIdBase<long>, new()
 		where TResponse : ResponseWithDataBase<TDomain>
 	{
 		TQuery simpleQuery = new TQuery() { Id = recordId };

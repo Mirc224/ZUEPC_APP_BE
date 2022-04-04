@@ -2,7 +2,7 @@
 using MediatR;
 using ZUEPC.DataAccess.Data.Users;
 using ZUEPC.DataAccess.Models.Users;
-using ZUEPC.Users.Base.Domain;
+using ZUEPC.Users.Domain;
 
 namespace ZUEPC.Api.Application.Auth.Queries.RefreshTokens;
 

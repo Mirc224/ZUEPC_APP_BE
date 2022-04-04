@@ -4,7 +4,7 @@ using ZUEPC.Base.Queries;
 namespace ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 
 public class GetPublicationIdentifierQuery : 
-	EPCSimpleQueryBase<long>,
+	EPCQueryWithIdBase<long>,
 	IRequest<GetPublicationIdentifierQueryResponse>
 {
 }

@@ -13,7 +13,7 @@ public abstract class DeleteSimpleModelBaseCommandHandler<TModel, TId>
 	: base(repository) {}
 
 	protected async Task<TResponse> ProcessDeleteCommandAsync<TDeleteCommand, TResponse>(TDeleteCommand request)
-	where TDeleteCommand : DeleteModelCommandBase<TId>
+	where TDeleteCommand : EPCDeleteModelCommandBase<TId>
 	where TResponse : ResponseBase, new()
 	{
 		TModel? currentModel = await _repository.GetModelByIdAsync(request.Id);

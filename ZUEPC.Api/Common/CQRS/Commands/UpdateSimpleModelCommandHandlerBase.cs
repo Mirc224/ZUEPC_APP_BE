@@ -19,7 +19,7 @@ public abstract class UpdateSimpleModelCommandHandlerBase<TRepository, TModel, T
 	}
 
 	protected async Task<TResponse> ProcessUpdateCommandFromRequestAsync<TUpdateCommand, TResponse>(TUpdateCommand request)
-	where TUpdateCommand : UpdateCommandBase<TId>
+	where TUpdateCommand : UpdateCommandWithIdBase<TId>
 	where TResponse : ResponseBase, new()
 	{
 		TModel? currentModel = await _repository.GetModelByIdAsync(request.Id);

@@ -1,6 +1,6 @@
 ﻿using ZUEPC.DataAccess.Models.Users;
 using ZUEPC.Responses;
-using ZUEPC.Users.Base.Domain;
+using ZUEPC.Users.Domain;
 
 namespace ZUEPC.Api.Application.Auth.Queries.RefreshTokens;
 

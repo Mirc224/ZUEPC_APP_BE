@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Base.Enums.Publication;
-using ZUEPC.Import.Models.Commond;
+using ZUEPC.Import.Models.Common;
 
 namespace ZUEPC.Import.Models;
 

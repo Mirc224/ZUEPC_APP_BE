@@ -1,10 +1,10 @@
-﻿using ZUEPC.EvidencePublication.Domain.Common;
+﻿using ZUEPC.Base.Domain;
 
 namespace ZUEPC.EvidencePublication.Domain.Publications;
 
 public class Publication : EPCDomainBase
 {
-	public string? DocumentType { get; set; }
 	public int? PublishYear { get; set; }
+	public string? DocumentType { get; set; }
 }
 

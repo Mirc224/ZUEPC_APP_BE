@@ -1,6 +1,6 @@
 ﻿namespace ZUEPC.Base.Queries;
 
-public abstract class EPCSimpleQueryBase<TId>
+public abstract class EPCQueryWithIdBase<TId>
 {
 	public TId Id { get; set; }
 }

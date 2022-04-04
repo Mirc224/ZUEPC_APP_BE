@@ -3,7 +3,7 @@ using MediatR;
 using Users.Base.Domain;
 using ZUEPC.Api.Application.Users.Entities.Details;
 using ZUEPC.Api.Application.Users.Queries.UserRoles;
-using ZUEPC.Users.Base.Domain;
+using ZUEPC.Users.Domain;
 
 namespace ZUEPC.Api.Application.Users.Queries.Users.Details.BaseHanlders;
 
