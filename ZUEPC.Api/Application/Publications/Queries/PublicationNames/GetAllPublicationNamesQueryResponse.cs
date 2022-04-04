@@ -1,4 +1,4 @@
-﻿using ZUEPC.EvidencePublication.Base.Domain.Publications;
+﻿using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Api.Application.Publications.Queries.PublicationNames;

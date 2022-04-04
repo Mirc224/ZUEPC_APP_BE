@@ -7,7 +7,7 @@ using ZUEPC.Application.Persons.Entities.Inputs.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonNames;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Services.ItemChecks;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Application.Persons.Commands.Persons;

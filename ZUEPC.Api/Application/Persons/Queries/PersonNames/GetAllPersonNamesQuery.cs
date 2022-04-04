@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ZUEPC.Api.Common.CQRS.Queries;
 using ZUEPC.Application.Persons.Queries.Persons;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Api.Application.Persons.Queries.PersonNames;
 

@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
-using ZUEPC.DataAccess.Filters;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.QueryFilters;
+using ZUEPC.Base.ItemInterfaces;
 using static Dapper.SqlBuilder;
 
 namespace ZUEPC.DataAccess.Data.Common;

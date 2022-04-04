@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using System.Dynamic;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.DataAccess.Models.Common;
 
 namespace ZUEPC.DataAccess.Data.Common;
@@ -38,7 +38,7 @@ public abstract class SQLDbEPCRepositoryBase<TModel>:
 
 	protected override void BuildBaseInsert()
 	{
-		Tuple<SqlBuilder, SqlBuilder> result = GetBaseInsertColumnInsertValuesSqlBuilderTuple();
+		Tuple<SqlBuilder, SqlBuilder> result = GetBaseInsertColumnAndInsertValuesSqlBuilderTuple();
 		string insertColumns = result.Item1.AddTemplate("/**select**/").RawSql;
 		string insertValues = result.Item2.AddTemplate("/**select**/").RawSql;
 		baseInsertRawSql = $@"INSERT INTO {baseTableName} ({insertColumns})

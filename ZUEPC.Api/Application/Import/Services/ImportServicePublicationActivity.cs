@@ -1,10 +1,10 @@
 ﻿using ZUEPC.Application.PublicationActivities.Commands;
 using ZUEPC.Application.PublicationActivities.Queries;
 using ZUEPC.Base.Enums.Common;
-using ZUEPC.EvidencePublication.Base.Commands;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
-using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.Base.Commands;
+using ZUEPC.EvidencePublication.Domain.Common;
+using ZUEPC.EvidencePublication.Domain.PublicationActivities;
+using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Import.Models;
 
 namespace ZUEPC.Application.Import.Services;

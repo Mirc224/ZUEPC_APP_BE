@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Responses;
-using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
+using ZUEPC.EvidencePublication.Domain.PublicationActivities;
 
 namespace ZUEPC.Application.PublicationActivities.Commands;
 

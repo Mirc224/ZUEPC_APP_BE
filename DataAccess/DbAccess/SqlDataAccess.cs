@@ -14,19 +14,6 @@ public class SqlDataAccess : ISqlDataAccess
         _config = config;
     }
 
-    public async Task<IEnumerable<T>> LoadDataAsync<T, U>(
-        string storedProcedure,
-        U parameters,
-        string connectionId = "Default")
-    {
-        using IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionId));
-
-        return await connection.QueryAsync<T>(storedProcedure,
-                                              parameters,
-                                              commandType: CommandType.StoredProcedure);
-
-    }
-
     public async Task<int> ExecuteAsync<T>(
         string sql,
         T parameters,
@@ -49,38 +36,6 @@ public class SqlDataAccess : ISqlDataAccess
         return await connection.QueryAsync<T>(sql,
                                               parameters,
                                               commandType: CommandType.Text);
-    }
-
-    public async Task SaveDataAsync<T>(
-        string storedProcedure,
-        T parameters,
-        string connectionId = "Default")
-    {
-        await ExecuteNonQueryProcedure(storedProcedure, parameters, connectionId);
-    }
-
-    public async Task UpdateDataAsync<T>(
-        string storedProcedure,
-        T parameters,
-        string connectionId = "Default")
-    {
-        await ExecuteNonQueryProcedure(storedProcedure, parameters, connectionId);
-    }
-
-    public async Task DeleteDataAsync<T>(string storedProcedure, T parameters, string connectionId = "Default")
-    {
-        await ExecuteNonQueryProcedure(storedProcedure, parameters, connectionId);
-    }
-
-    private async Task ExecuteNonQueryProcedure<T>(
-        string storedProcedure,
-        T parameters,
-        string connectionId = "Default")
-    {
-        using IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionId));
-
-        await connection.ExecuteAsync(storedProcedure, parameters,
-            commandType: CommandType.StoredProcedure);
     }
 
 	public async Task<T> ExecuteScalarAsync<T, U>(string sql, U parameters, string connectionId = "Default")

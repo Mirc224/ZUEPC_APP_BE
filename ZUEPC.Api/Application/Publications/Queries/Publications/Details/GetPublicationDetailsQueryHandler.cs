@@ -3,7 +3,7 @@ using MediatR;
 using ZUEPC.Application.Publications.Entities.Details;
 using ZUEPC.Application.Publications.Queries.Publications.Details.BaseHandlers;
 using ZUEPC.Application.Publications.Queries.Publictions;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.Publications.Details;
 

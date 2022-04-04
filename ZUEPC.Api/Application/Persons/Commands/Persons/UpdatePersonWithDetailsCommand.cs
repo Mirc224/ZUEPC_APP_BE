@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonNames;
-using ZUEPC.EvidencePublication.Base.Commands;
+using ZUEPC.Base.Commands;
 
 namespace ZUEPC.Application.Persons.Commands.Persons;
 

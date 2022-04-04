@@ -8,7 +8,7 @@ using ZUEPC.Application.Persons.Queries.Persons.Details;
 using ZUEPC.Application.Persons.Queries.Persons.Previews;
 using ZUEPC.Base.Enums.Common;
 using ZUEPC.Common.Services.URIServices;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Application.Persons.Controllers;
 

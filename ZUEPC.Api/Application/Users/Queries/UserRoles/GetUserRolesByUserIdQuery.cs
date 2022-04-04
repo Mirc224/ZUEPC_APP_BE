@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Base.Queries;
 
 namespace ZUEPC.Api.Application.Users.Queries.UserRoles;
 

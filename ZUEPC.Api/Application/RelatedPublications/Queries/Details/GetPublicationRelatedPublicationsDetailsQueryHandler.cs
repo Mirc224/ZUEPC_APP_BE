@@ -2,7 +2,7 @@
 using MediatR;
 using ZUEPC.Application.Publications.Queries.Publications.Previews;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
-using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
+using ZUEPC.EvidencePublication.Domain.RelatedPublications;
 
 namespace ZUEPC.Application.RelatedPublications.Queries.Details;
 

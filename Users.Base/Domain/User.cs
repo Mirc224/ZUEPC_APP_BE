@@ -1,5 +1,5 @@
-﻿using ZUEPC.DataAccess.Interfaces;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
+﻿using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.EvidencePublication.Domain.Common;
 
 namespace Users.Base.Domain;
 

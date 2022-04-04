@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Common.Services.URIServices;
-using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Base.Queries;
 
 namespace ZUEPC.Common.CQRS.Queries;
 

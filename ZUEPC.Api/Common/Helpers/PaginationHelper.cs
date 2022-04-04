@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Common.Services.URIServices;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Common.Helpers;

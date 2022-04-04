@@ -1,7 +1,7 @@
-﻿using ZUEPC.DataAccess.Interfaces;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
+﻿using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.EvidencePublication.Domain.Common;
 
-namespace ZUEPC.EvidencePublication.Base.Domain.Institutions;
+namespace ZUEPC.EvidencePublication.Domain.Institutions;
 
 public class InstitutionName : 
 	EPCDomainBase, 

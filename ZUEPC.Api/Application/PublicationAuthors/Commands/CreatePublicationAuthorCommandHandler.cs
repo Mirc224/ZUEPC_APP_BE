@@ -3,7 +3,7 @@ using MediatR;
 using ZUEPC.Common.CQRS.CommandHandlers;
 using ZUEPC.DataAccess.Data.PublicationAuthors;
 using ZUEPC.DataAccess.Models.PublicationAuthor;
-using ZUEPC.EvidencePublication.Base.PublicationAuthors;
+using ZUEPC.EvidencePublication.PublicationAuthors;
 
 namespace ZUEPC.Application.PublicationAuthors.Commands;
 

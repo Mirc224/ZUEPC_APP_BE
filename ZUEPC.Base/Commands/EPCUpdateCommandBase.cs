@@ -1,7 +1,6 @@
-﻿using ZUEPC.Base.Commands;
-using ZUEPC.Base.Enums.Common;
+﻿using ZUEPC.Base.Enums.Common;
 
-namespace ZUEPC.EvidencePublication.Base.Commands;
+namespace ZUEPC.Base.Commands;
 
 public class EPCUpdateCommandBase : UpdateCommandBase<long>
 {

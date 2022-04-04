@@ -7,7 +7,7 @@ using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Base.Enums.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportPublication;
 

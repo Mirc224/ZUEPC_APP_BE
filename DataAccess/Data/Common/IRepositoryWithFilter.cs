@@ -1,4 +1,4 @@
-﻿using ZUEPC.DataAccess.Filters;
+﻿using ZUEPC.Base.QueryFilters;
 using ZUEPC.DataAccess.Models.Common;
 
 namespace ZUEPC.DataAccess.Data.Common;

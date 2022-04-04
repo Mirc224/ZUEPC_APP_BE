@@ -1,8 +1,8 @@
 ﻿using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Queries;
 using ZUEPC.Base.Enums.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
-using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
+using ZUEPC.EvidencePublication.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.RelatedPublications;
 using ZUEPC.Import.Models;
 
 namespace ZUEPC.Application.Import.Services;

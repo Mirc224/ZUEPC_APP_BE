@@ -4,7 +4,6 @@ using System.Dynamic;
 using System.Reflection;
 using ZUEPC.DataAccess.Attributes.ModelAttributes;
 using ZUEPC.DataAccess.Extensions;
-using ZUEPC.DataAccess.Interfaces;
 using static Dapper.SqlBuilder;
 
 namespace ZUEPC.DataAccess.Data.Common;
@@ -103,7 +102,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 
 	public async Task<long> InsertModelAsync(TModel model)
 	{
-		return await db.ExecuteScalarAsync<int, TModel>(baseInsertRawSql, model);
+		return await db.ExecuteScalarAsync<long, TModel>(baseInsertRawSql, model);
 	}
 
 	public void AddToWhereExpression<T>(string columnName, T value, SqlBuilder builder, ExpandoObject parameters, string op = "=")
@@ -144,7 +143,7 @@ public abstract class SQLDbRepositoryBase<TModel>
 		return await GetModelsAsync(parameters, builder);
 	}
 
-	protected Tuple<SqlBuilder, SqlBuilder> GetBaseInsertColumnInsertValuesSqlBuilderTuple()
+	protected Tuple<SqlBuilder, SqlBuilder> GetBaseInsertColumnAndInsertValuesSqlBuilderTuple()
 	{
 		IEnumerable<PropertyInfo> props = typeof(TModel)
 			.GetProperties()

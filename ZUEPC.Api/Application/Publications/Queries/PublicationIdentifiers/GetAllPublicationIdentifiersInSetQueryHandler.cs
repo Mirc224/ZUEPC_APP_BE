@@ -3,7 +3,7 @@ using MediatR;
 using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Models.Publication;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 

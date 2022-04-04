@@ -1,4 +1,4 @@
-﻿using ZUEPC.DataAccess.Interfaces;
+﻿using ZUEPC.Base.ItemInterfaces;
 
 namespace ZUEPC.DataAccess.Data.Common;
 

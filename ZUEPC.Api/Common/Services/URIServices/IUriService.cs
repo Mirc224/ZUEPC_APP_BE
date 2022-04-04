@@ -1,4 +1,4 @@
-﻿using ZUEPC.DataAccess.Filters;
+﻿using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Common.Services.URIServices;
 

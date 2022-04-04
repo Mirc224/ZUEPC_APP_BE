@@ -1,4 +1,4 @@
-﻿using ZUEPC.EvidencePublication.Base.Domain.Persons;
+﻿using ZUEPC.EvidencePublication.Domain.Persons;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Application.Persons.Queries.Persons;

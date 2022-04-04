@@ -2,9 +2,9 @@
 using MediatR;
 using ZUEPC.Api.Common.CQRS.QueryHandlers;
 using ZUEPC.DataAccess.Data.Persons;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 using ZUEPC.DataAccess.Models.Person;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
+using ZUEPC.EvidencePublication.Domain.Persons;
 
 namespace ZUEPC.Api.Application.Persons.Queries.PersonNames;
 

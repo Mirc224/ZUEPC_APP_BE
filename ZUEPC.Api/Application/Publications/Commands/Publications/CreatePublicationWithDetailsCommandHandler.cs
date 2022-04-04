@@ -22,8 +22,8 @@ using ZUEPC.Application.RelatedPublications.Entities.Details;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Services.ItemChecks;
-using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.PublicationActivities;
+using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Application.Publications.Commands.Publications;

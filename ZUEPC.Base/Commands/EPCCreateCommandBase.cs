@@ -1,6 +1,6 @@
 ﻿using ZUEPC.Base.Enums.Common;
 
-namespace ZUEPC.EvidencePublication.Base.Commands;
+namespace ZUEPC.Base.Commands;
 
 public class EPCCreateCommandBase
 {

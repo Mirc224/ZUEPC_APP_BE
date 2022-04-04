@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Base.Enums.Users;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
+using ZUEPC.EvidencePublication.Domain.Common;
 
 namespace ZUEPC.Users.Base.Domain;
 

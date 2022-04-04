@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Interfaces;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
-using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.EvidencePublication.Domain.Common;
+using ZUEPC.Base.Queries;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Common.CQRS.QueryHandlers;

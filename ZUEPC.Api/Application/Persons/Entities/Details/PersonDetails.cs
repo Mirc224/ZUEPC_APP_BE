@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Common.Entities;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
+using ZUEPC.EvidencePublication.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Entities.Details;
 

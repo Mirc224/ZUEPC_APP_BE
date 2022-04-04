@@ -4,7 +4,7 @@ using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 using ZUEPC.Common.CQRS.QueryHandlers;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Models.Publication;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 

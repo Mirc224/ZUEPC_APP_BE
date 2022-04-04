@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Localization;
 using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Queries.PersonNames;
-using ZUEPC.DataAccess.Interfaces;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
-using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.EvidencePublication.Domain.Persons;
+using ZUEPC.Base.Queries;
 using ZUEPC.Localization;
 using ZUEPC.Responses;
 

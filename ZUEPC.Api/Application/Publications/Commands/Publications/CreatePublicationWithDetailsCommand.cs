@@ -5,7 +5,7 @@ using ZUEPC.Application.Publications.Entities.Inputs.PublicationExternDatabaseId
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Entities.Inputs.PublicationNames;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
-using ZUEPC.EvidencePublication.Base.Commands;
+using ZUEPC.Base.Commands;
 
 namespace ZUEPC.Application.Publications.Commands.Publications;
 

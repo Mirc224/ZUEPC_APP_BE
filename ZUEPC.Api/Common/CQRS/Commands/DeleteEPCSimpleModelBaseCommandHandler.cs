@@ -1,6 +1,6 @@
 ﻿//using ZUEPC.DataAccess.Data.Common;
 //using ZUEPC.DataAccess.Models.Common;
-//using ZUEPC.EvidencePublication.Base.Commands;
+//using ZUEPC.Base.Commands;
 //using ZUEPC.Responses;
 
 //namespace ZUEPC.Common.CQRS.CommandHandlers;

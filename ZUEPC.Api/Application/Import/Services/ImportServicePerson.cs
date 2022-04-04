@@ -5,7 +5,7 @@ using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Queries.PersonNames;
 using ZUEPC.Application.Persons.Queries.Persons;
 using ZUEPC.Base.Enums.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
+using ZUEPC.EvidencePublication.Domain.Persons;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportPerson;
 

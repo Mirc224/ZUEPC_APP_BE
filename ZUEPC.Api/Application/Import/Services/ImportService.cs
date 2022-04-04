@@ -5,13 +5,13 @@ using ZUEPC.Application.Import.Commands;
 using ZUEPC.Base.Enums.Common;
 using ZUEPC.DataAccess.Data.Publications;
 using ZUEPC.DataAccess.Data.RelatedPublications;
-using ZUEPC.DataAccess.Interfaces;
-using ZUEPC.EvidencePublication.Base.Commands;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.EvidencePublication.Domain.Common;
+using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Import.Models;
 using ZUEPC.Import.Models.Commond;
 using ZUEPC.Import.Parser;
+using ZUEPC.Base.Commands;
 
 namespace ZUEPC.Application.Import.Services;
 

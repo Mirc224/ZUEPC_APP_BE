@@ -1,6 +1,6 @@
-﻿using ZUEPC.EvidencePublication.Base.Domain.Common;
+﻿using ZUEPC.EvidencePublication.Domain.Common;
 
-namespace ZUEPC.EvidencePublication.Base.Domain.Publications;
+namespace ZUEPC.EvidencePublication.Domain.Publications;
 
 public class Publication : EPCDomainBase
 {

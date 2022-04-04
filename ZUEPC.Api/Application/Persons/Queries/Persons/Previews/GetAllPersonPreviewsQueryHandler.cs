@@ -4,8 +4,8 @@ using ZUEPC.Application.Persons.Entities.Previews;
 using ZUEPC.Application.Persons.Queries.Persons.Previews.BaseHandlers;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Helpers;
-using ZUEPC.DataAccess.Filters;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
+using ZUEPC.Base.QueryFilters;
+using ZUEPC.EvidencePublication.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews;
 

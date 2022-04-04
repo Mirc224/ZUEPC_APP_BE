@@ -1,10 +1,10 @@
 ﻿using ZUEPC.Application.PublicationAuthors.Commands;
 using ZUEPC.Application.PublicationAuthors.Queries;
 using ZUEPC.Base.Enums.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Institutions;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
-using ZUEPC.EvidencePublication.Base.PublicationAuthors;
+using ZUEPC.EvidencePublication.Domain.Institutions;
+using ZUEPC.EvidencePublication.Domain.Persons;
+using ZUEPC.EvidencePublication.Domain.Publications;
+using ZUEPC.EvidencePublication.PublicationAuthors;
 using ZUEPC.Import.Models;
 
 namespace ZUEPC.Application.Import.Services;

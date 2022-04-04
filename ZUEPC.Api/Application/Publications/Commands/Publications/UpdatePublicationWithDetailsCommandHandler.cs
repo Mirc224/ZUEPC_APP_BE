@@ -20,7 +20,7 @@ using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Services.ItemChecks;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.Localization;
 using ZUEPC.Responses;
 

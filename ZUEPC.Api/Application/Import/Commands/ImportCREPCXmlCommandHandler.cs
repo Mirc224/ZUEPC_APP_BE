@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using ZUEPC.Application.Import.Services;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.Publications;
 
 namespace ZUEPC.Application.Import.Commands;
 

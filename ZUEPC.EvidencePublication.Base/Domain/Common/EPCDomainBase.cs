@@ -1,7 +1,7 @@
 ﻿using ZUEPC.Base.Enums.Common;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.ItemInterfaces;
 
-namespace ZUEPC.EvidencePublication.Base.Domain.Common;
+namespace ZUEPC.EvidencePublication.Domain.Common;
 
 public class EPCDomainBase : 
 	DomainBase,

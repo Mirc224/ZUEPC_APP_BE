@@ -7,7 +7,7 @@ using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
 using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.RelatedPublications.Queries.Details;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Queries.Publications.Details.BaseHandlers;
 

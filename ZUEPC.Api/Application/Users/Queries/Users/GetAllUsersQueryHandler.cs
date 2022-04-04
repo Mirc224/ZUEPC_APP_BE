@@ -3,7 +3,7 @@ using DataAccess.Data.User;
 using MediatR;
 using Users.Base.Domain;
 using ZUEPC.Api.Common.CQRS.QueryHandlers;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 using ZUEPC.DataAccess.Models.Users;
 
 namespace ZUEPC.Api.Application.Users.Queries.Users;

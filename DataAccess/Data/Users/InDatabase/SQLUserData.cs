@@ -5,7 +5,7 @@ using System.Dynamic;
 using ZUEPC.DataAccess.Constants;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.DataAccess.Extensions;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 using ZUEPC.DataAccess.Models.Users;
 
 namespace ZUEPC.DataAccess.Data.Users.InDatabase;

@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.DataAccess.Interfaces;
+﻿namespace ZUEPC.Base.ItemInterfaces;
 
 public interface IInstitutionRelated
 {

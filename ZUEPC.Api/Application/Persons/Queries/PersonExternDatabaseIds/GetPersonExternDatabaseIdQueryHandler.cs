@@ -4,7 +4,7 @@ using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Common.CQRS.QueryHandlers;
 using ZUEPC.DataAccess.Data.Persons;
 using ZUEPC.DataAccess.Models.Person;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
+using ZUEPC.EvidencePublication.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 

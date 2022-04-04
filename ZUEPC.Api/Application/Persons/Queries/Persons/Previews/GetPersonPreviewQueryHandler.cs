@@ -2,7 +2,7 @@
 using MediatR;
 using ZUEPC.Application.Persons.Entities.Previews;
 using ZUEPC.Application.Persons.Queries.Persons.Previews.BaseHandlers;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
+using ZUEPC.EvidencePublication.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews;
 

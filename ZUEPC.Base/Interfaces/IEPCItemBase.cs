@@ -1,6 +1,6 @@
 ﻿using ZUEPC.Base.Enums.Common;
 
-namespace ZUEPC.DataAccess.Interfaces;
+namespace ZUEPC.Base.ItemInterfaces;
 
 public interface IEPCItemBase
 {

@@ -3,7 +3,7 @@ using MediatR;
 using ZUEPC.Application.Institutions.Entities.Details;
 using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Queries.InstitutionNames;
-using ZUEPC.EvidencePublication.Base.Domain.Institutions;
+using ZUEPC.EvidencePublication.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Details.BaseHandlers;
 

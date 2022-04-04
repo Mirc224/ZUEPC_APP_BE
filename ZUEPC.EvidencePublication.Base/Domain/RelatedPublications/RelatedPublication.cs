@@ -1,7 +1,7 @@
-﻿using ZUEPC.DataAccess.Interfaces;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
+﻿using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.EvidencePublication.Domain.Common;
 
-namespace ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
+namespace ZUEPC.EvidencePublication.Domain.RelatedPublications;
 
 public class RelatedPublication : 
 	EPCDomainBase,

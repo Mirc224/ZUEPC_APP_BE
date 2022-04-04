@@ -5,7 +5,7 @@ using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Application.Institutions.Queries.Institutions;
 using ZUEPC.Base.Enums.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Institutions;
+using ZUEPC.EvidencePublication.Domain.Institutions;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportInstitution;
 

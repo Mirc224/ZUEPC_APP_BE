@@ -2,8 +2,8 @@
 using ZUEPC.Common.CQRS.Queries;
 using ZUEPC.Common.Helpers;
 using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Filters;
-using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Base.QueryFilters;
+using ZUEPC.Base.Queries;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Common.CQRS.QueryHandlers;

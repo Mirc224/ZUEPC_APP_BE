@@ -7,7 +7,7 @@ using ZUEPC.Application.Persons.Entities.Inputs.Common;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonNames;
 using ZUEPC.Common.Extensions;
-using ZUEPC.EvidencePublication.Base.Domain.Persons;
+using ZUEPC.EvidencePublication.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Commands.Persons;
 

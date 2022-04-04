@@ -3,9 +3,9 @@ using ZUEPC.Api.Common.CQRS.Queries;
 using ZUEPC.Common.CQRS.QueryHandlers;
 using ZUEPC.Common.Helpers;
 using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 using ZUEPC.DataAccess.Models.Common;
-using ZUEPC.EvidencePublication.Base.Domain.Common;
+using ZUEPC.EvidencePublication.Domain.Common;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Api.Common.CQRS.QueryHandlers;

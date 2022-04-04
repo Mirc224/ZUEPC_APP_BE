@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Localization;
-using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Base.Queries;
 using ZUEPC.Localization;
 using ZUEPC.Responses;
 

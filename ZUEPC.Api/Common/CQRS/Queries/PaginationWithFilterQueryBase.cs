@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Common.CQRS.Queries;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Api.Common.CQRS.Queries;
 

@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Localization;
 using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Queries.InstitutionNames;
-using ZUEPC.DataAccess.Interfaces;
-using ZUEPC.EvidencePublication.Base.Domain.Institutions;
-using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.EvidencePublication.Domain.Institutions;
+using ZUEPC.Base.Queries;
 using ZUEPC.Localization;
 using ZUEPC.Responses;
 

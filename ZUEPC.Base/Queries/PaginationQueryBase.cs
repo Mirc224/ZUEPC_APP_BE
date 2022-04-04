@@ -1,6 +1,6 @@
-﻿using ZUEPC.DataAccess.Filters;
+﻿using ZUEPC.Base.QueryFilters;
 
-namespace ZUEPC.EvidencePublication.Base.Queries;
+namespace ZUEPC.Base.Queries;
 
 public abstract class PaginationQueryBase
 {

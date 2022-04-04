@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
-using ZUEPC.EvidencePublication.Base.Commands;
+using ZUEPC.Base.Commands;
 
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 

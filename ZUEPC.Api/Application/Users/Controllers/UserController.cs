@@ -12,7 +12,7 @@ using ZUEPC.Application.Users.Commands;
 using ZUEPC.Application.Users.Queries;
 using ZUEPC.Application.Users.Validators;
 using ZUEPC.Common.Services.URIServices;
-using ZUEPC.DataAccess.Filters;
+using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Application.Users.Controllers
 {

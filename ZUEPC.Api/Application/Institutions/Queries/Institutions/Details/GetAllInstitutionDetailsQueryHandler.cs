@@ -4,8 +4,8 @@ using ZUEPC.Application.Institutions.Entities.Details;
 using ZUEPC.Application.Institutions.Queries.Institutions.Details.BaseHandlers;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Helpers;
-using ZUEPC.DataAccess.Filters;
-using ZUEPC.EvidencePublication.Base.Domain.Institutions;
+using ZUEPC.Base.QueryFilters;
+using ZUEPC.EvidencePublication.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions.Details;
 

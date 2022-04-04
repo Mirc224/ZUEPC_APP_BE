@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Responses;
-using ZUEPC.EvidencePublication.Base.Domain.Institutions;
+using ZUEPC.EvidencePublication.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Commands.InstitutionExternDatabaseIds;
 

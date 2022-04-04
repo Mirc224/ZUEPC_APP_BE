@@ -7,7 +7,7 @@ using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseId
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
 using ZUEPC.Common.Extensions;
 using ZUEPC.Common.Services.ItemChecks;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Application.Institutions.Commands.Institutions;

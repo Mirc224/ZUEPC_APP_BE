@@ -13,12 +13,12 @@ using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.Publications.Queries.Publications.Previews;
 using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Application.RelatedPublications.Queries;
-using ZUEPC.DataAccess.Interfaces;
-using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
-using ZUEPC.EvidencePublication.Base.Domain.RelatedPublications;
-using ZUEPC.EvidencePublication.Base.PublicationAuthors;
-using ZUEPC.EvidencePublication.Base.Queries;
+using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.EvidencePublication.Domain.PublicationActivities;
+using ZUEPC.EvidencePublication.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.RelatedPublications;
+using ZUEPC.EvidencePublication.PublicationAuthors;
+using ZUEPC.Base.Queries;
 using ZUEPC.Localization;
 using ZUEPC.Responses;
 

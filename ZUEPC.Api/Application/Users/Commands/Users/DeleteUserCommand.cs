@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ZUEPC.EvidencePublication.Base.Commands;
+using ZUEPC.Base.Commands;
 
 namespace ZUEPC.Api.Application.Users.Commands.Users;
 

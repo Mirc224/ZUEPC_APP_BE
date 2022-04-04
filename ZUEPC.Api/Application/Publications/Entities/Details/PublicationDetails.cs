@@ -1,8 +1,8 @@
 ﻿using ZUEPC.Application.PublicationAuthors.Entities.Details;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
 using ZUEPC.Common.Entities;
-using ZUEPC.EvidencePublication.Base.Domain.PublicationActivities;
-using ZUEPC.EvidencePublication.Base.Domain.Publications;
+using ZUEPC.EvidencePublication.Domain.PublicationActivities;
+using ZUEPC.EvidencePublication.Domain.Publications;
 
 namespace ZUEPC.Application.Publications.Entities.Details;
 

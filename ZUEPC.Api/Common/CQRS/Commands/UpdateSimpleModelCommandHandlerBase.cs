@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ZUEPC.Base.Commands;
 using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.Responses;
 
 namespace ZUEPC.Common.CQRS.CommandHandlers;

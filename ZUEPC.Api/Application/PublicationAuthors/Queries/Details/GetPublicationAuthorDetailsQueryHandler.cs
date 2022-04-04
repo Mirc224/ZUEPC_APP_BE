@@ -3,7 +3,7 @@ using MediatR;
 using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Application.Persons.Queries.Persons.Previews;
 using ZUEPC.Application.PublicationAuthors.Entities.Details;
-using ZUEPC.EvidencePublication.Base.PublicationAuthors;
+using ZUEPC.EvidencePublication.PublicationAuthors;
 
 namespace ZUEPC.Application.PublicationAuthors.Queries.Details;
 

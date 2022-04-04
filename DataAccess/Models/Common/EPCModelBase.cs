@@ -1,6 +1,6 @@
 ﻿using ZUEPC.Base.Enums.Common;
 using ZUEPC.DataAccess.Attributes.ModelAttributes;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.ItemInterfaces;
 
 namespace ZUEPC.DataAccess.Models.Common;
 

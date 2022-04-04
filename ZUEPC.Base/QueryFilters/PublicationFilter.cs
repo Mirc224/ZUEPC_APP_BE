@@ -1,4 +1,4 @@
-﻿namespace ZUEPC.DataAccess.Filters;
+﻿namespace ZUEPC.Base.QueryFilters;
 
 public class PublicationFilter : IQueryFilter
 {

@@ -3,7 +3,7 @@ using MediatR;
 using ZUEPC.Common.CQRS.CommandHandlers;
 using ZUEPC.DataAccess.Data.Institutions;
 using ZUEPC.DataAccess.Models.Institution;
-using ZUEPC.EvidencePublication.Base.Domain.Institutions;
+using ZUEPC.EvidencePublication.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 

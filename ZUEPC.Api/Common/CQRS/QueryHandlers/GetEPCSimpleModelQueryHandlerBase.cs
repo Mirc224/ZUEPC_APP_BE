@@ -2,8 +2,8 @@
 //using ZUEPC.Responses;
 //using ZUEPC.DataAccess.Data.Common;
 //using ZUEPC.DataAccess.Models.Common;
-//using ZUEPC.EvidencePublication.Base.Domain.Common;
-//using ZUEPC.EvidencePublication.Base.Queries;
+//using ZUEPC.EvidencePublication.Domain.Common;
+//using ZUEPC.Base.Queries;
 
 //namespace ZUEPC.Common.CQRS.QueryHandlers;
 

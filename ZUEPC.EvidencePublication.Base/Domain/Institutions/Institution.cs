@@ -1,6 +1,6 @@
-﻿using ZUEPC.EvidencePublication.Base.Domain.Common;
+﻿using ZUEPC.EvidencePublication.Domain.Common;
 
-namespace ZUEPC.EvidencePublication.Base.Domain.Institutions;
+namespace ZUEPC.EvidencePublication.Domain.Institutions;
 
 public class Institution : EPCDomainBase
 {

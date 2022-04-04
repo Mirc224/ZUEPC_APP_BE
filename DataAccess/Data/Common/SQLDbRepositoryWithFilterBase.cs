@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using System.Dynamic;
-using ZUEPC.DataAccess.Filters;
-using ZUEPC.DataAccess.Interfaces;
+using ZUEPC.Base.QueryFilters;
+using ZUEPC.Base.ItemInterfaces;
 using static Dapper.SqlBuilder;
 
 namespace ZUEPC.DataAccess.Data.Common;
@@ -13,7 +13,7 @@ public abstract class SQLDbRepositoryWithFilterBase<TRepository, TModel, TFilter
 	where TFilter : IQueryFilter
 	where TRepository: IRepositoryWithFilter<TModel, TFilter>
 {
-	protected SQLDbRepositoryWithFilterBase(ISqlDataAccess db, string baseTableName, string baseTableAlias)
+	public SQLDbRepositoryWithFilterBase(ISqlDataAccess db, string baseTableName, string baseTableAlias)
 		: base(db, baseTableName, baseTableAlias)
 	{
 	}
