@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using DataAccess.DbAccess;
 using System.Dynamic;
+using ZUEPC.Base.Enums.Users;
 using ZUEPC.DataAccess.Constants;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.DataAccess.Models.Users;
@@ -21,7 +22,7 @@ public class SQLUserRolesData :
 		return await DeleteModelsWithColumnValueAsync(nameof(UserRoleModel.UserId), userId);
 	}
 
-	public async Task<UserRoleModel?> GetUserRoleByUserIdAndRoleIdAsync(long userId, long roleId)
+	public async Task<UserRoleModel?> GetUserRoleByUserIdAndRoleIdAsync(long userId, RoleType roleId)
 	{
 		SqlBuilder builder = new();
 		ExpandoObject parameters = new();
@@ -31,7 +32,7 @@ public class SQLUserRolesData :
 		return (await GetModelsAsync(parameters, builder)).FirstOrDefault();
 	}
 
-	public async Task<int> DeleteUserRoleByUserIdAndRoleIdAsync(long userId, long roleId)
+	public async Task<int> DeleteUserRoleByUserIdAndRoleIdAsync(long userId, RoleType roleId)
 	{
 		SqlBuilder builder = new();
 		ExpandoObject parameters = new();

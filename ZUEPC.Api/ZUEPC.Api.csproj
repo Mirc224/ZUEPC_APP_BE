@@ -22,8 +22,8 @@
     <ProjectReference Include="..\Constants\ZUEPC.Constants.csproj" />
     <ProjectReference Include="..\DataAccess\ZUEPC.DataAccess.csproj" />
     <ProjectReference Include="..\KIS.Import\ZUEPC.Import.csproj" />
-    <ProjectReference Include="..\Users.Base\ZUEPC.Users.Base.csproj" />
-    <ProjectReference Include="..\ZUEPC.EvidencePublication.Base\ZUEPC.EvidencePublication.Base.csproj" />
+    <ProjectReference Include="..\Users.Base\ZUEPC.Users.csproj" />
+    <ProjectReference Include="..\ZUEPC.EvidencePublication.Base\ZUEPC.PublicationEvidence.csproj" />
   </ItemGroup>
 
   <ItemGroup>

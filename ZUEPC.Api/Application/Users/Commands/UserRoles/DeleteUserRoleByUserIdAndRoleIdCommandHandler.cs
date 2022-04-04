@@ -16,7 +16,7 @@ public class DeleteUserRoleByUserIdAndRoleIdCommandHandler
 
 	public async Task<DeleteUserRoleByUserIdAndRoleIdCommandResponse> Handle(DeleteUserRoleByUserIdAndRoleIdCommand request, CancellationToken cancellationToken)
 	{
-		UserRoleModel? currentModel = await _repository.GetUserRoleByUserIdAndRoleIdAsync(request.UserId, (long)request.RoleType);
+		UserRoleModel? currentModel = await _repository.GetUserRoleByUserIdAndRoleIdAsync(request.UserId, request.RoleType);
 		if (currentModel is null)
 		{
 			return new() { Success = false };
