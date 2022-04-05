@@ -6,7 +6,7 @@ using ZUEPC.Application.Institutions.Entities.Details;
 using ZUEPC.Application.Institutions.Entities.Inputs.Common;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Commands.Institutions;

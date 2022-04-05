@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Import.Models;
 
 namespace ZUEPC.Import.Parser;
@@ -6,20 +7,16 @@ namespace ZUEPC.Import.Parser;
 partial class ImportParser
 {
 	private static List<ImportPublicationActivity> ParseCREPCPublishingActivityDetails(
-		XElement publicationElement, 
+		XElement publicationElement,
 		string xmlns)
 	{
 		List<ImportPublicationActivity> result = new();
-		var biblioActivityElements = publicationElement.Elements(XName.Get("cross_biblio_activity", xmlns));
-		if(!biblioActivityElements.Any())
+		IEnumerable<XElement>? biblioActivityElements = publicationElement.Elements(XName.Get("cross_biblio_activity", xmlns));
+
+		foreach (XElement activityElement in biblioActivityElements.OrEmptyIfNull())
 		{
-			return result;
-		}
-		
-		foreach(var activityElement in biblioActivityElements)
-		{
-			var recActivityElement = activityElement.Element(XName.Get("rec_activity_crepc", xmlns));
-			if(recActivityElement is null)
+			XElement? recActivityElement = activityElement.Element(XName.Get("rec_activity_crepc", xmlns));
+			if (recActivityElement is null)
 			{
 				continue;
 			}
@@ -41,26 +38,26 @@ partial class ImportParser
 	{
 		List<ImportPublicationActivity> result = new();
 
-		var publishingActivityElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
-										 where element.Attribute(DAWINCI_TAG)?.Value == "985"
-										 select element);
+		IEnumerable<XElement>? publishingActivityElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_DATAFIELD, xmlns))
+															where element.Attribute(DAWINCI_TAG)?.Value == "985"
+															select element);
 
-		foreach (var activityElement in publishingActivityElement)
+		foreach (XElement activityElement in publishingActivityElement.OrEmptyIfNull())
 		{
-			var categoryElement = (from element in activityElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-									  where element.Attribute(DAWINCI_CODE)?.Value == "a"
-									  select element).FirstOrDefault();
-			var governmentGrantElement = (from element in activityElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-									  where element.Attribute(DAWINCI_CODE)?.Value == "g"
-									  select element).FirstOrDefault();
-			if (categoryElement is null && governmentGrantElement is null )
+			XElement? categoryElement = (from element in activityElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+										 where element.Attribute(DAWINCI_CODE)?.Value == "a"
+										 select element).FirstOrDefault();
+			XElement? governmentGrantElement = (from element in activityElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+												where element.Attribute(DAWINCI_CODE)?.Value == "g"
+												select element).FirstOrDefault();
+			if (categoryElement is null && governmentGrantElement is null)
 			{
 				continue;
 			}
 
-			var activityYearElement = (from element in activityElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-									   where element.Attribute(DAWINCI_CODE)?.Value == "r"
-									   select element).FirstOrDefault();
+			XElement? activityYearElement = (from element in activityElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+											 where element.Attribute(DAWINCI_CODE)?.Value == "r"
+											 select element).FirstOrDefault();
 
 			ImportPublicationActivity activityDetails = new()
 			{

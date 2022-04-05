@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Application.RelatedPublications.Entities.Details;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.RelatedPublications.Queries.Details;
 

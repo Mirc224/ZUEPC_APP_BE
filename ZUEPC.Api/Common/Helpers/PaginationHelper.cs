@@ -1,6 +1,6 @@
-﻿using ZUEPC.Common.Services.URIServices;
+﻿using ZUEPC.Base.Services;
 using ZUEPC.Base.QueryFilters;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Common.Helpers;
 
@@ -14,7 +14,7 @@ public static class PaginationHelper
 		int totalRecords,
 		string route,
 		TModelFilter? modelFilter)
-		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
+		where TResponse : PaginatedResponseBase<IEnumerable<TDomain>>, new()
 		where TModelFilter: IQueryFilter
 	{
 		Uri pageUri = uriService.GetPageUri(route);
@@ -31,7 +31,7 @@ public static class PaginationHelper
 		IUriService uriService,
 		int totalRecords,
 		string route)
-		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
+		where TResponse : PaginatedResponseBase<IEnumerable<TDomain>>, new()
 	{
 		Uri pageUri = uriService.GetPageUri(route);
 		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, totalRecords, uriService);
@@ -43,7 +43,7 @@ public static class PaginationHelper
 		PaginationFilter paginationFilter, 
 		int totalRecords, 
 		IUriService uriService)
-		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
+		where TResponse : PaginatedResponseBase<IEnumerable<TDomain>>, new()
 	{
 		TResponse response = new()
 		{
@@ -63,7 +63,7 @@ public static class PaginationHelper
 		PaginationFilter paginationFilter,
 		int totalRecords,
 		IUriService uriService)
-		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
+		where TResponse : PaginatedResponseBase<IEnumerable<TDomain>>, new()
 	{
 		double totalPages = ((double)totalRecords / (double)paginationFilter.PageSize);
 		int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));

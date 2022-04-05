@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using ZUEPC.Api.Common.CQRS.Queries;
+using ZUEPC.Base.Queries;
 using ZUEPC.Common.CQRS.QueryHandlers;
 using ZUEPC.Common.Helpers;
 using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.Base.QueryFilters;
 using ZUEPC.DataAccess.Models.Common;
 using ZUEPC.Base.Domain;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Api.Common.CQRS.QueryHandlers;
 
@@ -21,8 +21,8 @@ public abstract class GetModelsWithFiltersPagedQueryHandlerBase<TRepository, TDo
 	}
 
 	protected async Task<TResponse> ProcessQueryWithFilterAsync<TQuery, TResponse>(TQuery request)
-		where TQuery : PaginationWithFilterQueryBase<TFilter>
-		where TResponse : PagedResponseBase<IEnumerable<TDomain>>, new()
+		where TQuery : PaginatedQueryWithFilterBase<TFilter>
+		where TResponse : PaginatedResponseBase<IEnumerable<TDomain>>, new()
 	{
 		ICollection<TDomain> mappedResult = await GetMappedDataWithFilterAsync(request);
 		int totalRecords = await _repository.CountAsync(request.QueryFilter);
@@ -36,7 +36,7 @@ public abstract class GetModelsWithFiltersPagedQueryHandlerBase<TRepository, TDo
 	}
 
 	protected async Task<ICollection<TDomain>> GetMappedDataWithFilterAsync<TQuery>(TQuery request)
-	where TQuery : PaginationWithFilterQueryBase<TFilter>
+	where TQuery : PaginatedQueryWithFilterBase<TFilter>
 	{
 		IEnumerable<TModel> result = await GetDataWithFilterAsync(request.QueryFilter, request.PaginationFilter);
 		return _mapper.Map<List<TDomain>>(result);

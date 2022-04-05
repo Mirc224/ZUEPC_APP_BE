@@ -1,8 +1,8 @@
 ﻿using Users.Base.Domain;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Api.Application.Users.Queries.Users;
 
-public class GetAllUsersQueryResponse : PagedResponseBase<IEnumerable<User>>
+public class GetAllUsersQueryResponse : PaginatedResponseBase<IEnumerable<User>>
 {
 }

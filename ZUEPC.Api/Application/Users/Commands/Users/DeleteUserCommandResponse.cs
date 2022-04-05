@@ -1,4 +1,4 @@
-﻿using ZUEPC.Responses;
+﻿using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Api.Application.Users.Commands.Users;
 

@@ -1,4 +1,4 @@
-﻿using ZUEPC.Responses;
+﻿using ZUEPC.Base.Responses;
 using ZUEPC.EvidencePublication.Domain.Institutions;
 
 namespace ZUEPC.Application.Institutions.Commands.InstitutionNames;

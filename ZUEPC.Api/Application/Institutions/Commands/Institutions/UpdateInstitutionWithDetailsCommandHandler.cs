@@ -5,10 +5,10 @@ using ZUEPC.Application.Institutions.Commands.InstitutionNames;
 using ZUEPC.Application.Institutions.Entities.Inputs.Common;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Entities.Inputs.InstitutionNames;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.Base.ItemInterfaces;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 

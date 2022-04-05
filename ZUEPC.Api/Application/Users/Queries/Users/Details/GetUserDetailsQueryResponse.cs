@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Api.Application.Users.Entities.Details;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Api.Application.Users.Queries.Users.Details;
 

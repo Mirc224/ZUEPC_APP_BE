@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportPerson;
 
@@ -12,23 +13,23 @@ partial class ImportParser
 		person.PersonNames = ParseCREPCPersonNames(personElement, xmlns);
 		person.PersonExternDatabaseIds = ParseCREPCPersonExternDbIds(personElement, xmlns);
 
-		var birthElement = (from element in personElement.Elements(XName.Get("periods", xmlns))
-							where element.Attribute("birth_death")?.Value == "yes"
-							select
-							(from dateElement in element.Descendants(XName.Get("date", xmlns))
-							 where dateElement.Element(XName.Get("year", xmlns))?.Attribute("period_type")?.Value == "from"
-							 select dateElement).FirstOrDefault()).FirstOrDefault();
+		XElement? birthElement = (from element in personElement.Elements(XName.Get("periods", xmlns))
+								  where element.Attribute("birth_death")?.Value == "yes"
+								  select
+								  (from dateElement in element.Descendants(XName.Get("date", xmlns))
+								   where dateElement.Element(XName.Get("year", xmlns))?.Attribute("period_type")?.Value == "from"
+								   select dateElement).FirstOrDefault()).FirstOrDefault();
 		if (birthElement != null)
 		{
 			person.BirthYear = ParseInt(birthElement.Element(XName.Get("year", xmlns))?.Value);
 		}
 
-		var deathElement = (from element in personElement.Elements(XName.Get("periods", xmlns))
-							where element.Attribute("birth_death")?.Value == "yes"
-							select
-							(from dateElement in element.Descendants(XName.Get("date", xmlns))
-							 where dateElement.Element(XName.Get("year", xmlns))?.Attribute("period_type")?.Value == "to"
-							 select dateElement).FirstOrDefault()).FirstOrDefault();
+		XElement? deathElement = (from element in personElement.Elements(XName.Get("periods", xmlns))
+								  where element.Attribute("birth_death")?.Value == "yes"
+								  select
+								  (from dateElement in element.Descendants(XName.Get("date", xmlns))
+								   where dateElement.Element(XName.Get("year", xmlns))?.Attribute("period_type")?.Value == "to"
+								   select dateElement).FirstOrDefault()).FirstOrDefault();
 		if (deathElement != null)
 		{
 			person.DeathYear = ParseInt(deathElement.Element(XName.Get("year", xmlns))?.Value);
@@ -42,16 +43,16 @@ partial class ImportParser
 		List<ImportPersonExternDatabaseId> result = new();
 
 		string? input = personElement.Attribute("id")?.Value.Trim();
-		var externDbId = new ImportPersonExternDatabaseId()
+		ImportPersonExternDatabaseId? externDbId = new()
 		{
 			ExternIdentifierValue = $"{CREPC_IDENTIFIER_PREFIX}:{input}",
 		};
 
 		result.Add(externDbId);
 
-		var records = personElement.Elements(XName.Get("cross_person_database", xmlns));
+		IEnumerable<XElement>? records = personElement.Elements(XName.Get("cross_person_database", xmlns));
 
-		foreach (var recordElement in records)
+		foreach (XElement? recordElement in records.OrEmptyIfNull())
 		{
 			ImportPersonExternDatabaseId personExterDbId = new();
 			string? idLabel = recordElement.Attribute("id_title")?.Value.Trim();
@@ -83,15 +84,15 @@ partial class ImportParser
 		person.PersonNames = ParseDaWinciPersonNames(personElement, xmlns);
 		person.PersonExternDatabaseIds = ParseDaWinciPersonExternDbIds(personElement, xmlns);
 
-		var birthDeathElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-								 where element.Attribute(DAWINCI_CODE)?.Value == "f"
-								 select element).FirstOrDefault();
+		XElement? birthDeathElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+									   where element.Attribute(DAWINCI_CODE)?.Value == "f"
+									   select element).FirstOrDefault();
 
 		if (birthDeathElement != null)
 		{
-			var intervalString = birthDeathElement.Value.Trim();
-			var yearsArr = intervalString.Split('-');
-			if(!string.IsNullOrEmpty(yearsArr[0]))
+			string? intervalString = birthDeathElement.Value.Trim();
+			string[]? yearsArr = intervalString.Split('-');
+			if (!string.IsNullOrEmpty(yearsArr[0]))
 			{
 				person.BirthYear = ParseInt(yearsArr[0]);
 			}
@@ -112,17 +113,17 @@ partial class ImportParser
 		string? firstName = null;
 		string? lastName = null;
 
-		var nameElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-						  where element.Attribute(DAWINCI_CODE)?.Value == "b"
-						  select element).FirstOrDefault();
-		if(nameElement != null)
+		XElement? nameElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+								 where element.Attribute(DAWINCI_CODE)?.Value == "b"
+								 select element).FirstOrDefault();
+		if (nameElement != null)
 		{
 			firstName = nameElement.Value.Trim();
 		}
 
 		nameElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-						   where element.Attribute(DAWINCI_CODE)?.Value == "a"
-						   select element).FirstOrDefault();
+					   where element.Attribute(DAWINCI_CODE)?.Value == "a"
+					   select element).FirstOrDefault();
 		if (nameElement != null)
 		{
 			lastName = nameElement.Value.Trim();
@@ -143,9 +144,9 @@ partial class ImportParser
 	{
 		List<ImportPersonExternDatabaseId> result = new();
 
-		var personIdElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-							   where element.Attribute(DAWINCI_CODE)?.Value == "3"
-							   select element).FirstOrDefault();
+		XElement? personIdElement = (from element in personElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+									 where element.Attribute(DAWINCI_CODE)?.Value == "3"
+									 select element).FirstOrDefault();
 		if (personIdElement != null)
 		{
 			ImportPersonExternDatabaseId externDbId = new()

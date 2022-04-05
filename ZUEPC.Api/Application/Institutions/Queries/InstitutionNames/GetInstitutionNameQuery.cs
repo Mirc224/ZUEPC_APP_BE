@@ -4,7 +4,7 @@ using ZUEPC.Base.Queries;
 namespace ZUEPC.Application.Institutions.Queries.InstitutionNames;
 
 public class GetInstitutionNameQuery :
-	EPCQueryWithIdBase<long>,
+	QueryWithIdBase<long>,
 	IRequest<GetInstitutionNameQueryResponse>
 {
 }

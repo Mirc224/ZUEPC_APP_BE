@@ -4,19 +4,19 @@ namespace ZUEPC.Options;
 
 public static class ApiLocalizationSettings
 {
-    public static RequestLocalizationOptions GetLocalizationOptions(WebApplicationBuilder builder)
-    {
-        var supportedCultures = builder.Configuration.GetSection("Cultures:SupportedCultures").Get<string[]>();
-        var defaultCulture = builder.Configuration.GetSection("Cultures:Default").Value;
-        
-        builder.Services.AddLocalization();
+	public static RequestLocalizationOptions GetLocalizationOptions(WebApplicationBuilder builder)
+	{
+		string[] supportedCultures = builder.Configuration.GetSection("Cultures:SupportedCultures").Get<string[]>();
+		string defaultCulture = builder.Configuration.GetSection("Cultures:Default").Value;
 
-        var localizationOptions = new RequestLocalizationOptions()
-            .AddSupportedCultures(supportedCultures)
-            .AddSupportedUICultures(supportedCultures);
-        localizationOptions.DefaultRequestCulture = new RequestCulture(defaultCulture);
-        localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+		builder.Services.AddLocalization();
 
-        return localizationOptions;
-    }
+		RequestLocalizationOptions localizationOptions = new RequestLocalizationOptions()
+			.AddSupportedCultures(supportedCultures)
+			.AddSupportedUICultures(supportedCultures);
+		localizationOptions.DefaultRequestCulture = new RequestCulture(defaultCulture);
+		localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+
+		return localizationOptions;
+	}
 }

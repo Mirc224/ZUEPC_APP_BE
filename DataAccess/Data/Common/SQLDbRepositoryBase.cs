@@ -110,11 +110,11 @@ public abstract class SQLDbRepositoryBase<TModel>
 		builder.Where($"{columnName} {op} @{columnName}");
 		parameters.TryAdd(columnName, value);
 	}
+
 	public void AddToWhereExpression(string columnName, SqlBuilder builder, string op = "=")
 	{
 		builder.Where($"{columnName} {op} @{columnName}");
 	}
-
 	protected async Task<int> DeleteModelsWithColumnValueAsync<T>(string columnName, T value)
 	{
 		SqlBuilder builder = new();

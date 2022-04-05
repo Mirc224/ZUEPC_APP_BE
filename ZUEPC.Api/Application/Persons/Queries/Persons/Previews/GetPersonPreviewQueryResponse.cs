@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Application.Persons.Entities.Previews;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews;
 

@@ -11,8 +11,8 @@ using ZUEPC.Api.Common.Authorization;
 using ZUEPC.Application.Users.Commands;
 using ZUEPC.Application.Users.Queries;
 using ZUEPC.Application.Users.Validators;
-using ZUEPC.Common.Services.URIServices;
 using ZUEPC.Base.QueryFilters;
+using ZUEPC.Base.Services;
 
 namespace ZUEPC.Application.Users.Controllers
 {

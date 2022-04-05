@@ -4,7 +4,7 @@ using ZUEPC.Base.Queries;
 namespace ZUEPC.Application.Publications.Queries.Publications.Details;
 
 public class GetPublicationDetailsQuery :
-	EPCQueryWithIdBase<long>,
+	QueryWithIdBase<long>,
 	IRequest<GetPublicationDetailsQueryResponse>
 {
 }

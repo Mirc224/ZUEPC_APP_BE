@@ -3,7 +3,7 @@ using MediatR;
 using Users.Base.Domain;
 using ZUEPC.Api.Application.Users.Entities.Details;
 using ZUEPC.Api.Application.Users.Queries.Users.Details.BaseHanlders;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Common.Helpers;
 using ZUEPC.Base.QueryFilters;
 

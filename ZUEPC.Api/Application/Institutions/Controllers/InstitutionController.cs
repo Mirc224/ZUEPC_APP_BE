@@ -7,7 +7,7 @@ using ZUEPC.Application.Institutions.Queries.Institutions;
 using ZUEPC.Application.Institutions.Queries.Institutions.Details;
 using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Base.Enums.Common;
-using ZUEPC.Common.Services.URIServices;
+using ZUEPC.Base.Services;
 using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Application.Institutions.Controllers;

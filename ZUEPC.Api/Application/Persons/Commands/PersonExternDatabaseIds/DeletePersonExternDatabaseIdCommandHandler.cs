@@ -6,7 +6,7 @@ using ZUEPC.DataAccess.Models.Person;
 namespace ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 
 public class DeletePersonExternDatabaseIdCommandHandler :
-	DeleteSimpleModelBaseCommandHandler<PersonExternDatabaseIdModel, long>,
+	DeleteModelWithIdCommandHandlerBase<PersonExternDatabaseIdModel, long>,
 	IRequestHandler<DeletePersonExternDatabaseIdCommand, DeletePersonExternDatabaseIdCommandResponse>
 {
 

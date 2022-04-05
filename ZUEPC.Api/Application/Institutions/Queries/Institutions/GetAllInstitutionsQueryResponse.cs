@@ -1,9 +1,9 @@
 ﻿using ZUEPC.EvidencePublication.Domain.Institutions;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Institutions.Queries.Institutions;
 
 public class GetAllInstitutionsQueryResponse :
-	PagedResponseBase<IEnumerable<Institution>>
+	PaginatedResponseBase<IEnumerable<Institution>>
 {
 }

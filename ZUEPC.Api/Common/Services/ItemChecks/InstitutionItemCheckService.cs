@@ -6,7 +6,7 @@ using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.EvidencePublication.Domain.Institutions;
 using ZUEPC.Base.Queries;
 using ZUEPC.Localization;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Common.Services.ItemChecks;
 
@@ -81,7 +81,7 @@ public class InstitutionItemCheckService :
 		Func<long, ResponseBase?, Task<TDomain?>> existenceCheckFunc,
 		ResponseBase? response = null)
 		where TDomain : class, IInstitutionRelated
-		where TQuery : EPCQueryWithIdBase<long>, new()
+		where TQuery : QueryWithIdBase<long>, new()
 		where TResponse : ResponseWithDataBase<TDomain>
 	{
 		TDomain? result = await existenceCheckFunc(recordId, response);

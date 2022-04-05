@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportInstitution;
 
@@ -20,9 +21,9 @@ partial class ImportParser
 	{
 		List<ImportInstitutionName> result = new();
 
-		var nameElements = institutionElement.Elements(XName.Get("institution_name", xmlns));
+		IEnumerable<XElement>? nameElements = institutionElement.Elements(XName.Get("institution_name", xmlns));
 
-		foreach (var nameElement in nameElements)
+		foreach (XElement? nameElement in nameElements.OrEmptyIfNull())
 		{
 			ImportInstitutionName institutionName = new()
 			{
@@ -39,33 +40,33 @@ partial class ImportParser
 		List<ImportInstitutionExternDatabaseId> result = new();
 
 		string? input = institutionElement.Attribute("id")?.Value.Trim();
-		var externDbId = new ImportInstitutionExternDatabaseId()
+		ImportInstitutionExternDatabaseId externDbId = new()
 		{
 			ExternIdentifierValue = $"CREPC:{input}"
 		};
 
 		result.Add(externDbId);
 
-		var insitutionTagElement = institutionElement.Element(XName.Get("institution_identifier", xmlns))?
+		XElement? insitutionTagElement = institutionElement.Element(XName.Get("institution_identifier", xmlns))?
 								   .Element(XName.Get("institution_tag", xmlns));
-		if(insitutionTagElement != null)
+		if (insitutionTagElement != null)
 		{
 			input = insitutionTagElement.Value;
-			externDbId = new ImportInstitutionExternDatabaseId()
+			externDbId = new()
 			{
 				ExternIdentifierValue = $"ins_tag:{input}"
 			};
 			result.Add(externDbId);
 		}
 
-		var identifierElements = institutionElement.Element(XName.Get("institution_identifier", xmlns))?
+		IEnumerable<XElement>? identifierElements = institutionElement.Element(XName.Get("institution_identifier", xmlns))?
 			.Elements(XName.Get("local_numbers", xmlns));
 
 		if (identifierElements is null)
 		{
 			return result;
 		}
-		foreach (var identifierElement in identifierElements)
+		foreach (XElement? identifierElement in identifierElements.OrEmptyIfNull())
 		{
 			string? dbName = identifierElement.Element(XName.Get("num_title", xmlns))?.Value.Trim();
 			string? idValue = identifierElement.Element(XName.Get("number", xmlns))?.Value.Trim();
@@ -95,14 +96,14 @@ partial class ImportParser
 	private static List<ImportInstitutionExternDatabaseId> ParseDaWinciInstitutionExternDbId(XElement publicationElement, string xmlns)
 	{
 		List<ImportInstitutionExternDatabaseId> result = new();
-		var insitutionTagElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
-									where element.Attribute(DAWINCI_CODE)?.Value == "p"
-									select element).FirstOrDefault();
+		XElement? insitutionTagElement = (from element in publicationElement.Elements(XName.Get(DAWINCI_SUBFIELD, xmlns))
+										  where element.Attribute(DAWINCI_CODE)?.Value == "p"
+										  select element).FirstOrDefault();
 
 		if (insitutionTagElement != null)
 		{
 			string input = insitutionTagElement.Value.Trim();
-			var externDbId = new ImportInstitutionExternDatabaseId()
+			ImportInstitutionExternDatabaseId? externDbId = new()
 			{
 				ExternIdentifierValue = $"ins_tag:{input}"
 			};

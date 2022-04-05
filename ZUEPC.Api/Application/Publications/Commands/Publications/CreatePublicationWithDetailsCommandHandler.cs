@@ -20,7 +20,7 @@ using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.EvidencePublication.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Domain.Publications;

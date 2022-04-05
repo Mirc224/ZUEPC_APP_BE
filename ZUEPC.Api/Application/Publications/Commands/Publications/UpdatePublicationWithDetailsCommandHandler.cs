@@ -18,11 +18,11 @@ using ZUEPC.Application.Publications.Entities.Inputs.PublicationNames;
 using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.Localization;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Publications.Commands.Publications;
 

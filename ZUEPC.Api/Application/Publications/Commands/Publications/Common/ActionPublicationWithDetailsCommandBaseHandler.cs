@@ -7,8 +7,8 @@ using ZUEPC.Application.PublicationAuthors.Entities.Inputs.PublicationAuthor;
 using ZUEPC.Application.Publications.Entities.Inputs.Common;
 using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.RelatedPublications.Entities.Inputs.RelatedPublications;
-using ZUEPC.Common.Extensions;
-using ZUEPC.Responses;
+using ZUEPC.Base.Extensions;
+using ZUEPC.Base.Responses;
 using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.Localization;
 

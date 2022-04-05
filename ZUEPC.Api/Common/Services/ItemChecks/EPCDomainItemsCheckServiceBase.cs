@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Localization;
 using ZUEPC.Base.Queries;
 using ZUEPC.Localization;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Common.Services.ItemChecks;
 
@@ -20,7 +20,7 @@ public class EPCDomainItemsCheckServiceBase
 		long recordId,
 		string annotationKey,
 		ResponseBase? response = null)
-		where TQuery : EPCQueryWithIdBase<long>, new()
+		where TQuery : QueryWithIdBase<long>, new()
 		where TResponse : ResponseWithDataBase<TDomain>
 	{
 		TQuery simpleQuery = new TQuery() { Id = recordId };

@@ -13,7 +13,7 @@ using ZUEPC.Api.Application.Auth.Queries.RefreshTokens;
 using ZUEPC.Api.Application.Users.Queries.UserRoles;
 using ZUEPC.Application.Users.Queries.Users;
 using ZUEPC.Auth.Domain;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Localization;
 using ZUEPC.Options;
 using ZUEPC.Users.Domain;

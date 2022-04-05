@@ -3,7 +3,8 @@
 public class PublicationFilter : IQueryFilter
 {
 	public string[]? DocumentType { get; set; }
-	public int[]? PublishYear { get; set; }
+	public int? PublishYearFrom { get; set; }
+	public int? PublishYearTo { get; set; }
 	public string[]? Name { get; set; }
 	public string[]? NameType { get; set; }
 	public string[]? IdentifierValue { get; set; }

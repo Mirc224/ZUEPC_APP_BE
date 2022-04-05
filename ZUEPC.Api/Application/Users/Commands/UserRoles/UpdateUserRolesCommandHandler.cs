@@ -2,7 +2,7 @@
 using ZUEPC.Api.Application.Users.Queries.UserRoles;
 using ZUEPC.Application.Users.Queries.Users;
 using ZUEPC.Base.Enums.Users;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Users.Domain;
 
 namespace ZUEPC.Api.Application.Users.Commands.UserRoles;

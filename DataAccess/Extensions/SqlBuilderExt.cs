@@ -22,11 +22,11 @@ public static class SqlBuilderExt
 		{
 			alias = "";
 		}
-		int counter = 1;
+
 		List<string> innerValues = new();
 		foreach (T item in values)
 		{
-			string paramName = $"{alias}{keyName}{counter++}";
+			string paramName = Guid.NewGuid().ToString("N");
 			innerValues.Add("@" + paramName);
 			parameters.TryAdd(paramName, item);
 		}
@@ -41,6 +41,27 @@ public static class SqlBuilderExt
 			columnAlias = columnAlias + ".";
 		}
 		builder.Where($"{columnAlias}{keyName} IN ({resultInner})");
+	}
+
+	public static void WhereColumnOpValue<T>(this SqlBuilder builder, string keyName, string op, T value, string? keyAlias, ExpandoObject parameters)
+	{
+		if (keyAlias != null)
+		{
+			keyAlias = keyAlias.Trim();
+		}
+		if (string.IsNullOrEmpty(keyAlias))
+		{
+			keyAlias = "";
+		}
+
+		string columnAlias = keyAlias;
+		if (!string.IsNullOrEmpty(columnAlias))
+		{
+			columnAlias = columnAlias + ".";
+		}
+		string paramName = Guid.NewGuid().ToString("N"); ;
+		parameters.TryAdd(paramName, value);
+		builder.Where($"{columnAlias}{keyName} {op} @{paramName}");
 	}
 
 
@@ -77,7 +98,7 @@ public static class SqlBuilderExt
 		List<string> innerValues = new();
 		foreach (string item in values)
 		{
-			string paramName = Guid.NewGuid().ToString("N"); ;
+			string paramName = Guid.NewGuid().ToString("N");
 
 			innerValues.Add($"{columnAlias}{keyName} LIKE @{paramName}");
 			string term = $"%{item}%";

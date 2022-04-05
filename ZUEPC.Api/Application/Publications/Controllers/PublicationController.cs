@@ -8,7 +8,7 @@ using ZUEPC.Application.Publications.Queries.Publications.Details;
 using ZUEPC.Application.Publications.Queries.Publications.Previews;
 using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Base.Enums.Common;
-using ZUEPC.Common.Services.URIServices;
+using ZUEPC.Base.Services;
 using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Application.Publications.Controllers;

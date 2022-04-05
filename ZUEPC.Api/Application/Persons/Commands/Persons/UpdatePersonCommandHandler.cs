@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Person;
 namespace ZUEPC.Application.Persons.Commands.Persons;
 
 public class UpdatePersonCommandHandler :
-	UpdateSimpleModelCommandHandlerBase<IPersonData, PersonModel, long>,
+	UpdateModelWithIdCommandHandlerBase<IPersonData, PersonModel, long>,
 	IRequestHandler<UpdatePersonCommand, UpdatePersonCommandResponse>
 {
 

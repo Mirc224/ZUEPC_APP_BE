@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
-using ZUEPC.DataAccess.Data.Common;
-using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.Base.Domain;
+using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.Base.Queries;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
+using ZUEPC.Common.CQRS.CommandHandlers;
+using ZUEPC.DataAccess.Data.Common;
 
 namespace ZUEPC.Common.CQRS.QueryHandlers;
 
@@ -21,7 +22,7 @@ public abstract class GetSimpleModelQueryHandlerBase<TRepository, TDomain, TMode
 	}
 
 	protected async Task<TResponse> ProcessQueryAsync<TQuery, TResponse>(TQuery request)
-		where TQuery : EPCQueryWithIdBase<TId>
+		where TQuery : QueryWithIdBase<TId>
 		where TResponse : ResponseWithDataBase<TDomain>, new()
 	{
 		TModel? result = await _repository.GetModelByIdAsync(request.Id);

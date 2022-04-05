@@ -2,7 +2,7 @@
 using MediatR;
 using ZUEPC.Application.Institutions.Entities.Details;
 using ZUEPC.Application.Institutions.Queries.Institutions.Details.BaseHandlers;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Common.Helpers;
 using ZUEPC.Base.QueryFilters;
 using ZUEPC.EvidencePublication.Domain.Institutions;

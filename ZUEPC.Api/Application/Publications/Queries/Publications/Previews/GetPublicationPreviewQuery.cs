@@ -4,7 +4,7 @@ using ZUEPC.Base.Queries;
 namespace ZUEPC.Application.Publications.Queries.Publications.Previews;
 
 public class GetPublicationPreviewQuery : 
-	EPCQueryWithIdBase<long>,
+	QueryWithIdBase<long>,
 	IRequest<GetPublicationPreviewQueryResponse>
 {
 }

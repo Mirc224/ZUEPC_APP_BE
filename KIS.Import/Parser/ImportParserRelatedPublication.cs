@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportPublication;
 
@@ -14,7 +15,7 @@ partial class ImportParser
 		IEnumerable<XElement> relatedPublicationsElements = from node in publicationElement.Elements(XName.Get("cross_biblio_biblio", xmlns))
 															 select node;
 
-		foreach (XElement relatedPublicationElement in relatedPublicationsElements)
+		foreach (XElement relatedPublicationElement in relatedPublicationsElements.OrEmptyIfNull())
 		{
 			ImportRelatedPublication relatedPublication = new()
 			{
@@ -54,7 +55,7 @@ partial class ImportParser
 															 where element.Attribute(DAWINCI_TAG)?.Value == "976"
 															 select element;
 
-		foreach (XElement relatedPublicationElement in relatedPublicationsElements)
+		foreach (XElement relatedPublicationElement in relatedPublicationsElements.OrEmptyIfNull())
 		{
 			ImportPublication? parsedPublication = ParseDaWinciReferencePublication(relatedPublicationElement, xmlns);
 			if (parsedPublication is null)
@@ -184,7 +185,7 @@ partial class ImportParser
 	{
 		int startIndexOfIdentifier = -1;
 		string? foundIdentifier = null;
-		foreach (string identifierType in wantedIdentifiers)
+		foreach (string identifierType in wantedIdentifiers.OrEmptyIfNull())
 		{
 			startIndexOfIdentifier = sourceMetadataString.LastIndexOf(identifierType, StringComparison.OrdinalIgnoreCase);
 			if (startIndexOfIdentifier != -1)

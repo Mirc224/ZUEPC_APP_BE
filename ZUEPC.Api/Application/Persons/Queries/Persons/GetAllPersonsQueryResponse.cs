@@ -1,9 +1,9 @@
 ﻿using ZUEPC.EvidencePublication.Domain.Persons;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Persons.Queries.Persons;
 
 public class GetAllPersonsQueryResponse : 
-	PagedResponseBase<IEnumerable<Person>>
+	PaginatedResponseBase<IEnumerable<Person>>
 {
 }

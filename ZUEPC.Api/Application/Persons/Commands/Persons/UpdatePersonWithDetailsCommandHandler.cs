@@ -5,10 +5,10 @@ using ZUEPC.Application.Persons.Commands.PersonNames;
 using ZUEPC.Application.Persons.Entities.Inputs.Common;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Entities.Inputs.PersonNames;
-using ZUEPC.Common.Extensions;
+using ZUEPC.Base.Extensions;
 using ZUEPC.Common.Services.ItemChecks;
 using ZUEPC.Base.ItemInterfaces;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Persons.Commands.Persons;
 

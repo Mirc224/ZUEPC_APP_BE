@@ -1,8 +1,8 @@
 ﻿using ZUEPC.Application.Persons.Entities.Previews;
-using ZUEPC.Responses;
+using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Persons.Queries.Persons.Previews;
 
-public class GetAllPersonPreviewsQueryResponse : PagedResponseBase<IEnumerable<PersonPreview>>
+public class GetAllPersonPreviewsQueryResponse : PaginatedResponseBase<IEnumerable<PersonPreview>>
 {
 }

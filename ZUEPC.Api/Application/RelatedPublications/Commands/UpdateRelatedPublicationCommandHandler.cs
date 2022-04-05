@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.RelatedPublication;
 namespace ZUEPC.Application.RelatedPublications.Commands;
 
 public class UpdateRelatedPublicationCommandHandler :
-	UpdateSimpleModelCommandHandlerBase<IRelatedPublicationData, RelatedPublicationModel, long>,
+	UpdateModelWithIdCommandHandlerBase<IRelatedPublicationData, RelatedPublicationModel, long>,
 	IRequestHandler<UpdateRelatedPublicationCommand, UpdateRelatedPublicationCommandResponse>
 {
 	public UpdateRelatedPublicationCommandHandler(IMapper mapper, IRelatedPublicationData repository)

@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Person;
 namespace ZUEPC.Application.Persons.Commands.PersonExternDatabaseIds;
 
 public class UpdatePersonExternDatabaseIdCommandHandler :
-	UpdateSimpleModelCommandHandlerBase<IPersonExternDatabaseIdData, PersonExternDatabaseIdModel, long>,
+	UpdateModelWithIdCommandHandlerBase<IPersonExternDatabaseIdData, PersonExternDatabaseIdModel, long>,
 	IRequestHandler<UpdatePersonExternDatabaseIdCommand, UpdatePersonExternDatabaseIdCommandResponse>
 {
 	public UpdatePersonExternDatabaseIdCommandHandler(IMapper mapper, IPersonExternDatabaseIdData repository)

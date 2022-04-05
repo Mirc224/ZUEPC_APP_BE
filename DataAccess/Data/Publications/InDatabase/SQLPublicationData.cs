@@ -123,9 +123,13 @@ public class SQLPublicationData :
 		{
 			builder.WhereInArray(nameof(PublicationModel.DocumentType), queryFilter.DocumentType, baseTableAlias, parameters);
 		}
-		if (queryFilter.PublishYear != null)
+		if (queryFilter.PublishYearFrom != null)
 		{
-			builder.WhereInArray(nameof(PublicationModel.PublishYear), queryFilter.PublishYear, baseTableAlias, parameters);
+			builder.WhereColumnOpValue(nameof(PublicationModel.PublishYear), ">=", queryFilter.PublishYearFrom, baseTableAlias, parameters);
+		}
+		if (queryFilter.PublishYearTo != null)
+		{
+			builder.WhereColumnOpValue(nameof(PublicationModel.PublishYear), "<=", queryFilter.PublishYearTo, baseTableAlias, parameters);
 		}
 		if (queryFilter.Name != null)
 		{

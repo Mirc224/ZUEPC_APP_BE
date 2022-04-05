@@ -1,4 +1,4 @@
-﻿using ZUEPC.Responses;
+﻿using ZUEPC.Base.Responses;
 using Users.Base.Application.Domain;
 
 namespace ZUEPC.Application.Users.Queries;

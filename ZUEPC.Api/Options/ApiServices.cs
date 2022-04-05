@@ -7,11 +7,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
-using ZUEPC.Application.Filters;
 using ZUEPC.Application.Import.Services;
+using ZUEPC.Application.Middleware;
 using ZUEPC.Auth.Services;
 using ZUEPC.Common.Services.ItemChecks;
-using ZUEPC.Common.Services.URIServices;
+using ZUEPC.Base.Services;
 using ZUEPC.DataAccess.Data.Institutions;
 using ZUEPC.DataAccess.Data.Institutions.InDatabase;
 using ZUEPC.DataAccess.Data.Persons;
@@ -133,7 +133,7 @@ public static class ApiServices
 	{
 		builder.Services.AddSingleton<AuthenticationService>();
 		builder.Services.AddSingleton<ImportService>();
-		JwtSettings? jwtSettings = new JwtSettings();
+		JwtSettings? jwtSettings = new();
 
 		builder.Configuration.Bind(nameof(jwtSettings), jwtSettings);
 		builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(nameof(jwtSettings)));

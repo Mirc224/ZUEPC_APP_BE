@@ -7,7 +7,7 @@ using ZUEPC.DataAccess.Models.Users;
 namespace ZUEPC.Api.Application.Users.Commands.Users;
 
 public class UpdateUserCommandHandler :
-	UpdateSimpleModelCommandHandlerBase<IUserData, UserModel, long>,
+	UpdateModelWithIdCommandHandlerBase<IUserData, UserModel, long>,
 	IRequestHandler<UpdateUserCommand, UpdateUserCommandResponse>
 {
 	public UpdateUserCommandHandler(IMapper mapper, IUserData repository)

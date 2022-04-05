@@ -1,4 +1,4 @@
-﻿using ZUEPC.Responses;
+﻿using ZUEPC.Base.Responses;
 using ZUEPC.EvidencePublication.Domain.RelatedPublications;
 
 namespace ZUEPC.Application.RelatedPublications.Queries;
