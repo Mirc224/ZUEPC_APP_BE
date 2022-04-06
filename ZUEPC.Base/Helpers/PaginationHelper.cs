@@ -2,7 +2,7 @@
 using ZUEPC.Base.QueryFilters;
 using ZUEPC.Base.Responses;
 
-namespace ZUEPC.Common.Helpers;
+namespace ZUEPC.Base.Helpers;
 
 public static class PaginationHelper
 {
@@ -22,7 +22,7 @@ public static class PaginationHelper
 		{
 			pageUri = uriService.AddDomainFilterToUri<TModelFilter>(pageUri, modelFilter);
 		}
-		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, totalRecords, uriService);
+		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, uriService, totalRecords);
 	}
 
 	public static TResponse ProcessResponse<TResponse, TDomain>(
@@ -34,15 +34,15 @@ public static class PaginationHelper
 		where TResponse : PaginatedResponseBase<IEnumerable<TDomain>>, new()
 	{
 		Uri pageUri = uriService.GetPageUri(route);
-		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, totalRecords, uriService);
+		return CreatePagedReponse<TResponse, TDomain>(pageUri, pagedData, paginationFilter, uriService, totalRecords);
 	}
 
 	public static TResponse CreatePagedReponse<TResponse, TDomain>(
 		Uri pageUri,
 		IEnumerable<TDomain> pagedData, 
-		PaginationFilter paginationFilter, 
-		int totalRecords, 
-		IUriService uriService)
+		PaginationFilter paginationFilter,  
+		IUriService uriService,
+		int totalRecords)
 		where TResponse : PaginatedResponseBase<IEnumerable<TDomain>>, new()
 	{
 		TResponse response = new()
@@ -53,7 +53,7 @@ public static class PaginationHelper
 			PageSize = paginationFilter.PageSize,
 			Success = true
 		};
-		response = AddPaginationToUri<TResponse, TDomain>(pageUri, response, paginationFilter, totalRecords, uriService);
+		response = AddPaginationToUri<TResponse, TDomain>(pageUri, response, paginationFilter, uriService, totalRecords);
 		return response;
 	}
 
@@ -61,8 +61,8 @@ public static class PaginationHelper
 		Uri pageUri, 
 		TResponse response,
 		PaginationFilter paginationFilter,
-		int totalRecords,
-		IUriService uriService)
+		IUriService uriService,
+		int totalRecords)
 		where TResponse : PaginatedResponseBase<IEnumerable<TDomain>>, new()
 	{
 		double totalPages = ((double)totalRecords / (double)paginationFilter.PageSize);

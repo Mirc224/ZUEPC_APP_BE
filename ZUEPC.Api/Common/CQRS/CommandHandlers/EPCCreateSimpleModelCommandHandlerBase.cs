@@ -8,7 +8,7 @@ using ZUEPC.Base.Responses;
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class EPCCreateSimpleModelCommandHandlerBase<TDomain, TModel> : 
-	DomainModelHandlerBase<IRepositoryBase<TModel>, TModel>
+	ModelHandlerBase<IRepositoryBase<TModel>>
 	where TDomain : EPCDomainBase
 	where TModel : EPCModelBase
 {

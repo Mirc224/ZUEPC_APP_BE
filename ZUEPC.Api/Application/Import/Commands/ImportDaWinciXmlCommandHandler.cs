@@ -15,7 +15,7 @@ public class ImportDaWinciXmlCommandHandler : IRequestHandler<ImportDaWinciXmlCo
 
 	public async Task<ImportDaWinciXmlCommandResponse> Handle(ImportDaWinciXmlCommand request, CancellationToken cancellationToken)
 	{
-		ICollection<Publication>? importedPublications = await _importService.ImportFromDaWinciXML(request);
+		IEnumerable<Publication>? importedPublications = await _importService.ImportFromDaWinciXML(request);
 		if (importedPublications is null)
 		{
 			return new() { Success = false };

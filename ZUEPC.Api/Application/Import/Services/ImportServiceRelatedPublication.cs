@@ -1,6 +1,7 @@
 ﻿using ZUEPC.Application.RelatedPublications.Commands;
 using ZUEPC.Application.RelatedPublications.Queries;
 using ZUEPC.Base.Enums.Common;
+using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.EvidencePublication.Domain.RelatedPublications;
 using ZUEPC.Import.Models;
@@ -116,7 +117,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		foreach (Tuple<ImportRelatedPublication, Publication, Publication> recordToInsert in importRelatedPublications)
+		foreach (Tuple<ImportRelatedPublication, Publication, Publication> recordToInsert in importRelatedPublications.OrEmptyIfNull())
 		{
 			await InsertRelatedPublicationAsync(recordToInsert.Item2, recordToInsert.Item3, recordToInsert.Item1, versionDate, source);
 		}
@@ -151,10 +152,6 @@ public partial class ImportService
 		}
 		ImportPublication importPublication = importRelatedPublication.RelatedPublication;
 		Publication destPublication = await ProcessImportedPublication(importPublication, versionDate, source);
-
-		//RelatedPublication relatedPublication = _mapper.Map<RelatedPublication>(importRelatedPublication);
-		//relatedPublication.PublicationId = sourcePublication.Id;
-		//relatedPublication.RelatedPublicationId = destPublication.Id;
 
 		return new Tuple<ImportRelatedPublication, Publication, Publication>(
 			importRelatedPublication, 

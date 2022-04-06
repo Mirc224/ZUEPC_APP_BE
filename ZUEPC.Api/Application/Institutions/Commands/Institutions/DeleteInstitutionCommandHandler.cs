@@ -19,7 +19,7 @@ public class DeleteInstitutionCommandHandler : IRequestHandler<DeleteInstitution
 	}
 	public async Task<DeleteInstitutionCommandResponse> Handle(DeleteInstitutionCommand request, CancellationToken cancellationToken)
 	{ 
-		long institutionId = request.InstitutionId;
+		long institutionId = request.Id;
 
 		GetInstitutionQueryResponse model = await _mediator.Send(new GetInstitutionQuery() { Id = institutionId });
 

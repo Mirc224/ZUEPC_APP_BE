@@ -7,6 +7,7 @@ using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
 using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.Publications.Queries.Publictions;
 using ZUEPC.Base.Enums.Common;
+using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportPublication;
@@ -150,7 +151,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		foreach (ImportPublicationIdentifier identifier in importIdentifiersToInsert)
+		foreach (ImportPublicationIdentifier identifier in importIdentifiersToInsert.OrEmptyIfNull())
 		{
 			if(identifier.IdentifierValue is null)
 			{
@@ -223,7 +224,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		foreach (ImportPublicationExternDatabaseId externIdentifier in importExternIdsToInsert)
+		foreach (ImportPublicationExternDatabaseId externIdentifier in importExternIdsToInsert.OrEmptyIfNull())
 		{
 			if (externIdentifier.ExternIdentifierValue is null)
 			{
@@ -245,7 +246,6 @@ public partial class ImportService
 			identifierToInsert,
 			versionDate,
 			source);
-
 	}
 
 	private async Task UpdatePublicationExternDatabaseIdAsync(
@@ -312,7 +312,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		foreach (ImportPublicationName name in importNames)
+		foreach (ImportPublicationName name in importNames.OrEmptyIfNull())
 		{
 			if(name.Name is null && name.NameType is null)
 			{

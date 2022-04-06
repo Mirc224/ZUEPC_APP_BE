@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
-using ZUEPC.Application.Auth.Commands.Users;
+using ZUEPC.Application.Auth.Commands.AuthActions;
 using ZUEPC.Localization;
 
 namespace ZUEPC.Application.Auth.Validators;
 
 public class LoginUserCommandValidator: AbstractValidator<LoginUserCommand>
 {
-    public LoginUserCommandValidator(IStringLocalizer<DataAnnotations> localizer)
+    public LoginUserCommandValidator()
     {
         RuleFor(x => x.Email)
             .NotNull()

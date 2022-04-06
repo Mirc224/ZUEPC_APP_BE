@@ -7,7 +7,7 @@ using ZUEPC.Base.Responses;
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class UpdateModelWithIdCommandHandlerBase<TRepository, TModel, TId> : 
-	DomainModelHandlerBase<TRepository, TModel>
+	ModelHandlerBase<TRepository>
 	where TRepository : IRepositoryBase<TModel>, IRepositoryWithSimpleIdBase<TModel, TId> 
 	where TModel : IItemWithID<TId>
 {

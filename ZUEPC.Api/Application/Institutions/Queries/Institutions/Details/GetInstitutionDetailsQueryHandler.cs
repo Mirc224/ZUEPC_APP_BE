@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.Application.Institutions.Entities.Details;
-using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
-using ZUEPC.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Application.Institutions.Queries.Institutions.Details.BaseHandlers;
 using ZUEPC.EvidencePublication.Domain.Institutions;
 

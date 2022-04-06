@@ -18,7 +18,7 @@ public class InstitutionItemCheckService :
 
 	public async Task<InstitutionName?> CheckAndGetIfInstitutionNameExistsAndRelatedToInstitutionAsync(
 		long recordId,
-		long InstitutionId,
+		long institutionId,
 		ResponseBase? response = null)
 	{
 		return await CheckAndGetIfObjectExistsAndRelatedToInstitutionAsync
@@ -26,7 +26,7 @@ public class InstitutionItemCheckService :
 			GetInstitutionNameQuery,
 			GetInstitutionNameQueryResponse>(
 			recordId,
-			InstitutionId,
+			institutionId,
 			DataAnnotationsKeyConstants.INSTITUTION_NAME_NOT_MATCH_INSTITUTION_ID,
 			CheckAndGetIfInstitutionNameExistsAsync,
 			response);
@@ -47,7 +47,7 @@ public class InstitutionItemCheckService :
 
 	public async Task<InstitutionExternDatabaseId?> CheckAndGetIfInstitutionExternDatabaseIdExistsAndRelatedToInstitutionAsync(
 		long recordId,
-		long InstitutionId,
+		long institutionId,
 		ResponseBase? response = null)
 	{
 		return await CheckAndGetIfObjectExistsAndRelatedToInstitutionAsync<
@@ -55,7 +55,7 @@ public class InstitutionItemCheckService :
 			GetInstitutionExternDatabaseIdQuery,
 			GetInstitutionExternDatabaseIdQueryResponse>(
 			recordId,
-			InstitutionId,
+			institutionId,
 			DataAnnotationsKeyConstants.INSTITUTION_EXTERN_DB_ID_NOT_MATCH_INSTITUTION_ID,
 			CheckAndGetIfInstitutionExternDatabaseIdExistsAsync,
 			response);

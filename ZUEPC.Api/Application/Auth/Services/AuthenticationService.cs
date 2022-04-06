@@ -56,11 +56,6 @@ public class AuthenticationService
 				return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_VALID] } };
 			}
 
-			//if (!IsExpired(tokenInVerification))
-			//{
-			//	return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_EXPIRED] } };
-			//}
-
 			if (refreshToken is null)
 			{
 				return new() { Success = false, ErrorMessages = new string[] { _localizer[DataAnnotationsKeyConstants.TOKEN_NOT_EXIST] } };
@@ -157,7 +152,7 @@ public class AuthenticationService
 		return new() { Success = true };
 	}
 
-	public async Task<RevokeResult> RevokeUserTokenAsync(int userId, string jwtId)
+	public async Task<RevokeResult> RevokeUserTokenAsync(long userId, string jwtId)
 	{
 		RefreshToken? storedToken = (await _mediator.Send(new GetRefreshTokenByJwtIdQuery() { JwtId = jwtId })).Data;
 
@@ -195,7 +190,7 @@ public class AuthenticationService
 
 	private DateTime UnixTimeStampToDateTime(long unixTimeStamp)
 	{
-		DateTime dateTimeVal = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+		DateTime dateTimeVal = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 		dateTimeVal = dateTimeVal.AddSeconds(unixTimeStamp);
 		return dateTimeVal;
 	}

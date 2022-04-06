@@ -1,10 +1,10 @@
 ﻿using ZUEPC.Application.Institutions.Entities.Previews;
 using ZUEPC.Application.Persons.Entities.Previews;
-using ZUEPC.Common.Entities;
+using ZUEPC.Base.Entities;
 
 namespace ZUEPC.Application.PublicationAuthors.Entities.Details;
 
-public class PublicationAuthorDetails : DetailsBase
+public class PublicationAuthorDetails : ItemDetailsBase
 {
 	public PersonPreview? PersonPreview { get; set; }
 	public InstitutionPreview? InstitutionPreview { get; set; }

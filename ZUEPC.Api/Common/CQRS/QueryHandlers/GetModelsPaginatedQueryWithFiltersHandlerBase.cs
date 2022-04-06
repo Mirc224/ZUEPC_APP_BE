@@ -1,21 +1,19 @@
 ﻿using AutoMapper;
 using ZUEPC.Base.Queries;
-using ZUEPC.Common.CQRS.QueryHandlers;
-using ZUEPC.Common.Helpers;
-using ZUEPC.DataAccess.Data.Common;
 using ZUEPC.Base.QueryFilters;
-using ZUEPC.DataAccess.Models.Common;
-using ZUEPC.Base.Domain;
 using ZUEPC.Base.Responses;
+using ZUEPC.Common.CQRS.QueryHandlers;
+using ZUEPC.Base.Helpers;
+using ZUEPC.DataAccess.Data.Common;
 
 namespace ZUEPC.Api.Common.CQRS.QueryHandlers;
 
-public abstract class GetModelsWithFiltersPagedQueryHandlerBase<TRepository, TDomain, TModel, TFilter> :
-	GetModelsPagedQueryHandlerBase<TRepository,TDomain, TModel, TFilter>
+public abstract class GetModelsPaginatedQueryWithFiltersHandlerBase<TRepository, TDomain, TModel, TFilter> :
+	GetModelsPaginatedQueryHandlerBase<TRepository,TDomain, TModel, TFilter>
 	where TRepository: IRepositoryWithFilter<TModel, TFilter>, IRepositoryBase<TModel>
 	where TFilter : IQueryFilter
 {
-	protected GetModelsWithFiltersPagedQueryHandlerBase(IMapper mapper, TRepository repository) 
+	protected GetModelsPaginatedQueryWithFiltersHandlerBase(IMapper mapper, TRepository repository) 
 		: base(mapper, repository)
 	{
 	}

@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
-using DataAccess.Data.User;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System.Security.Cryptography;
 using Users.Base.Domain;
 using ZUEPC.Api.Application.Users.Queries.Users;
-using ZUEPC.Application.Users.Queries.Users;
 using ZUEPC.Auth.Domain;
 using ZUEPC.Auth.Services;
 using ZUEPC.DataAccess.Models.Users;
 using ZUEPC.Localization;
 
-namespace ZUEPC.Application.Auth.Commands.Users;
+namespace ZUEPC.Application.Auth.Commands.AuthActions;
 
 public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUserCommandResponse>
 {

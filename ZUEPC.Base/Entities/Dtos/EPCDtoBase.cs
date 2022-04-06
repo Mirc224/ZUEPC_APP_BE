@@ -1,8 +1,8 @@
 ﻿using ZUEPC.Base.Enums.Common;
 
-namespace ZUEPC.Common.Entities.Inputs;
+namespace ZUEPC.Base.Entities.Dtos;
 
-public abstract class EPCBaseDto
+public abstract class EPCDtoBase
 {
 	public OriginSourceType OriginSourceType { get; set; }
 	public DateTime? VersionDate { get; set; }

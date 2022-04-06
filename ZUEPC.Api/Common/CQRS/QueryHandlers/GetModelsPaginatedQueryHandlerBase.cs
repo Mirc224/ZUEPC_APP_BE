@@ -4,18 +4,18 @@ using ZUEPC.Base.QueryFilters;
 using ZUEPC.Base.Responses;
 using ZUEPC.Common.CQRS.CommandHandlers;
 using ZUEPC.Common.CQRS.Queries;
-using ZUEPC.Common.Helpers;
+using ZUEPC.Base.Helpers;
 using ZUEPC.DataAccess.Data.Common;
 
 namespace ZUEPC.Common.CQRS.QueryHandlers;
 
-public abstract class GetModelsPagedQueryHandlerBase<TRepository,TDomain, TModel, TFilter>:
-	DomainModelHandlerBase<TRepository, TModel>
+public abstract class GetModelsPaginatedQueryHandlerBase<TRepository, TDomain, TModel, TFilter>:
+	ModelHandlerBase<TRepository>
 	where TFilter: IQueryFilter
 	where TRepository : IRepositoryWithFilter<TModel, TFilter>, IRepositoryBase<TModel>
 {
 	protected readonly IMapper _mapper;
-	public GetModelsPagedQueryHandlerBase(IMapper mapper, TRepository repository)
+	public GetModelsPaginatedQueryHandlerBase(IMapper mapper, TRepository repository)
 		: base(repository)
 	{
 		_mapper = mapper;

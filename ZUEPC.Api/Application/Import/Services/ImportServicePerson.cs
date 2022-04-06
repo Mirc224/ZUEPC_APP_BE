@@ -5,6 +5,7 @@ using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 using ZUEPC.Application.Persons.Queries.PersonNames;
 using ZUEPC.Application.Persons.Queries.Persons;
 using ZUEPC.Base.Enums.Common;
+using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Persons;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportPerson;
@@ -19,7 +20,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		List<Tuple<ImportPerson, Person>> processedPersonsTuples = new();
-		foreach (ImportPerson relatedPerson in relatedPersons)
+		foreach (ImportPerson relatedPerson in relatedPersons.OrEmptyIfNull())
 		{
 			Person updatedPerson = await ProcessImportPersonAsync(relatedPerson, versionDate, source);
 			processedPersonsTuples.Add(new Tuple<ImportPerson, Person>(relatedPerson, updatedPerson));
@@ -27,7 +28,6 @@ public partial class ImportService
 
 		return processedPersonsTuples;
 	}
-
 
 	private async Task<Person> ProcessImportPersonAsync(
 		ImportPerson importPerson,
@@ -87,7 +87,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		foreach (ImportPersonExternDatabaseId identifier in importPersonExternDbIds)
+		foreach (ImportPersonExternDatabaseId identifier in importPersonExternDbIds.OrEmptyIfNull())
 		{
 			if (identifier.ExternIdentifierValue is null)
 			{
@@ -177,7 +177,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		foreach (ImportPersonName personName in importPersonNames)
+		foreach (ImportPersonName personName in importPersonNames.OrEmptyIfNull())
 		{
 			if(personName.FirstName is null && personName.LastName is null)
 			{
@@ -219,7 +219,7 @@ public partial class ImportService
 		OriginSourceType source)
 	{
 		List<Tuple<ImportPerson, Person>> publicationPersonImportDomainTuples = new();
-		foreach (ImportPerson importPerson in relatedPersons)
+		foreach (ImportPerson importPerson in relatedPersons.OrEmptyIfNull())
 		{
 			Person? domainPerson = await FindOrCreatePersonAsync(importPerson, recordVersion, source);
 			publicationPersonImportDomainTuples.Add(new Tuple<ImportPerson, Person>(importPerson, domainPerson));

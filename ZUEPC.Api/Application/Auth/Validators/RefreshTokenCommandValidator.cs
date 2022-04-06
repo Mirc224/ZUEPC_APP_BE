@@ -7,7 +7,7 @@ namespace ZUEPC.Application.Auth.Validators;
 
 public class RefreshTokenCommandValidator : AbstractValidator<RefreshTokenCommand>
 {
-    public RefreshTokenCommandValidator(IStringLocalizer<DataAnnotations> localizer)
+    public RefreshTokenCommandValidator()
     {
         RuleFor(x => x.Token)
             .NotNull()

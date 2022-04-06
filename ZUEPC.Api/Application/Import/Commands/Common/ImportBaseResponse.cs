@@ -4,5 +4,5 @@ namespace ZUEPC.Application.Import.Commands.Common;
 
 public class ImportBaseResponse : ResponseBase
 {
-	public ICollection<long>? PublicationsIds { get; set; }
+	public IEnumerable<long>? PublicationsIds { get; set; }
 }

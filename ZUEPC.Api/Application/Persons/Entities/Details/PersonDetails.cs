@@ -1,9 +1,9 @@
-﻿using ZUEPC.Common.Entities;
+﻿using ZUEPC.Base.Entities;
 using ZUEPC.EvidencePublication.Domain.Persons;
 
 namespace ZUEPC.Application.Persons.Entities.Details;
 
-public class PersonDetails : DetailsBase
+public class PersonDetails : ItemDetailsBase
 {
 	public int? BirthYear { get; set; }
 	public int? DeathYear { get; set; }

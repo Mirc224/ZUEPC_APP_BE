@@ -107,7 +107,6 @@ public class UpdateInstitutionWithDetailsCommandHandler :
 			await _mediator.Send(deleteCommand);
 		}
 
-
 		await ProcessInstitutionPropertyAsync<InstitutionNameUpdateDto,UpdateInstitutionNameCommand>(
 			request,
 			request.NamesToUpdate, 
@@ -136,7 +135,7 @@ public class UpdateInstitutionWithDetailsCommandHandler :
 	}
 
 	private async Task CheckIfInstitutionRelatedObjectsAreValid<TDomain>(
-		long personId,
+		long instiutionId,
 		IEnumerable<long>? idsToCheck,
 		Func<long, long, ResponseBase?, Task<TDomain?>> checkFunction,
 		ResponseBase response)
@@ -145,7 +144,7 @@ public class UpdateInstitutionWithDetailsCommandHandler :
 		foreach (long recordId in idsToCheck.OrEmptyIfNull())
 		{
 			TDomain? publicationActivity =
-				await checkFunction(recordId, personId, response);
+				await checkFunction(recordId, instiutionId, response);
 
 			if (publicationActivity is null)
 			{

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using ZUEPC.Application.Persons.Entities.Details;
-using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
-using ZUEPC.Application.Persons.Queries.PersonNames;
 using ZUEPC.Application.Persons.Queries.Persons.Details.BaseHandler;
 using ZUEPC.EvidencePublication.Domain.Persons;
 

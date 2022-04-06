@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ZUEPC.Application.Auth.Commands.Users;
+namespace ZUEPC.Application.Auth.Commands.AuthActions;
 
 public class RegisterUserCommand: IRequest<RegisterUserCommandResponse>
 {

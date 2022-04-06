@@ -1,5 +1,5 @@
 ﻿using ZUEPC.Application.Publications.Entities.Inputs.Common;
-using ZUEPC.Common.Entities.Inputs;
+using ZUEPC.Base.Entities.Dtos;
 
 namespace ZUEPC.Application.Publications.Entities.Inputs.PublicationIdentifiers;
 

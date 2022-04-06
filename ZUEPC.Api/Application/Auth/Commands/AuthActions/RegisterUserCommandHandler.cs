@@ -5,7 +5,7 @@ using ZUEPC.Api.Application.Users.Commands.UserRoles;
 using ZUEPC.Api.Application.Users.Commands.Users;
 using ZUEPC.Base.Enums.Users;
 
-namespace ZUEPC.Application.Auth.Commands.Users;
+namespace ZUEPC.Application.Auth.Commands.AuthActions;
 
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisterUserCommandResponse>
 {

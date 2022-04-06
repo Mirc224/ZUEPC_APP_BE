@@ -5,6 +5,7 @@ using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 using ZUEPC.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Application.Institutions.Queries.Institutions;
 using ZUEPC.Base.Enums.Common;
+using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Institutions;
 using ZUEPC.Import.Models;
 using static ZUEPC.Import.Models.ImportInstitution;
@@ -154,7 +155,7 @@ public partial class ImportService
 		DateTime versionDate,
 		OriginSourceType source)
 	{
-		foreach (ImportInstitutionName name in importInstitutionNames)
+		foreach (ImportInstitutionName name in importInstitutionNames.OrEmptyIfNull())
 		{
 			if (name.Name is null)
 			{
@@ -189,8 +190,6 @@ public partial class ImportService
 			  versionDate,
 			  source);
 	}
-
-
 
 	private async Task UpdateInstitutionExternDatabaseIdDataAsync(
 		Institution currentInstitution,

@@ -6,7 +6,7 @@ using ZUEPC.Base.Responses;
 namespace ZUEPC.Common.CQRS.CommandHandlers;
 
 public abstract class DeleteModelWithIdCommandHandlerBase<TModel, TId>
-	: DomainModelHandlerBase<IRepositoryWithSimpleIdBase<TModel, TId>, TModel>
+	: ModelHandlerBase<IRepositoryWithSimpleIdBase<TModel, TId>>
 	where TModel : IItemWithID<TId>
 {
 	public DeleteModelWithIdCommandHandlerBase(IRepositoryWithSimpleIdBase<TModel, TId> repository)

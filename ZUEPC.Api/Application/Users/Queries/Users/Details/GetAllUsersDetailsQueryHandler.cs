@@ -4,7 +4,7 @@ using Users.Base.Domain;
 using ZUEPC.Api.Application.Users.Entities.Details;
 using ZUEPC.Api.Application.Users.Queries.Users.Details.BaseHanlders;
 using ZUEPC.Base.Extensions;
-using ZUEPC.Common.Helpers;
+using ZUEPC.Base.Helpers;
 using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Api.Application.Users.Queries.Users.Details;

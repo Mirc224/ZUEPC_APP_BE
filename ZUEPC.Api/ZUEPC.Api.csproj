@@ -27,8 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Institutions\Entities\Inputs\Institutions\" />
-    <Folder Include="Application\PublicationActivities\Controllers\" />
     <Folder Include="Application\PublicationAuthors\Controllers\" />
     <Folder Include="Application\PublicationAuthors\Entities\Previews\" />
     <Folder Include="Application\Publications\Entities\Inputs\PublicationActivities\" />

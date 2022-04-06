@@ -53,8 +53,6 @@ public partial class ImportService
 																		  source);
 	}
 
-
-
 	private IEnumerable<Tuple<ImportPublicationAuthor, Publication, Person, Institution>> GetPublicationAuthorTuples(
 		Publication updatedPublication,
 		IEnumerable<ImportPublicationAuthor> importPublicationAuthors,

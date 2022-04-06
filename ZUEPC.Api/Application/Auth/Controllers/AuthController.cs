@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using ZUEPC.Application.Auth.Commands.RefreshTokens;
-using ZUEPC.Application.Auth.Commands.Users;
+using ZUEPC.Application.Auth.Commands.AuthActions;
 
 namespace ZUEPC.Application.Auth.Controllers
 {
@@ -12,14 +12,11 @@ namespace ZUEPC.Application.Auth.Controllers
 	[Route("api/[controller]")]
 	public class AuthController : ControllerBase
 	{
-
 		private readonly IMediator _mediator;
-		private readonly IConfiguration config;
 
-		public AuthController(IMediator mediator, IConfiguration config)
+		public AuthController(IMediator mediator)
 		{
 			_mediator = mediator;
-			this.config = config;
 		}
 
 		[HttpPost("register")]

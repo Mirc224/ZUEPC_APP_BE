@@ -3,7 +3,6 @@ using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 
-public class CreateInstitutionWithDetailsCommandResponse : ResponseBase
+public class CreateInstitutionWithDetailsCommandResponse : ResponseWithDataBase<InstitutionDetails>
 {
-	public InstitutionDetails CreatedInstitutionDetails { get; set; }
 }

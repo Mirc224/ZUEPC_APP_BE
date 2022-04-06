@@ -142,7 +142,7 @@ public class InstitutionController : ControllerBase
 	[HttpDelete("{id}")]
 	public async Task<IActionResult> DeleteInstitution(long id)
 	{
-		DeleteInstitutionCommand request = new() { InstitutionId = id };
+		DeleteInstitutionCommand request = new() { Id = id };
 		DeleteInstitutionCommandResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{
@@ -153,7 +153,7 @@ public class InstitutionController : ControllerBase
 
 	[Authorize(Roles = "EDITOR,ADMIN")]
 	[HttpPut("{id}")]
-	public async Task<IActionResult> UpdatePerson([FromBody] UpdateInstitutionWithDetailsCommand request, [FromRoute] long id)
+	public async Task<IActionResult> UpdateInstitution([FromBody] UpdateInstitutionWithDetailsCommand request, [FromRoute] long id)
 	{
 		request.Id = id;
 		request.OriginSourceType = OriginSourceType.ZUEPC;
@@ -182,6 +182,6 @@ public class InstitutionController : ControllerBase
 		{
 			return BadRequest();
 		}
-		return Ok(response.CreatedInstitutionDetails);
+		return Ok(response.Data);
 	}
 }

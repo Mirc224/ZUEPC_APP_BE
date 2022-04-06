@@ -9,7 +9,7 @@ using ZUEPC.DataAccess.Models.Users;
 namespace ZUEPC.Api.Application.Users.Queries.Users;
 
 public class GetAllUsersQueryHandler :
-	GetModelsWithFiltersPagedQueryHandlerBase<IUserData, User, UserModel, UserFilter>,
+	GetModelsPaginatedQueryWithFiltersHandlerBase<IUserData, User, UserModel, UserFilter>,
 	IRequestHandler<GetAllUsersQuery, GetAllUsersQueryResponse>
 {
 	public GetAllUsersQueryHandler(IMapper mapper, IUserData repository)

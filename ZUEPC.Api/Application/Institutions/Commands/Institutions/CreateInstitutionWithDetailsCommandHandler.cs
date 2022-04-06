@@ -39,7 +39,7 @@ public class CreateInstitutionWithDetailsCommandHandler :
 
 		
 		responseObject.ExternDatabaseIds = await ProcessInstitutionExternDatabaseIdsAsync(request, institutionId);
-		return new() { Success = true, CreatedInstitutionDetails = responseObject };
+		return new() { Success = true, Data = responseObject };
 	}
 
 	private async Task<ICollection<InstitutionName>> ProcessInstitutionNamesAsync(CreateInstitutionWithDetailsCommand request, long institutionId)

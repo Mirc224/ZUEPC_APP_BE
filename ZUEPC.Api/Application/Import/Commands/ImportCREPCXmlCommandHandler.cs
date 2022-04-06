@@ -14,7 +14,7 @@ public class ImportCREPCXmlCommandHandler : IRequestHandler<ImportCREPCXmlComman
 	}
 	public async Task<ImportCREPCXmlCommandResponse> Handle(ImportCREPCXmlCommand request, CancellationToken cancellationToken)
 	{
-		ICollection<Publication>? importedPublications = await _importService.ImportFromCREPCXML(request);
+		IEnumerable<Publication>? importedPublications = await _importService.ImportFromCREPCXML(request);
 		if(importedPublications is null)
 		{
 			return new() { Success = false };

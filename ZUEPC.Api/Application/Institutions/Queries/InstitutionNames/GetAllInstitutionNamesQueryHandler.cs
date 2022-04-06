@@ -9,7 +9,7 @@ using ZUEPC.EvidencePublication.Domain.Institutions;
 namespace ZUEPC.Api.Application.Institutions.Queries.InstitutionNames;
 
 public class GetAllInstitutionNamesQueryHandler :
-	GetModelsWithFiltersPagedQueryHandlerBase<IInstitutionNameData, InstitutionName, InstitutionNameModel, InstitutionNameFilter>,
+	GetModelsPaginatedQueryWithFiltersHandlerBase<IInstitutionNameData, InstitutionName, InstitutionNameModel, InstitutionNameFilter>,
 	IRequestHandler<GetAllInstitutionNamesQuery, GetAllInstitutionNamesQueryResponse>
 {
 	public GetAllInstitutionNamesQueryHandler(IMapper mapper, IInstitutionNameData repository) : base(mapper, repository)

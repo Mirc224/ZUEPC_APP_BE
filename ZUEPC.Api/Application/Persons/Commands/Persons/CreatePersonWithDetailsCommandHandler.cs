@@ -37,7 +37,7 @@ public class CreatePersonWithDetailsCommandHandler : IRequestHandler<CreatePerso
 
 		
 		responseObject.ExternDatabaseIds = await ProcessPersonExternDatabaseIdsAsync(request, personId);
-		return new() { Success = true, CreatedPersonDetails = responseObject};
+		return new() { Success = true, Data = responseObject};
 	}
 
 	private async Task<ICollection<PersonName>> ProcessPersonNamesAsync(

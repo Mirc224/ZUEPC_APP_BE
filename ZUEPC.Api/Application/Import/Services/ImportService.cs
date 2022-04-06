@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using MediatR;
-using System.Xml.Linq;
 using ZUEPC.Application.Import.Commands;
-using ZUEPC.Base.Enums.Common;
-using ZUEPC.DataAccess.Data.Publications;
-using ZUEPC.DataAccess.Data.RelatedPublications;
-using ZUEPC.Base.ItemInterfaces;
+using ZUEPC.Base.Commands;
 using ZUEPC.Base.Domain;
+using ZUEPC.Base.Enums.Common;
+using ZUEPC.Base.Extensions;
+using ZUEPC.Base.ItemInterfaces;
 using ZUEPC.EvidencePublication.Domain.Publications;
 using ZUEPC.Import.Models;
 using ZUEPC.Import.Models.Common;
 using ZUEPC.Import.Parser;
-using ZUEPC.Base.Commands;
 
 namespace ZUEPC.Application.Import.Services;
 
@@ -19,38 +17,23 @@ public partial class ImportService
 {
 	private readonly IMapper _mapper;
 	private readonly IMediator _mediator;
-	private readonly IPublicationData publiRepo;
-	private readonly IPublicationIdentifierData publiIentifierRepo;
-	private readonly IPublicationNameData publiNameRepo;
-	private readonly IPublicationExternDatabaseIdData publiExternIdRepo;
-	private readonly IRelatedPublicationData pubRelatedRepo;
 
 	public ImportService(
 		IMapper mapper, 
-		IMediator mediator,
-		IPublicationData publiRepo,
-		IPublicationIdentifierData publiIentifierRepo,
-		IPublicationNameData publiNameRepo,
-		IPublicationExternDatabaseIdData publiExternIdRepo,
-		IRelatedPublicationData pubRelatedRepo
+		IMediator mediator
 		)
 	{
 		_mapper = mapper;
 		_mediator = mediator;
-		this.publiRepo = publiRepo;
-		this.publiIentifierRepo = publiIentifierRepo;
-		this.publiNameRepo = publiNameRepo;
-		this.publiExternIdRepo = publiExternIdRepo;
-		this.pubRelatedRepo = pubRelatedRepo;
 	}
 
-	public async Task<ICollection<Publication>?> ImportFromCREPCXML(ImportCREPCXmlCommand command)
+	public async Task<IEnumerable<Publication>?> ImportFromCREPCXML(ImportCREPCXmlCommand command)
 	{
 		IEnumerable<ImportRecord>? result = ParseImportXMLCommand(command, OriginSourceType.CREPC);
 		return await ProcessImportedRecords(result, OriginSourceType.CREPC);
 	}
 
-	public async Task<ICollection<Publication>?> ImportFromDaWinciXML(ImportDaWinciXmlCommand command)
+	public async Task<IEnumerable<Publication>?> ImportFromDaWinciXML(ImportDaWinciXmlCommand command)
 	{
 		IEnumerable<ImportRecord>? result = ParseImportXMLCommand(command, OriginSourceType.DAWINCI);
 		return await ProcessImportedRecords(result, OriginSourceType.DAWINCI);
@@ -92,6 +75,15 @@ public partial class ImportService
 		return importedList;
 	}
 
+	private async Task<Publication> ProccesImportedRecordAsync(ImportRecord record, OriginSourceType source)
+	{
+		ImportPublication importedPublication = record.Publication;
+		DateTime versionDate = record.RecordVersionDate;
+
+		return await ProcessImportedPublication(importedPublication, versionDate, source);
+	}
+
+
 	private async Task UpdateRecordsAsync<TDomain, TCommand>(
 		IEnumerable<TDomain> recordsToUpdate,
 		DateTime versionDate,
@@ -99,7 +91,7 @@ public partial class ImportService
 		where TCommand : EPCUpdateCommandBase, new()
 		where TDomain : EPCDomainBase
 	{
-		foreach (TDomain recordForUpdate in recordsToUpdate)
+		foreach (TDomain recordForUpdate in recordsToUpdate.OrEmptyIfNull())
 		{
 			await UpdateRecordAsync<TDomain, TCommand>(recordForUpdate, versionDate, source);
 		}
@@ -150,5 +142,42 @@ public partial class ImportService
 		List<TDomain> identifiersToInsert = _mapper.Map<List<TDomain>>(importExternIdToInsert);
 
 		return importExternIdToInsert;
+	}
+
+	private async Task DeleteRecordsAsync<TDomain, TCommand>(IEnumerable<TDomain> recordsToDelete)
+	where TCommand : EPCDeleteModelCommandBase<long>, new()
+	where TDomain : EPCDomainBase
+	{
+		foreach (TDomain record in recordsToDelete.OrEmptyIfNull())
+		{
+			TCommand deleteRequest = new TCommand() { Id = record.Id };
+			await _mediator.Send(deleteRequest);
+		}
+	}
+
+	private async Task InsertRecordsAsync<TDomain, TCommand>(
+		IEnumerable<TDomain> recordsToInsert,
+		DateTime versionDate,
+		OriginSourceType source)
+		where TCommand : EPCCreateCommandBase, new()
+		where TDomain : EPCDomainBase
+	{
+		foreach (TDomain record in recordsToInsert.OrEmptyIfNull())
+		{
+			await InsertRecordAsync<TDomain, TCommand>(record, versionDate, source);
+		}
+	}
+
+	private async Task InsertRecordAsync<TDomain, TCommand>(
+		TDomain recordToInsert,
+		DateTime versionDate,
+		OriginSourceType source)
+		where TCommand : EPCCreateCommandBase, new()
+		where TDomain : EPCDomainBase
+	{
+		TCommand insertRequest = _mapper.Map<TCommand>(recordToInsert);
+		insertRequest.VersionDate = versionDate;
+		insertRequest.OriginSourceType = source;
+		await _mediator.Send(insertRequest);
 	}
 }

@@ -9,7 +9,7 @@ using ZUEPC.DataAccess.Data.Common;
 namespace ZUEPC.Common.CQRS.QueryHandlers;
 
 public abstract class GetSimpleModelQueryHandlerBase<TRepository, TDomain, TModel, TId>:
-	DomainModelHandlerBase<TRepository, TModel>
+	ModelHandlerBase<TRepository>
 	where TRepository : IRepositoryBase<TModel>, IRepositoryWithSimpleIdBase<TModel, TId>
 	where TDomain : EPCDomainBase
 	where TModel : IItemWithID<TId>

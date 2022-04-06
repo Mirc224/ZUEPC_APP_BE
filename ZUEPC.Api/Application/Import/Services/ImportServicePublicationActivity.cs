@@ -67,7 +67,6 @@ public partial class ImportService
 		{
 			await UpdatePublicationActivityAsync(tuple.Item2, tuple.Item1, versionDate, source);
 		}
-
 	}
 
 	private async Task UpdatePublicationActivityAsync(
@@ -83,50 +82,5 @@ public partial class ImportService
 				recordForUpdate,
 				versionDate,
 				source);
-	}
-
-	private async Task<Publication> ProccesImportedRecordAsync(ImportRecord record, OriginSourceType source)
-	{
-		ImportPublication importedPublication = record.Publication;
-		DateTime versionDate = record.RecordVersionDate;
-
-		return await ProcessImportedPublication(importedPublication, versionDate, source);
-	}
-
-	private async Task DeleteRecordsAsync<TDomain, TCommand>(IEnumerable<TDomain> recordsToDelete)
-		where TCommand : EPCDeleteModelCommandBase<long>, new()
-		where TDomain : EPCDomainBase
-	{
-		foreach (TDomain record in recordsToDelete)
-		{
-			TCommand deleteRequest = new TCommand() { Id = record.Id };
-			await _mediator.Send(deleteRequest);
-		}
-	}
-
-	private async Task InsertRecordsAsync<TDomain, TCommand>(
-		IEnumerable<TDomain> recordsToInsert,
-		DateTime versionDate,
-		OriginSourceType source)
-		where TCommand : EPCCreateCommandBase, new()
-		where TDomain : EPCDomainBase
-	{
-		foreach (TDomain record in recordsToInsert)
-		{
-			await InsertRecordAsync<TDomain, TCommand>(record, versionDate, source);
-		}
-	}
-
-	private async Task InsertRecordAsync<TDomain, TCommand>(
-		TDomain recordToInsert,
-		DateTime versionDate,
-		OriginSourceType source)
-		where TCommand : EPCCreateCommandBase, new()
-		where TDomain : EPCDomainBase
-	{
-		TCommand insertRequest = _mapper.Map<TCommand>(recordToInsert);
-		insertRequest.VersionDate = versionDate;
-		insertRequest.OriginSourceType = source;
-		await _mediator.Send(insertRequest);
 	}
 }

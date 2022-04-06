@@ -1,6 +1,6 @@
 ﻿using ZUEPC.Base.Responses;
 
-namespace ZUEPC.Application.Auth.Commands.Users;
+namespace ZUEPC.Application.Auth.Commands.AuthActions;
 
 public class LoginUserCommandResponse : ResponseBase
 {

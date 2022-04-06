@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using ZUEPC.Base.Queries;
-using ZUEPC.Common.CQRS.Queries;
 using ZUEPC.Base.QueryFilters;
 
 namespace ZUEPC.Application.Persons.Queries.Persons;
