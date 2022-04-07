@@ -4,7 +4,7 @@ using Users.Base.Application.Domain;
 using ZUEPC.DataAccess.Data.Users;
 using ZUEPC.DataAccess.Models.Users;
 
-namespace ZUEPC.Application.Users.Queries;
+namespace ZUEPC.Application.Users.Queries.Roles;
 
 public class GetAllRolesQueryHandler : IRequestHandler<GetAllRolesQuery, GetAllRolesQueryResponse>
 {

@@ -20,7 +20,7 @@ public partial class ImportService
 				new GetPublicationRelatedPublicationsQuery()
 				{
 					SourcePublicationId = updatedPublication.Id
-				})).RelatedPublications;
+				})).Data;
 		List<Tuple<ImportRelatedPublication, Publication, Publication>> relatedPublicationTuples = new();
 		foreach (ImportRelatedPublication relatedPublication in importRelatedPublications)
 		{

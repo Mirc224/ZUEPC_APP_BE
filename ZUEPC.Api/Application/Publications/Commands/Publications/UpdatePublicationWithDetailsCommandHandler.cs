@@ -188,7 +188,7 @@ public class UpdatePublicationWithDetailsCommandHandler :
 	private async Task CheckIfUpdatedRelatedPublicationIsRelatedWithPublicationAsync(
 		long publicationId,
 		IEnumerable<long>? idsToCheck,
-		ResponseBase response)
+		UpdatePublicationWithDetailsCommandResponse response)
 	{
 		await CheckIfPublicationRelatedObjectsAreValid(
 			publicationId, 
@@ -331,12 +331,12 @@ public class UpdatePublicationWithDetailsCommandHandler :
 	private async Task ProcessPublicationPropertyAsync<TDto, TCommand>(
 		UpdatePublicationWithDetailsCommand request,
 		IEnumerable<TDto>? propertyObjects,
-		long PublicationId)
+		long publicationId)
 		where TDto : PublicationPropertyBaseDto
 	{
 		foreach (TDto propertyObject in propertyObjects.OrEmptyIfNull())
 		{
-			propertyObject.PublicationId = PublicationId;
+			propertyObject.PublicationId = publicationId;
 			propertyObject.OriginSourceType = request.OriginSourceType;
 			propertyObject.VersionDate = request.VersionDate;
 			TCommand actionCommand = _mapper.Map<TCommand>(propertyObject);

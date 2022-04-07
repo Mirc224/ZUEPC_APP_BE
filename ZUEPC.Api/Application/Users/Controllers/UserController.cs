@@ -1,16 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Users.Base.Domain;
 using ZUEPC.Api.Application.Users.Commands.UserRoles;
 using ZUEPC.Api.Application.Users.Commands.Users;
 using ZUEPC.Api.Application.Users.Queries.Users;
 using ZUEPC.Api.Application.Users.Queries.Users.Details;
 using ZUEPC.Api.Common.Authorization;
-using ZUEPC.Application.Users.Commands;
-using ZUEPC.Application.Users.Queries;
-using ZUEPC.Application.Users.Validators;
+using ZUEPC.Application.Users.Queries.Roles;
 using ZUEPC.Base.QueryFilters;
 using ZUEPC.Base.Services;
 
@@ -118,34 +114,6 @@ namespace ZUEPC.Application.Users.Controllers
 			UpdateUserCommandResponse response = await _mediator.Send(request);
 			if (!response.Success)
 				return NotFound();
-			return NoContent();
-		}
-
-		[Authorize(Roles = "ADMIN")]
-		[HttpPatch("{userId}")]
-		public async Task<IActionResult> PatchUser([FromBody] JsonPatchDocument<User> patchEntity, int userId)
-		{
-			User user = new();
-			patchEntity.ApplyTo(user);
-
-			FluentValidation.Results.ValidationResult? validationResult = new UserValidator().Validate(user);
-			if (!validationResult.IsValid)
-			{
-				foreach (FluentValidation.Results.ValidationFailure? error in validationResult.Errors)
-				{
-					ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-				}
-				return UnprocessableEntity(ModelState);
-			}
-			PatchUserCommand? request = new PatchUserCommand
-			{
-				AppliedPatch = patchEntity,
-				UserId = userId
-			};
-
-			PatchUserCommandResponse? response = await _mediator.Send(request);
-			if (!response.Success)
-				return BadRequest();
 			return NoContent();
 		}
 	}

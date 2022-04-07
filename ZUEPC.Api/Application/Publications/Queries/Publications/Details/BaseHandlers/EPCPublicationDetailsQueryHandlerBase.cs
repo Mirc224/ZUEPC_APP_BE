@@ -49,7 +49,7 @@ public class EPCPublicationDetailsQueryHandlerBase
 		result.RelatedPublications = (await _mediator.Send(new GetPublicationRelatedPublicationsDetailsQuery()
 		{
 			SourcePublicationId = publicationId
-		})).RelatedPublications;
+		})).Data;
 
 		result.PublicationActivities = (await _mediator.Send(new GetPublicationPublicationActivitiesQuery()
 		{

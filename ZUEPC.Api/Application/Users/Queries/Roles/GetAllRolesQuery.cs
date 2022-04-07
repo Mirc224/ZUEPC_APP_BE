@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ZUEPC.Application.Users.Queries;
+namespace ZUEPC.Application.Users.Queries.Roles;
 
 public class GetAllRolesQuery: IRequest<GetAllRolesQueryResponse>
 {

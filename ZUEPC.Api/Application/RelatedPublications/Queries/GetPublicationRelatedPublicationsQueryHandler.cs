@@ -21,6 +21,6 @@ public class GetPublicationRelatedPublicationsQueryHandler : IRequestHandler<Get
 		IEnumerable<RelatedPublicationModel> queryResult = await _repository.GetRelatedPublicationsByPublicationIdAsync(request.SourcePublicationId);
 		List<RelatedPublication> mappedResult = _mapper.Map<List<RelatedPublication>>(queryResult);
 
-		return new() { Success = true, RelatedPublications = mappedResult };
+		return new() { Success = true, Data = mappedResult };
 	}
 }

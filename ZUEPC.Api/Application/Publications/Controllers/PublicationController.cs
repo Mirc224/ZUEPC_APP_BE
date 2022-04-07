@@ -179,7 +179,7 @@ public class PublicationController : ControllerBase
 	[HttpDelete("{id}")]
 	public async Task<IActionResult> DeletePublication(long id)
 	{
-		DeletePublicationCommand request = new() { PublicationId = id };
+		DeletePublicationCommand request = new() { Id = id };
 		DeletePublicationCommandResponse response = await _mediator.Send(request);
 		if (!response.Success)
 		{

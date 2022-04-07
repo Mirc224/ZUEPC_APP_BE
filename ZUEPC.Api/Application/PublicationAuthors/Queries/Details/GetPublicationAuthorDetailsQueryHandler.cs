@@ -3,6 +3,7 @@ using MediatR;
 using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
 using ZUEPC.Application.Persons.Queries.Persons.Previews;
 using ZUEPC.Application.PublicationAuthors.Entities.Details;
+using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.PublicationAuthors;
 
 namespace ZUEPC.Application.PublicationAuthors.Queries.Details;
@@ -22,7 +23,7 @@ public class GetPublicationAuthorDetailsQueryHandler : IRequestHandler<GetPublic
 		long publicationId = request.PublicationId;
 		ICollection<PublicationAuthor> publicationAuthors = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery() { PublicationId = publicationId })).Data;
 		List<PublicationAuthorDetails> resultDetails = new();
-		foreach(PublicationAuthor pubAuthor in publicationAuthors)
+		foreach(PublicationAuthor pubAuthor in publicationAuthors.OrEmptyIfNull())
 		{
 			long personId = pubAuthor.PersonId;
 			long institutionId = pubAuthor.InstitutionId;

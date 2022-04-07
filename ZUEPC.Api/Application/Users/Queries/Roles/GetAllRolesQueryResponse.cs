@@ -1,7 +1,7 @@
 ﻿using ZUEPC.Base.Responses;
 using Users.Base.Application.Domain;
 
-namespace ZUEPC.Application.Users.Queries;
+namespace ZUEPC.Application.Users.Queries.Roles;
 
 public class GetAllRolesQueryResponse: ResponseBase
 {

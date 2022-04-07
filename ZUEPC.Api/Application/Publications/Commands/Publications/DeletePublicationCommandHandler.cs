@@ -25,7 +25,7 @@ public class DeletePublicationCommandHandler :
 	}
 	public async Task<DeletePublicationCommandResponse> Handle(DeletePublicationCommand request, CancellationToken cancellationToken)
 	{
-		long publicationId = request.PublicationId;
+		long publicationId = request.Id;
 
 		GetPublicationQueryResponse model = await _mediator.Send(new GetPublicationQuery() { Id = publicationId });
 

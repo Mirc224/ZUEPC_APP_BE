@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using ZUEPC.Base.Enums.Users;
+﻿using ZUEPC.Base.Enums.Users;
 
 namespace ZUEPC.Api.Application.Users.Entities.Details;
 

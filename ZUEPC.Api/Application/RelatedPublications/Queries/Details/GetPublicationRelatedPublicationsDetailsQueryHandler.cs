@@ -22,7 +22,7 @@ public class GetPublicationRelatedPublicationsDetailsQueryHandler : IRequestHand
 		IEnumerable<RelatedPublication>? relatedPublicationsDomain = (await _mediator.Send(new GetPublicationRelatedPublicationsQuery() 
 		{ 
 			SourcePublicationId = sourcePublicationId 
-		})).RelatedPublications;
+		})).Data;
 		if (relatedPublicationsDomain is null)
 		{
 			return new() { Success = false};
@@ -39,6 +39,6 @@ public class GetPublicationRelatedPublicationsDetailsQueryHandler : IRequestHand
 			})).Data;
 			resultRelatedPub.Add(mappedResult);
 		}
-		return new() { Success = true, RelatedPublications = resultRelatedPub };
+		return new() { Success = true, Data = resultRelatedPub };
 	}
 }

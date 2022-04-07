@@ -1,6 +1,5 @@
 ﻿using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Base.Entities;
-using ZUEPC.Base.Entities;
 
 namespace ZUEPC.Application.RelatedPublications.Entities.Details;
 

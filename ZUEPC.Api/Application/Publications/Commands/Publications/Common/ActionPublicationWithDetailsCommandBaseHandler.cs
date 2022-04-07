@@ -91,17 +91,6 @@ public abstract class ActionPublicationWithDetailsCommandBaseHandler
 		return result;
 	}
 
-	protected void ProcessErrorMessages(ResponseBase response, IEnumerable<string> errorMessages)
-	{
-		if (errorMessages.Any())
-		{
-			response.ErrorMessages = response.ErrorMessages is null ? new List<string>() : response.ErrorMessages;
-			List<string> responseMessages = response.ErrorMessages.ToList();
-			responseMessages.AddRange(errorMessages);
-			response.ErrorMessages = responseMessages;
-		}
-	}
-
 	protected async Task<ICollection<TResponse>> ProcessPublicationPropertiesAsync<TResponse, TCreateDto, TCommand>(
 		CreatePublicationWithDetailsCommand request,
 		IEnumerable<TCreateDto>? propertyObjects,
