@@ -237,7 +237,7 @@ public class SQLPublicationData :
 			builder.WhereColumnOpValue(
 				nameof(PublicationActivityModel.ActivityYear),
 				"<=",
-				queryFilter.ActivityYearFrom,
+				queryFilter.ActivityYearTo,
 				TableAliasConstants.PUBLICATION_ACTIVITIES_TABLE_ALIAS,
 				parameters);
 		}
