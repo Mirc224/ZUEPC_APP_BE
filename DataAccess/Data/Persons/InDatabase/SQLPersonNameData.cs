@@ -41,11 +41,13 @@ public class SQLPersonNameData :
 		}
 		if (queryFilter.Name != null)
 		{
-			string concatString = builder.GetConcatFunctionString(nameof(PersonNameModel.FirstName), nameof(PersonNameModel.LastName), baseTableAlias, parameters);
-			string concatStringReverse = builder.GetConcatFunctionString(nameof(PersonNameModel.LastName), nameof(PersonNameModel.FirstName), baseTableAlias, parameters);
-
-			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, queryFilter.Name, "", parameters);
-			string bindedSqlReverse = builder.WhereLikeInArrayBindedString(concatStringReverse, queryFilter.Name, "", parameters);
+			string concatString = builder.GetConcatFunctionString(nameof(PersonNameModel.FirstName), nameof(PersonNameModel.LastName), baseTableAlias, parameters, "");
+			string concatStringReverse = builder.GetConcatFunctionString(nameof(PersonNameModel.LastName), nameof(PersonNameModel.FirstName), baseTableAlias, parameters, "");
+			
+			IEnumerable<string> namesWithReplacedValues = queryFilter.Name.Select(x => x.Replace(' ', '%'));
+			
+			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, namesWithReplacedValues, "", parameters);
+			string bindedSqlReverse = builder.WhereLikeInArrayBindedString(concatStringReverse, namesWithReplacedValues, "", parameters);
 
 			builder.Where($"({bindedSql} OR {bindedSqlReverse})");
 		}

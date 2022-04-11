@@ -191,11 +191,13 @@ public class SQLPublicationData :
 		}
 		if (queryFilter.AuthorName != null)
 		{
-			string concatString = builder.GetConcatFunctionString(nameof(PersonNameModel.FirstName), nameof(PersonNameModel.LastName), TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
-			string concatStringReverse = builder.GetConcatFunctionString(nameof(PersonNameModel.LastName), nameof(PersonNameModel.FirstName), TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters);
+			string concatString = builder.GetConcatFunctionString(nameof(PersonNameModel.FirstName), nameof(PersonNameModel.LastName), TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters, "");
+			string concatStringReverse = builder.GetConcatFunctionString(nameof(PersonNameModel.LastName), nameof(PersonNameModel.FirstName), TableAliasConstants.PERSON_NAMES_TABLE_ALIAS, parameters, "");
 
-			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, queryFilter.AuthorName, "", parameters);
-			string bindedSqlReverse = builder.WhereLikeInArrayBindedString(concatStringReverse, queryFilter.AuthorName, "", parameters);
+			IEnumerable<string> namesWithReplacedValues = queryFilter.AuthorName.Select(x => x.Replace(' ', '%'));
+
+			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, namesWithReplacedValues, "", parameters);
+			string bindedSqlReverse = builder.WhereLikeInArrayBindedString(concatStringReverse, namesWithReplacedValues, "", parameters);
 
 			builder.Where($"({bindedSql} OR {bindedSqlReverse})");
 		}
