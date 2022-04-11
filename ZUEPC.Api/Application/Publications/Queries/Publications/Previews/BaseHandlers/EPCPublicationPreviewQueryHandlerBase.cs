@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Application.PublicationActivities.Queries;
 using ZUEPC.Application.PublicationAuthors.Queries.Details;
 using ZUEPC.Application.Publications.Entities.Previews;
 using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
@@ -44,6 +45,10 @@ public abstract class EPCPublicationPreviewQueryHandlerBase
 			PublicationId = publicationId
 		})).Data;
 
+		resultPreview.PublicationActivities = (await _mediator.Send(new GetPublicationPublicationActivitiesQuery()
+		{
+			PublicationId = publicationId
+		})).Data;
 		return resultPreview;
 	}
 }

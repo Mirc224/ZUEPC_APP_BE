@@ -31,7 +31,7 @@ public class ImportPublication
 				{ "formPatent_conf.xml", PublicationType.PATENT },
 				{ "formBookPublication_conf.xml", PublicationType.BOOK_PUBLICATION }
 			};
-			if (value != null && publicationTypeMap.TryGetValue(value, out var publicationType))
+			if (value != null && publicationTypeMap.TryGetValue(value, out PublicationType publicationType))
 			{
 				PublicationType = publicationType;
 				return;

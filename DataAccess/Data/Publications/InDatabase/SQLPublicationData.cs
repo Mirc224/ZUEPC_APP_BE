@@ -60,7 +60,9 @@ public class SQLPublicationData :
 				TableAliasConstants.PUBLICATION_EXTERN_DATABASE_ID_TABLE_ALIAS,
 				nameof(PublicationExternDatabaseIdModel.PublicationId));
 		}
-		if (queryFilter.ActivityCategory != null ||
+		if (queryFilter.ActivityYearFrom != null ||
+			queryFilter.ActivityYearTo != null ||
+			queryFilter.ActivityCategory != null ||
 			queryFilter.ActivityYear != null ||
 			queryFilter.GovernmentGrant != null)
 		{
@@ -218,6 +220,24 @@ public class SQLPublicationData :
 			builder.WhereInArray(
 				nameof(PublicationActivityModel.GovernmentGrant),
 				queryFilter.GovernmentGrant,
+				TableAliasConstants.PUBLICATION_ACTIVITIES_TABLE_ALIAS,
+				parameters);
+		}
+		if (queryFilter.ActivityYearFrom != null)
+		{
+			builder.WhereColumnOpValue(
+				nameof(PublicationActivityModel.ActivityYear),
+				">=", 
+				queryFilter.ActivityYearFrom, 
+				TableAliasConstants.PUBLICATION_ACTIVITIES_TABLE_ALIAS, 
+				parameters);
+		}
+		if (queryFilter.ActivityYearTo != null)
+		{
+			builder.WhereColumnOpValue(
+				nameof(PublicationActivityModel.ActivityYear),
+				"<=",
+				queryFilter.ActivityYearFrom,
 				TableAliasConstants.PUBLICATION_ACTIVITIES_TABLE_ALIAS,
 				parameters);
 		}
