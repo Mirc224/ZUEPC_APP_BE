@@ -36,7 +36,7 @@ public static class SqlBuilderExt
 		}
 		string resultInner = string.Join(',', innerValues);
 		string columnAlias = alias;
-		if(!string.IsNullOrEmpty(columnAlias))
+		if (!string.IsNullOrEmpty(columnAlias))
 		{
 			columnAlias = columnAlias + ".";
 		}
@@ -121,9 +121,9 @@ public static class SqlBuilderExt
 		ExpandoObject parameters,
 		string delimeter = " ")
 	{
-		if(firstKeyAlias != null)
+		if (firstKeyAlias != null)
 		{
-			firstKeyAlias +=".";
+			firstKeyAlias += ".";
 		}
 		if (secondKeyAlias != null)
 		{
@@ -137,9 +137,9 @@ public static class SqlBuilderExt
 		{
 			secondKeyAlias = "";
 		}
-		string delimeterAlias = "@" + Guid.NewGuid().ToString("N");
-		parameters.TryAdd(delimeterAlias, delimeter);
-		return $"CONCAT({firstKeyAlias}{firstKeyName},{delimeterAlias},{secondKeyAlias}{secondKeyName})";
+		string firstColumnName = firstKeyAlias + firstKeyName;
+		string secondColumnName = secondKeyAlias + secondKeyName;
+		return builder.GetConcatFunctionWithMultipleValuesString(new string[] { firstColumnName, secondColumnName }, parameters, delimeter);
 	}
 
 	public static string GetConcatFunctionString(
@@ -150,7 +150,22 @@ public static class SqlBuilderExt
 		ExpandoObject parameters,
 		string delimeter = " ")
 	{
-		
+
 		return builder.GetConcatFunctionString(firstKeyName, secondKeyName, alias, alias, parameters, delimeter);
 	}
+
+	public static string GetConcatFunctionWithMultipleValuesString(
+		this SqlBuilder builder,
+		IEnumerable<string> keyNames,
+		ExpandoObject parameters,
+		string delimeter = " ")
+	{
+		string delimeterAlias = "@" + Guid.NewGuid().ToString("N");
+		parameters.TryAdd(delimeterAlias, delimeter);
+		string result = string.Join($",{delimeterAlias},", keyNames);
+
+		return $"CONCAT({result})";
+	}
 }
+
+

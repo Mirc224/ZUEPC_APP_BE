@@ -151,11 +151,16 @@ public class SQLPublicationData :
 		}
 		if (queryFilter.IdentifierValue != null)
 		{
-			builder.WhereLikeInArray(
+			string concatString = builder.GetConcatFunctionString(
+				nameof(PublicationIdentifierModel.IdentifierName), 
 				nameof(PublicationIdentifierModel.IdentifierValue), 
-				queryFilter.IdentifierValue, 
 				TableAliasConstants.PUBLICATION_IDENTIFIERS_TABLE_ALIAS, 
-				parameters);
+				parameters, 
+				":");
+
+			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, queryFilter.IdentifierValue, "", parameters);
+
+			builder.Where(bindedSql);
 		}
 		if (queryFilter.IdentifierName != null)
 		{
