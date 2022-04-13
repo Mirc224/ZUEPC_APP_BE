@@ -2,7 +2,7 @@
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
     [InstitutionId] BIGINT NOT NULL, 
-    [ExternIdentifierValue] NVARCHAR(100) NOT NULL,
+    [ExternIdentifierValue] NVARCHAR(250) NOT NULL,
     [OriginSourceType] SMALLINT NOT NULL, 
     [VersionDate] DATETIME NOT NULL, 
     [CreatedAt] DATETIME NOT NULL, 

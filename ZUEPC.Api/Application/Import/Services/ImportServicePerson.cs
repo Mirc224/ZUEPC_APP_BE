@@ -246,7 +246,13 @@ public partial class ImportService
 		if (foundPersonExternIdentifiers?.Data != null &&
 			foundPersonExternIdentifiers.Data.Any())
 		{
-			personId = foundPersonExternIdentifiers.Data.First().PersonId;
+			personId = foundPersonExternIdentifiers
+						.Data
+						.GroupBy(x => x.PersonId)
+						.OrderByDescending(x => x.Count())
+						.First()
+						.First()
+						.PersonId;
 			resultModel = await GetPersonByIdAsync(personId);
 			if (resultModel != null)
 			{

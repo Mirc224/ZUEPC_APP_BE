@@ -93,7 +93,7 @@ public partial class ImportService
 														.Select(x => x.ExternIdentifierValue)
 														.ToList();
 		GetAllInstitutionExternDbIdsInSetQueryResponse foundInstitutionExternIdentifiers = null;
-		if(institutionExternDatabaseIds.Any())
+		if (institutionExternDatabaseIds.Any())
 		{
 			foundInstitutionExternIdentifiers = await _mediator.Send(
 			new GetAllInstitutionExternDbIdsInSetQuery()
@@ -105,7 +105,13 @@ public partial class ImportService
 		if (foundInstitutionExternIdentifiers?.Data != null &&
 			foundInstitutionExternIdentifiers.Data.Any())
 		{
-			institutionId = foundInstitutionExternIdentifiers.Data.First().InstitutionId;
+			institutionId = foundInstitutionExternIdentifiers
+							.Data
+							.GroupBy(x => x.InstitutionId)
+							.OrderByDescending(x => x.Count())
+							.First()
+							.First()
+							.InstitutionId;
 			resultModel = await GetInstitutionByIdAsync(institutionId);
 			if (resultModel != null)
 			{

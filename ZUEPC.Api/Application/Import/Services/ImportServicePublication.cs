@@ -70,7 +70,7 @@ public partial class ImportService
 		IEnumerable<string> imPublicationIdentifiers = publicationRecord.PublicationIdentifiers.Select(identifier => identifier.IdentifierValue);
 		GetAllPublicationIdentifiersInSetQueryResponse foundPublicationIdentifiers = null;
 
-		if(imPublicationIdentifiers.Any())
+		if (imPublicationIdentifiers.Any())
 		{
 			foundPublicationIdentifiers = await _mediator.Send(new GetAllPublicationIdentifiersInSetQuery()
 			{
@@ -81,7 +81,13 @@ public partial class ImportService
 		if (foundPublicationIdentifiers?.Data != null &&
 			foundPublicationIdentifiers.Data.Any())
 		{
-			publicationId = foundPublicationIdentifiers.Data.First().PublicationId;
+			publicationId = foundPublicationIdentifiers
+							.Data
+							.GroupBy(x => x.PublicationId)
+							.OrderByDescending(x => x.Count())
+							.First()
+							.First()
+							.PublicationId;
 			resultModel = await GetPublicationById(publicationId);
 			if (resultModel != null)
 			{
@@ -91,7 +97,7 @@ public partial class ImportService
 
 		IEnumerable<string> imPublicationExternIds = publicationRecord.PublicationExternDbIds.Select(identifier => identifier.ExternIdentifierValue);
 		GetAllPublicationExternDbIdsInSetQueryResponse foundPublicationExternIdentifiers = null;
-		if(imPublicationExternIds.Any())
+		if (imPublicationExternIds.Any())
 		{
 			foundPublicationExternIdentifiers = await _mediator.Send(new GetAllPublicationExternDbIdsInSetQuery()
 			{
@@ -102,7 +108,13 @@ public partial class ImportService
 		if (foundPublicationExternIdentifiers?.Data != null &&
 			foundPublicationExternIdentifiers.Data.Any())
 		{
-			publicationId = foundPublicationExternIdentifiers.Data.First().PublicationId;
+			publicationId = foundPublicationExternIdentifiers
+							.Data
+							.GroupBy(x => x.PublicationId)
+							.OrderByDescending(x => x.Count())
+							.First()
+							.First()
+							.PublicationId;
 			resultModel = await GetPublicationById(publicationId);
 			if (resultModel != null)
 			{
@@ -153,7 +165,7 @@ public partial class ImportService
 	{
 		foreach (ImportPublicationIdentifier identifier in importIdentifiersToInsert.OrEmptyIfNull())
 		{
-			if(identifier.IdentifierValue is null)
+			if (identifier.IdentifierValue is null)
 			{
 				continue;
 			}
@@ -314,7 +326,7 @@ public partial class ImportService
 	{
 		foreach (ImportPublicationName name in importNames.OrEmptyIfNull())
 		{
-			if(name.Name is null && name.NameType is null)
+			if (name.Name is null && name.NameType is null)
 			{
 				continue;
 			}
