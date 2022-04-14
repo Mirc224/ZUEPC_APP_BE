@@ -28,6 +28,10 @@ public abstract class SQLDbEPCRepositoryBase<TModel>:
 		return (await GetModelsWithColumnValueAsync(nameof(EPCModelBase.Id), id)).FirstOrDefault();
 	}
 
+	public async Task<IEnumerable<TModel>> GetModelsWhereIdInSetAsync(IEnumerable<long> ids)
+	{
+		return (await GetModelsWithColumnValueInSetAsync(nameof(EPCModelBase.Id), ids));
+	}
 	public async Task<int> UpdateModelAsync(TModel model)
 	{
 		SqlBuilder builder = new();

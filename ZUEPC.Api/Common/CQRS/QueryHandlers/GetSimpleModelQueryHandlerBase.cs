@@ -33,5 +33,4 @@ public abstract class GetSimpleModelQueryHandlerBase<TRepository, TDomain, TMode
 		TDomain mappedResult = _mapper.Map<TDomain>(result);
 		return new() { Success = true, Data = mappedResult };
 	}
-
 }

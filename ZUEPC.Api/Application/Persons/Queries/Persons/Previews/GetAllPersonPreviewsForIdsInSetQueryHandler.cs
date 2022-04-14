@@ -2,42 +2,36 @@
 using MediatR;
 using ZUEPC.Api.Application.Persons.Queries.Persons.Previews.BaseHandlers;
 using ZUEPC.Application.Persons.Entities.Previews;
-using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
-using ZUEPC.Application.Persons.Queries.PersonNames;
 using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Persons;
 
-namespace ZUEPC.Application.Persons.Queries.Persons.Previews.BaseHandlers;
+namespace ZUEPC.Api.Application.Persons.Queries.Persons.Previews;
 
-public abstract class EPCPersonPreviewQueryHandlerBase
+public class GetAllPersonPreviewsForIdsInSetQueryHandler :
+	IRequestHandler<GetAllPersonPreviewsForIdsInSetQuery, GetAllPersonPreviewsForIdsInSetQueryResponse>
 {
-	protected readonly IMapper _mapper;
-	protected readonly IMediator _mediator;
+	private readonly IMapper _mapper;
+	private readonly IMediator _mediator;
 
-	public EPCPersonPreviewQueryHandlerBase(IMapper mapper, IMediator mediator)
+	public GetAllPersonPreviewsForIdsInSetQueryHandler(IMapper mapper, IMediator mediator)
 	{
 		_mapper = mapper;
 		_mediator = mediator;
 	}
 
-	protected async Task<PersonPreview> ProcessPersonPreview(Person personDomain)
+	public async Task<GetAllPersonPreviewsForIdsInSetQueryResponse> Handle(GetAllPersonPreviewsForIdsInSetQuery request, CancellationToken cancellationToken)
 	{
-		long personId = personDomain.Id;
-		PersonPreview resultPreview = _mapper.Map<PersonPreview>(personDomain);
-		resultPreview.Names = (await _mediator.Send(new GetPersonPersonNamesQuery()
+		GetAllPersonsWithIdInSetQueryResponse response = await _mediator.Send(new GetAllPersonsWithIdInSetQuery()
 		{
-			PersonId = personId
-		})).Data;
-		resultPreview.ExternDatabaseIds = (await _mediator.Send(new GetPersonPersonExternDatabaseIdsQuery()
+			PersonIds = request.PersonIds,
+		});
+		
+		if(!response.Success)
 		{
-			PersonId = personId
-		})).Data;
-		return resultPreview;
-	}
+			return new() { Success = false };
+		}
 
-	protected async Task<IEnumerable<PersonPreview>> ProcessPersonPreviews(IEnumerable<Person> personDomains)
-	{
-		IEnumerable<PersonPreview> result = _mapper.Map<List<PersonPreview>>(personDomains);
+		IEnumerable<PersonPreview> result = _mapper.Map<List<PersonPreview>>(response.Data);
 		IEnumerable<long> personIds = result.Select(x => x.Id);
 		GetAllPersonPreviewDataForPersonIdsInSetQueryResponse previewData = await _mediator
 			.Send(new GetAllPersonPreviewDataForPersonIdsInSetQuery() { PersonIds = personIds });
@@ -51,6 +45,6 @@ public abstract class EPCPersonPreviewQueryHandlerBase
 			person.ExternDatabaseIds = personExternDbIdsGroupByPersonId.Where(x => x.Key == person.Id).Select(x => x.ToList()).FirstOrDefault().OrEmptyIfNull();
 		}
 
-		return result;
+		return new() { Success = true, Data = result };
 	}
 }
