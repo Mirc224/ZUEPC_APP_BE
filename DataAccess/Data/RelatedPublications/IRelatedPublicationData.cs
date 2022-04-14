@@ -9,6 +9,7 @@ public interface IRelatedPublicationData :
 {
 	Task<IEnumerable<RelatedPublicationModel>> GetRelatedPublicationsByPublicationIdAsync(long publicationId);
 	Task<IEnumerable<RelatedPublicationModel>> GetRelatedPublicationsByRelatedPublicationIdAsync(long relatedPublicationId);
+	Task<IEnumerable<RelatedPublicationModel>> GetAllRelatedPublicationsByPublicationIdInSetAsync(IEnumerable<long> publicationIds);
 	Task<int> DeleteRelatedPublicationsByPublicationIdAsync(long publicationId);
 	Task<int> DeleteRelatedPublicationsByRelatedPublicationIdAsync(long relatedPublicationId);
 }

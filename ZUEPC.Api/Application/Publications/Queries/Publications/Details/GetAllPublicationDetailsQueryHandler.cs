@@ -31,17 +31,21 @@ public class GetAllPublicationDetailsQueryHandler :
 			return new() { Success = false };
 		}
 
-		IEnumerable<Publication> publicationDomains = response.Data;
-		List<PublicationDetails> result = new();
-		foreach (Publication publication in publicationDomains.OrEmptyIfNull())
-		{
-			PublicationDetails PublicationPreview = await ProcessPublicationDetails(publication);
-			if (PublicationPreview != null)
-			{
-				result.Add(PublicationPreview);
-			}
-		}
 		int totalRecords = response.TotalRecords;
+
+		if (!response.Data.Any())
+		{
+			return PaginationHelper.ProcessResponse<GetAllPublicationDetailsQueryResponse, PublicationDetails, PublicationFilter>(
+			new List<PublicationDetails>(),
+			request.PaginationFilter,
+			request.UriService,
+			totalRecords,
+			request.Route,
+			request.QueryFilter);
+		}
+
+
+		IEnumerable<PublicationDetails> result = await ProcessPublicationPreviews(response.Data);
 		return PaginationHelper.ProcessResponse<GetAllPublicationDetailsQueryResponse, PublicationDetails, PublicationFilter>(
 			result,
 			request.PaginationFilter,

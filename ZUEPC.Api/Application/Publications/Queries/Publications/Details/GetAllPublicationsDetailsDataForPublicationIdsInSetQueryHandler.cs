@@ -9,23 +9,23 @@ using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Domain.Publications;
 
-namespace ZUEPC.Api.Application.Publications.Queries.Publications.Previews;
+namespace ZUEPC.Api.Application.Publications.Queries.Publications.Details;
 
-public class GetAllPublicationsPreviewDataForPublicationIdsInSetQueryHandler :
-	IRequestHandler<GetAllPublicationsPreviewDataForPublicationIdsInSetQuery, GetAllPublicationsPreviewDataForPublicationIdsInSetQueryResponse>
+public class GetAllPublicationsDetailsDataForPublicationIdsInSetQueryHandler: 
+	IRequestHandler<GetAllPublicationsDetailsDataForPublicationIdsInSetQuery, GetAllPublicationsDetailsDataForPublicationIdsInSetQueryResponse>
 {
 	private readonly IMediator _mediator;
 
-	public GetAllPublicationsPreviewDataForPublicationIdsInSetQueryHandler(IMediator mediator)
+	public GetAllPublicationsDetailsDataForPublicationIdsInSetQueryHandler(IMediator mediator)
 	{
 		_mediator = mediator;
 	}
 
-	public async Task<GetAllPublicationsPreviewDataForPublicationIdsInSetQueryResponse> Handle(GetAllPublicationsPreviewDataForPublicationIdsInSetQuery request, CancellationToken cancellationToken)
+	public async Task<GetAllPublicationsDetailsDataForPublicationIdsInSetQueryResponse> Handle(GetAllPublicationsDetailsDataForPublicationIdsInSetQuery request, CancellationToken cancellationToken)
 	{
 		IEnumerable<long> publicationIds = request.PublicationIds.ToHashSet();
-		return new() 
-		{ 
+		return new()
+		{
 			Success = true,
 			PublicationNames = await GetPublicationNamesWithPublicationIdInSet(publicationIds),
 			PublicationIdentifiers = await GetPublicationIdentifiersWithPublicationIdInSet(publicationIds),

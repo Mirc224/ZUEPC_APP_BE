@@ -2,11 +2,10 @@
 using ZUEPC.Base.Responses;
 using ZUEPC.EvidencePublication.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Domain.Publications;
-using ZUEPC.EvidencePublication.PublicationAuthors;
 
-namespace ZUEPC.Api.Application.Publications.Queries.Publications.Previews;
+namespace ZUEPC.Api.Application.Publications.Queries.Publications.Details;
 
-public class GetAllPublicationsPreviewDataForPublicationIdsInSetQueryResponse : ResponseBase
+public class GetAllPublicationsDetailsDataForPublicationIdsInSetQueryResponse : ResponseBase
 {
 	public IEnumerable<PublicationName> PublicationNames { get; set; }
 	public IEnumerable<PublicationIdentifier> PublicationIdentifiers { get; set; }

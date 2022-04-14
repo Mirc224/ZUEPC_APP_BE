@@ -10,10 +10,10 @@ public class PublicationDetails : ItemDetailsBase
 {
 	public string? DocumentType { get; set; }
 	public int? PublishYear { get; set; }
-	public ICollection<PublicationName>? Names { get; set; }
-	public ICollection<PublicationIdentifier>? Identifiers { get; set; }
-	public ICollection<PublicationExternDatabaseId>? ExternDatabaseIds { get; set; }
-	public ICollection<PublicationAuthorDetails>? Authors { get; set; }
-	public ICollection<RelatedPublicationDetails>? RelatedPublications { get; set; }
-	public ICollection<PublicationActivity>? PublicationActivities { get; set; }
+	public IEnumerable<PublicationName>? Names { get; set; }
+	public IEnumerable<PublicationIdentifier>? Identifiers { get; set; }
+	public IEnumerable<PublicationExternDatabaseId>? ExternDatabaseIds { get; set; }
+	public IEnumerable<PublicationAuthorDetails>? Authors { get; set; }
+	public IEnumerable<RelatedPublicationDetails>? RelatedPublications { get; set; }
+	public IEnumerable<PublicationActivity>? PublicationActivities { get; set; }
 }

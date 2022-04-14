@@ -328,11 +328,13 @@ public class MappingProfile : Profile
 
 		CreateMap<PublicationAuthor, PublicationAuthorDetails>()
 			.IncludeBase<EPCDomainBase, ItemDetailsBase>()
+			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.ContributionRatio, opts => opts.MapFrom(src => src.ContributionRatio))
 			.ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role));
 
 		CreateMap<RelatedPublication, RelatedPublicationDetails>()
 			.IncludeBase<EPCDomainBase, ItemDetailsBase>()
+			.ForMember(dest => dest.PublicationId, opts => opts.MapFrom(src => src.PublicationId))
 			.ForMember(dest => dest.RelationType, opts => opts.MapFrom(src => src.RelationType))
 			.ForMember(dest => dest.CitationCategory, opts => opts.MapFrom(src => src.CitationCategory));
 

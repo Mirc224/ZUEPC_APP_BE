@@ -6,5 +6,4 @@ public class GetAllPublicationsPreviewDataForPublicationIdsInSetQuery:
 	IRequest<GetAllPublicationsPreviewDataForPublicationIdsInSetQueryResponse>
 {
 	public IEnumerable<long> PublicationIds { get; set; }
-
 }
