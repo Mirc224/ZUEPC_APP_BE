@@ -21,9 +21,9 @@ public class GetAllInstitutionsPreviewsForIdsInSetQueryHandler :
 
 	public async Task<GetAllInstitutionsPreviewsForIdsInSetQueryResponse> Handle(GetAllInstitutionsPreviewsForIdsInSetQuery request, CancellationToken cancellationToken)
 	{
-		var response = await _mediator.Send(new GetAllInstitutionsWithIdInSetQuery()
+		GetAllInstitutionsWithIdInSetQueryResponse response = await _mediator.Send(new GetAllInstitutionsWithIdInSetQuery()
 		{
-			InstitutionIds= request.InstitutionIds,
+			InstitutionIds = request.InstitutionIds,
 		});
 
 		if (!response.Success)

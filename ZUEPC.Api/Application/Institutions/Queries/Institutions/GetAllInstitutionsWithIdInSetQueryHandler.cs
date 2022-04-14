@@ -20,7 +20,7 @@ public class GetAllInstitutionsWithIdInSetQueryHandler :
 
 	public async Task<GetAllInstitutionsWithIdInSetQueryResponse> Handle(GetAllInstitutionsWithIdInSetQuery request, CancellationToken cancellationToken)
 	{
-		IEnumerable<InstitutionModel> response = await _repository.GetModelsWhereIdInSetAsync(request.InstitutionIds);
+		IEnumerable<InstitutionModel> response = await _repository.GetModelsWhereIdInSetAsync(request.InstitutionIds.ToHashSet());
 		IEnumerable<Institution> mappedResult = _mapper.Map<List<Institution>>(response);
 		return new() { Success = true, Data = mappedResult };
 	}

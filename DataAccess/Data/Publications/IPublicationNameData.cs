@@ -10,5 +10,6 @@ public interface IPublicationNameData :
 	IRepositoryWithFilter<PublicationNameModel, PublicationNameFilter>
 {
 	Task<IEnumerable<PublicationNameModel>> GetPublicationNamesByPublicationIdAsync(long publicationId);
+	Task<IEnumerable<PublicationNameModel>> GetAllPublicationNamesByPublicationIdInSetAsync(IEnumerable<long> publicationIds);
 	Task<int> DeletePublicationNamesByPublicationIdAsync(long publicationId);
 }

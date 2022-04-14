@@ -8,6 +8,7 @@ public interface IPublicationIdentifierData :
 	IRepositoryWithSimpleIdBase<PublicationIdentifierModel, long>
 {
 	Task<IEnumerable<PublicationIdentifierModel>> GetPublicationIdentifiersByPublicationIdAsync(long publicationId);
+	Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifierByPublicationIdInSetAsync(IEnumerable<long> publicationIds);
 	Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByIdentifierValueSetAsync(IEnumerable<string> identifierValues);
 	Task<int> DeletePublicationIdentifiersByPublicationIdAsync(long publicationId);
 }

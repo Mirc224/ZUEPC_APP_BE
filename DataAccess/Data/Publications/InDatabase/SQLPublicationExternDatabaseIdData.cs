@@ -24,6 +24,11 @@ public class SQLPublicationExternDatabaseIdData :
 		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
 	}
 
+	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByPublicationIdInSetAsync(IEnumerable<long> publicationIds)
+	{
+		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationExternDatabaseIdModel.PublicationId), publicationIds);
+	}
+
 	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetPublicationExternDbIdsByPublicationIdAsync(long publicationId)
 	{
 		return await GetModelsWithColumnValueAsync(nameof(PublicationExternDatabaseIdModel.PublicationId), publicationId);

@@ -19,6 +19,11 @@ public class SQLPublicationIdentifierData :
 		return await DeleteModelsWithColumnValueAsync(nameof(PublicationIdentifierModel.PublicationId), publicationId);
 	}
 
+	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifierByPublicationIdInSetAsync(IEnumerable<long> publicationIds)
+	{
+		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationIdentifierModel.PublicationId), publicationIds);
+	}
+
 	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
 		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationIdentifierModel.IdentifierValue), identifierValues);

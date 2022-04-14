@@ -26,7 +26,7 @@ public class GetAllPersonNamesByPersonIdInSetQueryHandler :
 			return new() { Success = false };
 		}
 
-		IEnumerable<PersonName> mapedResult = _mapper.Map<List<PersonName>>(personNames);
-		return new() { Success = true, Data = mapedResult };
+		IEnumerable<PersonName> mappedResult = _mapper.Map<List<PersonName>>(personNames);
+		return new() { Success = true, Data = mappedResult };
 	}
 }

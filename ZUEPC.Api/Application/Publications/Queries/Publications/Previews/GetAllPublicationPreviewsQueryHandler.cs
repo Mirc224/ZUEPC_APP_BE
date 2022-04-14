@@ -29,18 +29,20 @@ public class GetAllPublicationPreviewsQueryHandler :
 		{
 			return new() { Success = false };
 		}
-
-		IEnumerable<Publication> publicationDomains = response.Data;
-		List<PublicationPreview> result = new();
-		foreach (Publication Publication in publicationDomains.OrEmptyIfNull())
-		{
-			PublicationPreview PublicationPreview = await ProcessPublicationPreview(Publication);
-			if (PublicationPreview != null)
-			{
-				result.Add(PublicationPreview);
-			}
-		}
 		int totalRecords = response.TotalRecords;
+
+		if (!response.Data.Any())
+		{
+			return PaginationHelper.ProcessResponse<GetAllPublicationPreviewsQueryResponse, PublicationPreview, PublicationFilter>(
+			new List<PublicationPreview>(),
+			request.PaginationFilter,
+			request.UriService,
+			totalRecords,
+			request.Route,
+			request.QueryFilter);
+		}
+
+		IEnumerable<PublicationPreview> result = await ProcessPublicationPreviews(response.Data);
 		return PaginationHelper.ProcessResponse<GetAllPublicationPreviewsQueryResponse, PublicationPreview, PublicationFilter>(
 			result,
 			request.PaginationFilter,

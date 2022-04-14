@@ -19,7 +19,7 @@ public class GetAllPersonsWithIdInSetQueryHandler :
 	}
 	public async Task<GetAllPersonsWithIdInSetQueryResponse> Handle(GetAllPersonsWithIdInSetQuery request, CancellationToken cancellationToken)
 	{
-		IEnumerable<PersonModel> response = await _repository.GetModelsWhereIdInSetAsync(request.PersonIds);
+		IEnumerable<PersonModel> response = await _repository.GetModelsWhereIdInSetAsync(request.PersonIds.ToHashSet());
 		IEnumerable<Person> mappedResult = _mapper.Map<List<Person>>(response);
 		return new() { Success=true,  Data = mappedResult };
 	}

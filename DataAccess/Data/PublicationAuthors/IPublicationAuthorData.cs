@@ -7,6 +7,7 @@ public interface IPublicationAuthorData :
 	IRepositoryBase<PublicationAuthorModel>,
 	IRepositoryWithSimpleIdBase<PublicationAuthorModel, long>
 {
+	Task<IEnumerable<PublicationAuthorModel>> GetAllPublicationAuthorsByPublicationIdInSetAsync(IEnumerable<long> publicationIds);
 	Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByPublicationIdAsync(long publicationId);
 	Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByPersonIdAsync(long personId);
 	Task<IEnumerable<PublicationAuthorModel>> GetPublicationAuthorByInstitutionIdAsync(long institutionId);

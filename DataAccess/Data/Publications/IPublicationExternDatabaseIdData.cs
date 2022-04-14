@@ -8,6 +8,7 @@ public interface IPublicationExternDatabaseIdData :
 	IRepositoryWithSimpleIdBase<PublicationExternDatabaseIdModel, long>
 {
 	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetPublicationExternDbIdsByPublicationIdAsync(long publicationId);
+	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByPublicationIdInSetAsync(IEnumerable<long> publicationIds);
 	Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues);
 	Task<int> DeletePublicationExternDbIdsByPublicationIdAsync(long publicationId);
 }
