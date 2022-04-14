@@ -10,5 +10,6 @@ public interface IInstitutionNameData :
 	IRepositoryWithFilter<InstitutionNameModel, InstitutionNameFilter>
 {
 	Task<IEnumerable<InstitutionNameModel>> GetInstitutionNamesByInstitutionIdAsync(long institutionId);
+	Task<IEnumerable<InstitutionNameModel>> GetAllInstitutionNamesByInstitutionIdInSetAsync(IEnumerable<long> institutionIds);
 	Task<int> DeleteInstitutionNamesByInstitutionIdAsync(long institutionId);
 }

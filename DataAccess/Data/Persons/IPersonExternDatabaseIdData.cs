@@ -9,5 +9,6 @@ public interface IPersonExternDatabaseIdData :
 {
 	Task<IEnumerable<PersonExternDatabaseIdModel>> GetPersonExternDatabaseIdsByPersonIdAsync(long personId);
 	Task<IEnumerable<PersonExternDatabaseIdModel>> GetAllPersonExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues);
+	Task<IEnumerable<PersonExternDatabaseIdModel>> GetAllPersonExternDbIdsByPersonIdInSetAsync(IEnumerable<long> personIds);
 	Task<int> DeletePersonExternDatabaseIdsByPersonIdAsync(long personId);
 }

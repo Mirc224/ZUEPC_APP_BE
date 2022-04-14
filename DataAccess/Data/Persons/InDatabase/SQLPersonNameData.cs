@@ -13,7 +13,7 @@ public class SQLPersonNameData :
 	SQLDbRepositoryWithFilterBase<IPersonNameData, PersonNameModel, PersonNameFilter>,
 	IPersonNameData
 {
-	public SQLPersonNameData(ISqlDataAccess db) : 
+	public SQLPersonNameData(ISqlDataAccess db) :
 		base(db, TableNameConstants.PERSON_NAMES_TABLE, TableAliasConstants.PERSON_NAMES_TABLE_ALIAS)
 	{
 	}
@@ -21,6 +21,11 @@ public class SQLPersonNameData :
 	public async Task<int> DeletePersonNameByPersonIdAsync(long personId)
 	{
 		return await DeleteModelsWithColumnValueAsync(nameof(PersonNameModel.PersonId), personId);
+	}
+
+	public async Task<IEnumerable<PersonNameModel>> GetAllPersonNamesByPersonIdInSetAsync(IEnumerable<long> personIds)
+	{
+		return await GetModelsWithColumnValueInSetAsync(nameof(PersonNameModel.PersonId), personIds);
 	}
 
 	public async Task<IEnumerable<PersonNameModel>> GetPersonNamesByPersonIdAsync(long personId)
@@ -43,9 +48,9 @@ public class SQLPersonNameData :
 		{
 			string concatString = builder.GetConcatFunctionString(nameof(PersonNameModel.FirstName), nameof(PersonNameModel.LastName), baseTableAlias, parameters, "");
 			string concatStringReverse = builder.GetConcatFunctionString(nameof(PersonNameModel.LastName), nameof(PersonNameModel.FirstName), baseTableAlias, parameters, "");
-			
+
 			IEnumerable<string> namesWithReplacedValues = queryFilter.Name.Select(x => x.Replace(' ', '%'));
-			
+
 			string bindedSql = builder.WhereLikeInArrayBindedString(concatString, namesWithReplacedValues, "", parameters);
 			string bindedSqlReverse = builder.WhereLikeInArrayBindedString(concatStringReverse, namesWithReplacedValues, "", parameters);
 

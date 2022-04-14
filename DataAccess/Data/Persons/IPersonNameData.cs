@@ -10,5 +10,6 @@ public interface IPersonNameData :
 	IRepositoryWithFilter<PersonNameModel, PersonNameFilter>
 {
 	Task<IEnumerable<PersonNameModel>> GetPersonNamesByPersonIdAsync(long personId);
+	Task<IEnumerable<PersonNameModel>> GetAllPersonNamesByPersonIdInSetAsync(IEnumerable<long> personIds);
 	Task<int> DeletePersonNameByPersonIdAsync(long personId);
 }

@@ -13,7 +13,7 @@ public class SQLInstitutionNameData :
 	SQLDbRepositoryWithFilterBase<IInstitutionNameData, InstitutionNameModel, InstitutionNameFilter>,
 	IInstitutionNameData
 {
-	public SQLInstitutionNameData(ISqlDataAccess db) : 
+	public SQLInstitutionNameData(ISqlDataAccess db) :
 		base(db, TableNameConstants.INSTITUTION_NAMES_TABLE, TableAliasConstants.INSTITUTION_NAMES_TABLE_ALIAS)
 	{
 	}
@@ -21,6 +21,11 @@ public class SQLInstitutionNameData :
 	public async Task<int> DeleteInstitutionNamesByInstitutionIdAsync(long institutionId)
 	{
 		return await DeleteModelsWithColumnValueAsync(nameof(InstitutionNameModel.InstitutionId), institutionId);
+	}
+
+	public async Task<IEnumerable<InstitutionNameModel>> GetAllInstitutionNamesByInstitutionIdInSetAsync(IEnumerable<long> institutionIds)
+	{
+		return await GetModelsWithColumnValueInSetAsync(nameof(InstitutionNameModel.InstitutionId), institutionIds);
 	}
 
 	public async Task<IEnumerable<InstitutionNameModel>> GetInstitutionNamesByInstitutionIdAsync(long institutionId)
@@ -43,7 +48,7 @@ public class SQLInstitutionNameData :
 		{
 			builder.WhereLikeInArray(nameof(InstitutionNameModel.Name), queryFilter.Name, baseTableAlias, parameters);
 		}
-		
+
 		return parameters;
 	}
 }

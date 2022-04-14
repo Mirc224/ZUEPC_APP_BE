@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using ZUEPC.Base.Responses;
 
 namespace ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
 

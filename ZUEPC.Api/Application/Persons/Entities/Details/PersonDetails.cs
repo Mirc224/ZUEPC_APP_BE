@@ -7,6 +7,6 @@ public class PersonDetails : ItemDetailsBase
 {
 	public int? BirthYear { get; set; }
 	public int? DeathYear { get; set; }
-	public ICollection<PersonName>? Names { get; set; }
-	public ICollection<PersonExternDatabaseId>? ExternDatabaseIds { get; set; }
+	public IEnumerable<PersonName>? Names { get; set; }
+	public IEnumerable<PersonExternDatabaseId>? ExternDatabaseIds { get; set; }
 }

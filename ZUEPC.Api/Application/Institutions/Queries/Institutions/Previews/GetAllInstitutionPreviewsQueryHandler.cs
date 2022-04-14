@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
+using ZUEPC.Api.Application.Institutions.Queries.InstitutionExternDatabaseIds;
+using ZUEPC.Api.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Application.Institutions.Entities.Previews;
 using ZUEPC.Application.Institutions.Queries.Institutions.Previews.BaseHandlers;
 using ZUEPC.Base.Extensions;
@@ -29,18 +31,33 @@ public class GetAllInstitutionPreviewsQueryHandler :
 		{
 			return new() { Success = false };
 		}
-
-		IEnumerable<Institution> institutionDomains = response.Data;
-		List<InstitutionPreview> result = new();
-		foreach (Institution institution in institutionDomains.OrEmptyIfNull())
-		{
-			InstitutionPreview InstitutionPreview = await ProcessInstitutionPreview(institution);
-			if (InstitutionPreview != null)
-			{
-				result.Add(InstitutionPreview);
-			}
-		}
 		int totalRecords = response.TotalRecords;
+
+		if (!response.Data.Any())
+		{
+			return PaginationHelper.ProcessResponse<GetAllInstitutionPreviewsQueryResponse, InstitutionPreview, InstitutionFilter>(
+			new List<InstitutionPreview>(),
+			request.PaginationFilter,
+			request.UriService,
+			totalRecords,
+			request.Route,
+			request.QueryFilter);
+		}
+
+		IEnumerable<InstitutionPreview> result = _mapper.Map<List<InstitutionPreview>>(response.Data);
+		IEnumerable<long> personIds = result.Select(x => x.Id).ToHashSet();
+
+		IEnumerable<InstitutionName> allNamesByInstitutionIds = await GetInstitutionNamesWithInstitutionIdInSet(personIds);
+		IEnumerable<InstitutionExternDatabaseId> allExternDbIdsByInstitutionIds = await GetInstitutionExternDbIdsWithInstitutionIdInSet(personIds);
+
+		IEnumerable<IGrouping<long, InstitutionName>> personNamesGroupByPersonId = allNamesByInstitutionIds.GroupBy(x => x.InstitutionId);
+		IEnumerable<IGrouping<long, InstitutionExternDatabaseId>> personExternDbIdsGroupByPersonId = allExternDbIdsByInstitutionIds.GroupBy(x => x.InstitutionId);
+
+		foreach (InstitutionPreview institution in result)
+		{
+			institution.Names = personNamesGroupByPersonId.Where(x => x.Key == institution.Id).Select(x => x.ToList()).FirstOrDefault().OrEmptyIfNull();
+			institution.ExternDatabaseIds = personExternDbIdsGroupByPersonId.Where(x => x.Key == institution.Id).Select(x => x.ToList()).FirstOrDefault().OrEmptyIfNull();
+		}
 		return PaginationHelper.ProcessResponse<GetAllInstitutionPreviewsQueryResponse, InstitutionPreview, InstitutionFilter>(
 			result,
 			request.PaginationFilter,
@@ -48,5 +65,19 @@ public class GetAllInstitutionPreviewsQueryHandler :
 			totalRecords,
 			request.Route,
 			request.QueryFilter);
+	}
+
+	private async Task<IEnumerable<InstitutionName>> GetInstitutionNamesWithInstitutionIdInSet(IEnumerable<long> institutionIds)
+	{
+		return (await _mediator.Send(new GetAllInstititutionNamesByInstititutionIdInSetQuery() { InstitutionIds = institutionIds }))
+		.Data
+		.OrEmptyIfNull();
+	}
+
+	private async Task<IEnumerable<InstitutionExternDatabaseId>> GetInstitutionExternDbIdsWithInstitutionIdInSet(IEnumerable<long> institutionIds)
+	{
+		return (await _mediator.Send(new GetAllInstititutionExternDbIdsByInstititutionIdInSetQuery() { InstitutionIds = institutionIds }))
+		.Data
+		.OrEmptyIfNull();
 	}
 }
