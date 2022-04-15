@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using ZUEPC.Application.Institutions.Queries.Institutions.Previews;
-using ZUEPC.Application.Persons.Queries.Persons.Previews;
-using ZUEPC.Application.PublicationAuthors.Entities.Details;
-using ZUEPC.Base.Extensions;
-using ZUEPC.EvidencePublication.PublicationAuthors;
+using ZUEPC.Api.Application.PublicationAuthors.Queries.Details;
 
 namespace ZUEPC.Application.PublicationAuthors.Queries.Details;
 
@@ -21,26 +17,8 @@ public class GetPublicationAuthorDetailsQueryHandler : IRequestHandler<GetPublic
 	public async Task<GetPublicationAuthorDetailsQueryResponse> Handle(GetPublicationAuthorDetailsQuery request, CancellationToken cancellationToken)
 	{
 		long publicationId = request.PublicationId;
-		ICollection<PublicationAuthor> publicationAuthors = (await _mediator.Send(new GetPublicationPublicationAuthorsQuery() { PublicationId = publicationId })).Data;
-		List<PublicationAuthorDetails> resultDetails = new();
-		foreach(PublicationAuthor pubAuthor in publicationAuthors.OrEmptyIfNull())
-		{
-			long personId = pubAuthor.PersonId;
-			long institutionId = pubAuthor.InstitutionId;
-			PublicationAuthorDetails authorDetails = _mapper.Map<PublicationAuthorDetails>(pubAuthor);
-			authorDetails.PersonPreview = (await _mediator.Send(new GetPersonPreviewQuery() 
-			{ 
-				Id = personId 
-			})).Data;
-			authorDetails.InstitutionPreview = (await _mediator
-				.Send(new GetInstitutionPreviewQuery()
-				{
-					Id = institutionId
-				})).Data;
-
-			resultDetails.Add(authorDetails);
-		}
-
-		return new() { Success = true, Data = resultDetails };
+		GetAllPublicationAuthorsDetailsByPublicationIdInSetQueryResponse? response = await _mediator
+			.Send(new GetAllPublicationAuthorsDetailsByPublicationIdInSetQuery() { PublicationIds = new long[] { publicationId } });
+		return new() { Success = response.Success, Data = response.Data };
 	}
 }

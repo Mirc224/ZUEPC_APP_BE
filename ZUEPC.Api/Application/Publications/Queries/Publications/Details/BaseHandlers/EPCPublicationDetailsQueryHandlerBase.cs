@@ -3,16 +3,10 @@ using MediatR;
 using ZUEPC.Api.Application.Publications.Queries.Publications;
 using ZUEPC.Api.Application.Publications.Queries.Publications.Details;
 using ZUEPC.Api.Application.RelatedPublications.Queries;
-using ZUEPC.Application.PublicationActivities.Queries;
 using ZUEPC.Application.PublicationAuthors.Entities.Details;
-using ZUEPC.Application.PublicationAuthors.Queries.Details;
 using ZUEPC.Application.Publications.Entities.Details;
 using ZUEPC.Application.Publications.Entities.Previews;
-using ZUEPC.Application.Publications.Queries.PublicationExternDatabaseIds;
-using ZUEPC.Application.Publications.Queries.PublicationIdentifiers;
-using ZUEPC.Application.Publications.Queries.PublicationNames;
 using ZUEPC.Application.RelatedPublications.Entities.Details;
-using ZUEPC.Application.RelatedPublications.Queries.Details;
 using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.PublicationActivities;
 using ZUEPC.EvidencePublication.Domain.Publications;
@@ -33,38 +27,7 @@ public class EPCPublicationDetailsQueryHandlerBase
 
 	protected async Task<PublicationDetails> ProcessPublicationDetails(Publication publicationDomain)
 	{
-		long publicationId = publicationDomain.Id;
-		PublicationDetails result = _mapper.Map<PublicationDetails>(publicationDomain);
-		result.Names = (await _mediator.Send(new GetPublicationPublicationNamesQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		result.Identifiers = (await _mediator.Send(new GetPublicationPublicationIdentifiersQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		result.ExternDatabaseIds = (await _mediator.Send(new GetPublicationPublicationExternDatabaseIdsQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		result.Authors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		result.RelatedPublications = (await _mediator.Send(new GetPublicationRelatedPublicationsDetailsQuery()
-		{
-			SourcePublicationId = publicationId
-		})).Data;
-
-		result.PublicationActivities = (await _mediator.Send(new GetPublicationPublicationActivitiesQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-		return result;
+		return (await ProcessPublicationPreviews(new Publication[] {publicationDomain})).First();
 	}
 
 	protected async Task<IEnumerable<PublicationDetails>> ProcessPublicationPreviews(IEnumerable<Publication> publicationDomains)

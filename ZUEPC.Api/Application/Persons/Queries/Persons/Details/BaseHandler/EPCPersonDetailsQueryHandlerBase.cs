@@ -23,19 +23,7 @@ public abstract class EPCPersonDetailsQueryHandlerBase
 
 	protected async Task<PersonDetails> ProcessPersonDetails(Person personDomain)
 	{
-		long personId = personDomain.Id;
-		PersonDetails result = _mapper.Map<PersonDetails>(personDomain);
-		result.Names = (await _mediator.Send(new GetPersonPersonNamesQuery()
-		{
-			PersonId = personId
-		})).Data;
-
-		result.ExternDatabaseIds = (await _mediator.Send(new GetPersonPersonExternDatabaseIdsQuery()
-		{
-			PersonId = personId
-		})).Data;
-
-		return result;
+		return (await ProcessPersonDetails(new Person[] {personDomain})).First();
 	}
 
 	protected async Task<IEnumerable<PersonDetails>> ProcessPersonDetails(IEnumerable<Person> personDomains)

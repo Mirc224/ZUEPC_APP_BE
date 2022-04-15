@@ -3,8 +3,6 @@ using MediatR;
 using ZUEPC.Api.Application.Institutions.Queries.InstitutionExternDatabaseIds;
 using ZUEPC.Api.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Application.Institutions.Entities.Details;
-using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
-using ZUEPC.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Institutions;
 
@@ -23,18 +21,7 @@ public abstract class EPCInstitutionDetailsQueryHandlerBase
 
 	protected async Task<InstitutionDetails> ProcessInstitutionDetails(Institution institutionDomain)
 	{
-		long institutionId = institutionDomain.Id;
-		InstitutionDetails result = _mapper.Map<InstitutionDetails>(institutionDomain);
-		result.Names = (await _mediator.Send(new GetInstitutionInstitutionNamesQuery()
-		{
-			InstitutionId = institutionId
-		})).Data;
-
-		result.ExternDatabaseIds = (await _mediator.Send(new GetInstitutionInstitutionExternDatabaseIdsQuery()
-		{
-			InstitutionId = institutionId
-		})).Data;
-		return result;
+		return (await ProcessInstitutionDetails(new Institution[] {institutionDomain})).First();
 	}
 
 	protected async Task<IEnumerable<InstitutionDetails>> ProcessInstitutionDetails(IEnumerable<Institution> institutionDomains)

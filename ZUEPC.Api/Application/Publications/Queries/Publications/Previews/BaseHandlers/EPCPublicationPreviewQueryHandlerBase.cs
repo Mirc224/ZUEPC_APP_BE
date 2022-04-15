@@ -32,33 +32,7 @@ public abstract class EPCPublicationPreviewQueryHandlerBase
 
 	protected async Task<PublicationPreview> ProcessPublicationPreview(Publication publicationDomain)
 	{
-		long publicationId = publicationDomain.Id;
-		PublicationPreview resultPreview = _mapper.Map<PublicationPreview>(publicationDomain);
-		resultPreview.Names = (await _mediator.Send(new GetPublicationPublicationNamesQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		resultPreview.Identifiers = (await _mediator.Send(new GetPublicationPublicationIdentifiersQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		resultPreview.Authors = (await _mediator.Send(new GetPublicationAuthorDetailsQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		resultPreview.ExternDatabaseIds = (await _mediator.Send(new GetPublicationPublicationExternDatabaseIdsQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-
-		resultPreview.PublicationActivities = (await _mediator.Send(new GetPublicationPublicationActivitiesQuery()
-		{
-			PublicationId = publicationId
-		})).Data;
-		return resultPreview;
+		return (await ProcessPublicationPreviews(new Publication[] {publicationDomain})).First();
 	}
 
 	protected async Task<IEnumerable<PublicationPreview>> ProcessPublicationPreviews(IEnumerable<Publication> publicationDomains)
@@ -88,7 +62,6 @@ public abstract class EPCPublicationPreviewQueryHandlerBase
 		IEnumerable<IGrouping<long, PublicationAuthorDetails>> authorDetailsGroupByPublicationId = previewData
 			.PublicationAuthors
 			.GroupBy(x => x.PublicationId);
-
 
 		foreach (PublicationPreview publication in result)
 		{

@@ -2,8 +2,6 @@
 using MediatR;
 using ZUEPC.Api.Application.Institutions.Queries.Institutions.Previews.BaseHandlers;
 using ZUEPC.Application.Institutions.Entities.Previews;
-using ZUEPC.Application.Institutions.Queries.InstitutionExternDatabaseIds;
-using ZUEPC.Application.Institutions.Queries.InstitutionNames;
 using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Institutions;
 
@@ -22,17 +20,7 @@ public abstract class EPCInstitutionPreviewQueryHandlerBase
 
 	protected async Task<InstitutionPreview> ProcessInstitutionPreview(Institution institutionDomain)
 	{
-		long institutionId = institutionDomain.Id;
-		InstitutionPreview resultPreview = _mapper.Map<InstitutionPreview>(institutionDomain);
-		resultPreview.Names = (await _mediator.Send(new GetInstitutionInstitutionNamesQuery()
-		{
-			InstitutionId = institutionId
-		})).Data;
-		resultPreview.ExternDatabaseIds = (await _mediator.Send(new GetInstitutionInstitutionExternDatabaseIdsQuery()
-		{
-			InstitutionId = institutionId
-		})).Data;
-		return resultPreview;
+		return (await ProcessInstitutionPreviews(new Institution[] {institutionDomain})).First();
 	}
 
 	protected async Task<IEnumerable<InstitutionPreview>> ProcessInstitutionPreviews(IEnumerable<Institution> institutionDomains)

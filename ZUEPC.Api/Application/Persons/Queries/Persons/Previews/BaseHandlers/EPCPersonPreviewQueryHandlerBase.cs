@@ -2,8 +2,6 @@
 using MediatR;
 using ZUEPC.Api.Application.Persons.Queries.Persons.Previews.BaseHandlers;
 using ZUEPC.Application.Persons.Entities.Previews;
-using ZUEPC.Application.Persons.Queries.PersonExternDatabaseIds;
-using ZUEPC.Application.Persons.Queries.PersonNames;
 using ZUEPC.Base.Extensions;
 using ZUEPC.EvidencePublication.Domain.Persons;
 
@@ -22,17 +20,7 @@ public abstract class EPCPersonPreviewQueryHandlerBase
 
 	protected async Task<PersonPreview> ProcessPersonPreview(Person personDomain)
 	{
-		long personId = personDomain.Id;
-		PersonPreview resultPreview = _mapper.Map<PersonPreview>(personDomain);
-		resultPreview.Names = (await _mediator.Send(new GetPersonPersonNamesQuery()
-		{
-			PersonId = personId
-		})).Data;
-		resultPreview.ExternDatabaseIds = (await _mediator.Send(new GetPersonPersonExternDatabaseIdsQuery()
-		{
-			PersonId = personId
-		})).Data;
-		return resultPreview;
+		return (await ProcessPersonPreviews(new Person[] { personDomain})).First();
 	}
 
 	protected async Task<IEnumerable<PersonPreview>> ProcessPersonPreviews(IEnumerable<Person> personDomains)
