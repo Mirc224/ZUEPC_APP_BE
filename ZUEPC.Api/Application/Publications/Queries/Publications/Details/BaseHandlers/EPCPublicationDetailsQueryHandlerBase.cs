@@ -78,12 +78,20 @@ public class EPCPublicationDetailsQueryHandlerBase
 			.OrEmptyIfNull();
 
 		IEnumerable<long> relatedPublicationIds = relatedPublications.Select(x => x.RelatedPublicationId);
-		IEnumerable<Publication> relaltedPublicationDomains = (await _mediator
-			.Send(new GetAllPublicationsWithIdInSetQuery() { PublicationIds = relatedPublicationIds }))
+		IEnumerable<Publication> alreadyFoundRelatedPublicationDomains = publicationDomains
+			.Where(x => relatedPublicationIds.Contains(x.Id))
+			.ToList();
+		IEnumerable<long> foundRelatedPublicationIds = alreadyFoundRelatedPublicationDomains.Select(x => x.Id).ToList();
+
+
+		IEnumerable<long> relatedPublicationToGetIds = relatedPublicationIds.Where(x => !foundRelatedPublicationIds.Contains(x));
+		IEnumerable<Publication> relaltedPublicationFromDbDomains = (await _mediator
+			.Send(new GetAllPublicationsWithIdInSetQuery() { PublicationIds = relatedPublicationToGetIds }))
 			.Data
 			.OrEmptyIfNull();
+		relaltedPublicationFromDbDomains = relaltedPublicationFromDbDomains.Concat(alreadyFoundRelatedPublicationDomains);
 
-		IEnumerable<long> allPublicationIds = relatedPublicationIds.Concat(publicationIds);
+		IEnumerable<long> allPublicationIds = relatedPublicationToGetIds.Concat(publicationIds);
 
 		GetAllPublicationsDetailsDataForPublicationIdsInSetQueryResponse previewData = await _mediator
 			.Send(new GetAllPublicationsDetailsDataForPublicationIdsInSetQuery() { PublicationIds = allPublicationIds });
@@ -108,7 +116,7 @@ public class EPCPublicationDetailsQueryHandlerBase
 			.PublicationAuthors
 			.GroupBy(x => x.PublicationId);
 
-		List<PublicationPreview> relatedPublicationPreviews = _mapper.Map<List<PublicationPreview>>(relaltedPublicationDomains);
+		List<PublicationPreview> relatedPublicationPreviews = _mapper.Map<List<PublicationPreview>>(relaltedPublicationFromDbDomains);
 		foreach (PublicationPreview relatedPubPrev in relatedPublicationPreviews)
 		{
 			relatedPubPrev.Names = namesGroupByPublicationId.Where(x => x.Key == relatedPubPrev.Id).Select(x => x.ToList()).FirstOrDefault().OrEmptyIfNull();

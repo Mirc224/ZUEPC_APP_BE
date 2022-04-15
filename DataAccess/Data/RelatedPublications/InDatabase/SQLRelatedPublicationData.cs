@@ -26,6 +26,10 @@ public class SQLRelatedPublicationData :
 
 	public async Task<IEnumerable<RelatedPublicationModel>> GetAllRelatedPublicationsByPublicationIdInSetAsync(IEnumerable<long> publicationIds)
 	{
+		if(!publicationIds.Any())
+		{
+			return Enumerable.Empty<RelatedPublicationModel>();
+		}
 		return await GetModelsWithColumnValueInSetAsync(nameof(RelatedPublicationModel.PublicationId), publicationIds);
 	}
 

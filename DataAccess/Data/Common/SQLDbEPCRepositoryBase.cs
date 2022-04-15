@@ -30,6 +30,10 @@ public abstract class SQLDbEPCRepositoryBase<TModel>:
 
 	public async Task<IEnumerable<TModel>> GetModelsWhereIdInSetAsync(IEnumerable<long> ids)
 	{
+		if(!ids.Any())
+		{
+			return Enumerable.Empty<TModel>();
+		}
 		return (await GetModelsWithColumnValueInSetAsync(nameof(EPCModelBase.Id), ids));
 	}
 	public async Task<int> UpdateModelAsync(TModel model)

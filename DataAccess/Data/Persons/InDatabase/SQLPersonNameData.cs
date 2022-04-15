@@ -25,6 +25,10 @@ public class SQLPersonNameData :
 
 	public async Task<IEnumerable<PersonNameModel>> GetAllPersonNamesByPersonIdInSetAsync(IEnumerable<long> personIds)
 	{
+		if (!personIds.Any())
+		{
+			return Enumerable.Empty<PersonNameModel>();
+		}
 		return await GetModelsWithColumnValueInSetAsync(nameof(PersonNameModel.PersonId), personIds);
 	}
 

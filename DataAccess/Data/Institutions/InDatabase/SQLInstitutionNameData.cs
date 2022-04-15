@@ -25,6 +25,10 @@ public class SQLInstitutionNameData :
 
 	public async Task<IEnumerable<InstitutionNameModel>> GetAllInstitutionNamesByInstitutionIdInSetAsync(IEnumerable<long> institutionIds)
 	{
+		if (!institutionIds.Any())
+		{
+			return Enumerable.Empty<InstitutionNameModel>();
+		}
 		return await GetModelsWithColumnValueInSetAsync(nameof(InstitutionNameModel.InstitutionId), institutionIds);
 	}
 

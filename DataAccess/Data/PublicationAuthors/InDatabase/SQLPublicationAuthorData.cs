@@ -31,6 +31,10 @@ public class SQLPublicationAuthorData :
 
 	public async Task<IEnumerable<PublicationAuthorModel>> GetAllPublicationAuthorsByPublicationIdInSetAsync(IEnumerable<long> publicationIds)
 	{
+		if (!publicationIds.Any())
+		{
+			return Enumerable.Empty<PublicationAuthorModel>();
+		}
 		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationAuthorModel.PublicationId), publicationIds);
 	}
 

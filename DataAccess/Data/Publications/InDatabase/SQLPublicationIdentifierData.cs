@@ -21,11 +21,19 @@ public class SQLPublicationIdentifierData :
 
 	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifierByPublicationIdInSetAsync(IEnumerable<long> publicationIds)
 	{
+		if (!publicationIds.Any())
+		{
+			return Enumerable.Empty<PublicationIdentifierModel>();
+		}
 		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationIdentifierModel.PublicationId), publicationIds);
 	}
 
 	public async Task<IEnumerable<PublicationIdentifierModel>> GetAllPublicationIdentifiersByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
+		if (!identifierValues.Any())
+		{
+			return Enumerable.Empty<PublicationIdentifierModel>();
+		}
 		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationIdentifierModel.IdentifierValue), identifierValues);
 	}
 

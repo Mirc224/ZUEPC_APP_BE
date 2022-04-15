@@ -21,11 +21,19 @@ public class SQLPublicationExternDatabaseIdData :
 
 	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByIdentifierValueSetAsync(IEnumerable<string> identifierValues)
 	{
+		if (!identifierValues.Any())
+		{
+			return Enumerable.Empty<PublicationExternDatabaseIdModel>();
+		}
 		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationExternDatabaseIdModel.ExternIdentifierValue), identifierValues);
 	}
 
 	public async Task<IEnumerable<PublicationExternDatabaseIdModel>> GetAllPublicationExternDbIdsByPublicationIdInSetAsync(IEnumerable<long> publicationIds)
 	{
+		if (!publicationIds.Any())
+		{
+			return Enumerable.Empty<PublicationExternDatabaseIdModel>();
+		}
 		return await GetModelsWithColumnValueInSetAsync(nameof(PublicationExternDatabaseIdModel.PublicationId), publicationIds);
 	}
 
