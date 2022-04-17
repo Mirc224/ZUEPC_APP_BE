@@ -7,7 +7,6 @@ builder.ConfigureServices();
 
 WebApplication app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
 	app.UseSwagger();
