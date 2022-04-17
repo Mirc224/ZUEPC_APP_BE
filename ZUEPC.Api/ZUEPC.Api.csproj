@@ -19,11 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Constants\ZUEPC.Constants.csproj" />
-    <ProjectReference Include="..\DataAccess\ZUEPC.DataAccess.csproj" />
-    <ProjectReference Include="..\KIS.Import\ZUEPC.Import.csproj" />
-    <ProjectReference Include="..\Users.Base\ZUEPC.Users.csproj" />
-    <ProjectReference Include="..\ZUEPC.EvidencePublication.Base\ZUEPC.PublicationEvidence.csproj" />
+    <ProjectReference Include="..\ZUEPC.Constants\ZUEPC.Constants.csproj" />
+    <ProjectReference Include="..\ZUEPC.Import\ZUEPC.Import.csproj" />
+    <ProjectReference Include="..\ZUEPC.PublicationEvidence\ZUEPC.PublicationEvidence.csproj" />
+    <ProjectReference Include="..\ZUEPC.Users\ZUEPC.Users.csproj" />
+    <ProjectReference Include="..\ZUPEC.DataAccess\ZUEPC.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>

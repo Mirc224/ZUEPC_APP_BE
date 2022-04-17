@@ -4,7 +4,7 @@ using ZUEPC.Base.Commands;
 namespace ZUEPC.Application.RelatedPublications.Commands;
 
 public class DeleteRelatedPublicationCommand : 
-	EPCDeleteModelCommandBase<long>, 
+	EPCDeleteCommandBase<long>, 
 	IRequest<DeleteRelatedPublicationCommandResponse>
 {
 }

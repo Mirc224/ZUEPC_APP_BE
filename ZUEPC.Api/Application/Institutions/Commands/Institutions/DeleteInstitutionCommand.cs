@@ -4,7 +4,7 @@ using ZUEPC.Base.Commands;
 namespace ZUEPC.Application.Institutions.Commands.Institutions;
 
 public class DeleteInstitutionCommand : 
-	EPCDeleteModelCommandBase<long>,
+	EPCDeleteCommandBase<long>,
 	IRequest<DeleteInstitutionCommandResponse>
 {
 }

@@ -4,7 +4,7 @@ using ZUEPC.Base.Commands;
 namespace ZUEPC.Application.Publications.Commands.PublicationIdentifiers;
 
 public class DeletePublicationIdentifierCommand : 
-	EPCDeleteModelCommandBase<long>, 
+	EPCDeleteCommandBase<long>, 
 	IRequest<DeletePublicationIdentifierCommandResponse>
 {
 }

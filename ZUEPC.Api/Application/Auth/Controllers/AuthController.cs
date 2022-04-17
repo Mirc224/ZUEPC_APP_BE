@@ -3,8 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
-using ZUEPC.Application.Auth.Commands.RefreshTokens;
 using ZUEPC.Application.Auth.Commands.AuthActions;
+using ZUEPC.Application.Auth.Commands.RefreshTokens;
 
 namespace ZUEPC.Application.Auth.Controllers
 {

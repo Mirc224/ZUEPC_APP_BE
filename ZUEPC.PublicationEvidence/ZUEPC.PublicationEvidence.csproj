@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DataAccess\ZUEPC.DataAccess.csproj" />
+    <ProjectReference Include="..\ZUEPC.Base\ZUEPC.Base.csproj" />
   </ItemGroup>
 
 </Project>
