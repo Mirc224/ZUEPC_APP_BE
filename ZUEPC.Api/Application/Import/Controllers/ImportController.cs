@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Xml.Linq;
@@ -23,6 +24,7 @@ namespace ZUEPC.Application.Import.Controllers
 			_localizer = localizer;
 		}
 
+		[Authorize(Roles = "EDITOR,ADMIN")]
 		[HttpPost("upload/{importSystem}")]
 		public async Task<IActionResult> UploadFile([FromRoute] string importSystem, IFormFile file)
 		{
