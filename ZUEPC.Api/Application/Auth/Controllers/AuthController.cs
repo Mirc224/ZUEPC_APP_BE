@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using ZUEPC.Application.Auth.Commands.AuthActions;
 using ZUEPC.Application.Auth.Commands.RefreshTokens;
 
@@ -56,12 +57,12 @@ namespace ZUEPC.Application.Auth.Controllers
 		[HttpPost("logout")]
 		public async Task<IActionResult> LogoutUser()
 		{
-			string jwtId = User?.Claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
+			string? jwtId = User?.Claims?.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)?.Value;
 			if (jwtId is null)
 			{
 				return Unauthorized();
 			}
-			System.Security.Claims.Claim? userIdClaim = User?.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserId);
+			Claim? userIdClaim = User?.Claims.FirstOrDefault(x => x.Type == CustomClaims.UserId);
 			if (userIdClaim is null)
 			{
 				return Unauthorized();

@@ -2,7 +2,6 @@ using ZUEPC.Options;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-
 builder.ConfigureServices();
 
 WebApplication app = builder.Build();

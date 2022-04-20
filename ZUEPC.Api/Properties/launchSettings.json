@@ -19,6 +19,16 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    "prod": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      //"launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:8082",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      }
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
